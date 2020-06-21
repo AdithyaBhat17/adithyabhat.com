@@ -1,5 +1,6 @@
 # dependencies
 node_modules
+yarn.lock
 
 # next.js
 .next
@@ -15,3 +16,6 @@ yarn-error.log*
 
 # misc
 .DS_Store
+
+# env
+.env

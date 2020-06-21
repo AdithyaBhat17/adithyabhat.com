@@ -14,4 +14,14 @@ module.exports = {
     '\\.(css|less|sass|scss)$': 'identity-obj-proxy',
     '\\.(gif|ttf|eot|svg|png)$': '<rootDir>/test/__mocks__/fileMock.js',
   },
+  testEnvironment: 'jest-environment-jsdom',
+  setupFilesAfterEnv: ['@testing-library/jest-dom/extend-expect'],
+  collectCoverageFrom: ['**/pages/**/*.+(js|ts|tsx)'],
+  coverageThreshold: {
+    global: {
+      statements: 80,
+      functions: 80,
+      lines: 80,
+    },
+  },
 }
