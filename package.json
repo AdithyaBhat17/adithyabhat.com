@@ -12,7 +12,8 @@
     "test": "jest",
     "test:coverage": "jest --coverage",
     "test-all": "yarn lint && yarn type-check && yarn test:coverage",
-    "build": "yarn test-all && next build"
+    "build": "yarn test-all && next build",
+    "build:now": "next build"
   },
   "husky": {
     "hooks": {
