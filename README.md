@@ -8,8 +8,8 @@ The source code for my current [website](https://www.adithyabhat.com) can be fou
 
 - [x] Setup Tailwind.
 - [x] Pick a CMS and complete setup for the same.
-- [] Design all the pages.
-- [] Develop the pages.
-- [] Ensure 80% code coverage using Jest and react-testing-library
-- [] Setup github actions
-- [] Deploy on v4.adithyabhat.com
+- [ ] Design all the pages.
+- [ ] Develop the pages.
+- [ ] Ensure 80% code coverage using Jest and react-testing-library
+- [ ] Setup github actions
+- [ ] Deploy on v4.adithyabhat.com
