@@ -3,7 +3,59 @@
 exports[`Home page matches snapshot 1`] = `
 <DocumentFragment>
   <div
-    class="container"
-  />
+    class=""
+  >
+    <nav
+      class="navbar px-6 md:px-36 lg:px-48"
+    >
+      <a
+        class="hover:border-white"
+        href="/"
+      >
+        <img
+          alt="Adithya NR"
+          class="fill-current lg:h-16 lg:w-16 w-12 h-12"
+          src="/static/logo_black.svg"
+        />
+      </a>
+      <ul
+        class="flex justify-between"
+      >
+        <li
+          class="ml-6"
+        >
+          <a
+            class=" text-black hover:border-gray-900"
+            data-testid="nav-link"
+            href="/about"
+          >
+            About
+          </a>
+        </li>
+        <li
+          class="ml-6"
+        >
+          <a
+            class=" text-black hover:border-gray-900"
+            data-testid="nav-link"
+            href="/blog"
+          >
+            Blog
+          </a>
+        </li>
+        <li
+          class="ml-6"
+        >
+          <a
+            class=" text-black hover:border-gray-900"
+            data-testid="nav-link"
+            href="/uses"
+          >
+            Uses
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </div>
 </DocumentFragment>
 `;

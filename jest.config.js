@@ -16,7 +16,10 @@ module.exports = {
   },
   testEnvironment: 'jest-environment-jsdom',
   setupFilesAfterEnv: ['@testing-library/jest-dom/extend-expect'],
-  collectCoverageFrom: ['**/pages/**/*.+(js|ts|tsx)'],
+  collectCoverageFrom: [
+    '**/pages/**/*.+(js|ts|tsx)',
+    '**/components/**/*.+(js|ts|tsx)',
+  ],
   coverageThreshold: {
     global: {
       statements: 80,
