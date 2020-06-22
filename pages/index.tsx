@@ -1,8 +1,10 @@
 import Head from '../components/header'
+import Navbar from '../components/navigation/nav'
 
 export const Home = (): JSX.Element => (
-  <div className="container">
+  <div className="">
     <Head title="Adithya NR | A Full stack Designer based in Bengaluru, India." />
+    <Navbar />
   </div>
 )
 

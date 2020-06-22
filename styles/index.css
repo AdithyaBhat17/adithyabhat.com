@@ -1,3 +1,4 @@
+/* eslint-disable */
 @tailwind base;
 @tailwind components;
 
@@ -5,12 +6,19 @@ html,
 body {
   padding: 0;
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  font-family: -apple-system, Inter, BlinkMacSystemFont, Segoe UI, Roboto,
+    Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 * {
   box-sizing: border-box;
+}
+
+img {
+  max-width: 100%;
 }
 
 .container {
@@ -18,8 +26,8 @@ body {
   padding: 0 0.5rem;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  /* justify-content: center; */
+  /* align-items: center; */
 }
 
 main {
@@ -40,8 +48,15 @@ footer {
   align-items: center;
 }
 a {
-  color: inherit;
+  color: #0076ff;
   text-decoration: none;
+  border-bottom: 1px solid transparent;
+  -webkit-transition: border 0.2s ease;
+  transition: border 0.2s ease;
+}
+
+a:hover {
+  border-bottom: 1px solid #0076ff;
 }
 
 code {
@@ -61,6 +76,17 @@ code {
 
   max-width: 800px;
   margin-top: 3rem;
+}
+
+.logo {
+  width: 100px;
+}
+
+.navbar {
+  @apply flex sticky w-full overflow-hidden top-0 mb-6 items-center justify-between flex-wrap py-4 text-gray-900;
+  background-color: rgba(255, 255, 255, 0.5);
+  z-index: 1;
+  backdrop-filter: blur(8px);
 }
 
 @media (max-width: 600px) {

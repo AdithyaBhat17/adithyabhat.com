@@ -1,28 +1,44 @@
 import { fetchAPI } from '../lib/datocms'
 import { Use } from '../interfaces/use'
 import Head from '../components/header'
+import Navbar from '../components/navigation/nav'
+import Container from '../components/container'
 
 export default function Uses({ data }) {
   return (
-    <div className="container">
-      <Head title="Adithya NR | A Full stack Designer based in Bengaluru, India." />
-      {data?.allUses?.map((use: Use) => (
-        <div key={use.id}>
-          <h3 data-testid="category">{use.category}</h3>
-          {use.tools?.map((tool, index) => (
-            <span key={index}>
-              <a
-                data-testid="link"
-                href={tool.link}
-                rel="noreferrer noopener"
-                target="_blank"
+    <div>
+      <Head title="Uses | Adithya NR" />
+      <Navbar />
+      <Container>
+        <h1 className="text-black font-semibold text-6xl text-gray-900">
+          <b>Uses</b>
+        </h1>
+        {data?.allUses?.map((use: Use) => (
+          <div key={use.id}>
+            <h3
+              data-testid="category"
+              className="text-md font-semibold text-black mb-2 mt-5"
+            >
+              {use.category}
+            </h3>
+            {use.tools?.map((tool, index) => (
+              <span
+                key={index}
+                className="text-sm mr-3 text-md bg-gray-100 shadow-sm px-2 py-1 rounded-sm flex-wrap break-all leading-10"
               >
-                {tool.name}
-              </a>
-            </span>
-          ))}
-        </div>
-      ))}
+                <a
+                  data-testid="link"
+                  href={tool.link}
+                  rel="noreferrer noopener"
+                  target="_blank"
+                >
+                  {tool.name}
+                </a>
+              </span>
+            ))}
+          </div>
+        ))}
+      </Container>
     </div>
   )
 }
