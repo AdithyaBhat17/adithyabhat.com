@@ -1,4 +1,4 @@
-import Head from '../../components/header'
+import Head from '@/components/header'
 import { render } from '@testing-library/react'
 
 test('Renders metadata', async () => {

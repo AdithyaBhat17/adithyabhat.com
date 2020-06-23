@@ -1,4 +1,4 @@
-import { ContainerProps } from '../../interfaces/layout'
+import { ContainerProps } from '../interfaces/layout'
 
 export default function Container({ children, props }: ContainerProps) {
   return (

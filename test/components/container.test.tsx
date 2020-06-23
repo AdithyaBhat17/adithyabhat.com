@@ -1,5 +1,5 @@
 import { render } from '../testUtils'
-import Container from '../../components/container'
+import Container from '@/components/container'
 
 test('containers renders children with given props', () => {
   const { getByTestId } = render(

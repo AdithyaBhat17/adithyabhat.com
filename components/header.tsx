@@ -1,5 +1,5 @@
 import NextHead from 'next/head'
-import { SEO } from '../../interfaces/seo'
+import { SEO } from '../interfaces/seo'
 import { useEffect, useState } from 'react'
 
 export default function Head({ title, description }: SEO) {
@@ -30,7 +30,7 @@ export default function Head({ title, description }: SEO) {
 
   return (
     <NextHead>
-      <title>{title}</title>
+      <title>{title || 'Adithya NR'}</title>
       <meta name="description" content={description} />
       <meta
         name="viewport"

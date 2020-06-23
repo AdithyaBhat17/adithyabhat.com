@@ -1,5 +1,5 @@
 import { render } from '../testUtils'
-import Navbar, { routes } from '../../components/navigation/nav'
+import Navbar, { routes } from '@/components/navbar'
 import { cleanup } from '@testing-library/react'
 
 afterEach(cleanup)

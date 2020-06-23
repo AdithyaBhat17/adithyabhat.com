@@ -1,5 +1,5 @@
-import Head from '../components/header'
-import Navbar from '../components/navigation/nav'
+import Head from '@/components/header'
+import Navbar from '@/components/navbar'
 
 export const Home = (): JSX.Element => (
   <div className="">

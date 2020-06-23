@@ -1,10 +1,8 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Home page matches snapshot 1`] = `
-<DocumentFragment>
-  <div
-    class=""
-  >
+exports[`Renders a list of blogs 1`] = `
+<div>
+  <div>
     <nav
       class="navbar px-6 md:px-36 lg:px-48"
     >
@@ -63,6 +61,48 @@ exports[`Home page matches snapshot 1`] = `
         </li>
       </ul>
     </nav>
+    <div
+      class="px-6 md:px-36 lg:px-48 mb-6"
+      data-testid="container"
+    >
+      <h1
+        class="text-black font-semibold text-5xl text-gray-900 mb-6"
+      >
+        <b>
+          Blogs
+        </b>
+      </h1>
+      <a
+        class="flex justify-between items-baseline px-6 hover:text-blue-900 py-4 border-black w-full mx-auto mb-5"
+        href="/blog/abc"
+      >
+        <h3
+          class="text-2xl text-black font-semibold "
+        >
+          abc
+        </h3>
+        <small
+          class="text-gray-900"
+        >
+          2018-01-01
+        </small>
+      </a>
+      <a
+        class="flex justify-between items-baseline px-6 hover:text-blue-900 py-4 border-black w-full mx-auto mb-5"
+        href="/blog/undefined"
+      >
+        <h3
+          class="text-2xl text-black font-semibold "
+        >
+          xyz
+        </h3>
+        <small
+          class="text-gray-900"
+        >
+          2018-09-12
+        </small>
+      </a>
+    </div>
   </div>
-</DocumentFragment>
+</div>
 `;

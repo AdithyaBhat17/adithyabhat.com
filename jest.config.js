@@ -13,6 +13,10 @@ module.exports = {
   moduleNameMapper: {
     '\\.(css|less|sass|scss)$': 'identity-obj-proxy',
     '\\.(gif|ttf|eot|svg|png)$': '<rootDir>/test/__mocks__/fileMock.js',
+    '@/lib/(.*)': '<rootDir>/lib/$1',
+    '@/components/(.*)': '<rootDir>/components/$1',
+    '@/pages/(.*)': '<rootDir>/pages/$1',
+    'graphql/(.*)': '<rootDir>/graphql/$1',
   },
   testEnvironment: 'jest-environment-jsdom',
   setupFilesAfterEnv: ['@testing-library/jest-dom/extend-expect'],
