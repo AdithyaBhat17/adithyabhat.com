@@ -19,7 +19,7 @@
       "@/lib/*": ["lib/*"],
       "@/styles/*": ["styles/*"],
       "@/pages/*": ["pages/*"],
-      "@/interfaces/*": ["intefaces/*"]
+      "@/interfaces/*": ["interfaces/*"]
     }
   },
   "exclude": ["node_modules", ".next", "out"],
