@@ -2,6 +2,11 @@
 @tailwind base;
 @tailwind components;
 
+@font-face {
+  src: url('../public/static/SFMono.ttf');
+  font-family: 'SF Mono';
+}
+
 html,
 body {
   padding: 0;
@@ -47,8 +52,8 @@ a {
   transition: border 0.2s ease;
 }
 
-a:hover {
-  color: inherit;
+a:hover > * {
+  color: #003b71aa;
   border-bottom: 1px solid inherit;
 }
 
@@ -57,8 +62,12 @@ pre > code {
   background: #fafafa;
   border-radius: 5px;
   padding: 0.75rem;
-  font-size: 1.1rem;
-  font-family: 'SF Mono', sans-serif;
+  white-space: pre-wrap;
+  font-family: 'SF Mono', monospace;
+}
+
+.code {
+  font-family: 'SF Mono', monospace;
 }
 
 .grid {
@@ -89,20 +98,50 @@ pre > code {
   }
 }
 
+.content {
+  @apply my-10;
+}
+
 .content > p > img {
-  @apply block w-full my-5 shadow-md rounded-lg;
+  max-width: 100%;
+  @apply block w-full my-5 rounded-lg;
 }
 
 .content > p {
-  @apply my-10 leading-8;
+  @apply my-5 leading-8;
 }
 
 .content > p > strong {
   @apply text-lg font-semibold;
 }
 
+.content > h3,
+.content > h4,
+.content > h2 {
+  @apply font-semibold mt-10 mb-5;
+}
+
 .content > h3 {
-  @apply text-2xl font-semibold mt-10 mb-5;
+  @apply text-2xl;
+}
+
+.content > h4 {
+  @apply text-xl;
+}
+
+.content > h2 {
+  @apply text-3xl;
+}
+
+.content > ul,
+.content > ol {
+  list-style: initial;
+  @apply ml-5;
+}
+
+.content > ol {
+  list-style: decimal;
+  @apply mb-6;
 }
 
 @tailwind utilities;

@@ -9,6 +9,7 @@ import { ArticleProps } from '@/interfaces/blog'
 import dayjs from 'dayjs'
 import { useRouter } from 'next/router'
 import ErrorPage from 'next/error'
+import RecentArticles from '@/components/recent-articles'
 
 export default function Article({ data }: ArticleProps) {
   const router = useRouter()
@@ -33,16 +34,17 @@ export default function Article({ data }: ArticleProps) {
             dangerouslySetInnerHTML={{ __html: data?.article?.content }}
           />
         </div>
+        <RecentArticles articles={data?.moreArticles || []} />
       </Container>
     </div>
   )
 }
 
 // istanbul ignore next line
-export async function getStaticProps({ params }) {
+export async function getStaticProps({ params, preview }) {
   const result = await fetchAPI(ARTICLE_QUERY, {
     variables: { slug: params.slug },
-    preview: true,
+    preview,
   })
   return {
     props: {
@@ -50,7 +52,7 @@ export async function getStaticProps({ params }) {
         ...result,
         article: {
           ...result.article,
-          content: await processMarkdown(result.article.content),
+          content: await processMarkdown(result?.article?.content ?? ''),
         },
       },
     },

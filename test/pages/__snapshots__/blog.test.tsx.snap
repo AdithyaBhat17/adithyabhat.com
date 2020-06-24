@@ -73,7 +73,8 @@ exports[`Renders a list of blogs 1`] = `
         </b>
       </h1>
       <a
-        class="flex justify-between items-baseline px-6 hover:text-blue-900 py-4 border-black w-full mx-auto mb-5"
+        class="flex flex-wrap justify-between items-baseline px-0 md:px-6 hover:text-blue-900 py-4 border-black w-full mx-auto mb-5"
+        data-testid="article"
         href="/blog/abc"
       >
         <h3
@@ -82,13 +83,14 @@ exports[`Renders a list of blogs 1`] = `
           abc
         </h3>
         <small
-          class="text-gray-900"
+          class="mt-5 sm:my-0 text-gray-900 text-xs"
         >
           2018-01-01
         </small>
       </a>
       <a
-        class="flex justify-between items-baseline px-6 hover:text-blue-900 py-4 border-black w-full mx-auto mb-5"
+        class="flex flex-wrap justify-between items-baseline px-0 md:px-6 hover:text-blue-900 py-4 border-black w-full mx-auto mb-5"
+        data-testid="article"
         href="/blog/undefined"
       >
         <h3
@@ -97,7 +99,7 @@ exports[`Renders a list of blogs 1`] = `
           xyz
         </h3>
         <small
-          class="text-gray-900"
+          class="mt-5 sm:my-0 text-gray-900 text-xs"
         >
           2018-09-12
         </small>

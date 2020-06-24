@@ -5,7 +5,7 @@ const API_TOKEN = process.env.DATOCMS_API_TOKEN
 
 export async function fetchAPI(
   query: string,
-  { variables, preview }: FetchParams = { variables: undefined, preview: true }
+  { variables, preview }: FetchParams = {}
 ) {
   const endpoint = preview ? API_URL + '/preview' : API_URL
 

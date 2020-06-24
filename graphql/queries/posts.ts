@@ -19,10 +19,11 @@ export const ARTICLE_QUERY = `
             slug
         }
 
-        moreArticles:allArticles(orderBy:date_DESC, first: 2, filter:{slug:{neq:$slug}}) {
+        moreArticles:allArticles(orderBy:date_DESC, first: 5, filter:{slug:{neq:$slug}}) {
             id
             title
             slug
+            date
         }
     }
 `
