@@ -2,7 +2,7 @@ export interface BlogPosts {
   data: {
     allArticles: {
       id: string
-      slug: string
+      slug?: string
       date: Date | string
       title: string
     }[]
@@ -16,7 +16,7 @@ export interface ArticleProps {
       title: string
       content: string
       date: Date | string
-      slug: string | undefined
+      slug?: string
     }
     moreArticles: {
       id: string

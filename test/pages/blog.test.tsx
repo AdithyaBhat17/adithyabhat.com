@@ -27,13 +27,17 @@ test('Renders a list of blogs', () => {
 })
 
 test('Renders an article', () => {
-  const { getByTestId } = render(<Article data={{ article: allArticles[0] }} />)
+  const { getByTestId } = render(
+    <Article data={{ article: allArticles[0], moreArticles: [] }} />
+  )
   expect(getByTestId('title').textContent).toEqual('abc')
   expect(getByTestId('date').textContent).toEqual('01 Jan, 2018')
   expect(getByTestId('content').textContent).toEqual('this is a demo article 1')
 })
 
 test('Displays error page for invalid slug', () => {
-  const { getByText } = render(<Article data={{ article: allArticles[1] }} />)
+  const { getByText } = render(
+    <Article data={{ article: allArticles[1], moreArticles: [] }} />
+  )
   expect(getByText('404')).toBeInTheDocument()
 })
