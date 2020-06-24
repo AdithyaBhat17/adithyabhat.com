@@ -22,18 +22,25 @@ export default function Navbar() {
     return useRouter()?.route === link ? 'border-gray-900' : ''
   }, [])
 
+  const getRoute = () => useRouter()?.pathname?.split('/')[1] ?? null
+
   return (
     <>
       <nav className="navbar px-6 md:px-36 lg:px-48">
-        <Link href="/">
-          <a className="hover:border-white">
-            <img
-              className="fill-current lg:h-16 lg:w-16 w-12 h-12"
-              src="/static/logo_black.svg"
-              alt="Adithya NR"
-            />
-          </a>
-        </Link>
+        <div className="flex justify-start items-center">
+          <Link href="/">
+            <a className="hover:border-white">
+              <img
+                className="fill-current lg:h-16 lg:w-16 w-12 h-12"
+                src="/static/logo_black.svg"
+                alt="Adithya NR"
+              />
+            </a>
+          </Link>
+          <span className="sm:appearance-none inline ml-6 text-gray-500 capitalize">
+            {getRoute()}
+          </span>
+        </div>
 
         <ul className="flex justify-between">
           {routes?.map((route, i) => (

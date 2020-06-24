@@ -1,8 +1,8 @@
-import { fetchAPI } from '../lib/datocms'
+import { fetchAPI } from '@/lib/datocms'
 import { Use } from '../interfaces/use'
-import Head from '../components/header'
-import Navbar from '../components/navigation/nav'
-import Container from '../components/container'
+import Head from '@/components/header'
+import Navbar from '@/components/navbar'
+import Container from '@/components/container'
 
 export default function Uses({ data }) {
   return (
@@ -53,7 +53,7 @@ const USES_QUERY = `
     }
 `
 // istanbul ignore next line
-export async function getServerSideProps() {
+export async function getStaticProps() {
   const data = await fetchAPI(USES_QUERY)
   return {
     props: {
