@@ -1,5 +1,8 @@
+require('dotenv').config()
+
 module.exports = {
   roots: ['<rootDir>'],
+  // setupFiles: ['dotenv/config'],
   moduleFileExtensions: ['js', 'ts', 'tsx', 'json'],
   testPathIgnorePatterns: ['<rootDir>[/\\\\](node_modules|.next)[/\\\\]'],
   transformIgnorePatterns: ['[/\\\\]node_modules[/\\\\].+\\.(ts|tsx)$'],
