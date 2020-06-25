@@ -30,3 +30,7 @@ jobs:
       run: |
         yarn
         yarn run test-all
+      env:
+        DATOCMS_API_URL: ${{ secrets.DATOCMS_API_URL }}
+        DATOCMS_PREVIEW_SECRET: ${{ secrets.DATOCMS_PREVIEW_SECRET }}
+        DATOCMS_URL: ${{ secrets.DATOCMS_URL }}
