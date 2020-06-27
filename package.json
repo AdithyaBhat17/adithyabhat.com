@@ -57,6 +57,7 @@
     "jest": "^25.2.3",
     "jest-watch-typeahead": "^0.5.0",
     "lint-staged": "^10.0.10",
+    "msw": "^0.19.5",
     "postcss-preset-env": "^6.7.0",
     "prettier": "^2.0.2",
     "tailwindcss": "^1.4.6",

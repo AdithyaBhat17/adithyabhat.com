@@ -12,8 +12,8 @@ export const routes = [
     link: '/blog',
   },
   {
-    name: 'Uses',
-    link: '/uses',
+    name: 'Contact',
+    link: '/contact',
   },
 ]
 
@@ -37,7 +37,7 @@ export default function Navbar() {
               />
             </a>
           </Link>
-          <span className="sm:appearance-none inline ml-6 text-gray-500 capitalize">
+          <span className="sm:inline hidden ml-6 text-gray-500 capitalize">
             {getRoute()}
           </span>
         </div>
@@ -50,7 +50,7 @@ export default function Navbar() {
                   data-testid="nav-link"
                   className={`${activeStyle(
                     route.link
-                  )} text-black hover:border-gray-900`}
+                  )} text-black text-sm hover:border-gray-900`}
                 >
                   {route.name}
                 </a>

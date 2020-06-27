@@ -20,7 +20,7 @@ exports[`Renders a list of blogs 1`] = `
           />
         </a>
         <span
-          class="sm:appearance-none inline ml-6 text-gray-500 capitalize"
+          class="sm:inline hidden ml-6 text-gray-500 capitalize"
         />
       </div>
       <ul
@@ -30,7 +30,7 @@ exports[`Renders a list of blogs 1`] = `
           class="ml-6"
         >
           <a
-            class=" text-black hover:border-gray-900"
+            class=" text-black text-sm hover:border-gray-900"
             data-testid="nav-link"
             href="/about"
           >
@@ -41,7 +41,7 @@ exports[`Renders a list of blogs 1`] = `
           class="ml-6"
         >
           <a
-            class=" text-black hover:border-gray-900"
+            class=" text-black text-sm hover:border-gray-900"
             data-testid="nav-link"
             href="/blog"
           >
@@ -52,11 +52,11 @@ exports[`Renders a list of blogs 1`] = `
           class="ml-6"
         >
           <a
-            class=" text-black hover:border-gray-900"
+            class=" text-black text-sm hover:border-gray-900"
             data-testid="nav-link"
-            href="/uses"
+            href="/contact"
           >
-            Uses
+            Contact
           </a>
         </li>
       </ul>

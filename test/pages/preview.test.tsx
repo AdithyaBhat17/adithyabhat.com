@@ -7,6 +7,7 @@ import {
   apiResolver,
   __ApiPreviewProps,
 } from 'next/dist/next-server/server/api-utils'
+import { waitFor } from '@testing-library/react'
 
 let server: http.Server, url: string
 
@@ -36,7 +37,9 @@ test('Should redirect to /blogs/[slug] if required query strings are passed', as
   const response = await fetch(
     `${url}?secret=${process.env.DATOCMS_PREVIEW_SECRET}&slug=javascript-variables`
   )
-  expect(response.url).toBe(`${url}/blog/javascript-variables`)
+  await waitFor(() => {
+    expect(response.url).toBe(`${url}/blog/javascript-variables`)
+  })
 })
 
 test('Should return 400 if the slug is invalid', async () => {
