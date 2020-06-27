@@ -52,12 +52,12 @@ a {
   transition: border 0.2s ease;
 }
 
-a:hover > * {
+a:hover>* {
   color: #003b71aa;
   border-bottom: 1px solid inherit;
 }
 
-pre > code {
+pre>code {
   display: block;
   background: #fafafa;
   border-radius: 5px;
@@ -102,46 +102,72 @@ pre > code {
   @apply my-10;
 }
 
-.content > p > img {
+.content>p>img {
   max-width: 100%;
   @apply block w-full my-5 rounded-lg;
 }
 
-.content > p {
+.content>p {
   @apply my-5 leading-8;
 }
 
-.content > p > strong {
+.content>p>strong {
   @apply text-lg font-semibold;
 }
 
-.content > h3,
-.content > h4,
-.content > h2 {
+.content>h3,
+.content>h4,
+.content>h2 {
   @apply font-semibold mt-10 mb-5;
 }
 
-.content > h3 {
+.content>h3 {
   @apply text-2xl;
 }
 
-.content > h4 {
+.content>h4 {
   @apply text-xl;
 }
 
-.content > h2 {
+.content>h2 {
   @apply text-3xl;
 }
 
-.content > ul,
-.content > ol {
+.content>ul,
+.content>ol {
   list-style: initial;
   @apply ml-5;
 }
 
-.content > ol {
+.content>ol {
   list-style: decimal;
   @apply mb-6;
+}
+
+/* form */
+.form-group {
+  @apply my-5
+}
+
+.label {
+  @apply block tracking-wide text-gray-700 text-sm font-semibold mb-2;
+}
+
+.input {
+  @apply shadow-xs appearance-none border rounded w-full p-4;
+}
+
+.input:active,
+.input:focus {
+  @apply outline-none border-blue-800 border-2
+}
+
+.submit-button {
+  @apply bg-black px-5 py-3 text-white border-black cursor-pointer rounded-md transition-all duration-75 ease-in shadow-sm;
+}
+
+.submit-button:hover {
+  border: 1px solid #000 @apply text-black;
 }
 
 @tailwind utilities;
