@@ -1,8 +1,5 @@
 import { render } from '../testUtils'
 import Navbar, { routes } from '@/components/navbar'
-import { cleanup } from '@testing-library/react'
-
-afterEach(cleanup)
 
 test('renders all navigation links', () => {
   const { getAllByTestId } = render(<Navbar />)
