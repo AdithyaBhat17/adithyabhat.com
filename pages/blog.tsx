@@ -13,7 +13,7 @@ export default function Blog({ data }: BlogPosts) {
       <Head title="Blog | Adithya NR" />
       <Navbar />
       <Container>
-        <h1 className="text-black font-semibold text-5xl text-gray-900 mb-6">
+        <h1 className="font-semibold text-5xl text-gray-900 mb-6">
           <b>Blogs</b>
         </h1>
         <ArticlesList data={data} />
