@@ -1,149 +1,130 @@
 import Navbar from '@/components/navbar'
 import Head from '@/components/header'
 import Container from '@/components/container'
-import { useState, FormEvent, useMemo, ChangeEvent } from 'react'
-import FormErrorMessage from '@/components/error-message'
+import {
+  Fragment,
+  useMemo,
+  useState,
+  BaseSyntheticEvent,
+  useEffect,
+} from 'react'
+import Footer from '@/components/footer'
 
-export interface ContactResponse {
-  success: boolean
-  message: string
-}
+import { useForm } from 'react-hook-form'
+import FormErrorMessage from '@/components/error-message'
+import { ContactData, ContactResponse } from '@/interfaces/contact'
 
 export default function Contact() {
-  const [data, setData] = useState({
-    name: '',
-    email: '',
-    text: '',
-  })
+  const { register, handleSubmit, errors } = useForm()
   const [status, setStatus] = useState('idle')
-  const [message, setMessage] = useState('')
 
-  const buttonText = useMemo(() => {
-    if (status === 'success') return message
-    else if (status === 'sending') return 'Sending message'
-    return 'Send message'
-  }, [status, message])
+  useEffect(() => {
+    if (status === 'success' || status === 'error') {
+      setTimeout(() => setStatus('idle'), 3000)
+    }
+  }, [status])
 
-  const handleInputChange = (
-    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  const submitMessage = async (
+    data: ContactData,
+    event: BaseSyntheticEvent
   ) => {
-    setData({
-      ...data,
-      [event.target.name]: event.target.value,
-    })
-  }
-
-  const hasInvalidInputs = (
-    name: string,
-    email: string,
-    text: string
-  ): boolean => {
-    if (!name.trim()) {
-      setStatus('error')
-      setMessage('Please provide your name 😢')
-      return true
+    const { name, email, message } = data
+    if (!name || !email || !message.trim()) {
+      return
     }
-    if (!email.trim()) {
-      setStatus('error')
-      setMessage('Please provide your email 😢')
-      return true
-    }
-    if (!text.trim()) {
-      setStatus('error')
-      setMessage('Looks like you forgot to leave a message 🥺')
-      return true
-    }
-    return false
-  }
-
-  const sendMessage = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
-    setStatus('sending')
-    setMessage('')
-    if (hasInvalidInputs(name, email, text)) return
     try {
-      const { name, email, text } = data
+      setStatus('sending')
       const contactResponse = await fetch(`/api/contact`, {
         method: 'POST',
         body: JSON.stringify({
-          name,
+          name: name.trim(),
           email,
-          message: text,
+          message: message.trim(),
         }),
       })
       const contactStatus: ContactResponse = await contactResponse.json()
       if (contactStatus.success) {
         setStatus('success')
-        setMessage(contactStatus.message)
-        setData({ name: '', email: '', text: '' })
+        event.target.reset()
       } else {
         setStatus('error')
-        setMessage(contactStatus.message)
       }
     } catch (error) {
       setStatus('error')
-      setMessage('Failed to send message 😢')
     }
-    setTimeout(() => {
-      setStatus('idle')
-      setMessage('')
-    }, 5000)
   }
 
-  const { text, email, name } = data
+  const buttonText = useMemo(() => {
+    if (status === 'success') return 'Message sent!'
+    else if (status === 'error') return 'Mission Failed 😶'
+    else if (status === 'sending') return 'Sending message'
+    return 'Send message'
+  }, [status])
 
   return (
-    <>
+    <Fragment>
       <Head title="Contact - Adithya NR" />
       <Navbar />
       <Container>
         <div className="md:w-2/3 w-full mx-auto">
           <h1 className="md:text-5xl text-3xl font-bold mb-3">Get in touch</h1>
           <p>Send me a message here and I&apos;ll get back to you ASAP</p>
-          <form onSubmit={sendMessage}>
+          <form onSubmit={handleSubmit(submitMessage)}>
             <div className="form-group">
               <label className="label" htmlFor="name">
                 Your name
               </label>
               <input
-                onFocus={() => setStatus('idle')}
                 className="input"
-                onChange={handleInputChange}
                 type="text"
-                defaultValue={name || ''}
+                ref={register({ required: 'Name cannot be empty 🙁' })}
                 name="name"
                 id="name"
                 placeholder="Mike Wazowski"
               />
+              {errors.name ? (
+                <FormErrorMessage message={errors.name.message} />
+              ) : null}
             </div>
             <div className="form-group">
               <label className="label" htmlFor="email">
                 Your email address
               </label>
               <input
-                onFocus={() => setStatus('idle')}
                 className="input"
                 type="email"
-                onChange={handleInputChange}
-                defaultValue={email || ''}
+                ref={register({
+                  required: 'Please provide your email address 😓',
+                  pattern: {
+                    value: /[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+/,
+                    message: 'Invalid email address...',
+                  },
+                })}
                 name="email"
                 id="email"
                 placeholder="mike@monstersinc.com"
               />
+              {errors.email ? (
+                <FormErrorMessage message={errors.email.message} />
+              ) : null}
             </div>
             <div className="form-group">
-              <label className="label" htmlFor="text">
+              <label className="label" htmlFor="message">
                 Your message
               </label>
               <textarea
-                onFocus={() => setStatus('idle')}
+                ref={register({
+                  required: 'Please leave a message 😢',
+                  minLength: { value: 10, message: 'Message too short 😞' },
+                })}
                 className="input"
-                onChange={handleInputChange}
-                defaultValue={text || ''}
-                name="text"
-                id="text"
+                name="message"
+                id="message"
                 rows={5}
               />
+              {errors.message ? (
+                <FormErrorMessage message={errors.message.message} />
+              ) : null}
             </div>
             <input
               type="submit"
@@ -153,10 +134,11 @@ export default function Contact() {
                 status === 'success' ? 'bg-green-600 text-black' : ''
               }`}
             />
-            {status === 'error' ? <FormErrorMessage message={message} /> : null}
           </form>
         </div>
       </Container>
-    </>
+      <br />
+      <Footer />
+    </Fragment>
   )
 }

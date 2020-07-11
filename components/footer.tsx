@@ -1,6 +1,6 @@
 import Container from './container'
 import Link from 'next/link'
-import { useCallback } from 'react'
+import { useCallback, memo } from 'react'
 import { useRouter } from 'next/router'
 
 export const footerRoutes = [
@@ -53,7 +53,7 @@ export const socials = [
   },
 ]
 
-export default function Footer() {
+function Footer() {
   const router = useRouter()
   const activeStyle = useCallback((link: string) => {
     return router?.route === link ? 'border-gray-900' : ''
@@ -113,3 +113,5 @@ export default function Footer() {
     </Container>
   )
 }
+
+export default memo(Footer)

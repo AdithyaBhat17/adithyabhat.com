@@ -1,6 +1,7 @@
 import { ContainerProps } from '../interfaces/layout'
+import { memo } from 'react'
 
-export default function Container({ children, props }: ContainerProps) {
+function Container({ children, props }: ContainerProps) {
   return (
     <div
       data-testid="container"
@@ -11,3 +12,5 @@ export default function Container({ children, props }: ContainerProps) {
     </div>
   )
 }
+
+export default memo(Container)

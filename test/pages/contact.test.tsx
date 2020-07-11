@@ -1,6 +1,6 @@
 import { render } from '../testUtils'
 import Contact from '@/pages/contact'
-import { fireEvent, screen } from '@testing-library/react'
+import { fireEvent, screen, act } from '@testing-library/react'
 import { rest } from 'msw'
 import { setupServer } from 'msw/node'
 
@@ -29,47 +29,58 @@ test('renders all necessary inputs', () => {
 })
 
 test('throws an error if name is empty', async () => {
-  const { getByText, getByRole } = render(<Contact />)
-  fireEvent.click(getByText(/send message/i))
-  expect(getByRole('error').textContent).toBe('Please provide your name 😢')
+  await act(async () => {
+    render(<Contact />)
+    fireEvent.click(screen.getByText(/send message/i))
+  })
+  expect(screen.getAllByRole('error').shift().textContent).toBe(
+    'Name cannot be empty 🙁'
+  )
 })
 
 test('throws an error if email is empty', async () => {
-  const { getByText, getByRole } = render(<Contact />)
-  fireEvent.change(screen.getByPlaceholderText(/Mike/), {
-    target: { value: 'Mike' },
+  await act(async () => {
+    render(<Contact />)
+    fireEvent.change(screen.getByPlaceholderText(/Mike/), {
+      target: { value: 'Mike' },
+    })
+    fireEvent.click(screen.getByText(/send message/i))
   })
-  fireEvent.click(getByText(/send message/i))
-  expect(getByRole('error').textContent).toBe('Please provide your email 😢')
+  expect(screen.getAllByRole('error').shift().textContent).toBe(
+    'Please provide your email address 😓'
+  )
 })
 
 test('throws an error if message is empty', async () => {
-  const { getByText, getByRole } = render(<Contact />)
-  fireEvent.change(screen.getByPlaceholderText(/Mike/), {
-    target: { value: 'Mike' },
+  await act(async () => {
+    render(<Contact />)
+    fireEvent.change(screen.getByPlaceholderText(/Mike/), {
+      target: { value: 'Mike' },
+    })
+    fireEvent.change(screen.getByPlaceholderText(/mike@monstersinc.com/), {
+      target: { value: 'Mike@monstersinc.com' },
+    })
+    fireEvent.click(screen.getByText(/send message/i))
   })
-  fireEvent.change(screen.getByPlaceholderText(/mike@monstersinc.com/), {
-    target: { value: 'Mike@monstersinc.com' },
-  })
-  fireEvent.click(getByText(/send message/i))
-  expect(getByRole('error').textContent).toBe(
-    'Looks like you forgot to leave a message 🥺'
+  expect(screen.getByRole('error').textContent).toBe(
+    'Please leave a message 😢'
   )
 })
 
-test('Fails to send message if all fields are filled but absolute urls are not provided', async () => {
-  const { getByText } = render(<Contact />)
-  fireEvent.change(screen.getByPlaceholderText(/Mike/), {
-    target: { value: 'Mike' },
+test('No errors are thrown if all fields are filled', async () => {
+  await act(async () => {
+    render(<Contact />)
+    fireEvent.change(screen.getByPlaceholderText(/Mike/), {
+      target: { value: 'Mike' },
+    })
+    fireEvent.change(screen.getByPlaceholderText(/mike@monstersinc.com/), {
+      target: { value: 'Mike@monstersinc.com' },
+    })
+    fireEvent.change(screen.getByLabelText(/your message/i), {
+      target: { value: 'Hello there' },
+    })
+
+    fireEvent.click(screen.getByText(/send message/i))
   })
-  fireEvent.change(screen.getByPlaceholderText(/mike@monstersinc.com/), {
-    target: { value: 'mike@monstersinc.com' },
-  })
-  fireEvent.change(screen.getByLabelText(/Your message/), {
-    target: { value: 'hello' },
-  })
-  fireEvent.click(getByText(/send message/i))
-  expect(screen.getByRole('error').textContent).toBe(
-    'Failed to send message 😢'
-  )
+  expect(screen.queryAllByRole('error').length).toEqual(0)
 })

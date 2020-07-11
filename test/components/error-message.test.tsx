@@ -1,5 +1,5 @@
 import { render } from '../testUtils'
-import FormErrorMessage from '@/components/error-message'
+import FormErrorMessage from '@/components/FormErrorMessage'
 
 test('does not render an error message if not valid props are not sent', () => {
   const { container } = render(<FormErrorMessage message="" />)
