@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { useCallback } from 'react'
+import { useCallback, memo } from 'react'
 
 export const routes = [
   {
@@ -17,7 +17,7 @@ export const routes = [
   },
 ]
 
-export default function Navbar() {
+function Navbar() {
   const activeStyle = useCallback((link: string) => {
     return useRouter()?.route === link ? 'border-gray-900' : ''
   }, [])
@@ -62,3 +62,5 @@ export default function Navbar() {
     </>
   )
 }
+
+export default memo(Navbar)
