@@ -50,6 +50,7 @@ export default function About() {
             <b>Companies I&apos;ve worked with</b>
           </h3>
           <div className="flex flex-wrap mx-auto justify-between sm:justify-around items-center mb-5">
+            {/* @todo Refactor company logos section */}
             <div className="w-1/2 md:w-1/4 mx-auto my-5">
               <img
                 className="mx-auto w-1/2 sm:w-2/3 company"
