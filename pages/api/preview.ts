@@ -7,8 +7,8 @@ export default async function preview(
   res: NextApiResponse
 ) {
   if (
-    req.query.secret !== process.env.DATOCMS_PREVIEW_SECRET ||
-    !req.query.slug
+    req.query?.secret !== process.env.DATOCMS_PREVIEW_SECRET ||
+    !req.query?.slug
   ) {
     return res.status(403).send({ message: 'Invalid token' })
   }

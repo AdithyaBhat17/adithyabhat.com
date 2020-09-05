@@ -16,6 +16,8 @@ beforeAll(async (done) => {
     previewModeSigningKey: 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
   }
   server = http.createServer((req, res) =>
+    // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+    // @ts-ignore
     apiResolver(req, res, undefined, contact, dummyApiContext)
   )
   url = await listen(server)
