@@ -4,8 +4,9 @@ import Navbar from '@/components/navbar'
 import Container from '@/components/container'
 import Link from 'next/link'
 import Footer from '@/components/footer'
+import { companies } from '@/utils/about'
 
-export default function About() {
+export default function About({ companies }) {
   return (
     <Fragment>
       <Head title="About - Adithya NR" />
@@ -50,38 +51,16 @@ export default function About() {
             <b>Companies I&apos;ve worked with</b>
           </h3>
           <div className="flex flex-wrap mx-auto justify-between sm:justify-around items-center mb-5">
-            <div className="w-1/2 md:w-1/4 mx-auto my-5">
-              <img
-                className="mx-auto w-1/2 sm:w-2/3 company"
-                src="/static/betsol_logo.svg"
-                alt="Betsol"
-                title="Betsol"
-              />
-            </div>
-            <div className="w-1/2 md:w-1/4 mx-auto my-5">
-              <img
-                className="mx-auto w-1/2 sm:w-2/3 company"
-                src="/static/Homero.svg"
-                alt="Homero"
-                title="Homero"
-              />
-            </div>
-            <div className="w-1/2 md:w-1/4 mx-auto my-5">
-              <img
-                className="mx-auto w-1/2 sm:w-2/3 company"
-                src="/static/trayahpottery.svg"
-                alt="Trayah Pottery"
-                title="Trayah Pottery"
-              />
-            </div>
-            <div className="w-1/2 md:w-1/4 mx-auto my-5">
-              <img
-                className="mx-auto w-1/3 sm:w-1/3 company"
-                src="/static/grandmentor.svg"
-                alt="Grand Mentor LLC"
-                title="Grand Mentor LLC"
-              />
-            </div>
+            {companies?.map((company) => (
+              <div key={company.name} className="w-1/2 md:w-1/4 mx-auto my-5">
+                <img
+                  className="mx-auto w-1/2 sm:w-2/3 company"
+                  src={company.path}
+                  alt={company.name}
+                  title={company.name}
+                />
+              </div>
+            ))}
           </div>
           <h3 className="text-xl md:text-3xl mt-20 mb-16 text-left sm:text-center">
             <b>Things I&apos;m good at</b>
@@ -135,4 +114,12 @@ export default function About() {
       <Footer />
     </Fragment>
   )
+}
+
+export function getStaticProps() {
+  return {
+    props: {
+      companies,
+    },
+  }
 }
