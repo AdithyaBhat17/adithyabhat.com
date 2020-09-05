@@ -40,7 +40,7 @@ test('Should redirect to /blogs/[slug] if required query strings are passed', as
     `${url}?secret=${process.env.DATOCMS_PREVIEW_SECRET}&slug=javascript-variables`
   )
   await waitFor(() => {
-    expect(response.url).toBe(`${url}/blog/javascript-variables`)
+    expect(response.url).toMatch('javascript-variables')
   })
 })
 
