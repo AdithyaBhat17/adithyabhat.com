@@ -20,6 +20,7 @@ module.exports = {
     '@/components/(.*)': '<rootDir>/components/$1',
     '@/pages/(.*)': '<rootDir>/pages/$1',
     'graphql/(.*)': '<rootDir>/graphql/$1',
+    '@/utils/(.*)': '<rootDir>/utils/$1',
   },
   testEnvironment: 'jest-environment-jsdom',
   setupFilesAfterEnv: ['@testing-library/jest-dom/extend-expect'],
