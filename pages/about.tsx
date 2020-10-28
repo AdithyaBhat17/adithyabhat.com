@@ -14,6 +14,7 @@ export default function About({ companies }) {
       <Container>
         <div className="px-0 md:px-16 xl:px-32">
           <img
+            loading="eager"
             className="mx-auto w-3/4 md:w-1/3"
             src="/static/about_hero.svg"
             alt="About Adithya"
@@ -54,6 +55,7 @@ export default function About({ companies }) {
             {companies?.map((company) => (
               <div key={company.name} className="w-1/2 md:w-1/4 mx-auto my-5">
                 <img
+                  loading="lazy"
                   className="mx-auto w-1/2 sm:w-2/3 company"
                   src={company.path}
                   alt={company.name}
@@ -66,6 +68,7 @@ export default function About({ companies }) {
             <b>Things I&apos;m good at</b>
           </h3>
           <img
+            loading="lazy"
             className="mx-auto w-3/4 md:w-1/3 block h-56 sm:h-auto"
             src="/static/skills.svg"
             alt="Things I'm good at"
