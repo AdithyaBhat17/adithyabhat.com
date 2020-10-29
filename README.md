@@ -12,6 +12,6 @@ The source code for my current [website](https://www.adithyabhat.com) can be fou
 - [x] Pick a CMS and complete setup for the same.
 - [ ] Design all the pages.
 - [ ] Develop the pages.
-- [ ] Ensure 80% code coverage using Jest and react-testing-library
+- [x] Ensure 80% code coverage using Jest and react-testing-library
 - [x] Setup github actions
-- [ ] Deploy on v4.adithyabhat.com
+- [x] Deploy on v4.adithyabhat.com
