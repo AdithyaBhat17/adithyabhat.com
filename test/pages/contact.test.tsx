@@ -1,25 +1,6 @@
 import { render } from '../testUtils'
 import Contact from '@/pages/contact'
 import { fireEvent, screen, act } from '@testing-library/react'
-import { rest } from 'msw'
-import { setupServer } from 'msw/node'
-
-const server = setupServer(
-  rest.post('/api/contact', (req, res, ctx) => {
-    return res(
-      ctx.json({
-        success: true,
-        message: 'Done! your message was sent perfectly!',
-      })
-    )
-  })
-)
-
-beforeAll(() => server.listen())
-
-afterAll(() => {
-  server.close()
-})
 
 test('renders all necessary inputs', () => {
   const { getByPlaceholderText, getByLabelText } = render(<Contact />)
