@@ -2,7 +2,7 @@ import { render } from '../testUtils'
 import FormErrorMessage from '@/components/FormErrorMessage'
 
 test('does not render an error message if not valid props are not sent', () => {
-  const { container } = render(<FormErrorMessage message="" />)
+  const { container } = render(<FormErrorMessage message={undefined} />)
   expect(container.innerHTML).toBe('')
 })
 

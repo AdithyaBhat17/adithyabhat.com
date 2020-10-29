@@ -1,25 +1,6 @@
 import { render } from '../testUtils'
 import Contact from '@/pages/contact'
 import { fireEvent, screen, act } from '@testing-library/react'
-import { rest } from 'msw'
-import { setupServer } from 'msw/node'
-
-const server = setupServer(
-  rest.post('/api/contact', (req, res, ctx) => {
-    return res(
-      ctx.json({
-        success: true,
-        message: 'Done! your message was sent perfectly!',
-      })
-    )
-  })
-)
-
-beforeAll(() => server.listen())
-
-afterAll(() => {
-  server.close()
-})
 
 test('renders all necessary inputs', () => {
   const { getByPlaceholderText, getByLabelText } = render(<Contact />)
@@ -68,6 +49,16 @@ test('throws an error if message is empty', async () => {
 })
 
 test('No errors are thrown if all fields are filled', async () => {
+  // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+  // @ts-ignore
+  global.fetch = jest.fn(() =>
+    Promise.resolve({
+      json: () =>
+        Promise.resolve({
+          success: true,
+        }),
+    })
+  )
   await act(async () => {
     render(<Contact />)
     fireEvent.change(screen.getByPlaceholderText(/Mike/), {
@@ -83,4 +74,5 @@ test('No errors are thrown if all fields are filled', async () => {
     fireEvent.click(screen.getByText(/send message/i))
   })
   expect(screen.queryAllByRole('error').length).toEqual(0)
+  jest.clearAllMocks()
 })
