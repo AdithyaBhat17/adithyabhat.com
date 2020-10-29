@@ -1,53 +1,76 @@
 import preview from '@/pages/api/preview'
 
-import http from 'http'
-import fetch from 'isomorphic-fetch'
-import listen from 'test-listen'
-import {
-  apiResolver,
-  __ApiPreviewProps,
-} from 'next/dist/next-server/server/api-utils'
-import { waitFor } from '@testing-library/react'
+import { createMocks, Mocks } from 'node-mocks-http'
+import { NextApiRequest, NextApiResponse } from 'next'
 
-let server: http.Server, url: string
-
-beforeAll(async (done) => {
-  const dummyApiContext: __ApiPreviewProps = {
-    previewModeEncryptionKey: 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
-    previewModeId: 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
-    previewModeSigningKey: 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
-  }
-  server = http.createServer((req, res) =>
-    // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-    // @ts-ignore
-    apiResolver(req, res, undefined, preview, dummyApiContext)
+test('Should return 403 if required query string or slug is missing', async () => {
+  const { req, res }: Mocks<NextApiRequest, NextApiResponse> = createMocks({
+    method: 'GET',
+  })
+  await preview(req, res)
+  expect(res._getStatusCode()).toBe(403)
+  expect(res._getData()).toEqual(
+    expect.objectContaining({
+      message: 'Invalid token',
+    })
   )
-  url = await listen(server)
-  done()
-})
 
-afterAll((done) => server.close(done))
-
-test('Should return 403 if required query string is missing', async () => {
-  const response = await fetch(url + '/api/preview')
-  const data = await response.json()
-  expect(response.status).toBeGreaterThanOrEqual(400)
-  expect(data.message).toContain('Invalid')
+  const {
+    req: slugReq,
+    res: slugRes,
+  }: Mocks<NextApiRequest, NextApiResponse> = createMocks({
+    method: 'GET',
+    query: { secret: process.env.DATOCMD_PREVIEW_SECRET },
+  })
+  await preview(slugReq, slugRes)
+  expect(res._getStatusCode()).toBe(403)
+  expect(res._getData()).toEqual(
+    expect.objectContaining({
+      message: 'Invalid token',
+    })
+  )
 })
 
 test('Should redirect to /blogs/[slug] if required query strings are passed', async () => {
-  const response = await fetch(
-    `${url}?secret=${process.env.DATOCMS_PREVIEW_SECRET}&slug=javascript-variables`
+  // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+  // @ts-ignore
+  global.fetch = jest.fn(() =>
+    Promise.resolve({
+      json: () =>
+        Promise.resolve({
+          data: { article: { slug: 'javascript-variables' } },
+        }),
+    })
   )
-  await waitFor(() => {
-    expect(response.url).toMatch('javascript-variables')
+  const { req, res }: Mocks<NextApiRequest, NextApiResponse> = createMocks({
+    method: 'GET',
+    query: {
+      secret: process.env.DATOCMS_PREVIEW_SECRET,
+      slug: 'javascript-variables',
+    },
   })
+  res.setPreviewData = jest.fn()
+  await preview(req, res)
+  expect(res._getStatusCode()).toBe(307)
+  expect(res.setPreviewData).toBeCalledWith({})
 })
 
 test('Should return 400 if the slug is invalid', async () => {
-  const response = await fetch(
-    `${url}?secret=${process.env.DATOCMS_PREVIEW_SECRET}&slug=abc`
+  // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+  // @ts-ignore
+  global.fetch = jest.fn(() =>
+    Promise.resolve({
+      json: () => Promise.resolve({}),
+    })
   )
-  expect(response.status).toBeGreaterThanOrEqual(400)
-  expect((await response.json()).message).toContain('Invalid')
+  const { req, res }: Mocks<NextApiRequest, NextApiResponse> = createMocks({
+    method: 'GET',
+    query: { secret: process.env.DATOCMS_PREVIEW_SECRET, slug: 'abc' },
+  })
+  await preview(req, res)
+  expect(res._getStatusCode()).toBe(400)
+  expect(res._getData()).toEqual(
+    expect.objectContaining({ message: 'Invalid slug' })
+  )
+  jest.clearAllMocks()
 })

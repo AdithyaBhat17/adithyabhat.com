@@ -68,6 +68,16 @@ test('throws an error if message is empty', async () => {
 })
 
 test('No errors are thrown if all fields are filled', async () => {
+  // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+  // @ts-ignore
+  global.fetch = jest.fn(() =>
+    Promise.resolve({
+      json: () =>
+        Promise.resolve({
+          success: true,
+        }),
+    })
+  )
   await act(async () => {
     render(<Contact />)
     fireEvent.change(screen.getByPlaceholderText(/Mike/), {
@@ -83,4 +93,5 @@ test('No errors are thrown if all fields are filled', async () => {
     fireEvent.click(screen.getByText(/send message/i))
   })
   expect(screen.queryAllByRole('error').length).toEqual(0)
+  jest.clearAllMocks()
 })
