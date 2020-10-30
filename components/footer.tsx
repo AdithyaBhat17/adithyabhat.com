@@ -2,11 +2,12 @@ import Container from './container'
 import Link from 'next/link'
 import { useCallback, memo } from 'react'
 import { useRouter } from 'next/router'
+import Socials from './socials'
 
 export const footerRoutes = [
   {
     name: 'Home',
-    link: '/home',
+    link: '/',
   },
   {
     name: 'About',
@@ -27,29 +28,6 @@ export const footerRoutes = [
   {
     name: 'Resume',
     link: '/',
-  },
-]
-
-export const socials = [
-  {
-    icon: 'behance',
-    link: 'https://behance.net/adithyabhat',
-  },
-  {
-    icon: 'dribbble',
-    link: 'https://dribbble.com/adithyanr',
-  },
-  {
-    icon: 'twitter',
-    link: 'https://twitter.com/adithya__nr',
-  },
-  {
-    icon: 'github',
-    link: 'https://github.com/adithyabhat17',
-  },
-  {
-    icon: 'linkedin',
-    link: 'https://linkedin.com/in/adithya-nr',
   },
 ]
 
@@ -79,7 +57,7 @@ function Footer() {
           </Link>
         </div>
 
-        <ul className="flex justify-between">
+        <ul className="flex justify-between mb-5">
           {footerRoutes?.map((route, i) => (
             <li className="ml-0 md:ml-10" key={i}>
               <Link href={`${route.link}`}>
@@ -95,21 +73,8 @@ function Footer() {
             </li>
           ))}
         </ul>
+        <Socials />
       </footer>
-      <div className="flex justify-start items-center">
-        {socials.map((social, i) => (
-          <a
-            key={i}
-            data-testid="socials-link"
-            href={social.link}
-            target="_blank"
-            rel="noreferrer noopener"
-            className="text-black mr-5"
-          >
-            <img src={`/static/${social.icon}.svg`} alt={social.icon} />
-          </a>
-        ))}
-      </div>
     </Container>
   )
 }
