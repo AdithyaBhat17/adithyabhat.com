@@ -69,10 +69,6 @@ pre > code {
   margin-bottom: 5px;
 }
 
-ul {
-  margin-top: 20px;
-}
-
 code,
 .code {
   font-family: 'SF Mono', monospace;
@@ -94,10 +90,47 @@ code,
 
 .navbar,
 .footer {
-  @apply flex sticky w-full overflow-hidden top-0 mb-6 items-center justify-between flex-wrap py-4 text-gray-900;
+  @apply flex;
+  @apply sticky;
+  @apply w-full; @apply overflow-hidden;
+  @apply top-0; 
+  @apply mb-6;
+  @apply items-center; 
+  @apply justify-between;
+  @apply flex-wrap;
+  @apply py-4;
+  @apply text-gray-900;
   background-color: rgba(255, 255, 255, 0.5);
   z-index: 1;
   backdrop-filter: blur(8px);
+}
+
+.button_primary {
+  @apply bg-gray-900;
+  @apply text-white;
+  @apply px-5;
+  @apply py-2;
+  @apply rounded-md;
+  border: 1px solid #231F20;
+  font-family: 'Poppins', sans-serif;
+  transition: background-color .2s ease-in-out;
+}
+.button_primary:hover {
+  @apply bg-black;
+  @apply rounded-lg;
+}
+
+.button_outlined {
+  @apply text-gray-900;
+  border: 1px solid #eaeaea;
+  font-family: 'Poppins', sans-serif;
+  @apply rounded-md;
+  @apply px-5;
+  @apply py-2;
+  transition: border .2s ease-in-out;
+}
+.button_outlined:hover, .button_outlined:focus, .button_outlined:active {
+  border: 1px solid #231F20;
 }
 
 @media (max-width: 600px) {
