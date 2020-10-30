@@ -1,6 +1,5 @@
 import React from 'react'
 import Container from '@/components/container'
-import Image from 'next/image'
 import useResizeObserver from 'hooks/useResizeObserver'
 import Socials from './socials'
 import Link from 'next/link'
@@ -55,21 +54,20 @@ export default function Hero() {
           </div>
         </div>
         <div ref={imageRef} className="mx-auto">
-          <Image
+          <img
             onMouseMove={handleMouseOver}
             src="/static/hero.svg"
-            unsized
-            className="block mx-auto"
+            loading="eager"
+            className="block mx-auto w-full sm:w-auto"
             alt="Hero image"
           />
         </div>
       </div>
-      <Image
+      <img
         src="/static/gifs/scroll.gif"
         loading="eager"
         className={`mx-auto text-center w-1/6 ${gif ? '' : 'hidden'}`}
         alt="scroll down"
-        unsized
       />
     </Container>
   )
