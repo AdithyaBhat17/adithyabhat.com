@@ -66,7 +66,7 @@ export default function Hero() {
       <img
         src="/static/gifs/scroll.gif"
         loading="eager"
-        className={`mx-auto text-center w-1/6 ${gif ? '' : 'hidden'}`}
+        className={`mx-auto text-center w-1/6 ${gif ? '' : 'invisible'}`}
         alt="scroll down"
       />
     </Container>
