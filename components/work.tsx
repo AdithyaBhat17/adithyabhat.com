@@ -36,7 +36,7 @@ export default function Work({ data }: WorkProps) {
             ?.sort((a, b) => (new Date(b.date) > new Date(a.date) ? 1 : -1))
             .map((project) => {
               return (
-                <div className="w-full md:w-2/7" key={project.title}>
+                <div className="w-full md:w-2/7 mt-5" key={project.title}>
                   <Image
                     className="rounded-lg shadow-sm"
                     data={project.thumbnail.responsiveImage}
