@@ -38,8 +38,8 @@ export default function Hero() {
           </h1>
           <p className="mt-5 w-full md:w-3/4 leading-7 poppins">
             A UX engineer from Bengaluru, helping companies of all sizes get
-            ahead online. I am currently working on a DevOps and Analytics
-            product at <span className="text-blue-800">Betsol</span>.
+            ahead online. I am currently working on DevOps and Analytics
+            products at <span className="text-blue-800">Betsol</span>.
           </p>
           <div className="mt-6 mb-8 flex justify-start items-center">
             <Link href="/about">

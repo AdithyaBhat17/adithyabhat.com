@@ -8,7 +8,7 @@ afterEach(cleanup)
 
 describe('Home page', () => {
   it('matches snapshot', () => {
-    const { asFragment } = render(<Home />, {})
+    const { asFragment } = render(<Home data={{ allProjects: [] }} />, {})
     expect(asFragment()).toMatchSnapshot()
   })
   it('Imports css modules using _app.tsx', () => {
