@@ -1,13 +1,4 @@
-export interface BlogPosts {
-  data: {
-    allArticles: {
-      id: string
-      slug?: string
-      date: Date | string
-      title: string
-    }[]
-  }
-}
+import { ResponsiveImageType, SeoMetaTagType } from 'react-datocms'
 
 export interface ArticleProps {
   data: {
@@ -17,10 +8,28 @@ export interface ArticleProps {
       content: string
       date: Date | string
       slug?: string
+      seo: SeoMetaTagType[]
     }
     moreArticles: {
       id: string
       slug: string
+      title: string
+    }[]
+  }
+}
+
+export interface BlogPosts {
+  data: {
+    allArticles: {
+      date: Date | string
+      tags: string
+      slug: string
+      thumbnail: {
+        alt: string
+        blurhash: string
+        title: string
+        responsiveImage: ResponsiveImageType
+      }
       title: string
     }[]
   }

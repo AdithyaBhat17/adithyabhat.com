@@ -1,8 +1,8 @@
 import React from 'react'
 import Container from '@/components/container'
-import useResizeObserver from 'hooks/useResizeObserver'
 import Socials from './socials'
 import Link from 'next/link'
+import useResizeObserver from 'hooks/useResizeObserver'
 
 export default function Hero() {
   const [gif, showGif] = React.useState(false)
@@ -14,7 +14,7 @@ export default function Hero() {
   React.useEffect(() => {
     const timeout = setTimeout(() => {
       if (width > 1100) showGif(true)
-    }, 3000)
+    }, 1000)
     return () => clearTimeout(timeout)
   }, [width])
 

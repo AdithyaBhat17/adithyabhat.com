@@ -1,16 +1,10 @@
 import { render } from '../testUtils'
 import RecentArticles from '@/components/recent-articles'
+import { mockArticles } from '../__mocks__/article'
 
-const allArticles = [
-  {
-    id: '1',
-    slug: 'javascript-variables',
-    date: '2020-02-03',
-    title: 'JavaScript Variables',
-  },
-]
+const { allArticles } = mockArticles
 
 test('Lists all articles', () => {
-  const { getAllByTestId } = render(<RecentArticles articles={allArticles} />)
-  expect(getAllByTestId('article').length).toEqual(1)
+  const { getAllByRole } = render(<RecentArticles articles={allArticles} />)
+  expect(getAllByRole('presentation').length).toEqual(3)
 })

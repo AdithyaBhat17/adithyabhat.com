@@ -133,6 +133,18 @@ code,
   border: 1px solid #231F20;
 }
 
+.hover-card {
+  transition: all .5s ease;
+}
+
+.hover-card:hover {
+  transform: scale(1.03);
+}
+
+.decoration-none:hover, .decoration-none:focus {
+  color: #000
+}
+
 @media (max-width: 600px) {
   .grid {
     width: 100%;
@@ -150,6 +162,9 @@ code,
 
   .footer > ul > li {
     @apply mt-2;
+  }
+  .hover-card:hover {
+    transform: none
   }
 }
 

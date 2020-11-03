@@ -39,7 +39,7 @@ function Footer() {
 
   return (
     <Container>
-      <hr className="border-gray-800" />
+      <hr className="border-gray-800 mt-12 px-6" />
       <br />
       <footer className="footer flex-wrap">
         <div className="flex justify-start items-center">
@@ -57,7 +57,7 @@ function Footer() {
           </Link>
         </div>
 
-        <ul className="flex justify-between mb-5">
+        <ul className="flex justify-between">
           {footerRoutes?.map((route, i) => (
             <li className="ml-0 md:ml-10" key={i}>
               <Link href={`${route.link}`}>
