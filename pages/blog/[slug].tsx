@@ -22,7 +22,7 @@ export default function Article({ data }: ArticleProps) {
   return (
     <div>
       <Head title={data?.article?.title} />
-      <NextHead>{renderMetaTags(data.article.seo)}</NextHead>
+      <NextHead>{renderMetaTags(data?.article?.seo)}</NextHead>
       <Navbar />
       <Container>
         <div className="w-full md:w-3/4 mx-auto">
