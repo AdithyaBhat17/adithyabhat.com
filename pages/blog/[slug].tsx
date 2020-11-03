@@ -5,11 +5,14 @@ import processMarkdown from '@/lib/processMarkdown'
 import Container from '@/components/container'
 import Navbar from '@/components/navbar'
 import { ArticleProps } from '@/interfaces/blog'
+import NextHead from 'next/head'
+import Footer from '@/components/footer'
 
 import dayjs from 'dayjs'
 import { useRouter } from 'next/router'
 import ErrorPage from 'next/error'
 import RecentArticles from '@/components/recent-articles'
+import { renderMetaTags } from 'react-datocms'
 
 export default function Article({ data }: ArticleProps) {
   const router = useRouter()
@@ -19,6 +22,9 @@ export default function Article({ data }: ArticleProps) {
   return (
     <div>
       <Head title={data?.article?.title} />
+      <NextHead>
+        {data?.article ? renderMetaTags(data?.article?.seo) : null}
+      </NextHead>
       <Navbar />
       <Container>
         <div className="w-full md:w-3/4 mx-auto">
@@ -34,8 +40,11 @@ export default function Article({ data }: ArticleProps) {
             dangerouslySetInnerHTML={{ __html: data?.article?.content }}
           />
         </div>
-        <RecentArticles articles={data?.moreArticles || []} />
+        <div className="px-0 md:px-24 lg:px-24 mb-6">
+          <RecentArticles articles={data?.moreArticles || []} />
+        </div>
       </Container>
+      <Footer />
     </div>
   )
 }

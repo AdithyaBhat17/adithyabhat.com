@@ -117,7 +117,7 @@ exports[`Home page matches snapshot 1`] = `
             class="mb-5"
           >
             <div
-              class="flex justify-start items-center"
+              class="flex justify-start items-center mt-10 lg:mt-0"
             >
               <a
                 class="text-black mr-5"
@@ -195,7 +195,7 @@ exports[`Home page matches snapshot 1`] = `
       </div>
       <img
         alt="scroll down"
-        class="mx-auto text-center w-1/6 hidden"
+        class="mx-auto text-center w-1/6 invisible"
         loading="eager"
         src="/static/gifs/scroll.gif"
       />
@@ -204,9 +204,323 @@ exports[`Home page matches snapshot 1`] = `
       class="px-6 md:px-36 lg:px-48 mb-6"
       data-testid="container"
     >
-      <h1>
+      <h1
+        class="mt-6 lg:mt-16 xl:mt-24 mb-6 text-2xl font-semibold"
+      >
         Recent work
       </h1>
+      <div
+        class="flex items-start flex-wrap -mx-5"
+      />
+    </div>
+    <div
+      class="px-6 md:px-36 lg:px-48 mb-6"
+      data-testid="container"
+    >
+      <h1
+        class="mt-24 xl:mt-64 mb-6 text-2xl font-semibold"
+      >
+        Featured articles
+      </h1>
+      <div
+        class="flex items-start flex-wrap -mx-5"
+      >
+        <a
+          class="w-full md:w-1/3 mt-8 text-gray-900 hover-card px-5"
+          href="/blog/a-beginner-s-guide-to-understanding-react-s-context-api"
+        >
+          <div
+            class="rounded-lg shadow-sm"
+            style="display: block; overflow: hidden; position: relative;"
+          >
+            <img
+              role="presentation"
+              src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI1NjkiIGhlaWdodD0iNDI3Ij48L3N2Zz4="
+              style="display: block; width: 100%;"
+            />
+            <div
+              style="background-image: url(data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAoHBwgHBgoICAgLFBILDhUNGRUSDh0PEQ8NFx8aGBYVKhUaLisjIh0oHSEiJDUlKC0vMjIyGSU4PTcwPCsxMi8BCgsLDg0OHBAQHC8oGh07Oy8vLy8vLy8vLy8vOzAvLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vL//AABEIABIAGAMBIgACEQEDEQH/xAAaAAACAgMAAAAAAAAAAAAAAAAABAEDAgUG/8QAIRAAAgEEAAcAAAAAAAAAAAAAAAECAwQFERIjMTM0UXH/xAAXAQEBAQEAAAAAAAAAAAAAAAADBAUC/8QAGREAAgMBAAAAAAAAAAAAAAAAAAECETES/9oADAMBAAIRAxEAPwC6U1oQuKLqjFrz1syutUI7YkOU7EEaVtwMClZOnKfCmiStNCWbHDdtEZ3x5fAAy4YcPThbOUnkaicn19kABasFZ//Z); background-size: cover; opacity: 1; transition: opacity 500ms 500ms; position: absolute; left: 0px; top: 0px; bottom: 0px; right: 0px;"
+            />
+            <noscript />
+          </div>
+          <h3
+            class="mt-3 font-semibold text-xl sm:text-sm lg:text-xl"
+          >
+            A beginner’s guide to understanding React’s context API
+          </h3>
+          <p
+            class="text-gray-600 poppins sm:text-xs md:text-md mt-2"
+          >
+            Sep 2018 | React.js 
+          </p>
+        </a>
+        <a
+          class="w-full md:w-1/3 mt-8 text-gray-900 hover-card px-5"
+          href="/blog/the-most-underrated-skill-for-a-developer-communication"
+        >
+          <div
+            class="rounded-lg shadow-sm"
+            style="display: block; overflow: hidden; position: relative;"
+          >
+            <img
+              role="presentation"
+              src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI1NjkiIGhlaWdodD0iNDI3Ij48L3N2Zz4="
+              style="display: block; width: 100%;"
+            />
+            <div
+              style="background-image: url(data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAoHBwgHBgoICAgLFBILDhUNGRUSDh0PEQ8NFx8aGBYVKhUaLisjIh0oHSEiJDUlKC0vMjIyGSU4PTcwPCsxMi8BCgsLDg0OHBAQHC8oGh07Oy8vLy8vLy8vLy8vOzAvLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vL//AABEIABIAGAMBIgACEQEDEQH/xAAaAAACAgMAAAAAAAAAAAAAAAAABAEDAgUG/8QAIRAAAgEEAAcAAAAAAAAAAAAAAAECAwQFERIjMTM0UXH/xAAXAQEBAQEAAAAAAAAAAAAAAAADBAUC/8QAGREAAgMBAAAAAAAAAAAAAAAAAAECETES/9oADAMBAAIRAxEAPwC6U1oQuKLqjFrz1syutUI7YkOU7EEaVtwMClZOnKfCmiStNCWbHDdtEZ3x5fAAy4YcPThbOUnkaicn19kABasFZ//Z); background-size: cover; opacity: 1; transition: opacity 500ms 500ms; position: absolute; left: 0px; top: 0px; bottom: 0px; right: 0px;"
+            />
+            <noscript />
+          </div>
+          <h3
+            class="mt-3 font-semibold text-xl sm:text-sm lg:text-xl"
+          >
+            The most underrated skill for a developer: Communication
+          </h3>
+          <p
+            class="text-gray-600 poppins sm:text-xs md:text-md mt-2"
+          >
+            Aug 2018 | Miscellaneous  
+          </p>
+        </a>
+        <a
+          class="w-full md:w-1/3 mt-8 text-gray-900 hover-card px-5"
+          href="/blog/generate-code-coverage-reports-for-your-unit-tests-using-jest"
+        >
+          <div
+            class="rounded-lg shadow-sm"
+            style="display: block; overflow: hidden; position: relative;"
+          >
+            <img
+              role="presentation"
+              src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI1NjkiIGhlaWdodD0iNDI3Ij48L3N2Zz4="
+              style="display: block; width: 100%;"
+            />
+            <div
+              style="background-image: url(data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAoHBwgHBgoICAgLFBILDhUNGRUSDh0PEQ8NFx8aGBYVKhUaLisjIh0oHSEiJDUlKC0vMjIyGSU4PTcwPCsxMi8BCgsLDg0OHBAQHC8oGh07Oy8vLy8vLy8vLy8vOzAvLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vL//AABEIABIAGAMBIgACEQEDEQH/xAAaAAACAgMAAAAAAAAAAAAAAAAABAEDAgUG/8QAIRAAAgEEAAcAAAAAAAAAAAAAAAECAwQFERIjMTM0UXH/xAAXAQEBAQEAAAAAAAAAAAAAAAADBAUC/8QAGREAAgMBAAAAAAAAAAAAAAAAAAECETES/9oADAMBAAIRAxEAPwC6U1oQuKLqjFrz1syutUI7YkOU7EEaVtwMClZOnKfCmiStNCWbHDdtEZ3x5fAAy4YcPThbOUnkaicn19kABasFZ//Z); background-size: cover; opacity: 1; transition: opacity 500ms 500ms; position: absolute; left: 0px; top: 0px; bottom: 0px; right: 0px;"
+            />
+            <noscript />
+          </div>
+          <h3
+            class="mt-3 font-semibold text-xl sm:text-sm lg:text-xl"
+          >
+            Generate code coverage reports for your unit tests using Jest 
+          </h3>
+          <p
+            class="text-gray-600 poppins sm:text-xs md:text-md mt-2"
+          >
+            Aug 2020 | Unit testing 
+          </p>
+        </a>
+      </div>
+      <a
+        class="text-gray-900 hover:text-black poppins mt-16 mx-auto text-center flex items-center justify-center w-auto"
+        href="/blog"
+      >
+        Read more articles  
+        <svg
+          fill="#000"
+          viewBox="0 0 20 20"
+          width="20"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            clip-rule="evenodd"
+            d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z"
+            fill-rule="evenodd"
+          />
+        </svg>
+      </a>
+      <h1
+        class="mt-24 xl:mt-32 mb-6 text-3xl font-semibold"
+      >
+        Thanks for stopping by!
+      </h1>
+      <p
+        class="poppins text-lg"
+      >
+        Got a project in mind, a question, or something else? 
+        <br
+          class="hidden lg:block"
+        />
+         Get in touch with me 
+        <a
+          class="font-semibold hover:border-b-2 hover:border-blue-800"
+          href="/contact"
+        >
+          here
+        </a>
+      </p>
+    </div>
+    <div
+      class="mt-24 lg:mt-32"
+    >
+      <div
+        class="px-6 md:px-36 lg:px-48 mb-6"
+        data-testid="container"
+      >
+        <hr
+          class="border-gray-800 mt-12 px-6"
+        />
+        <br />
+        <footer
+          class="footer flex-wrap"
+        >
+          <div
+            class="flex justify-start items-center"
+          >
+            <a
+              class="hover:border-white flex justify-start items-center"
+              href="/"
+            >
+              <img
+                alt="Adithya NR"
+                class="fill-current lg:h-16 lg:w-12 w-12 h-12 mr-3"
+                src="/static/logo_black.svg"
+              />
+              <span
+                class="font-semibold text-black poppins"
+              >
+                adithya nr
+              </span>
+            </a>
+          </div>
+          <ul
+            class="flex justify-between"
+          >
+            <li
+              class="ml-0 md:ml-10"
+            >
+              <a
+                class=" text-black text-sm hover:border-gray-900"
+                data-testid="footer-link"
+                href="/"
+              >
+                Home
+              </a>
+            </li>
+            <li
+              class="ml-0 md:ml-10"
+            >
+              <a
+                class=" text-black text-sm hover:border-gray-900"
+                data-testid="footer-link"
+                href="/about"
+              >
+                About
+              </a>
+            </li>
+            <li
+              class="ml-0 md:ml-10"
+            >
+              <a
+                class=" text-black text-sm hover:border-gray-900"
+                data-testid="footer-link"
+                href="/blog"
+              >
+                Blog
+              </a>
+            </li>
+            <li
+              class="ml-0 md:ml-10"
+            >
+              <a
+                class=" text-black text-sm hover:border-gray-900"
+                data-testid="footer-link"
+                href="/work"
+              >
+                Work
+              </a>
+            </li>
+            <li
+              class="ml-0 md:ml-10"
+            >
+              <a
+                class=" text-black text-sm hover:border-gray-900"
+                data-testid="footer-link"
+                href="/contact"
+              >
+                Contact
+              </a>
+            </li>
+            <li
+              class="ml-0 md:ml-10"
+            >
+              <a
+                class=" text-black text-sm hover:border-gray-900"
+                data-testid="footer-link"
+                href="/"
+              >
+                Resume
+              </a>
+            </li>
+          </ul>
+          <div
+            class="flex justify-start items-center mt-10 lg:mt-0"
+          >
+            <a
+              class="text-black mr-5"
+              data-testid="socials-link"
+              href="https://behance.net/adithyabhat"
+              rel="noreferrer noopener"
+              target="_blank"
+            >
+              <img
+                alt="behance"
+                src="/static/behance.svg"
+              />
+            </a>
+            <a
+              class="text-black mr-5"
+              data-testid="socials-link"
+              href="https://dribbble.com/adithyanr"
+              rel="noreferrer noopener"
+              target="_blank"
+            >
+              <img
+                alt="dribbble"
+                src="/static/dribbble.svg"
+              />
+            </a>
+            <a
+              class="text-black mr-5"
+              data-testid="socials-link"
+              href="https://twitter.com/adithya__nr"
+              rel="noreferrer noopener"
+              target="_blank"
+            >
+              <img
+                alt="twitter"
+                src="/static/twitter.svg"
+              />
+            </a>
+            <a
+              class="text-black mr-5"
+              data-testid="socials-link"
+              href="https://github.com/adithyabhat17"
+              rel="noreferrer noopener"
+              target="_blank"
+            >
+              <img
+                alt="github"
+                src="/static/github.svg"
+              />
+            </a>
+            <a
+              class="text-black mr-5"
+              data-testid="socials-link"
+              href="https://linkedin.com/in/adithya-nr"
+              rel="noreferrer noopener"
+              target="_blank"
+            >
+              <img
+                alt="linkedin"
+                src="/static/linkedin.svg"
+              />
+            </a>
+          </div>
+        </footer>
+      </div>
     </div>
   </div>
 </DocumentFragment>

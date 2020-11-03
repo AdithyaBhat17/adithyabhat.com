@@ -6,6 +6,7 @@ import Navbar from '@/components/navbar'
 import Container from '@/components/container'
 import { BlogPosts } from '@/interfaces/blog'
 import ArticlesList from '@/components/articles-list'
+import Footer from '@/components/footer'
 
 export default function Blog({ data }: BlogPosts) {
   return (
@@ -18,6 +19,8 @@ export default function Blog({ data }: BlogPosts) {
         </h1>
         <ArticlesList data={data} />
       </Container>
+      <br />
+      <Footer />
     </div>
   )
 }

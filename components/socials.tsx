@@ -26,7 +26,7 @@ export const socials = [
 export default function Socials() {
   return (
     <>
-      <div className="flex justify-start items-center">
+      <div className="flex justify-start items-center mt-10 lg:mt-0">
         {socials.map((social, i) => (
           <a
             key={i}
