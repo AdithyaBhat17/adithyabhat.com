@@ -7,21 +7,26 @@ import Container from '@/components/container'
 import { BlogPosts } from '@/interfaces/blog'
 import ArticlesList from '@/components/articles-list'
 import Footer from '@/components/footer'
+import { motion } from 'framer-motion'
 
 export default function Blog({ data }: BlogPosts) {
   return (
-    <div>
+    <motion.div initial="initial" exit={{ opacity: 0 }} animate="animate">
       <Head title="Blog | Adithya NR" />
       <Navbar />
       <Container>
-        <h1 className="font-semibold text-5xl text-gray-900 mb-6">
+        <motion.h1
+          initial={{ opacity: 0, y: 60 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="font-semibold text-5xl text-gray-900 mb-6"
+        >
           <b>Blogs</b>
-        </h1>
+        </motion.h1>
         <ArticlesList data={data} />
       </Container>
       <br />
       <Footer />
-    </div>
+    </motion.div>
   )
 }
 

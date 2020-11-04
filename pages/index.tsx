@@ -12,9 +12,36 @@ import Container from '@/components/container'
 import Footer from '@/components/footer'
 import NextLink from '@/components/NextLink'
 import Link from 'next/link'
+import { motion } from 'framer-motion'
+
+const easing = [0.6, -0.05, 0.01, 0.99]
+export const fadeInUp = {
+  initial: {
+    y: 20,
+    opacity: 0,
+    transition: { duration: 0.6, ease: easing },
+  },
+  animate: {
+    y: 0,
+    opacity: 1,
+    transition: {
+      duration: 0.6,
+      ease: easing,
+    },
+  },
+}
+
+export const stagger = {
+  animate: {
+    transition: {
+      staggerChildren: 0.1,
+      delayChildren: 0.3,
+    },
+  },
+}
 
 export const Home = ({ recentWork, featuredArticles }): JSX.Element => (
-  <div className="">
+  <motion.div initial="initial" animate="animate" exit={{ opacity: 0 }}>
     <Head title="Adithya NR | A Full stack Designer based in Bengaluru, India." />
     <Navbar />
     <Hero />
@@ -41,7 +68,7 @@ export const Home = ({ recentWork, featuredArticles }): JSX.Element => (
     <div className="mt-24 lg:mt-32">
       <Footer />
     </div>
-  </div>
+  </motion.div>
 )
 
 export async function getStaticProps() {

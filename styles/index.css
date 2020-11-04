@@ -145,6 +145,19 @@ code,
   color: #000
 }
 
+.hero-text-enter {
+  opacity: 0;
+  margin-top: 50px;
+}
+.hero-text-enter-active, .hero-text-exit {  
+  opacity: 1;
+  margin-top: 0;
+}
+.hero-text-exit-active {
+  opacity: 0;
+  margin-top: -50px;
+}
+
 @media (max-width: 600px) {
   .grid {
     width: 100%;

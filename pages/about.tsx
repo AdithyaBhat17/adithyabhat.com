@@ -1,27 +1,28 @@
-import { Fragment } from 'react'
 import Head from '@/components/header'
 import Navbar from '@/components/navbar'
 import Container from '@/components/container'
 import Link from 'next/link'
 import Footer from '@/components/footer'
 import { companies } from '@/utils/about'
+import { motion } from 'framer-motion'
+import { fadeInUp } from '.'
 
 export default function About({ companies }) {
   return (
-    <Fragment>
+    <motion.div initial="initial" animate="animate" exit={{ opacity: 0 }}>
       <Head title="About - Adithya NR" />
       <Navbar />
       <Container>
-        <div className="px-0 md:px-16 xl:px-32">
+        <motion.div variants={fadeInUp} className="px-0 md:px-16 xl:px-32">
           <img
             loading="eager"
             className="mx-auto w-3/4 md:w-1/3"
             src="/static/about_hero.svg"
             alt="About Adithya"
           />
-          <h3 className="text-3xl md:text-5xl my-5 text-left sm:text-center">
+          <h1 className="text-3xl md:text-5xl my-5 text-left sm:text-center">
             Hello, I&apos;m Adithya
-          </h3>
+          </h1>
           <p className=" my-5 leading-8">
             As you might have guessed already, I&apos;m Adithya, a 22-year-old
             Full-Stack Designer from Bengaluru, India.
@@ -31,9 +32,9 @@ export default function About({ companies }) {
             Designer. Free time is hard to come by, but when it does, I
             freelance and craft web apps for a living.
           </p>
-          <h3 className="text-md leading-8 uppercase opacity-50 mt-5 mb-3">
+          <h2 className="text-md leading-8 uppercase opacity-50 mt-5 mb-3">
             Background
-          </h3>
+          </h2>
           <p className="my-5 leading-8">
             I studied computer science and engineering at RNS Institute of
             Technology, Bangalore. During my time at RNSIT, I volunteered as a
@@ -112,10 +113,10 @@ export default function About({ companies }) {
               <a> here</a>
             </Link>
           </h1>
-        </div>
+        </motion.div>
       </Container>
       <Footer />
-    </Fragment>
+    </motion.div>
   )
 }
 

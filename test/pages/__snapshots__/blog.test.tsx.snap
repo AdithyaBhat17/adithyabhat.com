@@ -67,6 +67,7 @@ exports[`Renders a list of blogs 1`] = `
     >
       <h1
         class="font-semibold text-5xl text-gray-900 mb-6"
+        style="opacity: 0; transform: translateY(60px) translateZ(0);"
       >
         <b>
           Blogs
@@ -75,9 +76,9 @@ exports[`Renders a list of blogs 1`] = `
       <div
         class="flex items-start flex-wrap -mx-5"
       >
-        <a
-          class="w-full md:w-1/3 mt-8 text-gray-900 hover-card px-5"
-          href="/blog/a-beginner-s-guide-to-understanding-react-s-context-api"
+        <div
+          class="w-full md:w-1/3 mt-8 cursor-pointer text-gray-900 px-5"
+          style="opacity: 0; transform: translateY(20px) translateZ(0);"
         >
           <div
             class="rounded-lg shadow-sm"
@@ -104,10 +105,10 @@ exports[`Renders a list of blogs 1`] = `
             Sep 2018 | React.js
              
           </p>
-        </a>
-        <a
-          class="w-full md:w-1/3 mt-8 text-gray-900 hover-card px-5"
-          href="/blog/the-most-underrated-skill-for-a-developer-communication"
+        </div>
+        <div
+          class="w-full md:w-1/3 mt-8 cursor-pointer text-gray-900 px-5"
+          style="opacity: 0; transform: translateY(20px) translateZ(0);"
         >
           <div
             class="rounded-lg shadow-sm"
@@ -134,10 +135,10 @@ exports[`Renders a list of blogs 1`] = `
             Aug 2018 | Miscellaneous 
              
           </p>
-        </a>
-        <a
-          class="w-full md:w-1/3 mt-8 text-gray-900 hover-card px-5"
-          href="/blog/generate-code-coverage-reports-for-your-unit-tests-using-jest"
+        </div>
+        <div
+          class="w-full md:w-1/3 mt-8 cursor-pointer text-gray-900 px-5"
+          style="opacity: 0; transform: translateY(20px) translateZ(0);"
         >
           <div
             class="rounded-lg shadow-sm"
@@ -164,7 +165,7 @@ exports[`Renders a list of blogs 1`] = `
             Aug 2020 | Unit testing
              
           </p>
-        </a>
+        </div>
       </div>
     </div>
     <br />

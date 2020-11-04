@@ -3,21 +3,32 @@ import Container from '@/components/container'
 import { Image } from 'react-datocms'
 import { WorkProps } from '@/interfaces/work'
 import NextLink from './NextLink'
+import { motion } from 'framer-motion'
+import { stagger, fadeInUp } from '../pages'
 
 export default function Work({ data }: WorkProps) {
   return (
-    <>
+    <div>
       <Container>
         <h1 className="mt-6 lg:mt-16 xl:mt-24 mb-6 text-2xl font-semibold">
           Recent work
         </h1>
-        <div className="flex items-start flex-wrap -mx-5">
+        <motion.div
+          variants={stagger}
+          className="flex items-start flex-wrap -mx-5"
+        >
           {data?.allProjects
             ?.slice(0, 3)
             ?.sort((a, b) => (new Date(b.date) > new Date(a.date) ? 1 : -1))
             .map((project) => {
               return (
-                <div className="w-full md:w-1/3 mt-5 px-5" key={project.title}>
+                <motion.div
+                  variants={fadeInUp}
+                  whileHover={{ scale: 1.03 }}
+                  whileTap={{ scale: 0.97 }}
+                  className="w-full md:w-1/3 mt-5 px-5"
+                  key={project.title}
+                >
                   <Image
                     className="rounded-lg shadow-sm"
                     data={project.thumbnail.responsiveImage}
@@ -26,14 +37,14 @@ export default function Work({ data }: WorkProps) {
                     {project.title}
                   </h3>
                   <p className="text-gray-600 poppins">{project.tags}</p>
-                </div>
+                </motion.div>
               )
             })}
-        </div>
+        </motion.div>
         {data?.allProjects?.length > 3 ? (
           <NextLink href="/" text="View more projects" />
         ) : null}
       </Container>
-    </>
+    </div>
   )
 }
