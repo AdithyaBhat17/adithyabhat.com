@@ -1,18 +1,14 @@
 import Navbar from '@/components/navbar'
 import Head from '@/components/header'
 import Container from '@/components/container'
-import {
-  Fragment,
-  useMemo,
-  useState,
-  BaseSyntheticEvent,
-  useEffect,
-} from 'react'
+import { useMemo, useState, BaseSyntheticEvent, useEffect } from 'react'
 import Footer from '@/components/footer'
 
 import { useForm } from 'react-hook-form'
 import FormErrorMessage from '@/components/error-message'
 import { ContactData, ContactResponse } from '@/interfaces/contact'
+import { motion } from 'framer-motion'
+import { fadeInUp, stagger } from '.'
 
 export default function Contact() {
   const { register, handleSubmit, errors } = useForm()
@@ -62,15 +58,26 @@ export default function Contact() {
   }, [status])
 
   return (
-    <Fragment>
+    <motion.div initial="initial" animate="animate" exit={{ opacity: 0 }}>
       <Head title="Contact - Adithya NR" />
       <Navbar />
       <Container>
         <div className="md:w-2/3 w-full mx-auto">
-          <h1 className="md:text-5xl text-3xl font-bold mb-3">Get in touch</h1>
-          <p>Send me a message here and I&apos;ll get back to you ASAP</p>
-          <form onSubmit={handleSubmit(submitMessage)}>
-            <div className="form-group">
+          <motion.h1
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="md:text-5xl text-3xl font-bold mb-3"
+          >
+            Get in touch
+          </motion.h1>
+          <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+            Send me a message here and I&apos;ll get back to you ASAP
+          </motion.p>
+          <motion.form
+            variants={stagger}
+            onSubmit={handleSubmit(submitMessage)}
+          >
+            <motion.div variants={fadeInUp} className="form-group">
               <label className="label" htmlFor="name">
                 Your name
               </label>
@@ -85,8 +92,8 @@ export default function Contact() {
               {errors.name ? (
                 <FormErrorMessage message={errors.name.message} />
               ) : null}
-            </div>
-            <div className="form-group">
+            </motion.div>
+            <motion.div variants={fadeInUp} className="form-group">
               <label className="label" htmlFor="email">
                 Your email address
               </label>
@@ -107,8 +114,8 @@ export default function Contact() {
               {errors.email ? (
                 <FormErrorMessage message={errors.email.message} />
               ) : null}
-            </div>
-            <div className="form-group">
+            </motion.div>
+            <motion.div variants={fadeInUp} className="form-group">
               <label className="label" htmlFor="message">
                 Your message
               </label>
@@ -125,8 +132,11 @@ export default function Contact() {
               {errors.message ? (
                 <FormErrorMessage message={errors.message.message} />
               ) : null}
-            </div>
-            <input
+            </motion.div>
+            <motion.input
+              variants={fadeInUp}
+              whileHover={{ scale: 1.05, x: 0 }}
+              whileTap={{ scale: 0.5, x: 0 }}
               type="submit"
               role="submit"
               value={buttonText}
@@ -134,11 +144,11 @@ export default function Contact() {
                 status === 'success' ? 'bg-green-600 text-black' : ''
               }`}
             />
-          </form>
+          </motion.form>
         </div>
       </Container>
       <br />
       <Footer />
-    </Fragment>
+    </motion.div>
   )
 }

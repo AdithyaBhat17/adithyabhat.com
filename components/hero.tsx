@@ -3,6 +3,8 @@ import Container from '@/components/container'
 import Socials from './socials'
 import Link from 'next/link'
 import useResizeObserver from 'hooks/useResizeObserver'
+import { motion } from 'framer-motion'
+import { fadeInUp, stagger } from '../pages'
 
 export default function Hero() {
   const [gif, showGif] = React.useState(false)
@@ -22,16 +24,19 @@ export default function Hero() {
     if (!imageRef.current) return
     const { x, y, height, width } = imageRef?.current?.getBoundingClientRect()
     const centerPoint = { x: x + width / 2, y: y + height / 2 }
-    const degreeX = (event.clientY - centerPoint.y) * 0.02
-    const degreeY = (event.clientX - centerPoint.x) * -0.02
+    const degreeX = (event.clientY - centerPoint.y) * 0.03
+    const degreeY = (event.clientX - centerPoint.x) * -0.03
 
     imageRef.current.style.transform = `perspective(1000px) rotateX(${degreeX}deg) rotateY(${degreeY}deg)`
   }
 
   return (
     <Container>
-      <div className="flex justify-between items-center flex-wrap md:flex-no-wrap">
-        <div>
+      <motion.div
+        variants={stagger}
+        className="flex justify-between items-center flex-wrap md:flex-no-wrap"
+      >
+        <motion.div variants={fadeInUp}>
           <h1 className="font-semibold text-3xl">
             Hey, I&apos;m <span className="font-bold">Adithya </span>
             <span role="img">👋</span>
@@ -52,17 +57,17 @@ export default function Hero() {
           <div className="mb-5">
             <Socials />
           </div>
-        </div>
-        <div ref={imageRef} className="mx-auto">
+        </motion.div>
+        <motion.div variants={fadeInUp} ref={imageRef} className="mx-auto">
           <img
             onMouseMove={handleMouseOver}
             src="/static/hero.svg"
             loading="eager"
-            className="block mx-auto w-full sm:w-auto"
+            className="block mx-auto w-full "
             alt="Hero image"
           />
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
       <img
         src="/static/gifs/scroll.gif"
         loading="eager"

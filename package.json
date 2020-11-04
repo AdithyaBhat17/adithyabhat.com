@@ -29,6 +29,7 @@
   },
   "dependencies": {
     "dayjs": "^1.8.28",
+    "framer-motion": "^2.9.4",
     "next": "^10.0.0",
     "react": "^16.13.1",
     "react-datocms": "^1.2.6",

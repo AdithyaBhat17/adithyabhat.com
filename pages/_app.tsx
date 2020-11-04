@@ -11,6 +11,16 @@ function MyApp({ Component, pageProps }) {
           crossOrigin="anonymous"
         />
         <link
+          rel="preconnect"
+          href="https://vitals.vercel-analytics.com"
+          crossOrigin="anonymous"
+        />
+        <link
+          rel="preconnect"
+          href="https://www.datocms-assets.com"
+          crossOrigin="anonymous"
+        />
+        <link
           rel="stylesheet"
           href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400&display=swap"
         />
