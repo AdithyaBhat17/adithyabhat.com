@@ -27,7 +27,7 @@ export const footerRoutes = [
   },
   {
     name: 'Resume',
-    link: '/',
+    link: '/resume.pdf',
   },
 ]
 
