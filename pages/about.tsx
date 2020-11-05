@@ -6,8 +6,10 @@ import Footer from '@/components/footer'
 import { companies } from '@/utils/about'
 import { motion } from 'framer-motion'
 import { fadeInUp } from '.'
+import useResetScroll from 'hooks/useResetScroll'
 
 export default function About({ companies }) {
+  useResetScroll()
   return (
     <motion.div initial="initial" animate="animate" exit={{ opacity: 0 }}>
       <Head title="About - Adithya NR" />

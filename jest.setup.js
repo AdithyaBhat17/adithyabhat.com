@@ -8,3 +8,5 @@ process.env = {
     loader: 'default',
   },
 }
+
+window.scrollTo = jest.fn()

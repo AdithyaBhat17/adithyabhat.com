@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { memo } from 'react'
 import Container from '@/components/container'
 import Socials from './socials'
 import Link from 'next/link'
@@ -6,7 +6,7 @@ import useResizeObserver from 'hooks/useResizeObserver'
 import { motion } from 'framer-motion'
 import { fadeInUp, stagger } from '../pages'
 
-export default function Hero() {
+function Hero() {
   const [gif, showGif] = React.useState(false)
 
   const imageRef = React.useRef(undefined)
@@ -77,3 +77,5 @@ export default function Hero() {
     </Container>
   )
 }
+
+export default memo(Hero)

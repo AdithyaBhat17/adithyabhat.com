@@ -1,15 +1,22 @@
 import { BlogPosts } from '@/interfaces/blog'
 import dayjs from 'dayjs'
 import { motion } from 'framer-motion'
+import useCustomInView from 'hooks/customInView'
 import Link from 'next/link'
+import { memo } from 'react'
 import { Image } from 'react-datocms'
 import { fadeInUp, stagger } from '../pages'
 
-export default function ArticlesList({ data }: BlogPosts) {
+function ArticlesList({ data }: BlogPosts) {
   const { allArticles: articles } = data
+  const { ref, controls } = useCustomInView()
   return (
-    <motion.div variants={stagger} className="flex items-start flex-wrap -mx-5">
-      {articles?.map((article) => (
+    <motion.div
+      ref={ref}
+      variants={stagger}
+      className="flex items-start flex-wrap -mx-5"
+    >
+      {articles?.map((article, i) => (
         <Link
           data-testid="article"
           key={article.title}
@@ -17,7 +24,9 @@ export default function ArticlesList({ data }: BlogPosts) {
           as={`/blog/${article.slug}`}
         >
           <motion.div
-            variants={fadeInUp}
+            custom={i}
+            initial={fadeInUp.initial}
+            animate={controls}
             whileHover={{ scale: 1.03 }}
             whileTap={{ scale: 0.97 }}
             className="w-full md:w-1/3 mt-8 cursor-pointer text-gray-900 px-5"
@@ -38,3 +47,5 @@ export default function ArticlesList({ data }: BlogPosts) {
     </motion.div>
   )
 }
+
+export default memo(ArticlesList)
