@@ -208,6 +208,7 @@ exports[`Home page matches snapshot 1`] = `
       >
         <h1
           class="mt-6 lg:mt-16 xl:mt-24 mb-6 text-2xl font-semibold"
+          style="opacity: 0; transform: translateY(10px) translateZ(0);"
         >
           Recent work
         </h1>
@@ -336,11 +337,13 @@ exports[`Home page matches snapshot 1`] = `
       </a>
       <h1
         class="mt-24 xl:mt-32 mb-6 text-3xl font-semibold"
+        style="opacity: 0; transform: translateY(20px) translateZ(0);"
       >
         Thanks for stopping by!
       </h1>
       <p
         class="poppins text-lg"
+        style="opacity: 0; transform: translateY(20px) translateZ(0);"
       >
         Got a project in mind, a question, or something else? 
         <br
@@ -452,7 +455,7 @@ exports[`Home page matches snapshot 1`] = `
               <a
                 class=" text-black text-sm hover:border-gray-900"
                 data-testid="footer-link"
-                href="/"
+                href="/resume.pdf"
               >
                 Resume
               </a>
