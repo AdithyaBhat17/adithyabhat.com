@@ -43,9 +43,9 @@ function Work({ data }: WorkProps) {
                     className="rounded-lg shadow-sm"
                     data={project.thumbnail.responsiveImage}
                   />
-                  <h3 className="mt-3 font-semibold text-xl">
+                  <h2 className="mt-3 font-semibold text-xl">
                     {project.title}
-                  </h3>
+                  </h2>
                   <p className="text-gray-600 poppins">{project.tags}</p>
                 </motion.div>
               )

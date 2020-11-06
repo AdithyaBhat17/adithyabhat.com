@@ -35,9 +35,9 @@ function ArticlesList({ data }: BlogPosts) {
               className="rounded-lg shadow-sm"
               data={article.thumbnail.responsiveImage}
             />
-            <h3 className="mt-3 font-semibold text-xl sm:text-sm lg:text-xl">
+            <h2 className="mt-3 font-semibold text-xl sm:text-sm lg:text-xl">
               {article.title}
-            </h3>
+            </h2>
             <p className="text-gray-600 poppins sm:text-xs md:text-md mt-2">
               {`${dayjs(article.date).format('MMM YYYY')} | ${article.tags}`}{' '}
             </p>
