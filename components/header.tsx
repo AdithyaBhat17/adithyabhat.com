@@ -2,29 +2,13 @@ import NextHead from 'next/head'
 import { SEO } from '../interfaces/seo'
 import { useEffect, useState } from 'react'
 
-export default function Head({ title, description }: SEO) {
+const defaultDescription =
+  'A UX engineer from Bengaluru, helping companies of all sizes get ahead online. I am currently working on DevOps and Analytics products at Betsol.'
+
+export default function Head({ title, description = defaultDescription }: SEO) {
   const [url, setUrl] = useState('https://adithyabhat.com')
 
-  // istanbul ignore next line
   useEffect(() => {
-    const viewport = document.getElementById('viewport-meta')
-    if (!viewport) return
-    const viewports = {
-      default: viewport.getAttribute('content'),
-      landscape: 'width = 2560',
-      portrait: 'width = 768',
-    }
-    const setViewport = function () {
-      screen.width > 2560
-        ? viewport.setAttribute('content', viewports.landscape)
-        : screen.width >= 768 && screen.width < 1200
-        ? viewport.setAttribute('content', viewports.portrait)
-        : viewport.setAttribute('content', viewports.default)
-    }
-    setViewport()
-    window.onresize = function () {
-      setViewport()
-    }
     setUrl(document.location.href)
   }, [])
 
@@ -44,7 +28,14 @@ export default function Head({ title, description }: SEO) {
       <meta name="og:description" content={description} />
       <meta property="og:url" content={url} />
       <meta property="og:site_name" content="Adithya NR" />
-      <meta property="og:image" content="../../public/static/logo_black.svg" />
+      <meta
+        property="og:image"
+        content="https://cdn.dribbble.com/users/2366701/screenshots/14499518/media/80880f845dd409a5d3108c8961c8d8e4.png"
+      />
+      <meta
+        property="twitter:image"
+        content="https://cdn.dribbble.com/users/2366701/screenshots/14499518/media/80880f845dd409a5d3108c8961c8d8e4.png"
+      />
       <meta
         name="keywords"
         content="front-end developer, front-end development, web designer, adithya, adithya nr, adithya bhat, web developer"
@@ -52,6 +43,7 @@ export default function Head({ title, description }: SEO) {
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:site" content="@adithya__nr" />
       <meta name="twitter:creator" content="@adithya__nr" />
+      <meta name="twitter:description" content={description} />
     </NextHead>
   )
 }

@@ -3,11 +3,21 @@ import Head from 'next/head'
 
 function MyApp({ Component, pageProps }) {
   return (
-    <div>
+    <main className="p-0">
       <Head>
         <link
           rel="preconnect"
           href="https://fonts.gstatic.com/"
+          crossOrigin="anonymous"
+        />
+        <link
+          rel="preconnect"
+          href="https://fonts.googleapis.com/"
+          crossOrigin="anonymous"
+        />
+        <link
+          rel="preconnect"
+          href="https://cdn.dribbble.com/"
           crossOrigin="anonymous"
         />
         <link
@@ -30,7 +40,7 @@ function MyApp({ Component, pageProps }) {
         ></link>
       </Head>
       <Component {...pageProps} />
-    </div>
+    </main>
   )
 }
 
