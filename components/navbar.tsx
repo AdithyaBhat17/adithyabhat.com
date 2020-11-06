@@ -33,7 +33,7 @@ function Navbar() {
               <img
                 className="fill-current lg:h-16 lg:w-16 w-12 h-12"
                 src="/static/logo_black.svg"
-                alt="Adithya NR"
+                alt="Adithya NR logo"
               />
             </a>
           </Link>

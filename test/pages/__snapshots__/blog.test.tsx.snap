@@ -14,7 +14,7 @@ exports[`Renders a list of blogs 1`] = `
           href="/"
         >
           <img
-            alt="Adithya NR"
+            alt="Adithya NR logo"
             class="fill-current lg:h-16 lg:w-16 w-12 h-12"
             src="/static/logo_black.svg"
           />
@@ -94,11 +94,11 @@ exports[`Renders a list of blogs 1`] = `
             />
             <noscript />
           </div>
-          <h3
+          <h2
             class="mt-3 font-semibold text-xl sm:text-sm lg:text-xl"
           >
             A beginner’s guide to understanding React’s context API
-          </h3>
+          </h2>
           <p
             class="text-gray-600 poppins sm:text-xs md:text-md mt-2"
           >
@@ -124,11 +124,11 @@ exports[`Renders a list of blogs 1`] = `
             />
             <noscript />
           </div>
-          <h3
+          <h2
             class="mt-3 font-semibold text-xl sm:text-sm lg:text-xl"
           >
             The most underrated skill for a developer: Communication
-          </h3>
+          </h2>
           <p
             class="text-gray-600 poppins sm:text-xs md:text-md mt-2"
           >
@@ -154,11 +154,11 @@ exports[`Renders a list of blogs 1`] = `
             />
             <noscript />
           </div>
-          <h3
+          <h2
             class="mt-3 font-semibold text-xl sm:text-sm lg:text-xl"
           >
             Generate code coverage reports for your unit tests using Jest 
-          </h3>
+          </h2>
           <p
             class="text-gray-600 poppins sm:text-xs md:text-md mt-2"
           >
@@ -188,7 +188,7 @@ exports[`Renders a list of blogs 1`] = `
             href="/"
           >
             <img
-              alt="Adithya NR"
+              alt="Adithya NR logo"
               class="fill-current lg:h-16 lg:w-12 w-12 h-12 mr-3"
               src="/static/logo_black.svg"
             />

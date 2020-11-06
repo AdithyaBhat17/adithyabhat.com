@@ -92,10 +92,11 @@ code,
 .footer {
   @apply flex;
   @apply sticky;
-  @apply w-full; @apply overflow-hidden;
-  @apply top-0; 
+  @apply w-full;
+  @apply overflow-hidden;
+  @apply top-0;
   @apply mb-6;
-  @apply items-center; 
+  @apply items-center;
   @apply justify-between;
   @apply flex-wrap;
   @apply py-4;
@@ -111,9 +112,9 @@ code,
   @apply px-5;
   @apply py-2;
   @apply rounded-md;
-  border: 1px solid #231F20;
+  border: 1px solid #231f20;
   font-family: 'Poppins', sans-serif;
-  transition: background-color .2s ease-in-out;
+  transition: background-color 0.2s ease-in-out;
 }
 .button_primary:hover {
   @apply bg-black;
@@ -127,29 +128,33 @@ code,
   @apply rounded-md;
   @apply px-5;
   @apply py-2;
-  transition: border .2s ease-in-out;
+  transition: border 0.2s ease-in-out;
 }
-.button_outlined:hover, .button_outlined:focus, .button_outlined:active {
-  border: 1px solid #231F20;
+.button_outlined:hover,
+.button_outlined:focus,
+.button_outlined:active {
+  border: 1px solid #231f20;
 }
 
 .hover-card {
-  transition: all .5s ease;
+  transition: all 0.5s ease;
 }
 
 .hover-card:hover {
   transform: scale(1.03);
 }
 
-.decoration-none:hover, .decoration-none:focus {
-  color: #000
+.decoration-none:hover,
+.decoration-none:focus {
+  color: #000;
 }
 
 .hero-text-enter {
   opacity: 0;
   margin-top: 50px;
 }
-.hero-text-enter-active, .hero-text-exit {  
+.hero-text-enter-active,
+.hero-text-exit {
   opacity: 1;
   margin-top: 0;
 }
@@ -177,7 +182,7 @@ code,
     @apply mt-2;
   }
   .hover-card:hover {
-    transform: none
+    transform: none;
   }
 }
 
