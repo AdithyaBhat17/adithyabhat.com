@@ -3,6 +3,7 @@ export const RECENT_WORK = `
         allProjects {
             date
             tags
+            slug
             thumbnail {
               alt
               blurhash
@@ -24,4 +25,28 @@ export const RECENT_WORK = `
             caseStudy
           }
     }
+`
+
+export const CASE_STUDY = `
+  query Project ($slug: String!) {
+    project (filter:{slug:{eq:$slug}}, orderBy: date_DESC) {
+      id
+      title
+      caseStudy
+      slug
+      date
+      slug
+      link
+      seo: _seoMetaTags {
+        attributes
+        tag
+        content
+      }
+    }
+
+    moreProjects:allProjects (orderBy: date_DESC, first: 1, filter:{slug:{neq:$slug}}) {
+      slug
+      title
+    }
+  }
 `
