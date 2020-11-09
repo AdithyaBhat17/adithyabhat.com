@@ -6,6 +6,7 @@ import NextLink from './NextLink'
 import { motion } from 'framer-motion'
 import { stagger, fadeInUp } from '../pages'
 import useCustomInView from 'hooks/customInView'
+import Link from 'next/link'
 
 function Work({ data }: WorkProps) {
   const { ref, inView, controls } = useCustomInView()
@@ -30,24 +31,31 @@ function Work({ data }: WorkProps) {
             ?.sort((a, b) => (new Date(b.date) > new Date(a.date) ? 1 : -1))
             .map((project, i) => {
               return (
-                <motion.div
-                  custom={i}
-                  animate={controls}
-                  initial={fadeInUp.initial}
-                  whileHover={{ scale: 1.03 }}
-                  whileTap={{ scale: 0.97 }}
-                  className="w-full md:w-1/3 mt-5 px-5"
+                <Link
+                  data-testid="project"
                   key={project.title}
+                  href={`/work/[slug]`}
+                  as={`/work/${project.slug}`}
                 >
-                  <Image
-                    className="rounded-lg shadow-sm"
-                    data={project.thumbnail.responsiveImage}
-                  />
-                  <h2 className="mt-3 font-semibold text-xl">
-                    {project.title}
-                  </h2>
-                  <p className="text-gray-600 poppins">{project.tags}</p>
-                </motion.div>
+                  <motion.div
+                    custom={i}
+                    animate={controls}
+                    initial={fadeInUp.initial}
+                    whileHover={{ scale: 1.03 }}
+                    whileTap={{ scale: 0.97 }}
+                    className="w-full md:w-1/3 cursor-pointer text-gray-900 mt-5 px-5"
+                    key={project.title}
+                  >
+                    <Image
+                      className="rounded-lg shadow-sm"
+                      data={project.thumbnail.responsiveImage}
+                    />
+                    <h2 className="mt-3 font-semibold text-xl">
+                      {project.title}
+                    </h2>
+                    <p className="text-gray-600 poppins">{project.tags}</p>
+                  </motion.div>
+                </Link>
               )
             })}
         </motion.div>
