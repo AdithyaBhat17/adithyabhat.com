@@ -59,6 +59,28 @@ a:hover > * {
   border-bottom: 1px solid inherit;
 }
 
+a.left {
+  position: relative;
+  @apply pb-2;
+}
+
+a.left:before {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 2px;
+  bottom: 0;
+  left: 0;
+  background-color: #003b71aa;
+  visibility: hidden;
+  transition: all 0.3s ease-in-out;
+}
+
+a.left:hover:before {
+  visibility: visible;
+  width: 100%;
+}
+
 pre > code {
   display: block;
   background: #fafafa;
@@ -161,6 +183,11 @@ code,
 .hero-text-exit-active {
   opacity: 0;
   margin-top: -50px;
+}
+
+.casestudy > h1 {
+  @apply mt-10;
+  @apply mb-2;
 }
 
 @media (max-width: 600px) {
