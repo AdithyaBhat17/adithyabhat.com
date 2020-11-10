@@ -5,7 +5,7 @@ import Link from 'next/link'
 import Footer from '@/components/footer'
 import { companies } from '@/utils/about'
 import { motion } from 'framer-motion'
-import { fadeInUp } from '.'
+import { fadeInUp } from '@/utils/motion'
 import useResetScroll from 'hooks/useResetScroll'
 
 export default function About({ companies }) {

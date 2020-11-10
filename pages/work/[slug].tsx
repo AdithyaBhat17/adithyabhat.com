@@ -9,11 +9,19 @@ import Footer from '@/components/footer'
 import { useRouter } from 'next/router'
 import ErrorPage from 'next/error'
 import { renderMetaTags } from 'react-datocms'
-import { Project } from '@/interfaces/work'
 import { CASE_STUDY, RECENT_WORK } from 'graphql/queries/work'
 import Link from 'next/link'
+import RecentProjects from '@/components/recent-articles'
+import { Project } from '@/interfaces/blog'
 
-export default function CaseStudy({ data }: Project) {
+type Props = {
+  data: {
+    project: Project
+    allProjects: Project[]
+  }
+}
+
+export default function CaseStudy({ data }: Props) {
   const router = useRouter()
   if (!router?.isFallback && !data?.project?.slug) {
     return <ErrorPage statusCode={404} />
@@ -35,44 +43,36 @@ export default function CaseStudy({ data }: Project) {
             className="casestudy"
             dangerouslySetInnerHTML={{ __html: data?.project?.caseStudy }}
           />
-          <hr className="border-gray-800 mt-20 mb-12 px-6" />
-          {/* @todo refactor pagination links */}
-          <div className="flex justify-between items-end flex-wrap">
-            <a
-              href={data?.project?.link}
-              rel="noopener noreferrer"
-              target="_blank"
-              className="poppins font-semibold left items-center text-lg text-black hover:text-blue-900"
+          <hr className="border-gray-800 mt-20 mb-16 px-6" />
+          {/* @todo move view project link to a separate component */}
+          <a
+            href={data?.project?.link}
+            rel="noopener noreferrer"
+            target="_blank"
+            className="poppins font-semibold left items-center text-lg text-black hover:text-blue-900"
+          >
+            <span className="inline">Visit Project</span>{' '}
+            <svg
+              className="w-6 h-6 ml-2 inline"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
             >
-              <span className="inline">Visit Project</span>{' '}
-              <svg
-                className="w-6 h-6 ml-2 inline"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-                />
-              </svg>
-            </a>
-            <div className="mt-5">
-              <span className="md:float-right">Next Project</span> <br />
-              <Link
-                href={`/work/[slug]`}
-                as={`/work/${data?.moreProjects[0].slug}`}
-              >
-                <a className="text-blue-800 font-semibold left text-lg">
-                  {data?.moreProjects[0].title}
-                </a>
-              </Link>
-            </div>
-          </div>
-          <h1 className="font-semibold text-4xl my-20">
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+              />
+            </svg>
+          </a>
+          <RecentProjects
+            data={{ allProjects: data.allProjects }}
+            type="allProjects"
+            columns={data.allProjects.length < 3 ? '2' : '3'}
+          />
+          <h1 className="font-semibold text-4xl my-48">
             Have a similar project in mind? <br />{' '}
             <Link href={`/contact?ref=${data?.project?.slug}`}>
               <a className="left">Let&apos;s chat!</a>

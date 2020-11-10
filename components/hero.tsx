@@ -4,7 +4,7 @@ import Socials from './socials'
 import Link from 'next/link'
 import useResizeObserver from 'hooks/useResizeObserver'
 import { motion } from 'framer-motion'
-import { fadeInUp, stagger } from '../pages'
+import { fadeInUp, stagger } from '@/utils/motion'
 
 function Hero() {
   const [gif, showGif] = React.useState(false)

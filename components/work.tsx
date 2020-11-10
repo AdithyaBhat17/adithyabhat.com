@@ -4,7 +4,7 @@ import { Image } from 'react-datocms'
 import { WorkProps } from '@/interfaces/work'
 import NextLink from './NextLink'
 import { motion } from 'framer-motion'
-import { stagger, fadeInUp } from '../pages'
+import { stagger, fadeInUp } from '@/utils/motion'
 import useCustomInView from 'hooks/customInView'
 import Link from 'next/link'
 

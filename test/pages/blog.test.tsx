@@ -8,7 +8,11 @@ afterAll(cleanup)
 
 test('Renders a list of blogs', () => {
   const { container } = render(
-    <Blog data={{ allArticles: mockArticles.allArticles }} />
+    <Blog
+      data={{ allArticles: mockArticles.allArticles }}
+      type="allArticles"
+      columns="3"
+    />
   )
   expect(container).toMatchSnapshot()
 })

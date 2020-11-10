@@ -8,7 +8,7 @@ import { useForm } from 'react-hook-form'
 import FormErrorMessage from '@/components/error-message'
 import { ContactData, ContactResponse } from '@/interfaces/contact'
 import { motion } from 'framer-motion'
-import { fadeInUp, stagger } from '.'
+import { fadeInUp, stagger } from '@/utils/motion'
 
 export default function Contact() {
   const { register, handleSubmit, errors } = useForm()

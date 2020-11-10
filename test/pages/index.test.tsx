@@ -12,7 +12,7 @@ describe('Home page', () => {
   it('matches snapshot', () => {
     const data = mockArticles
     const { asFragment } = render(
-      <Home recentWork="" featuredArticles={data} />
+      <Home recentWork={undefined} featuredArticles={data} />
     )
     expect(asFragment()).toMatchSnapshot()
   })

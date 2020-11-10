@@ -1,14 +1,26 @@
-import { BlogPosts } from '@/interfaces/blog'
+import { Article, List, Project } from '@/interfaces/blog'
 import dayjs from 'dayjs'
 import { motion } from 'framer-motion'
 import useCustomInView from 'hooks/customInView'
 import Link from 'next/link'
 import { memo } from 'react'
 import { Image } from 'react-datocms'
-import { fadeInUp, stagger } from '../pages'
+import { fadeInUp, stagger } from '@/utils/motion'
 
-function ArticlesList({ data }: BlogPosts) {
-  const { allArticles: articles } = data
+const renderMeta = (
+  type: 'allArticles' | 'allProjects',
+  date: Date | string,
+  tags: string
+): string => {
+  let desc = ''
+  if (type === 'allArticles') {
+    desc = `${dayjs(date).format('MMM YYYY')} | `
+  }
+  desc += tags
+  return desc
+}
+
+function CardsList({ data, type, columns }: List) {
   const { ref, controls } = useCustomInView()
   return (
     <motion.div
@@ -16,12 +28,12 @@ function ArticlesList({ data }: BlogPosts) {
       variants={stagger}
       className="flex items-start flex-wrap -mx-5"
     >
-      {articles?.map((article, i) => (
+      {data[type]?.map((item: Article | Project, i: number) => (
         <Link
           data-testid="article"
-          key={article.title}
+          key={item.title}
           href={`/blog/[slug]`}
-          as={`/blog/${article.slug}`}
+          as={`/blog/${item.slug}`}
         >
           <motion.div
             custom={i}
@@ -29,17 +41,17 @@ function ArticlesList({ data }: BlogPosts) {
             animate={controls}
             whileHover={{ scale: 1.03 }}
             whileTap={{ scale: 0.97 }}
-            className="w-full md:w-1/3 mt-8 cursor-pointer text-gray-900 px-5"
+            className={`w-full md:w-1/${columns} mt-8 cursor-pointer text-gray-900 px-5`}
           >
             <Image
               className="rounded-lg shadow-sm"
-              data={article.thumbnail.responsiveImage}
+              data={item.thumbnail.responsiveImage}
             />
             <h2 className="mt-3 font-semibold text-xl sm:text-sm lg:text-xl">
-              {article.title}
+              {item.title}
             </h2>
             <p className="text-gray-600 poppins sm:text-xs md:text-md mt-2">
-              {`${dayjs(article.date).format('MMM YYYY')} | ${article.tags}`}{' '}
+              {renderMeta(type, item.date, item.tags)}
             </p>
           </motion.div>
         </Link>
@@ -48,4 +60,4 @@ function ArticlesList({ data }: BlogPosts) {
   )
 }
 
-export default memo(ArticlesList)
+export default memo(CardsList)

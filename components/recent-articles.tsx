@@ -1,13 +1,14 @@
-import ArticlesList from './articles-list'
+import { List } from '@/interfaces/blog'
+import CardsList from './cards'
 
-export default function RecentArticles({ articles }) {
-  if (!articles.length) return null
+export default function Recent({ data, type, columns }: List) {
+  if (!data[type].length) return null
   return (
     <div>
       <h3 className="text-md uppercase px-0 font-semibold mt-24 mb-6">
-        Recent posts
+        Recent {type === 'allArticles' ? 'Posts' : 'Projects'}
       </h3>
-      <ArticlesList data={{ allArticles: articles }} />
+      <CardsList data={data} type={type} columns={columns} />
     </div>
   )
 }
