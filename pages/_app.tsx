@@ -1,47 +1,38 @@
+/* eslint-disable @typescript-eslint/camelcase */
 import '../styles/index.css'
-import Head from 'next/head'
+import '../styles/fonts.css'
+import { useEffect } from 'react'
+import * as gtag from '@/lib/gtag'
+import { useRouter } from 'next/router'
 
 function MyApp({ Component, pageProps }) {
+  const router = useRouter()
+
+  useEffect(() => {
+    const handleRouteChange = (url: string) => {
+      gtag.pageview(url)
+    }
+
+    router?.events?.on('routeChangeComplete', handleRouteChange)
+    return () => {
+      router?.events?.off('routeChangeComplete', handleRouteChange)
+    }
+  }, [router?.events])
+
   return (
     <main className="p-0">
-      <Head>
-        <link
-          rel="preconnect"
-          href="https://fonts.gstatic.com/"
-          crossOrigin="anonymous"
-        />
-        <link
-          rel="preconnect"
-          href="https://fonts.googleapis.com/"
-          crossOrigin="anonymous"
-        />
-        <link
-          rel="preconnect"
-          href="https://cdn.dribbble.com/"
-          crossOrigin="anonymous"
-        />
-        <link
-          rel="preconnect"
-          href="https://vitals.vercel-analytics.com"
-          crossOrigin="anonymous"
-        />
-        <link
-          rel="preconnect"
-          href="https://www.datocms-assets.com"
-          crossOrigin="anonymous"
-        />
-        <link
-          rel="stylesheet"
-          href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400&display=swap"
-        />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap"
-          rel="stylesheet"
-        ></link>
-      </Head>
       <Component {...pageProps} />
     </main>
   )
 }
 
 export default MyApp
+
+export function reportWebVitals({ id, name, label, value }) {
+  ;(window as any).gtag('event', name, {
+    event_category: label === 'web-vital' ? 'Web Vitals' : 'Next.js metric',
+    value: Math.round(name === 'CLS' ? value * 1000 : value), // values must be integers
+    event_label: id, // id unique to current page load
+    non_interaction: true, // avoids affecting bounce rate.
+  })
+}
