@@ -12,6 +12,7 @@ import { renderMetaTags } from 'react-datocms'
 import { Project } from '@/interfaces/work'
 import { CASE_STUDY, RECENT_WORK } from 'graphql/queries/work'
 import Link from 'next/link'
+import { event as logEvent } from '@/lib/gtag'
 
 export default function CaseStudy({ data }: Project) {
   const router = useRouter()
@@ -66,7 +67,17 @@ export default function CaseStudy({ data }: Project) {
                 href={`/work/[slug]`}
                 as={`/work/${data?.moreProjects[0].slug}`}
               >
-                <a className="text-blue-800 font-semibold left text-lg">
+                <a
+                  onClick={() =>
+                    logEvent({
+                      action: `User visited ${data?.project?.title} from /${data?.project?.slug}`,
+                      label: 'user_success',
+                      category: 'engagement',
+                      value: data?.project?.title,
+                    })
+                  }
+                  className="text-blue-800 font-semibold left text-lg"
+                >
                   {data?.moreProjects[0].title}
                 </a>
               </Link>
