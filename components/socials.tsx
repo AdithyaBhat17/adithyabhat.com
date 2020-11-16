@@ -36,7 +36,11 @@ export default function Socials() {
             rel="noreferrer noopener"
             className="text-black mr-5"
           >
-            <img src={`/static/${social.icon}.svg`} alt={social.icon} />
+            <img
+              loading="lazy"
+              src={`/static/${social.icon}.svg`}
+              alt={social.icon}
+            />
           </a>
         ))}
       </div>

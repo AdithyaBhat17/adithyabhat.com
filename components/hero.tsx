@@ -5,6 +5,7 @@ import Link from 'next/link'
 import useResizeObserver from 'hooks/useResizeObserver'
 import { motion } from 'framer-motion'
 import { fadeInUp, stagger } from '../pages'
+import Image from 'next/image'
 
 function Hero() {
   const [gif, showGif] = React.useState(false)
@@ -59,7 +60,9 @@ function Hero() {
           </div>
         </motion.div>
         <motion.div variants={fadeInUp} ref={imageRef} className="mx-auto">
-          <img
+          <Image
+            width={600}
+            height={600}
             onMouseMove={handleMouseOver}
             src="/static/hero.svg"
             loading="eager"

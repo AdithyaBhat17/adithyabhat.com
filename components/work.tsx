@@ -11,7 +11,12 @@ import Link from 'next/link'
 function Work({ data }: WorkProps) {
   const { ref, inView, controls } = useCustomInView()
   return (
-    <div>
+    <motion.div
+      variants={{
+        initial: { opacity: 0, transition: { delay: 200 } },
+        animate: { opacity: 1 },
+      }}
+    >
       <Container>
         <motion.h1
           ref={ref}
@@ -63,7 +68,7 @@ function Work({ data }: WorkProps) {
           <NextLink href="/" text="View more projects" />
         ) : null}
       </Container>
-    </div>
+    </motion.div>
   )
 }
 
