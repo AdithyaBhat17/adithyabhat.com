@@ -4,7 +4,7 @@ import Head from '@/components/header'
 import processMarkdown from '@/lib/processMarkdown'
 import Container from '@/components/container'
 import Navbar from '@/components/navbar'
-import { ArticleProps } from '@/interfaces/blog'
+import { ArticleProps } from '@/interfaces/content'
 import NextHead from 'next/head'
 import Footer from '@/components/footer'
 

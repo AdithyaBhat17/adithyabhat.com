@@ -1,4 +1,4 @@
-import { List } from '@/interfaces/blog'
+import { List } from '@/interfaces/content'
 import CardsList from './cards'
 
 export default function Recent({ data, type, columns }: List) {

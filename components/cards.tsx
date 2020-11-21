@@ -1,4 +1,4 @@
-import { Article, List, Project } from '@/interfaces/blog'
+import { Article, List, Project } from '@/interfaces/content'
 import dayjs from 'dayjs'
 import { motion } from 'framer-motion'
 import useCustomInView from 'hooks/customInView'
@@ -21,6 +21,7 @@ const renderMeta = (
 }
 
 function CardsList({ data, type, columns }: List) {
+  const pathname = type === 'allArticles' ? 'blog' : 'work'
   const { ref, controls } = useCustomInView()
   return (
     <motion.div
@@ -32,8 +33,8 @@ function CardsList({ data, type, columns }: List) {
         <Link
           data-testid="article"
           key={item.title}
-          href={`/blog/[slug]`}
-          as={`/blog/${item.slug}`}
+          href={`/${pathname}/[slug]`}
+          as={`/${pathname}/${item.slug}`}
         >
           <motion.div
             custom={i}

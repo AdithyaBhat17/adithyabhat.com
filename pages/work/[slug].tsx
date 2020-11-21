@@ -12,7 +12,7 @@ import { renderMetaTags } from 'react-datocms'
 import { CASE_STUDY, RECENT_WORK } from 'graphql/queries/work'
 import Link from 'next/link'
 import RecentProjects from '@/components/recent-articles'
-import { Project } from '@/interfaces/blog'
+import { Project } from '@/interfaces/content'
 
 type Props = {
   data: {
