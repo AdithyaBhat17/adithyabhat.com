@@ -1,6 +1,6 @@
 import { render } from '../testUtils'
 import ArticlesList from '@/components/cards'
-import { mockArticles } from '../__mocks__/article'
+import { mockArticles } from '../__mocks__/content'
 
 const data = mockArticles
 

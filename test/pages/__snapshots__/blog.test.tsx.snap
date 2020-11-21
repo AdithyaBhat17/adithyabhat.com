@@ -54,6 +54,17 @@ exports[`Renders a list of blogs 1`] = `
           <a
             class=" text-black text-sm hover:border-gray-900"
             data-testid="nav-link"
+            href="/work"
+          >
+            Work
+          </a>
+        </li>
+        <li
+          class="ml-6"
+        >
+          <a
+            class=" text-black text-sm hover:border-gray-900"
+            data-testid="nav-link"
             href="/contact"
           >
             Contact
@@ -287,6 +298,7 @@ exports[`Renders a list of blogs 1`] = `
           >
             <img
               alt="behance"
+              loading="lazy"
               src="/static/behance.svg"
             />
           </a>
@@ -299,6 +311,7 @@ exports[`Renders a list of blogs 1`] = `
           >
             <img
               alt="dribbble"
+              loading="lazy"
               src="/static/dribbble.svg"
             />
           </a>
@@ -311,6 +324,7 @@ exports[`Renders a list of blogs 1`] = `
           >
             <img
               alt="twitter"
+              loading="lazy"
               src="/static/twitter.svg"
             />
           </a>
@@ -323,6 +337,7 @@ exports[`Renders a list of blogs 1`] = `
           >
             <img
               alt="github"
+              loading="lazy"
               src="/static/github.svg"
             />
           </a>
@@ -335,6 +350,7 @@ exports[`Renders a list of blogs 1`] = `
           >
             <img
               alt="linkedin"
+              loading="lazy"
               src="/static/linkedin.svg"
             />
           </a>
