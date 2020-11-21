@@ -6,10 +6,6 @@ import Socials from './socials'
 
 export const footerRoutes = [
   {
-    name: 'Home',
-    link: '/',
-  },
-  {
     name: 'About',
     link: '/about',
   },

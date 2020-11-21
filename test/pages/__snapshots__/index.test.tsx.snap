@@ -77,7 +77,7 @@ exports[`Home page matches snapshot 1`] = `
       data-testid="container"
     >
       <div
-        class="flex justify-between items-center flex-wrap md:flex-no-wrap"
+        class="flex justify-between items-center flex-wrap md:flex-nowrap"
       >
         <div
           style="opacity: 0; transform: translateY(20px) translateZ(0);"
@@ -203,19 +203,27 @@ exports[`Home page matches snapshot 1`] = `
           style="opacity: 0; transform: translateY(20px) translateZ(0);"
         >
           <div
-            style="max-width: 100%; width: 600px;"
+            style="display: inline-block; max-width: 100%; overflow: hidden; position: relative; box-sizing: border-box; margin: 0px;"
           >
             <div
-              style="position: relative; padding-bottom: 100%;"
+              style="box-sizing: border-box; display: block; max-width: 100%;"
             >
               <img
-                alt="Hero image"
-                class="block mx-auto w-full "
-                src="/_next/image?url=%2Fstatic%2Fhero.svg&w=768&q=75"
-                srcset="/_next/image?url=%2Fstatic%2Fhero.svg&w=320&q=75 320w, /_next/image?url=%2Fstatic%2Fhero.svg&w=420&q=75 420w, /_next/image?url=%2Fstatic%2Fhero.svg&w=768&q=75 768w"
-                style="visibility: visible; height: 100%; left: 0px; position: absolute; top: 0px; width: 100%;"
+                alt=""
+                aria-hidden="true"
+                role="presentation"
+                src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAwIiBoZWlnaHQ9IjYwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB2ZXJzaW9uPSIxLjEiLz4="
+                style="max-width: 100%; display: block;"
               />
             </div>
+            <img
+              alt="Hero image"
+              class="block mx-auto w-full "
+              decoding="async"
+              src="/_next/image?url=%2Fstatic%2Fhero.svg&w=1200&q=75"
+              srcset="/_next/image?url=%2Fstatic%2Fhero.svg&w=768&q=75 1x, /_next/image?url=%2Fstatic%2Fhero.svg&w=1200&q=75 2x"
+              style="visibility: visible; position: absolute; top: 0px; left: 0px; bottom: 0px; right: 0px; box-sizing: border-box; padding: 0px; margin: auto; display: block; width: 0px; height: 0px; min-width: 100%; max-width: 100%; min-height: 100%; max-height: 100%;"
+            />
           </div>
         </div>
       </div>
@@ -509,17 +517,6 @@ exports[`Home page matches snapshot 1`] = `
           <ul
             class="flex justify-between"
           >
-            <li
-              class="ml-0 md:ml-10"
-            >
-              <a
-                class=" text-black text-sm hover:border-gray-900"
-                data-testid="footer-link"
-                href="/"
-              >
-                Home
-              </a>
-            </li>
             <li
               class="ml-0 md:ml-10"
             >

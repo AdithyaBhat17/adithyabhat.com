@@ -35,7 +35,7 @@ function Hero() {
     <Container>
       <motion.div
         variants={stagger}
-        className="flex justify-between items-center flex-wrap md:flex-no-wrap"
+        className="flex justify-between items-center flex-wrap md:flex-nowrap"
       >
         <motion.div variants={fadeInUp}>
           <h1 className="font-semibold text-3xl">
@@ -66,6 +66,7 @@ function Hero() {
             onMouseMove={handleMouseOver}
             src="/static/hero.svg"
             loading="eager"
+            // layout="responsive"
             className="block mx-auto w-full "
             alt="Hero image"
           />

@@ -214,17 +214,6 @@ exports[`Renders a list of blogs 1`] = `
             <a
               class=" text-black text-sm hover:border-gray-900"
               data-testid="footer-link"
-              href="/"
-            >
-              Home
-            </a>
-          </li>
-          <li
-            class="ml-0 md:ml-10"
-          >
-            <a
-              class=" text-black text-sm hover:border-gray-900"
-              data-testid="footer-link"
               href="/about"
             >
               About

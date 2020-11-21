@@ -38,7 +38,6 @@ h3 {
 }
 
 main {
-  padding: 5rem 0;
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -269,7 +268,7 @@ code,
 }
 
 .input {
-  @apply shadow-xs appearance-none border rounded w-full p-4;
+  @apply shadow-sm appearance-none border rounded w-full p-4;
 }
 
 .input:active,
@@ -282,7 +281,8 @@ code,
 }
 
 .submit-button:hover {
-  border: 1px solid #000 @apply text-black;
+  border: 1px solid #000;
+  @apply text-black;
 }
 
 .company {

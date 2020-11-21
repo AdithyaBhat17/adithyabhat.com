@@ -10,10 +10,13 @@ import { ContactData, ContactResponse } from '@/interfaces/contact'
 import { motion } from 'framer-motion'
 import { fadeInUp, stagger } from '@/utils/motion'
 import { event as logEvent } from '@/lib/gtag'
+import useResetScroll from 'hooks/useResetScroll'
 
 export default function Contact() {
   const { register, handleSubmit, errors } = useForm()
   const [status, setStatus] = useState('idle')
+
+  useResetScroll()
 
   useEffect(() => {
     if (status === 'success' || status === 'error') {
@@ -71,7 +74,12 @@ export default function Contact() {
   }, [status])
 
   return (
-    <motion.div initial="initial" animate="animate" exit={{ opacity: 0 }}>
+    <motion.div
+      className="p-0 w-full"
+      initial="initial"
+      animate="animate"
+      exit={{ opacity: 0 }}
+    >
       <Head title="Contact - Adithya NR" />
       <Navbar />
       <Container>

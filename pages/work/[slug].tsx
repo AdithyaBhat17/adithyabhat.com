@@ -77,9 +77,9 @@ export default function CaseStudy({ data }: Props) {
             </svg>
           </a>
           <RecentProjects
-            data={{ allProjects: data.allProjects }}
+            data={{ allProjects: data?.allProjects ?? [] }}
             type="allProjects"
-            columns={data.allProjects.length < 3 ? '2' : '3'}
+            columns={data?.allProjects?.length < 3 ? '2' : '3'}
           />
           <h1 className="font-semibold text-4xl my-48">
             Have a similar project in mind? <br />{' '}
