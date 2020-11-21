@@ -13,6 +13,7 @@ import { CASE_STUDY, RECENT_WORK } from 'graphql/queries/work'
 import Link from 'next/link'
 import RecentProjects from '@/components/recent-articles'
 import { Project } from '@/interfaces/content'
+import { event as logEvent } from '@/lib/gtag'
 
 type Props = {
   data: {
@@ -47,6 +48,14 @@ export default function CaseStudy({ data }: Props) {
           {/* @todo move view project link to a separate component */}
           <a
             href={data?.project?.link}
+            onClick={() => {
+              logEvent({
+                action: `User visited ${data?.project?.title} from /${data?.project?.slug}`,
+                label: 'user_success',
+                category: 'engagement',
+                value: data?.project?.title,
+              })
+            }}
             rel="noopener noreferrer"
             target="_blank"
             className="poppins font-semibold left items-center text-lg text-black hover:text-blue-900"

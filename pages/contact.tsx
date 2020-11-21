@@ -9,6 +9,7 @@ import FormErrorMessage from '@/components/error-message'
 import { ContactData, ContactResponse } from '@/interfaces/contact'
 import { motion } from 'framer-motion'
 import { fadeInUp, stagger } from '@/utils/motion'
+import { event as logEvent } from '@/lib/gtag'
 
 export default function Contact() {
   const { register, handleSubmit, errors } = useForm()
@@ -26,6 +27,12 @@ export default function Contact() {
   ) => {
     const { name, email, message } = data
     if (!name || !email || !message.trim()) {
+      logEvent({
+        action: 'User submitted form without filling details',
+        category: 'engagement',
+        label: 'user_error',
+        value: 0,
+      })
       return
     }
     try {
@@ -40,6 +47,12 @@ export default function Contact() {
       })
       const contactStatus: ContactResponse = await contactResponse.json()
       if (contactStatus.success) {
+        logEvent({
+          action: 'User sent a message',
+          category: 'engagement',
+          label: 'user_success',
+          value: 100,
+        })
         setStatus('success')
         event.target.reset()
       } else {
