@@ -27,7 +27,7 @@ function CardsList({ data, type, columns }: List) {
     <motion.div
       ref={ref}
       variants={stagger}
-      className="flex items-start flex-wrap -mx-5"
+      className={`grid grid-cols-1 md:grid-cols-${columns} gap-8 2xl:gap-16`}
     >
       {data[type]?.map((item: Article | Project, i: number) => (
         <Link
@@ -42,7 +42,7 @@ function CardsList({ data, type, columns }: List) {
             animate={controls}
             whileHover={{ scale: 1.03 }}
             whileTap={{ scale: 0.97 }}
-            className={`w-full md:w-1/${columns} mt-8 cursor-pointer text-gray-900 px-5`}
+            className={`w-full mt-8 cursor-pointer text-gray-900`}
           >
             <Image
               className="rounded-lg shadow-sm"

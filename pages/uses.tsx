@@ -10,9 +10,7 @@ export default function Uses({ data }) {
       <Head title="Uses | Adithya NR" />
       <Navbar />
       <Container>
-        <h1 className="text-black font-semibold text-6xl text-gray-900">
-          <b>Uses</b>
-        </h1>
+        <h1 className="text-black font-semibold text-4xl my-10">Uses</h1>
         {data?.allUses?.map((use: Use) => (
           <div key={use.id}>
             <h3
