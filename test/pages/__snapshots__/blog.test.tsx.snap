@@ -54,6 +54,17 @@ exports[`Renders a list of blogs 1`] = `
           <a
             class=" text-black text-sm hover:border-gray-900"
             data-testid="nav-link"
+            href="/work"
+          >
+            Work
+          </a>
+        </li>
+        <li
+          class="ml-6"
+        >
+          <a
+            class=" text-black text-sm hover:border-gray-900"
+            data-testid="nav-link"
             href="/contact"
           >
             Contact
@@ -69,9 +80,7 @@ exports[`Renders a list of blogs 1`] = `
         class="font-semibold text-5xl text-gray-900 mb-6"
         style="opacity: 0; transform: translateY(60px) translateZ(0);"
       >
-        <b>
-          Blogs
-        </b>
+        Articles
       </h1>
       <div
         class="flex items-start flex-wrap -mx-5"
@@ -103,7 +112,6 @@ exports[`Renders a list of blogs 1`] = `
             class="text-gray-600 poppins sm:text-xs md:text-md mt-2"
           >
             Sep 2018 | React.js
-             
           </p>
         </div>
         <div
@@ -133,7 +141,6 @@ exports[`Renders a list of blogs 1`] = `
             class="text-gray-600 poppins sm:text-xs md:text-md mt-2"
           >
             Aug 2018 | Miscellaneous 
-             
           </p>
         </div>
         <div
@@ -163,7 +170,6 @@ exports[`Renders a list of blogs 1`] = `
             class="text-gray-600 poppins sm:text-xs md:text-md mt-2"
           >
             Aug 2020 | Unit testing
-             
           </p>
         </div>
       </div>
@@ -202,17 +208,6 @@ exports[`Renders a list of blogs 1`] = `
         <ul
           class="flex justify-between"
         >
-          <li
-            class="ml-0 md:ml-10"
-          >
-            <a
-              class=" text-black text-sm hover:border-gray-900"
-              data-testid="footer-link"
-              href="/"
-            >
-              Home
-            </a>
-          </li>
           <li
             class="ml-0 md:ml-10"
           >
@@ -268,6 +263,17 @@ exports[`Renders a list of blogs 1`] = `
               Resume
             </a>
           </li>
+          <li
+            class="ml-0 md:ml-10"
+          >
+            <a
+              class=" text-black text-sm hover:border-gray-900"
+              data-testid="footer-link"
+              href="/uses"
+            >
+              Uses
+            </a>
+          </li>
         </ul>
         <div
           class="flex justify-start items-center mt-10 lg:mt-0"
@@ -281,6 +287,7 @@ exports[`Renders a list of blogs 1`] = `
           >
             <img
               alt="behance"
+              loading="lazy"
               src="/static/behance.svg"
             />
           </a>
@@ -293,6 +300,7 @@ exports[`Renders a list of blogs 1`] = `
           >
             <img
               alt="dribbble"
+              loading="lazy"
               src="/static/dribbble.svg"
             />
           </a>
@@ -305,6 +313,7 @@ exports[`Renders a list of blogs 1`] = `
           >
             <img
               alt="twitter"
+              loading="lazy"
               src="/static/twitter.svg"
             />
           </a>
@@ -317,6 +326,7 @@ exports[`Renders a list of blogs 1`] = `
           >
             <img
               alt="github"
+              loading="lazy"
               src="/static/github.svg"
             />
           </a>
@@ -329,6 +339,7 @@ exports[`Renders a list of blogs 1`] = `
           >
             <img
               alt="linkedin"
+              loading="lazy"
               src="/static/linkedin.svg"
             />
           </a>

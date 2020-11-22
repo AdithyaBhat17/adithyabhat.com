@@ -6,10 +6,6 @@ import Socials from './socials'
 
 export const footerRoutes = [
   {
-    name: 'Home',
-    link: '/',
-  },
-  {
     name: 'About',
     link: '/about',
   },
@@ -28,6 +24,10 @@ export const footerRoutes = [
   {
     name: 'Resume',
     link: '/resume.pdf',
+  },
+  {
+    name: 'Uses',
+    link: '/uses',
   },
 ]
 

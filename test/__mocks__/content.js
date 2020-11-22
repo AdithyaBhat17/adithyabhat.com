@@ -93,7 +93,12 @@ const mockArticle = {
   seo: [],
 }
 
+const mockProjects = {
+  allProjects: mockArticles.allArticles,
+}
+
 module.exports = {
   mockArticles,
   mockArticle,
+  mockProjects,
 }

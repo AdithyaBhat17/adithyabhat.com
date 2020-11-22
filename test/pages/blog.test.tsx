@@ -2,13 +2,17 @@ import { render } from '../testUtils'
 import { cleanup } from '@testing-library/react'
 import Blog from '@/pages/blog'
 import Article from '@/pages/blog/[slug]'
-import { mockArticles, mockArticle } from '../__mocks__/article'
+import { mockArticles, mockArticle } from '../__mocks__/content'
 
 afterAll(cleanup)
 
 test('Renders a list of blogs', () => {
   const { container } = render(
-    <Blog data={{ allArticles: mockArticles.allArticles }} />
+    <Blog
+      data={{ allArticles: mockArticles.allArticles }}
+      type="allArticles"
+      columns="3"
+    />
   )
   expect(container).toMatchSnapshot()
 })

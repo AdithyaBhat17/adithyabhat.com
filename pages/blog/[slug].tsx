@@ -4,7 +4,7 @@ import Head from '@/components/header'
 import processMarkdown from '@/lib/processMarkdown'
 import Container from '@/components/container'
 import Navbar from '@/components/navbar'
-import { ArticleProps } from '@/interfaces/blog'
+import { ArticleProps } from '@/interfaces/content'
 import NextHead from 'next/head'
 import Footer from '@/components/footer'
 
@@ -41,7 +41,11 @@ export default function Article({ data }: ArticleProps) {
           />
         </div>
         <div className="px-0 md:px-24 lg:px-24 mb-6">
-          <RecentArticles articles={data?.moreArticles || []} />
+          <RecentArticles
+            data={{ allArticles: data?.moreArticles || [] }}
+            type="allArticles"
+            columns="3"
+          />
         </div>
       </Container>
       <Footer />

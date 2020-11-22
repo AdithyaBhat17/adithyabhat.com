@@ -44,9 +44,28 @@ export const CASE_STUDY = `
       }
     }
 
-    moreProjects:allProjects (orderBy: date_DESC, first: 1, filter:{slug:{neq:$slug}}) {
+    allProjects (orderBy: date_DESC, filter:{slug:{neq:$slug}}) {
       slug
       title
+      thumbnail {
+        alt
+        blurhash
+        title
+        responsiveImage(imgixParams: { fit: crop,  ar: "4:3", auto: format }) {
+          srcSet
+          webpSrcSet
+          sizes
+          src
+          width
+          height
+          aspectRatio
+          alt
+          title
+          base64
+        }
+      }
+      tags
+      date
     }
   }
 `

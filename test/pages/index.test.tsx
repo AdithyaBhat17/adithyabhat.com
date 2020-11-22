@@ -3,16 +3,16 @@ import { render } from '../testUtils'
 import { Home } from '../../pages/index'
 import { cleanup } from '@testing-library/react'
 import MyApp from '../../pages/_app'
-import { mockArticles } from '../__mocks__/article'
+import { mockArticles, mockProjects } from '../__mocks__/content'
 import About from '@/pages/about'
 
 afterEach(cleanup)
 
 describe('Home page', () => {
   it('matches snapshot', () => {
-    const data = mockArticles
+    const data = { ...mockArticles, ...mockProjects }
     const { asFragment } = render(
-      <Home recentWork="" featuredArticles={data} />
+      <Home data={data} type="allArticles" columns="3" />
     )
     expect(asFragment()).toMatchSnapshot()
   })

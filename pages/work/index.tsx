@@ -1,18 +1,18 @@
 import { fetchAPI } from '@/lib/datocms'
-import { ALL_ARTICLES_QUERY } from '../graphql/queries/posts'
+import { RECENT_WORK } from '../../graphql/queries/work'
 
 import Head from '@/components/header'
 import Navbar from '@/components/navbar'
 import Container from '@/components/container'
-import { BlogPosts } from '@/interfaces/blog'
-import ArticlesList from '@/components/articles-list'
+import { List } from '@/interfaces/content'
+import CardsList from '@/components/cards'
 import Footer from '@/components/footer'
 import { motion } from 'framer-motion'
 
-export default function Blog({ data }: BlogPosts) {
+export default function Work({ data, type, columns }: List) {
   return (
     <motion.div initial="initial" exit={{ opacity: 0 }} animate="animate">
-      <Head title="Blog | Adithya NR" />
+      <Head title="Work | Adithya NR" />
       <Navbar />
       <Container>
         <motion.h1
@@ -20,9 +20,9 @@ export default function Blog({ data }: BlogPosts) {
           animate={{ opacity: 1, y: 0 }}
           className="font-semibold text-5xl text-gray-900 mb-6"
         >
-          <b>Blogs</b>
+          Recent work
         </motion.h1>
-        <ArticlesList data={data} />
+        <CardsList data={data} type={type} columns={columns} />
       </Container>
       <br />
       <Footer />
@@ -32,8 +32,8 @@ export default function Blog({ data }: BlogPosts) {
 
 // istanbul ignore next line
 export async function getStaticProps() {
-  const allArticles = await fetchAPI(ALL_ARTICLES_QUERY)
+  const allProjects = await fetchAPI(RECENT_WORK)
   return {
-    props: { data: allArticles },
+    props: { data: allProjects, type: 'allProjects', columns: '3' },
   }
 }

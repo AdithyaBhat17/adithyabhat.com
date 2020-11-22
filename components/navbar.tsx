@@ -12,6 +12,10 @@ export const routes = [
     link: '/blog',
   },
   {
+    name: 'Work',
+    link: '/work',
+  },
+  {
     name: 'Contact',
     link: '/contact',
   },
