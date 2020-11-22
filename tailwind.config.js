@@ -6,7 +6,7 @@ module.exports = {
       './pages/**/*.{js,ts,jsx,tsx}',
     ],
     options: {
-      safelist: ['sm:w-1/2', 'sm:w-1/3'],
+      safelist: ['sm:w-1/2', 'sm:w-1/3', 'lg:w-1/2'],
     },
   },
   darkMode: 'media',
