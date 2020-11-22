@@ -95,16 +95,6 @@ code,
   font-family: 'SF Mono', monospace;
 }
 
-.grid {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-wrap: wrap;
-
-  max-width: 800px;
-  margin-top: 3rem;
-}
-
 .logo {
   width: 100px;
 }

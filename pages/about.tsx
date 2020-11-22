@@ -22,7 +22,7 @@ export default function About({ companies }) {
             src="/static/about_hero.svg"
             alt="About Adithya"
           />
-          <h1 className="text-3xl md:text-5xl my-5 text-left sm:text-center">
+          <h1 className="text-3xl md:text-4xl my-10 text-left sm:text-center font-semibold">
             Hello, I&apos;m Adithya
           </h1>
           <p className=" my-5 leading-8">
@@ -34,7 +34,7 @@ export default function About({ companies }) {
             Designer. Free time is hard to come by, but when it does, I
             freelance and craft web apps for a living.
           </p>
-          <h2 className="text-md leading-8 uppercase opacity-50 mt-5 mb-3">
+          <h2 className="text-md leading-8 uppercase opacity-50 mt-5 mb-3 font-semibold">
             Background
           </h2>
           <p className="my-5 leading-8">
@@ -51,8 +51,8 @@ export default function About({ companies }) {
             and development of the product using React, Redux, Node and
             Postgres. .
           </p>
-          <h3 className="text-xl md:text-3xl my-20 text-left sm:text-center">
-            <b>Companies I&apos;ve worked with</b>
+          <h3 className="text-xl md:text-3xl my-20 text-left sm:text-center font-semibold">
+            Companies I&apos;ve worked with
           </h3>
           <div className="flex flex-wrap mx-auto justify-between sm:justify-around items-center mb-5">
             {companies?.map((company) => (
@@ -67,8 +67,8 @@ export default function About({ companies }) {
               </div>
             ))}
           </div>
-          <h3 className="text-xl md:text-3xl mt-20 mb-16 text-left sm:text-center">
-            <b>Things I&apos;m good at</b>
+          <h3 className="text-xl md:text-3xl mt-20 mb-16 text-left sm:text-center font-semibold">
+            Things I&apos;m good at
           </h3>
           <img
             loading="lazy"
@@ -78,7 +78,7 @@ export default function About({ companies }) {
           />
           <div className="flex flex-wrap mx-auto text-left md:text-center mt-16 md:mt-24">
             <div className="w-full mx-auto sm:flex-1">
-              <h2 className="inline-flex items-center text-xl">
+              <h2 className="inline-flex items-center text-xl font-semibold">
                 <img
                   src="/static/pen-tool.svg"
                   className="mr-5"
@@ -93,7 +93,7 @@ export default function About({ companies }) {
               </small>
             </div>
             <div className="w-full mx-auto flex-1">
-              <h2 className="inline-flex items-center text-xl">
+              <h2 className="inline-flex items-center text-xl font-semibold">
                 <img
                   src="/static/terminal.svg"
                   className="mr-5"
@@ -108,7 +108,7 @@ export default function About({ companies }) {
               </small>
             </div>
           </div>
-          <h1 className="text-2xl md:text-5xl font-semibold my-20 md:my-40">
+          <h1 className="text-2xl md:text-5xl font-semibold my-20 md:my-40 leading-10">
             Got a project in mind, a question or something else? Get in touch
             with me{' '}
             <Link href="/contact">
