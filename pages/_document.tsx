@@ -79,7 +79,7 @@ export default class MyDocument extends Document {
                 "image":"https://raw.githubusercontent.com/AdithyaBhat17/adithyabhat17.github.io/version-3/public/adithya1.png",
                 "headline":"Adithya NR",
                 "sameAs":[
-                  "https://twitter.com/Adithyabhat9",
+                  "https://twitter.com/adithya__nr",
                   "https://linkedin.com/in/adithya-nr/",
                   "https://github.com/AdithyaBhat17",
                   "https://instagram.com/adithyabhat__/",
