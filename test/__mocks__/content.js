@@ -93,12 +93,28 @@ const mockArticle = {
   seo: [],
 }
 
+const mockProject = {
+  id: '12313',
+  title: 'Homero',
+  caseStudy: 'Homero case study',
+  date: '2020-08-20',
+  slug: 'homero',
+  seo: [],
+  link: 'heyhomero.com',
+}
+
 const mockProjects = {
-  allProjects: mockArticles.allArticles,
+  allProjects: mockArticles.allArticles.map((article) => ({
+    ...article,
+    id: Math.random().toString(),
+    caseStudy: 'abc',
+    link: 'abc',
+  })),
 }
 
 module.exports = {
   mockArticles,
   mockArticle,
   mockProjects,
+  mockProject,
 }

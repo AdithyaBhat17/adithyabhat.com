@@ -1,13 +1,18 @@
 import { render } from '../testUtils'
 import Footer, { footerRoutes } from '@/components/footer'
 import { socials } from '@/components/socials'
+import { waitFor } from '@testing-library/react'
 
-test('renders all footer links', () => {
+test('renders all footer links', async () => {
   const { getAllByTestId } = render(<Footer />)
-  expect(getAllByTestId('footer-link').length).toEqual(footerRoutes.length)
+  waitFor(() =>
+    expect(getAllByTestId('footer-link').length).toEqual(footerRoutes.length)
+  )
 })
 
-test('renders all social links', () => {
+test('renders all social links', async () => {
   const { getAllByTestId } = render(<Footer />)
-  expect(getAllByTestId('socials-link').length).toEqual(socials.length)
+  waitFor(() =>
+    expect(getAllByTestId('socials-link').length).toEqual(socials.length)
+  )
 })

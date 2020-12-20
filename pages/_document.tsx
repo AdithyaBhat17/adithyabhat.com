@@ -1,3 +1,5 @@
+/* istanbul ignore file */
+
 import { GA_TRACKING_ID } from '@/lib/gtag'
 import Document, {
   Html,
@@ -50,6 +52,42 @@ export default class MyDocument extends Document {
               page_path: window.location.pathname,
             });
           `,
+            }}
+          />
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{
+              __html: `{
+                "name":"Adithya NR",
+                "description":"I am a Full stack Designer based in Bengaluru, India.",
+                "author":{
+                  "@type":"Person",
+                  "name":"Adithya NR"
+                },
+                "disambiguatingDescription": "Web Designer & Developer",
+                "jobTitle": "Full Stack Designer, Freelancer",
+                "@type":"WebSite",
+                "url":"https://adithyabhat.com/",
+                "publisher":{
+                  "@type":"Organization",
+                  "logo":{
+                    "@type":"ImageObject",
+                    "url":"https://raw.githubusercontent.com/AdithyaBhat17/adithyabhat17.github.io/version-3/public/adithya1.png"
+                  },
+                    "name":"Adithya NR"
+                },
+                "image":"https://raw.githubusercontent.com/AdithyaBhat17/adithyabhat17.github.io/version-3/public/adithya1.png",
+                "headline":"Adithya NR",
+                "sameAs":[
+                  "https://twitter.com/adithya__nr",
+                  "https://linkedin.com/in/adithya-nr/",
+                  "https://github.com/AdithyaBhat17",
+                  "https://instagram.com/adithyabhat__/",
+                  "https://medium.com/adithya-nr"
+                ],
+                "alternateName": "Adithya Bhat",
+                "@context":"http://schema.org"
+              }`,
             }}
           />
         </Head>
