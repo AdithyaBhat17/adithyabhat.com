@@ -80,99 +80,11 @@ exports[`Renders a list of blogs 1`] = `
         class="font-semibold text-5xl text-gray-900 mb-6"
         style="opacity: 0; transform: translateY(60px) translateZ(0);"
       >
-        Articles
+        Recent work
       </h1>
       <div
         class="flex items-start flex-wrap -mx-5"
-      >
-        <div
-          class="w-full sm:w-1/3 mt-8 cursor-pointer text-gray-900 px-5"
-          style="opacity: 0; transform: translateY(20px) translateZ(0);"
-        >
-          <div
-            class="rounded-lg shadow-sm"
-            style="display: block; overflow: hidden; position: relative;"
-          >
-            <img
-              role="presentation"
-              src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI1NjkiIGhlaWdodD0iNDI3Ij48L3N2Zz4="
-              style="display: block; width: 100%;"
-            />
-            <div
-              style="background-image: url(data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAoHBwgHBgoICAgLFBILDhUNGRUSDh0PEQ8NFx8aGBYVKhUaLisjIh0oHSEiJDUlKC0vMjIyGSU4PTcwPCsxMi8BCgsLDg0OHBAQHC8oGh07Oy8vLy8vLy8vLy8vOzAvLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vL//AABEIABIAGAMBIgACEQEDEQH/xAAaAAACAgMAAAAAAAAAAAAAAAAABAEDAgUG/8QAIRAAAgEEAAcAAAAAAAAAAAAAAAECAwQFERIjMTM0UXH/xAAXAQEBAQEAAAAAAAAAAAAAAAADBAUC/8QAGREAAgMBAAAAAAAAAAAAAAAAAAECETES/9oADAMBAAIRAxEAPwC6U1oQuKLqjFrz1syutUI7YkOU7EEaVtwMClZOnKfCmiStNCWbHDdtEZ3x5fAAy4YcPThbOUnkaicn19kABasFZ//Z); background-size: cover; opacity: 1; transition: opacity 500ms 500ms; position: absolute; left: 0px; top: 0px; bottom: 0px; right: 0px;"
-            />
-            <noscript />
-          </div>
-          <h2
-            class="mt-3 font-semibold text-xl sm:text-sm lg:text-xl"
-          >
-            A beginner’s guide to understanding React’s context API
-          </h2>
-          <p
-            class="text-gray-600 poppins sm:text-xs md:text-md mt-2"
-          >
-            Sep 2018 | React.js
-          </p>
-        </div>
-        <div
-          class="w-full sm:w-1/3 mt-8 cursor-pointer text-gray-900 px-5"
-          style="opacity: 0; transform: translateY(20px) translateZ(0);"
-        >
-          <div
-            class="rounded-lg shadow-sm"
-            style="display: block; overflow: hidden; position: relative;"
-          >
-            <img
-              role="presentation"
-              src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI1NjkiIGhlaWdodD0iNDI3Ij48L3N2Zz4="
-              style="display: block; width: 100%;"
-            />
-            <div
-              style="background-image: url(data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAoHBwgHBgoICAgLFBILDhUNGRUSDh0PEQ8NFx8aGBYVKhUaLisjIh0oHSEiJDUlKC0vMjIyGSU4PTcwPCsxMi8BCgsLDg0OHBAQHC8oGh07Oy8vLy8vLy8vLy8vOzAvLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vL//AABEIABIAGAMBIgACEQEDEQH/xAAaAAACAgMAAAAAAAAAAAAAAAAABAEDAgUG/8QAIRAAAgEEAAcAAAAAAAAAAAAAAAECAwQFERIjMTM0UXH/xAAXAQEBAQEAAAAAAAAAAAAAAAADBAUC/8QAGREAAgMBAAAAAAAAAAAAAAAAAAECETES/9oADAMBAAIRAxEAPwC6U1oQuKLqjFrz1syutUI7YkOU7EEaVtwMClZOnKfCmiStNCWbHDdtEZ3x5fAAy4YcPThbOUnkaicn19kABasFZ//Z); background-size: cover; opacity: 1; transition: opacity 500ms 500ms; position: absolute; left: 0px; top: 0px; bottom: 0px; right: 0px;"
-            />
-            <noscript />
-          </div>
-          <h2
-            class="mt-3 font-semibold text-xl sm:text-sm lg:text-xl"
-          >
-            The most underrated skill for a developer: Communication
-          </h2>
-          <p
-            class="text-gray-600 poppins sm:text-xs md:text-md mt-2"
-          >
-            Aug 2018 | Miscellaneous 
-          </p>
-        </div>
-        <div
-          class="w-full sm:w-1/3 mt-8 cursor-pointer text-gray-900 px-5"
-          style="opacity: 0; transform: translateY(20px) translateZ(0);"
-        >
-          <div
-            class="rounded-lg shadow-sm"
-            style="display: block; overflow: hidden; position: relative;"
-          >
-            <img
-              role="presentation"
-              src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI1NjkiIGhlaWdodD0iNDI3Ij48L3N2Zz4="
-              style="display: block; width: 100%;"
-            />
-            <div
-              style="background-image: url(data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAoHBwgHBgoICAgLFBILDhUNGRUSDh0PEQ8NFx8aGBYVKhUaLisjIh0oHSEiJDUlKC0vMjIyGSU4PTcwPCsxMi8BCgsLDg0OHBAQHC8oGh07Oy8vLy8vLy8vLy8vOzAvLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vL//AABEIABIAGAMBIgACEQEDEQH/xAAaAAACAgMAAAAAAAAAAAAAAAAABAEDAgUG/8QAIRAAAgEEAAcAAAAAAAAAAAAAAAECAwQFERIjMTM0UXH/xAAXAQEBAQEAAAAAAAAAAAAAAAADBAUC/8QAGREAAgMBAAAAAAAAAAAAAAAAAAECETES/9oADAMBAAIRAxEAPwC6U1oQuKLqjFrz1syutUI7YkOU7EEaVtwMClZOnKfCmiStNCWbHDdtEZ3x5fAAy4YcPThbOUnkaicn19kABasFZ//Z); background-size: cover; opacity: 1; transition: opacity 500ms 500ms; position: absolute; left: 0px; top: 0px; bottom: 0px; right: 0px;"
-            />
-            <noscript />
-          </div>
-          <h2
-            class="mt-3 font-semibold text-xl sm:text-sm lg:text-xl"
-          >
-            Generate code coverage reports for your unit tests using Jest 
-          </h2>
-          <p
-            class="text-gray-600 poppins sm:text-xs md:text-md mt-2"
-          >
-            Aug 2020 | Unit testing
-          </p>
-        </div>
-      </div>
+      />
     </div>
     <br />
     <div

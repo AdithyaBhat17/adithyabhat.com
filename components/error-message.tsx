@@ -1,4 +1,4 @@
-export default function FormErrorMessage({ message }) {
+export default function FormErrorMessage({ message }: { message?: string }) {
   if (!message) {
     return null
   }

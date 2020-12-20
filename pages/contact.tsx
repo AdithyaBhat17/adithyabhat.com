@@ -108,6 +108,7 @@ export default function Contact() {
                 ref={register({ required: 'Name cannot be empty 🙁' })}
                 name="name"
                 id="name"
+                data-testid="name"
                 placeholder="Mike Wazowski"
               />
               {errors.name ? (
@@ -121,6 +122,7 @@ export default function Contact() {
               <input
                 className="input"
                 type="email"
+                data-testid="email"
                 ref={register({
                   required: 'Please provide your email address 😓',
                   pattern: {
@@ -147,6 +149,7 @@ export default function Contact() {
                 })}
                 className="input"
                 name="message"
+                data-testid="message"
                 id="message"
                 rows={5}
               />
