@@ -10,7 +10,7 @@
     "format": "prettier --write **/*.{js,ts,tsx}",
     "lint": "eslint . --ext ts --ext tsx --ext js",
     "test": "jest",
-    "test:coverage": "jest --coverage -u",
+    "test:coverage": "jest --coverage -u --silent",
     "test-all": "yarn lint && yarn type-check && yarn test:coverage",
     "build": "yarn test-all && next build",
     "build:now": "next build"

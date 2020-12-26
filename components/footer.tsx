@@ -29,6 +29,10 @@ export const footerRoutes = [
     name: 'Uses',
     link: '/uses',
   },
+  {
+    name: 'Legal',
+    link: '/legal',
+  },
 ]
 
 function Footer() {

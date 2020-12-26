@@ -7,6 +7,7 @@ import { companies } from '@/utils/about'
 import { motion } from 'framer-motion'
 import { fadeInUp } from '@/utils/motion'
 import useResetScroll from 'hooks/useResetScroll'
+import Image from 'next/image'
 
 export default function About({ companies }) {
   useResetScroll()
@@ -16,12 +17,16 @@ export default function About({ companies }) {
       <Navbar />
       <Container>
         <motion.div variants={fadeInUp} className="px-0 md:px-16 xl:px-32">
-          <img
-            loading="eager"
-            className="mx-auto w-3/4 md:w-1/3"
-            src="/static/about_hero.svg"
-            alt="About Adithya"
-          />
+          <div className="flex justify-center">
+            <Image
+              width={250}
+              height={250}
+              loading="eager"
+              className="block mx-auto"
+              src="/static/about_hero.svg"
+              alt="About Adithya"
+            />
+          </div>
           <h1 className="text-3xl md:text-4xl my-10 text-left sm:text-center font-semibold">
             Hello, I&apos;m Adithya
           </h1>

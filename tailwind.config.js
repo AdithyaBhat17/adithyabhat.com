@@ -1,12 +1,21 @@
 module.exports = {
   purge: {
-    enabled: true,
     content: [
       './components/**/*.{js,ts,jsx,tsx}',
       './pages/**/*.{js,ts,jsx,tsx}',
     ],
     options: {
-      safelist: ['sm:w-1/2', 'sm:w-1/3', 'lg:w-1/2', 'sm:mt-10', 'sm:text-4xl'],
+      safelist: [
+        'sm:w-1/2',
+        'sm:w-1/3',
+        'lg:w-1/2',
+        'sm:mt-10',
+        'sm:text-4xl',
+        'md:w-1/2',
+        'md:w-1/3',
+        'md:w-1/4',
+        'lg:w-1/3',
+      ],
     },
   },
   darkMode: 'media',
