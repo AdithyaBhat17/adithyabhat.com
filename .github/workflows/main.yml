@@ -18,10 +18,14 @@ jobs:
     runs-on: ubuntu-latest
 
     # Steps represent a sequence of tasks that will be executed as part of the job
-    steps:
+    steps:        
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
     - uses: actions/checkout@v2
-
+        
+    - name: ACTIONS_ALLOW_UNSECURE_COMMANDS
+      id: ACTIONS_ALLOW_UNSECURE_COMMANDS
+      run: echo 'ACTIONS_ALLOW_UNSECURE_COMMANDS=true' >> $GITHUB_ENV
+    
     - name: Setup Node.js environment
       uses: actions/setup-node@v1.4.2
 
@@ -31,6 +35,7 @@ jobs:
         yarn
         yarn run test-all
       env:
+        ACTIONS_ALLOW_UNSECURE_COMMANDS: true
         DATOCMS_API_URL: ${{ secrets.DATOCMS_API_URL }}
         DATOCMS_PREVIEW_SECRET: ${{ secrets.DATOCMS_PREVIEW_SECRET }}
         DATOCMS_URL: ${{ secrets.DATOCMS_URL }}
