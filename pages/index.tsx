@@ -12,9 +12,26 @@ import { motion } from 'framer-motion'
 import useResetScroll from 'hooks/useResetScroll'
 import Thanks from '@/components/thanks'
 import { HOME_PAGE_QUERY } from 'graphql/queries'
+import useResizeObserver from 'hooks/useResizeObserver'
+import { useEffect } from 'react'
 
 export const Home = ({ data }: List): JSX.Element => {
   useResetScroll()
+  const { width } = useResizeObserver()
+
+  useEffect(() => {
+    if (window !== undefined && width) {
+      const isTablet = width >= 768 && width <= 1024
+
+      const limit = isTablet ? 4 : 3
+
+      ;(data as AllArticles).allArticles = (data as AllArticles).allArticles.slice(
+        0,
+        limit
+      )
+    }
+  }, [width])
+
   return (
     <motion.div initial="initial" animate="animate" exit={{ opacity: 0 }}>
       <Head title="Adithya NR | A Full stack Designer based in Bengaluru, India." />

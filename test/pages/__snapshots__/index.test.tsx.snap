@@ -77,13 +77,13 @@ exports[`Home page matches snapshot 1`] = `
       data-testid="container"
     >
       <div
-        class="flex justify-between items-center flex-wrap md:flex-nowrap"
+        class="flex justify-between items-center flex-wrap md:flex-nowrap hero-wrapper"
       >
         <div
           style="opacity: 0; transform: translateY(20px) translateZ(0);"
         >
           <h1
-            class="font-semibold text-3xl"
+            class="font-semibold text-3xl md:text-4xl hero-title"
           >
             Hey, I'm 
             <span
@@ -98,7 +98,7 @@ exports[`Home page matches snapshot 1`] = `
             </span>
           </h1>
           <p
-            class="mt-5 w-full md:w-3/4 leading-7 poppins"
+            class="mt-5 w-full lg:w-3/4 leading-7 poppins hero-description"
           >
             A UX engineer from Bengaluru, helping companies of all sizes get ahead online. I am currently working on DevOps and Analytics products at 
             <span
@@ -251,7 +251,7 @@ exports[`Home page matches snapshot 1`] = `
           class="flex items-start flex-wrap -mx-5"
         >
           <div
-            class="w-full md:w-1/3 cursor-pointer text-gray-900 mt-5 px-5"
+            class="w-full md:w-1/2 lg:w-1/3 mt-8 cursor-pointer text-gray-900 px-5"
             style="opacity: 0; transform: translateY(20px) translateZ(0);"
           >
             <div
@@ -269,47 +269,18 @@ exports[`Home page matches snapshot 1`] = `
               <noscript />
             </div>
             <h2
-              class="mt-3 font-semibold text-xl"
-            >
-              Generate code coverage reports for your unit tests using Jest 
-            </h2>
-            <p
-              class="text-gray-600 poppins"
-            >
-              Unit testing
-            </p>
-          </div>
-          <div
-            class="w-full md:w-1/3 cursor-pointer text-gray-900 mt-5 px-5"
-            style="opacity: 0; transform: translateY(20px) translateZ(0);"
-          >
-            <div
-              class="rounded-lg shadow-sm"
-              style="display: block; overflow: hidden; position: relative;"
-            >
-              <img
-                role="presentation"
-                src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI1NjkiIGhlaWdodD0iNDI3Ij48L3N2Zz4="
-                style="display: block; width: 100%;"
-              />
-              <div
-                style="background-image: url(data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAoHBwgHBgoICAgLFBILDhUNGRUSDh0PEQ8NFx8aGBYVKhUaLisjIh0oHSEiJDUlKC0vMjIyGSU4PTcwPCsxMi8BCgsLDg0OHBAQHC8oGh07Oy8vLy8vLy8vLy8vOzAvLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vL//AABEIABIAGAMBIgACEQEDEQH/xAAaAAACAgMAAAAAAAAAAAAAAAAABAEDAgUG/8QAIRAAAgEEAAcAAAAAAAAAAAAAAAECAwQFERIjMTM0UXH/xAAXAQEBAQEAAAAAAAAAAAAAAAADBAUC/8QAGREAAgMBAAAAAAAAAAAAAAAAAAECETES/9oADAMBAAIRAxEAPwC6U1oQuKLqjFrz1syutUI7YkOU7EEaVtwMClZOnKfCmiStNCWbHDdtEZ3x5fAAy4YcPThbOUnkaicn19kABasFZ//Z); background-size: cover; opacity: 1; transition: opacity 500ms 500ms; position: absolute; left: 0px; top: 0px; bottom: 0px; right: 0px;"
-              />
-              <noscript />
-            </div>
-            <h2
-              class="mt-3 font-semibold text-xl"
+              class="mt-3 font-semibold text-xl sm:text-sm lg:text-xl"
             >
               A beginner’s guide to understanding React’s context API
             </h2>
             <p
-              class="text-gray-600 poppins"
+              class="text-gray-600 poppins sm:text-xs md:text-md mt-2"
             >
               React.js
             </p>
           </div>
           <div
-            class="w-full md:w-1/3 cursor-pointer text-gray-900 mt-5 px-5"
+            class="w-full md:w-1/2 lg:w-1/3 mt-8 cursor-pointer text-gray-900 px-5"
             style="opacity: 0; transform: translateY(20px) translateZ(0);"
           >
             <div
@@ -327,14 +298,43 @@ exports[`Home page matches snapshot 1`] = `
               <noscript />
             </div>
             <h2
-              class="mt-3 font-semibold text-xl"
+              class="mt-3 font-semibold text-xl sm:text-sm lg:text-xl"
             >
               The most underrated skill for a developer: Communication
             </h2>
             <p
-              class="text-gray-600 poppins"
+              class="text-gray-600 poppins sm:text-xs md:text-md mt-2"
             >
               Miscellaneous 
+            </p>
+          </div>
+          <div
+            class="w-full md:w-1/2 lg:w-1/3 mt-8 cursor-pointer text-gray-900 px-5"
+            style="opacity: 0; transform: translateY(20px) translateZ(0);"
+          >
+            <div
+              class="rounded-lg shadow-sm"
+              style="display: block; overflow: hidden; position: relative;"
+            >
+              <img
+                role="presentation"
+                src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI1NjkiIGhlaWdodD0iNDI3Ij48L3N2Zz4="
+                style="display: block; width: 100%;"
+              />
+              <div
+                style="background-image: url(data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAoHBwgHBgoICAgLFBILDhUNGRUSDh0PEQ8NFx8aGBYVKhUaLisjIh0oHSEiJDUlKC0vMjIyGSU4PTcwPCsxMi8BCgsLDg0OHBAQHC8oGh07Oy8vLy8vLy8vLy8vOzAvLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vL//AABEIABIAGAMBIgACEQEDEQH/xAAaAAACAgMAAAAAAAAAAAAAAAAABAEDAgUG/8QAIRAAAgEEAAcAAAAAAAAAAAAAAAECAwQFERIjMTM0UXH/xAAXAQEBAQEAAAAAAAAAAAAAAAADBAUC/8QAGREAAgMBAAAAAAAAAAAAAAAAAAECETES/9oADAMBAAIRAxEAPwC6U1oQuKLqjFrz1syutUI7YkOU7EEaVtwMClZOnKfCmiStNCWbHDdtEZ3x5fAAy4YcPThbOUnkaicn19kABasFZ//Z); background-size: cover; opacity: 1; transition: opacity 500ms 500ms; position: absolute; left: 0px; top: 0px; bottom: 0px; right: 0px;"
+              />
+              <noscript />
+            </div>
+            <h2
+              class="mt-3 font-semibold text-xl sm:text-sm lg:text-xl"
+            >
+              Generate code coverage reports for your unit tests using Jest 
+            </h2>
+            <p
+              class="text-gray-600 poppins sm:text-xs md:text-md mt-2"
+            >
+              Unit testing
             </p>
           </div>
         </div>
@@ -353,7 +353,7 @@ exports[`Home page matches snapshot 1`] = `
         class="flex items-start flex-wrap -mx-5"
       >
         <div
-          class="w-full sm:w-1/3 mt-8 cursor-pointer text-gray-900 px-5"
+          class="w-full md:w-1/2 lg:w-1/3 mt-8 cursor-pointer text-gray-900 px-5"
           style="opacity: 0; transform: translateY(20px) translateZ(0);"
         >
           <div
@@ -382,7 +382,7 @@ exports[`Home page matches snapshot 1`] = `
           </p>
         </div>
         <div
-          class="w-full sm:w-1/3 mt-8 cursor-pointer text-gray-900 px-5"
+          class="w-full md:w-1/2 lg:w-1/3 mt-8 cursor-pointer text-gray-900 px-5"
           style="opacity: 0; transform: translateY(20px) translateZ(0);"
         >
           <div
@@ -411,7 +411,7 @@ exports[`Home page matches snapshot 1`] = `
           </p>
         </div>
         <div
-          class="w-full sm:w-1/3 mt-8 cursor-pointer text-gray-900 px-5"
+          class="w-full md:w-1/2 lg:w-1/3 mt-8 cursor-pointer text-gray-900 px-5"
           style="opacity: 0; transform: translateY(20px) translateZ(0);"
         >
           <div
@@ -581,6 +581,17 @@ exports[`Home page matches snapshot 1`] = `
                 href="/uses"
               >
                 Uses
+              </a>
+            </li>
+            <li
+              class="ml-0 md:ml-10"
+            >
+              <a
+                class=" text-black text-sm hover:border-gray-900"
+                data-testid="footer-link"
+                href="/legal"
+              >
+                Legal
               </a>
             </li>
           </ul>

@@ -22,7 +22,7 @@ const renderMeta = (
 
 function CardsList({ data, type, columns }: List) {
   const pathname = type === 'allArticles' ? 'blog' : 'work'
-  const cardWidth = `sm:w-1/${columns}`
+  const cardWidth = `md:w-1/${Number(columns) - 1} lg:w-1/${columns}`
   const { ref, controls } = useCustomInView()
   return (
     <motion.div

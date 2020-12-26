@@ -35,14 +35,14 @@ function Hero() {
     <Container>
       <motion.div
         variants={stagger}
-        className="flex justify-between items-center flex-wrap md:flex-nowrap"
+        className="flex justify-between items-center flex-wrap md:flex-nowrap hero-wrapper"
       >
         <motion.div variants={fadeInUp}>
-          <h1 className="font-semibold text-3xl">
+          <h1 className="font-semibold text-3xl md:text-4xl hero-title">
             Hey, I&apos;m <span className="font-bold">Adithya </span>
             <span role="img">👋</span>
           </h1>
-          <p className="mt-5 w-full md:w-3/4 leading-7 poppins">
+          <p className="mt-5 w-full lg:w-3/4 leading-7 poppins hero-description">
             A UX engineer from Bengaluru, helping companies of all sizes get
             ahead online. I am currently working on DevOps and Analytics
             products at <span className="text-blue-800">Betsol</span>.
