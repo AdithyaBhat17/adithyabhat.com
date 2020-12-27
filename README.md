@@ -7,6 +7,7 @@ This repository contains the source code for my new portfolio (2021)
 ### Tools used
 - Figma (Design)
 - Next
+- React
 - Tailwind CSS
 - TypeScript
 - Framer Motion (Micro-animations)
