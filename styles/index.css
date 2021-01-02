@@ -82,7 +82,7 @@ a.left:hover:before {
 
 pre > code {
   display: block;
-  background: #fafafa;
+  /* background: #fafafa; */
   border-radius: 5px !important;
   padding: 0.75rem !important;
   white-space: pre-wrap !important;
@@ -243,7 +243,8 @@ code,
   @apply ml-5;
 }
 
-.content > ol {
+.content > ol,
+.content > p > ol {
   list-style: decimal;
   @apply mb-6;
 }

@@ -13,6 +13,8 @@ import { useRouter } from 'next/router'
 import ErrorPage from 'next/error'
 import RecentArticles from '@/components/recent-articles'
 import { renderMetaTags } from 'react-datocms'
+import ReactMarkdown from 'react-markdown'
+import Code from '@/components/Code'
 
 export default function Article({ data }: ArticleProps) {
   const router = useRouter()
@@ -28,16 +30,17 @@ export default function Article({ data }: ArticleProps) {
       <Navbar />
       <Container>
         <div className="w-full md:w-3/4 mx-auto">
-          <h1 data-testid="title" className="text-5xl font-bold mb-5">
+          <h1 data-testid="title" className="text-5xl font-semibold mb-5">
             {data?.article?.title}
           </h1>
           <small data-testid="date">
             {dayjs(data?.article?.date).format('DD MMM, YYYY')}
           </small>
-          <div
+          <ReactMarkdown
             data-testid="content"
             className="content"
-            dangerouslySetInnerHTML={{ __html: data?.article?.content }}
+            source={data?.article?.content}
+            renderers={{ code: Code }}
           />
         </div>
         <div className="px-0 md:px-24 lg:px-24 mb-6">
@@ -65,7 +68,9 @@ export async function getStaticProps({ params, preview }) {
         ...result,
         article: {
           ...result.article,
-          content: await processMarkdown(result?.article?.content ?? ''),
+          content:
+            result?.article?.content ??
+            ('' || (await processMarkdown(result?.article?.content ?? ''))),
         },
       },
     },
