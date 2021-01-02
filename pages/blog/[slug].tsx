@@ -1,7 +1,6 @@
 import { fetchAPI } from '@/lib/datocms'
 import { ARTICLE_QUERY, ALL_ARTICLES_QUERY } from '../../graphql/queries/posts'
 import Head from '@/components/header'
-import processMarkdown from '@/lib/processMarkdown'
 import Container from '@/components/container'
 import Navbar from '@/components/navbar'
 import { ArticleProps } from '@/interfaces/content'
@@ -68,9 +67,7 @@ export async function getStaticProps({ params, preview }) {
         ...result,
         article: {
           ...result.article,
-          content:
-            result?.article?.content ??
-            ('' || (await processMarkdown(result?.article?.content ?? ''))),
+          content: result?.article?.content ?? '',
         },
       },
     },
