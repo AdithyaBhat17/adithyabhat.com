@@ -23,7 +23,6 @@ test('Renders an article', () => {
   )
   expect(getByTestId('title').textContent).toEqual('Intro to JavaScript')
   expect(getByTestId('date').textContent).toEqual('20 Aug, 2020')
-  expect(getByTestId('content').textContent).toEqual('Blog contents')
 })
 
 test('Displays error page for invalid slug', () => {
