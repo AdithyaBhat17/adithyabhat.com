@@ -7,13 +7,31 @@ const defaultDescription =
 
 export default function Head({ title, description = defaultDescription }: SEO) {
   const [url, setUrl] = useState('https://adithyabhat.com')
+  const [hydrated, setHydrated] = useState(false)
 
   useEffect(() => {
     setUrl(document.location.href)
   }, [])
 
+  useEffect(() => {
+    if (!hydrated) {
+      setHydrated(true)
+    }
+  }, [])
+
   return (
     <NextHead>
+      <link
+        rel="preload"
+        as="style"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Poppins:wght@300;600&display=swap"
+      />
+
+      <link
+        media={!hydrated ? 'print' : 'all'}
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Poppins:wght@400;600;700&display=swap"
+        rel="stylesheet"
+      />
       <title>{title || 'Adithya NR'}</title>
       <meta name="description" content={description} />
       <meta

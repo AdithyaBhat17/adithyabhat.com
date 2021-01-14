@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/camelcase */
 import '../styles/index.css'
-import '../styles/fonts.css'
 import { useEffect } from 'react'
 import * as gtag from '@/lib/gtag'
 import { useRouter } from 'next/router'
