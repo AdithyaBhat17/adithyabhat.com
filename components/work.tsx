@@ -15,7 +15,7 @@ function Work({ data }: WorkProps) {
 
   const limit = isTablet ? 4 : 3
 
-  data.allProjects = data.allProjects.slice(0, limit)
+  data.allProjects = data.allProjects?.slice(0, limit)
 
   return (
     <motion.div
