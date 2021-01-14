@@ -25,7 +25,7 @@ export const Home = ({ data }: List): JSX.Element => {
 
       const limit = isTablet ? 4 : 3
 
-      ;(data as AllArticles).allArticles = (data as AllArticles).allArticles.slice(
+      ;(data as AllArticles).allArticles = (data as AllArticles).allArticles?.slice(
         0,
         limit
       )

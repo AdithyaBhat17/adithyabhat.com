@@ -164,7 +164,7 @@ export default function Contact() {
               type="submit"
               role="submit"
               value={buttonText}
-              className={`submit-button w-full sm:w-auto ${
+              className={`submit-button hover:text-white w-full sm:w-auto ${
                 status === 'success' ? 'bg-green-600 text-black' : ''
               }`}
             />
