@@ -8,8 +8,9 @@ import { motion } from 'framer-motion'
 import { fadeInUp } from '@/utils/motion'
 import useResetScroll from 'hooks/useResetScroll'
 import Image from 'next/image'
+import { calculateAge } from '@/utils/age'
 
-export default function About({ companies }) {
+export default function About({ companies, age }) {
   useResetScroll()
   return (
     <motion.div initial="initial" animate="animate" exit={{ opacity: 0 }}>
@@ -31,8 +32,9 @@ export default function About({ companies }) {
             Hello, I&apos;m Adithya
           </h1>
           <p className=" my-5 leading-8">
-            As you might have guessed already, I&apos;m Adithya, a 23-year-old
-            Full-Stack Designer from Bengaluru, India.
+            As you might have guessed already, I&apos;m Adithya, a{' '}
+            <span data-testid="age">{age}</span>
+            -year-old Full-Stack Designer from Bengaluru, India.
           </p>
           <p className="my-5 leading-8">
             I&apos;m a React nanodegree graduate, and an IDF certified UX
@@ -128,9 +130,11 @@ export default function About({ companies }) {
 }
 
 export function getStaticProps() {
+  const age = calculateAge()
   return {
     props: {
       companies,
+      age,
     },
   }
 }
