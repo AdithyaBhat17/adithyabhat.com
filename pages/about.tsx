@@ -31,7 +31,7 @@ export default function About({ companies }) {
             Hello, I&apos;m Adithya
           </h1>
           <p className=" my-5 leading-8">
-            As you might have guessed already, I&apos;m Adithya, a 22-year-old
+            As you might have guessed already, I&apos;m Adithya, a 23-year-old
             Full-Stack Designer from Bengaluru, India.
           </p>
           <p className="my-5 leading-8">
