@@ -40,7 +40,7 @@ export default function Head({ title, description = defaultDescription }: SEO) {
         id="viewport-meta"
       />
 
-      <link rel="icon" href="static/logo_white.svg" />
+      <link rel="icon" type="image/svg" href="static/logo_white.svg" />
       <meta name="author" content="Adithya NR" />
       <meta property="og:title" content="Adithya NR" />
       <meta name="og:description" content={description} />
