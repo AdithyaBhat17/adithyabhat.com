@@ -37,9 +37,9 @@ export default function About({ companies, age }) {
             -year-old Full-Stack Designer from Bengaluru, India.
           </p>
           <p className="my-5 leading-8">
-            I&apos;m a React nanodegree graduate, and an IDF certified UX
-            Designer. Free time is hard to come by, but when it does, I
-            freelance and craft web apps for a living.
+            I&apos;m a React nanodegree graduate and an IDF certified UX
+            Designer. Free time is hard to come by, but I freelance and craft
+            web apps for a living when it does.
           </p>
           <h2 className="text-md leading-8 uppercase opacity-50 mt-5 mb-3 font-semibold">
             Background
@@ -47,16 +47,15 @@ export default function About({ companies, age }) {
           <p className="my-5 leading-8">
             I studied computer science and engineering at RNS Institute of
             Technology, Bangalore. During my time at RNSIT, I volunteered as a
-            graphic designer with a small team that helped me jumpstart and hone
-            my skills as a digital designer.
+            graphic designer with a small team that helped me jump start and
+            hone my digital designer skills.
           </p>
           <p className="my-5 leading-8">
-            Aside from design, I also build web apps using the latest
-            technologies like React, Node and many more tools. I&apos;m
-            currently working at Betsol as a Web Architect on a product called
-            Leto. I&apos;m involved in the design (both UI/UX and architecture)
-            and development of the product using React, Redux, Node and
-            Postgres. .
+            Besides design, I also build web apps using React, Node and many
+            more tools. I&apos;m currently working at Betsol as a Web Architect
+            on a product called Leto. I&apos;m involved in the design (both
+            UI/UX and architecture) and the product development using React,
+            Redux, Node, and Postgres.
           </p>
           <h3 className="text-xl md:text-3xl my-20 text-left sm:text-center font-semibold">
             Companies I&apos;ve worked with
