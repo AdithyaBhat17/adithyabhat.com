@@ -1,3 +1,5 @@
+import { ResponsiveImageType } from 'react-datocms'
+
 export interface Use {
   id: string
   category: string
@@ -14,6 +16,7 @@ export interface Stack {
   description: string
   logo: {
     url: string
+    responsiveImage: ResponsiveImageType
   }
   category: string
 }
