@@ -26,8 +26,8 @@ export const footerRoutes = [
     link: '/resume.pdf',
   },
   {
-    name: 'Stack',
-    link: '/stack',
+    name: 'Uses',
+    link: '/uses',
   },
   {
     name: 'Legal',
@@ -41,7 +41,7 @@ function Footer() {
     (link: string) => {
       return router?.route === link ? 'border-gray-900' : ''
     },
-    [router.route]
+    [router?.route]
   )
 
   return (
