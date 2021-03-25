@@ -5,7 +5,6 @@ import { createMocks, Mocks } from 'node-mocks-http'
 test('should throw an error if message is invalid', async () => {
   const { req, res }: Mocks<NextApiRequest, NextApiResponse> = createMocks({
     method: 'POST',
-    // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
     // @ts-ignore
     body: JSON.stringify({
       name: 'test',
@@ -38,7 +37,6 @@ test('should throw an error if http method is not POST', async () => {
 })
 
 test('API sends a failure response if slack fails to send the message', async () => {
-  // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
   // @ts-ignore
   global.fetch = jest.fn(() =>
     Promise.resolve({
@@ -47,7 +45,6 @@ test('API sends a failure response if slack fails to send the message', async ()
   )
   const { req, res }: Mocks<NextApiRequest, NextApiResponse> = createMocks({
     method: 'POST',
-    // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
     // @ts-ignore
     body: JSON.stringify({
       name: 'test',
@@ -66,12 +63,10 @@ test('API sends a failure response if slack fails to send the message', async ()
 })
 
 test('should work if all fields are sent', async () => {
-  // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
   // @ts-ignore
   global.fetch = jest.fn(() => Promise.resolve({ statusText: 'OK' }))
   const { req, res }: Mocks<NextApiRequest, NextApiResponse> = createMocks({
     method: 'POST',
-    // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
     // @ts-ignore
     body: JSON.stringify({
       name: 'test',

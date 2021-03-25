@@ -13,6 +13,7 @@ import { HOME_PAGE_QUERY } from 'graphql/queries'
 import useResizeObserver from 'hooks/useResizeObserver'
 import { useEffect } from 'react'
 
+// eslint-disable-next-line no-undef
 export const Home = ({ data }: List): JSX.Element => {
   useResetScroll()
   const { width } = useResizeObserver()

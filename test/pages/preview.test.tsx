@@ -32,7 +32,6 @@ test('Should return 403 if required query string or slug is missing', async () =
 })
 
 test('Should redirect to /blogs/[slug] if required query strings are passed', async () => {
-  // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
   // @ts-ignore
   global.fetch = jest.fn(() =>
     Promise.resolve({
@@ -56,7 +55,6 @@ test('Should redirect to /blogs/[slug] if required query strings are passed', as
 })
 
 test('Should return 400 if the slug is invalid', async () => {
-  // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
   // @ts-ignore
   global.fetch = jest.fn(() =>
     Promise.resolve({

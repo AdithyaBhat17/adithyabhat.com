@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/camelcase */
 import '../styles/index.css'
 import { useEffect } from 'react'
 import * as gtag from '@/lib/gtag'

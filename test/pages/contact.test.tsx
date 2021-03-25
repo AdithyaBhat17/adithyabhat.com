@@ -55,7 +55,6 @@ test('throws an error if message is empty', async () => {
 })
 
 test('No errors are thrown if all fields are filled', async () => {
-  // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
   // @ts-ignore
   global.fetch = jest.fn(() =>
     Promise.resolve({

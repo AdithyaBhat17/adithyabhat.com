@@ -78,7 +78,7 @@ export default function CaseStudy({ data }: Props) {
             type="allProjects"
             columns={data?.allProjects?.length < 3 ? '2' : '3'}
           />
-          <h1 className="font-semibold text-4xl my-48">
+          <h1 className="font-semibold text-4xl my-48 leading-relaxed">
             Have a similar project in mind? <br />{' '}
             <Link href={`/contact?ref=${data?.project?.slug}`}>
               <a className="left">Let&apos;s chat!</a>
