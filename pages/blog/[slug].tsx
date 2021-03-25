@@ -2,10 +2,8 @@ import { fetchAPI } from '@/lib/datocms'
 import { ARTICLE_QUERY, ALL_ARTICLES_QUERY } from '../../graphql/queries/posts'
 import Head from '@/components/header'
 import Container from '@/components/container'
-import Navbar from '@/components/navbar'
 import { ArticleProps } from '@/interfaces/content'
 import NextHead from 'next/head'
-import Footer from '@/components/footer'
 
 import dayjs from 'dayjs'
 import { useRouter } from 'next/router'
@@ -26,7 +24,6 @@ export default function Article({ data }: ArticleProps) {
       <NextHead>
         {data?.article ? renderMetaTags(data?.article?.seo) : null}
       </NextHead>
-      <Navbar />
       <Container>
         <div className="w-full md:w-3/4 mx-auto">
           <h1 data-testid="title" className="text-5xl font-semibold mb-5">
@@ -50,7 +47,6 @@ export default function Article({ data }: ArticleProps) {
           />
         </div>
       </Container>
-      <Footer />
     </div>
   )
 }

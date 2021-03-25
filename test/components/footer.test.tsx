@@ -5,14 +5,14 @@ import { waitFor } from '@testing-library/react'
 
 test('renders all footer links', async () => {
   const { getAllByTestId } = render(<Footer />)
-  waitFor(() =>
+  await waitFor(() =>
     expect(getAllByTestId('footer-link').length).toEqual(footerRoutes.length)
   )
 })
 
 test('renders all social links', async () => {
   const { getAllByTestId } = render(<Footer />)
-  waitFor(() =>
+  await waitFor(() =>
     expect(getAllByTestId('socials-link').length).toEqual(socials.length)
   )
 })

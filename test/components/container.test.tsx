@@ -3,7 +3,7 @@ import Container from '@/components/container'
 
 test('containers renders children with given props', () => {
   const { getByTestId } = render(
-    <Container props={{ id: 'span' }}>
+    <Container id="span">
       <span>hello</span>
     </Container>
   )

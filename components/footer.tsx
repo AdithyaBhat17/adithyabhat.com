@@ -37,9 +37,12 @@ export const footerRoutes = [
 
 function Footer() {
   const router = useRouter()
-  const activeStyle = useCallback((link: string) => {
-    return router?.route === link ? 'border-gray-900' : ''
-  }, [])
+  const activeStyle = useCallback(
+    (link: string) => {
+      return router?.route === link ? 'border-gray-900' : ''
+    },
+    [router?.route]
+  )
 
   return (
     <Container>

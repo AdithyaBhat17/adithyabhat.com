@@ -2,18 +2,15 @@ import { fetchAPI } from '@/lib/datocms'
 import { ALL_ARTICLES_QUERY } from '../../graphql/queries/posts'
 
 import Head from '@/components/header'
-import Navbar from '@/components/navbar'
 import Container from '@/components/container'
 import { List } from '@/interfaces/content'
 import CardsList from '@/components/cards'
-import Footer from '@/components/footer'
 import { motion } from 'framer-motion'
 
 export default function Blog({ data, type, columns }: List) {
   return (
     <motion.div initial="initial" exit={{ opacity: 0 }} animate="animate">
       <Head title="Blog | Adithya NR" />
-      <Navbar />
       <Container>
         <motion.h1
           initial={{ opacity: 0, y: 60 }}
@@ -24,8 +21,6 @@ export default function Blog({ data, type, columns }: List) {
         </motion.h1>
         <CardsList data={data} type={type} columns={columns} />
       </Container>
-      <br />
-      <Footer />
     </motion.div>
   )
 }

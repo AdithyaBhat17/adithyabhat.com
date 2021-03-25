@@ -1,6 +1,4 @@
 import Head from '@/components/header'
-import Navbar from '@/components/navbar'
-import Footer from '@/components/footer'
 import { fetchAPI } from '@/lib/datocms'
 import processMarkdown from '@/lib/processMarkdown'
 import Container from '@/components/container'
@@ -9,7 +7,6 @@ export default function Legal({ document }: { document: string }) {
   return (
     <div className="p-0">
       <Head title="Legal | Adithya NR" />
-      <Navbar />
       <Container>
         <div
           className="content"
@@ -17,7 +14,6 @@ export default function Legal({ document }: { document: string }) {
         />
       </Container>
       <br />
-      <Footer />
     </div>
   )
 }

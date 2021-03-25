@@ -1,12 +1,10 @@
 import ArticlesList from '@/components/cards'
 import Head from '@/components/header'
 import Hero from '@/components/hero'
-import Navbar from '@/components/navbar'
 import Work from '@/components/work'
 import { AllArticles, AllProjects, List } from '@/interfaces/content'
 import { fetchAPI } from '@/lib/datocms'
 import Container from '@/components/container'
-import Footer from '@/components/footer'
 import NextLink from '@/components/NextLink'
 import { motion } from 'framer-motion'
 import useResetScroll from 'hooks/useResetScroll'
@@ -15,6 +13,7 @@ import { HOME_PAGE_QUERY } from 'graphql/queries'
 import useResizeObserver from 'hooks/useResizeObserver'
 import { useEffect } from 'react'
 
+// eslint-disable-next-line no-undef
 export const Home = ({ data }: List): JSX.Element => {
   useResetScroll()
   const { width } = useResizeObserver()
@@ -35,7 +34,6 @@ export const Home = ({ data }: List): JSX.Element => {
   return (
     <motion.div initial="initial" animate="animate" exit={{ opacity: 0 }}>
       <Head title="Adithya NR | A Full stack Designer based in Bengaluru, India." />
-      <Navbar />
       <Hero />
       <Work data={data as AllProjects} />
       <Container>
@@ -50,9 +48,6 @@ export const Home = ({ data }: List): JSX.Element => {
         <NextLink href="/blog" text="Read more articles" />
         <Thanks />
       </Container>
-      <div className="mt-24 lg:mt-32">
-        <Footer />
-      </div>
     </motion.div>
   )
 }

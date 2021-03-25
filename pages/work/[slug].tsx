@@ -2,9 +2,7 @@ import { fetchAPI } from '@/lib/datocms'
 import Head from '@/components/header'
 import processMarkdown from '@/lib/processMarkdown'
 import Container from '@/components/container'
-import Navbar from '@/components/navbar'
 import NextHead from 'next/head'
-import Footer from '@/components/footer'
 
 import { useRouter } from 'next/router'
 import ErrorPage from 'next/error'
@@ -33,7 +31,6 @@ export default function CaseStudy({ data }: Props) {
       <NextHead>
         {data?.project ? renderMetaTags(data?.project?.seo) : null}
       </NextHead>
-      <Navbar />
       <Container>
         <div className="w-full md:w-2/3 mx-auto">
           <h1 data-testid="title" className="text-5xl font-semibold mb-5">
@@ -81,7 +78,7 @@ export default function CaseStudy({ data }: Props) {
             type="allProjects"
             columns={data?.allProjects?.length < 3 ? '2' : '3'}
           />
-          <h1 className="font-semibold text-4xl my-48">
+          <h1 className="font-semibold text-4xl my-48 leading-relaxed">
             Have a similar project in mind? <br />{' '}
             <Link href={`/contact?ref=${data?.project?.slug}`}>
               <a className="left">Let&apos;s chat!</a>
@@ -89,7 +86,6 @@ export default function CaseStudy({ data }: Props) {
           </h1>
         </div>
       </Container>
-      <Footer />
     </div>
   )
 }
