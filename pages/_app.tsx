@@ -3,6 +3,8 @@ import '../styles/index.css'
 import { useEffect } from 'react'
 import * as gtag from '@/lib/gtag'
 import { useRouter } from 'next/router'
+import Navbar from '@/components/navbar'
+import Footer from '@/components/footer'
 
 function MyApp({ Component, pageProps }) {
   const router = useRouter()
@@ -19,9 +21,15 @@ function MyApp({ Component, pageProps }) {
   }, [router?.events])
 
   return (
-    <main className="p-0">
-      <Component {...pageProps} />
-    </main>
+    <div className="flex flex-col justify-around min-h-screen">
+      <Navbar />
+      <main className="p-0">
+        <Component {...pageProps} />
+      </main>
+      <div className="mt-24 lg:mt-32">
+        <Footer />
+      </div>
+    </div>
   )
 }
 

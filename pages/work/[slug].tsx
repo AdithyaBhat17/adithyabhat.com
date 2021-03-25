@@ -2,9 +2,7 @@ import { fetchAPI } from '@/lib/datocms'
 import Head from '@/components/header'
 import processMarkdown from '@/lib/processMarkdown'
 import Container from '@/components/container'
-import Navbar from '@/components/navbar'
 import NextHead from 'next/head'
-import Footer from '@/components/footer'
 
 import { useRouter } from 'next/router'
 import ErrorPage from 'next/error'
@@ -33,7 +31,6 @@ export default function CaseStudy({ data }: Props) {
       <NextHead>
         {data?.project ? renderMetaTags(data?.project?.seo) : null}
       </NextHead>
-      <Navbar />
       <Container>
         <div className="w-full md:w-2/3 mx-auto">
           <h1 data-testid="title" className="text-5xl font-semibold mb-5">
@@ -89,7 +86,6 @@ export default function CaseStudy({ data }: Props) {
           </h1>
         </div>
       </Container>
-      <Footer />
     </div>
   )
 }

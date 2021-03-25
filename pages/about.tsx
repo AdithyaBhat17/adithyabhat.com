@@ -1,8 +1,6 @@
 import Head from '@/components/header'
-import Navbar from '@/components/navbar'
 import Container from '@/components/container'
 import Link from 'next/link'
-import Footer from '@/components/footer'
 import { companies } from '@/utils/about'
 import { motion } from 'framer-motion'
 import { fadeInUp } from '@/utils/motion'
@@ -15,7 +13,6 @@ export default function About({ companies, age }) {
   return (
     <motion.div initial="initial" animate="animate" exit={{ opacity: 0 }}>
       <Head title="About - Adithya NR" />
-      <Navbar />
       <Container>
         <motion.div variants={fadeInUp} className="px-0 md:px-16 xl:px-32">
           <div className="flex justify-center">
@@ -114,7 +111,7 @@ export default function About({ companies, age }) {
               </small>
             </div>
           </div>
-          <h1 className="text-2xl md:text-5xl font-semibold my-20 md:my-40 leading-10">
+          <h1 className="text-2xl md:text-5xl font-semibold my-20 md:my-40 leading-relaxed md:leading-relaxed">
             Got a project in mind, a question or something else? Get in touch
             with me{' '}
             <Link href="/contact">
@@ -123,7 +120,6 @@ export default function About({ companies, age }) {
           </h1>
         </motion.div>
       </Container>
-      <Footer />
     </motion.div>
   )
 }

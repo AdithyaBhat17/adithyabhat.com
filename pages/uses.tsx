@@ -1,14 +1,12 @@
 import { fetchAPI } from '@/lib/datocms'
 import { Use } from '../interfaces/use'
 import Head from '@/components/header'
-import Navbar from '@/components/navbar'
 import Container from '@/components/container'
 
 export default function Uses({ data }) {
   return (
     <div>
       <Head title="Uses | Adithya NR" />
-      <Navbar />
       <Container>
         <h1 className="text-black font-semibold text-4xl my-10">Uses</h1>
         {data?.allUses?.map((use: Use) => (

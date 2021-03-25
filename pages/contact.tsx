@@ -1,8 +1,6 @@
-import Navbar from '@/components/navbar'
 import Head from '@/components/header'
 import Container from '@/components/container'
 import { useMemo, useState, BaseSyntheticEvent, useEffect } from 'react'
-import Footer from '@/components/footer'
 
 import { useForm } from 'react-hook-form'
 import FormErrorMessage from '@/components/error-message'
@@ -81,7 +79,6 @@ export default function Contact() {
       exit={{ opacity: 0 }}
     >
       <Head title="Contact - Adithya NR" />
-      <Navbar />
       <Container>
         <div className="md:w-2/3 w-full mx-auto">
           <motion.h1
@@ -172,7 +169,6 @@ export default function Contact() {
         </div>
       </Container>
       <br />
-      <Footer />
     </motion.div>
   )
 }
