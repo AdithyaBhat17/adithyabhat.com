@@ -4,13 +4,18 @@
   "extends": [
     "eslint:recommended",
     "plugin:react/recommended",
-    "prettier"
+    "plugin:@typescript-eslint/recommended"
   ],
   "env": {
     "es6": true,
     "browser": true,
     "jest": true,
     "node": true
+  },
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
   },
   "rules": {
     "react/react-in-jsx-scope": 0,
@@ -23,6 +28,9 @@
     "@typescript-eslint/no-explicit-any": 0,
     "@typescript-eslint/no-var-requires": 0,
     "@typescript-eslint/no-use-before-define": 0,
+    "@typescript-eslint/ban-ts-comment": 0,
+    "@typescript-eslint/explicit-module-boundary-types": 0,
+    "@typescript-eslint/no-extra-semi": 0,
     "@typescript-eslint/no-unused-vars": [
       2,
       {

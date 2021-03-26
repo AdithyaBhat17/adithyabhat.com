@@ -73,6 +73,8 @@ export default function Uses({ data, categories }) {
                     width="50"
                     height="50"
                     loading="lazy"
+                    alt={`${stack.product} brand icon`}
+                    title={stack.product}
                     src={stack.logo?.url}
                     className="stack-icon rounded-lg h-auto object-contain"
                   />
