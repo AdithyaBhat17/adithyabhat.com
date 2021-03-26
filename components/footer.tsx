@@ -49,7 +49,7 @@ function Footer() {
       <hr className="border-gray-800 mt-12 px-6" />
       <br />
       <footer className="footer flex-wrap">
-        <div className="flex justify-start items-center">
+        <div className="flex justify-start items-center my-5">
           <Link href="/">
             <a className="hover:border-white flex justify-start items-center">
               <img
@@ -64,9 +64,9 @@ function Footer() {
           </Link>
         </div>
 
-        <ul className="flex justify-between">
+        <ul className="grid grid-flow-col gap-8 justify-between">
           {footerRoutes?.map((route, i) => (
-            <li className="ml-0 md:ml-10" key={i}>
+            <li className="ml-0" key={i}>
               <Link href={`${route.link}`}>
                 <a
                   data-testid="footer-link"
