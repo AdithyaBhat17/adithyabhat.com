@@ -12,8 +12,15 @@ import RecentArticles from '@/components/recent-articles'
 import { renderMetaTags } from 'react-datocms'
 import ReactMarkdown from 'react-markdown'
 import Code from '@/components/Code'
+import PreviewBanner from '@/components/PreviewBanner'
 
-export default function Article({ data }: ArticleProps) {
+export default function Article({
+  data,
+  preview,
+}: {
+  data: ArticleProps['data']
+  preview?: boolean
+}) {
   const router = useRouter()
   if (!router?.isFallback && !data?.article?.slug) {
     return <ErrorPage statusCode={404} />
@@ -24,6 +31,7 @@ export default function Article({ data }: ArticleProps) {
       <NextHead>
         {data?.article ? renderMetaTags(data?.article?.seo) : null}
       </NextHead>
+      {preview ? <PreviewBanner /> : null}
       <Container>
         <div className="w-full md:w-3/4 mx-auto">
           <h1 data-testid="title" className="text-5xl font-semibold mb-5">
@@ -52,7 +60,7 @@ export default function Article({ data }: ArticleProps) {
 }
 
 // istanbul ignore next line
-export async function getStaticProps({ params, preview }) {
+export async function getStaticProps({ params, preview = false }) {
   const result = await fetchAPI(ARTICLE_QUERY, {
     variables: { slug: params.slug },
     preview,
@@ -66,6 +74,7 @@ export async function getStaticProps({ params, preview }) {
           content: result?.article?.content ?? '',
         },
       },
+      preview,
     },
   }
 }
@@ -75,6 +84,6 @@ export async function getStaticPaths() {
   const data = await fetchAPI(ALL_ARTICLES_QUERY)
   return {
     paths: data?.allArticles?.map((article) => `/blog/${article.slug}`) || [],
-    fallback: true,
+    fallback: false,
   }
 }
