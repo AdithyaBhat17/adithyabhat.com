@@ -12,15 +12,17 @@ import Link from 'next/link'
 import RecentProjects from '@/components/recent-articles'
 import { Project } from '@/interfaces/content'
 import { event as logEvent } from '@/lib/gtag'
+import PreviewBanner from '@/components/PreviewBanner'
 
 type Props = {
   data: {
     project: Project
     allProjects: Project[]
   }
+  preview?: boolean
 }
 
-export default function CaseStudy({ data }: Props) {
+export default function CaseStudy({ data, preview }: Props) {
   const router = useRouter()
   if (!router?.isFallback && !data?.project?.slug) {
     return <ErrorPage statusCode={404} />
@@ -31,6 +33,7 @@ export default function CaseStudy({ data }: Props) {
       <NextHead>
         {data?.project ? renderMetaTags(data?.project?.seo) : null}
       </NextHead>
+      {preview ? <PreviewBanner /> : null}
       <Container>
         <div className="w-full md:w-2/3 mx-auto">
           <h1 data-testid="title" className="text-5xl font-semibold mb-5">
@@ -91,7 +94,7 @@ export default function CaseStudy({ data }: Props) {
 }
 
 // istanbul ignore next line
-export async function getStaticProps({ params, preview }) {
+export async function getStaticProps({ params, preview = false }) {
   const result = await fetchAPI(CASE_STUDY, {
     variables: { slug: params.slug },
     preview,
@@ -105,6 +108,7 @@ export async function getStaticProps({ params, preview }) {
           content: await processMarkdown(result?.project?.content ?? ''),
         },
       },
+      preview,
     },
   }
 }
