@@ -1,24 +1,28 @@
 import '../styles/index.css'
-import { useEffect } from 'react'
+import NProgress from 'nprogress'
 import * as gtag from '@/lib/gtag'
-import { useRouter } from 'next/router'
+import { Router } from 'next/router'
 import Navbar from '@/components/navbar'
 import Footer from '@/components/footer'
 
+const handleRouteChange = (url: string) => {
+  gtag.pageview(url)
+}
+
+Router.events.on('routeChangeStart', (url: string) => {
+  NProgress.start()
+  handleRouteChange(url)
+})
+Router.events.on('routeChangeComplete', (url: string) => {
+  NProgress.done()
+  handleRouteChange(url)
+})
+Router.events.on('routeChangeError', (url: string) => {
+  NProgress.done()
+  handleRouteChange(url)
+})
+
 function MyApp({ Component, pageProps }) {
-  const router = useRouter()
-
-  useEffect(() => {
-    const handleRouteChange = (url: string) => {
-      gtag.pageview(url)
-    }
-
-    router?.events?.on('routeChangeComplete', handleRouteChange)
-    return () => {
-      router?.events?.off('routeChangeComplete', handleRouteChange)
-    }
-  }, [router?.events])
-
   return (
     <div className="flex flex-col justify-around min-h-screen">
       <Navbar />

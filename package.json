@@ -31,6 +31,7 @@
     "dayjs": "^1.8.28",
     "framer-motion": "^4.0.3",
     "next": "^10.0.2",
+    "nprogress": "^0.2.0",
     "react": "^17.0.2",
     "react-datocms": "^1.2.6",
     "react-dom": "^17.0.2",
