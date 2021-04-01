@@ -118,6 +118,6 @@ export async function getStaticPaths() {
   const data = await fetchAPI(RECENT_WORK)
   return {
     paths: data?.allProjects?.map((project) => `/work/${project.slug}`) || [],
-    fallback: true,
+    fallback: false,
   }
 }
