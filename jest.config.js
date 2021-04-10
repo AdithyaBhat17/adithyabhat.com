@@ -2,7 +2,7 @@ require('dotenv').config()
 
 module.exports = {
   roots: ['<rootDir>'],
-  setupFiles: ['./jest.setup.js'],
+  setupFiles: ['./jest.setup.js', 'jest-canvas-mock'],
   moduleFileExtensions: ['js', 'ts', 'tsx', 'json'],
   testPathIgnorePatterns: ['<rootDir>[/\\\\](node_modules|.next)[/\\\\]'],
   transformIgnorePatterns: ['[/\\\\]node_modules[/\\\\].+\\.(ts|tsx)$'],
@@ -22,6 +22,7 @@ module.exports = {
     'graphql/(.*)': '<rootDir>/graphql/$1',
     '@/utils/(.*)': '<rootDir>/utils/$1',
     'hooks/(.*)': '<rootDir>/hooks/$1',
+    'lotties/(.*)': '<rootDir>/lotties/$1',
   },
   testEnvironment: 'jest-environment-jsdom',
   setupFilesAfterEnv: ['@testing-library/jest-dom/extend-expect'],
