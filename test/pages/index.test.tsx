@@ -20,7 +20,7 @@ describe('Home page', () => {
     waitFor(() => expect(asFragment()).toMatchSnapshot())
   })
   it('Imports css modules using _app.tsx', () => {
-    render(<MyApp Component={About} pageProps={{}}></MyApp>)
+    render(<MyApp Component={About} pageProps={{}} />)
   })
 })
 
