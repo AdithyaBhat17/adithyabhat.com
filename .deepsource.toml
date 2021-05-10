@@ -1,0 +1,12 @@
+version = 1
+
+test_patterns = ["test/**/*.test.tsx"]
+
+exclude_patterns = ["pages/_*.tsx"]
+
+[[analyzers]]
+name = "javascript"
+enabled = true
+
+  [analyzers.meta]
+  plugins = ["react"]
