@@ -7,5 +7,5 @@ beforeEach(() => {
 })
 
 test('404 page renders a link to go home', () => {
-  expect(screen.getByRole('link', { name: /go home/i })).toBeInTheDocument()
+  expect(screen.getByRole('link', { name: /go home/iu })).toBeInTheDocument()
 })
