@@ -123,7 +123,7 @@ export default function Contact() {
                 ref={register({
                   required: 'Please provide your email address 😓',
                   pattern: {
-                    value: /[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+/,
+                    value: /[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+/u,
                     message: 'Invalid email address...',
                   },
                 })}
