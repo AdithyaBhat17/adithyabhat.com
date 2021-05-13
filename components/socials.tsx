@@ -25,25 +25,23 @@ export const socials = [
 
 export default function Socials() {
   return (
-    <>
-      <div className="flex justify-start items-center mt-10 lg:mt-0">
-        {socials.map((social, i) => (
-          <a
-            key={i}
-            data-testid="socials-link"
-            href={social.link}
-            target="_blank"
-            rel="noreferrer noopener"
-            className="text-black mr-5"
-          >
-            <img
-              loading="lazy"
-              src={`/static/${social.icon}.svg`}
-              alt={social.icon}
-            />
-          </a>
-        ))}
-      </div>
-    </>
+    <div className="flex justify-start items-center mt-10 lg:mt-0">
+      {socials.map((social, i) => (
+        <a
+          key={i}
+          data-testid="socials-link"
+          href={social.link}
+          target="_blank"
+          rel="noreferrer noopener"
+          className="text-black mr-5"
+        >
+          <img
+            loading="lazy"
+            src={`/static/${social.icon}.svg`}
+            alt={social.icon}
+          />
+        </a>
+      ))}
+    </div>
   )
 }
