@@ -6,7 +6,7 @@ import Navbar from '@/components/navbar'
 import Footer from '@/components/footer'
 
 const handleRouteChange = (url: string) => {
-  gtag.pageview(url)
+  gtag && gtag.pageview(url)
 }
 
 Router.events.on('routeChangeStart', (url: string) => {
@@ -39,7 +39,7 @@ function MyApp({ Component, pageProps }) {
 export default MyApp
 
 export function reportWebVitals({ id, name, label, value }) {
-  ;(window as any).gtag('event', name, {
+  ;(window as any).gtag?.('event', name, {
     event_category: label === 'web-vital' ? 'Web Vitals' : 'Next.js metric',
     value: Math.round(name === 'CLS' ? value * 1000 : value), // values must be integers
     event_label: id, // id unique to current page load

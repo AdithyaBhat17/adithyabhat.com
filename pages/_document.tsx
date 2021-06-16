@@ -8,6 +8,7 @@ import Document, {
   Head,
   DocumentContext,
 } from 'next/document'
+import Script from 'next/script'
 
 export default class MyDocument extends Document {
   static async getInitialProps(ctx: DocumentContext) {
@@ -40,7 +41,6 @@ export default class MyDocument extends Document {
           />
 
           <script
-            async
             src={`https://www.googletagmanager.com/gtag/js?id=${GA_TRACKING_ID}`}
           />
           <script
@@ -55,7 +55,8 @@ export default class MyDocument extends Document {
           `,
             }}
           />
-          <script
+          <Script
+            strategy="lazyOnload"
             type="application/ld+json"
             dangerouslySetInnerHTML={{
               __html: `{
@@ -95,13 +96,17 @@ export default class MyDocument extends Document {
         <body>
           <Main />
           <NextScript />
-          <script
-            defer
+          <Script
+            strategy="afterInteractive"
             src="https://static.cloudflareinsights.com/beacon.min.js"
             data-cf-beacon='{"token": "6821738704c04aac971dbeae66fca2d6", "spa": true}'
-          ></script>
+          ></Script>
         </body>
-        <script type="text/javascript" src="/viewport.js"></script>
+        <Script
+          strategy="lazyOnload"
+          type="text/javascript"
+          src="/viewport.js"
+        ></Script>
       </Html>
     )
   }

@@ -6,6 +6,7 @@ module.exports = {
     ],
     options: {
       safelist: [
+        'xs:px-6',
         'sm:w-1/2',
         'sm:w-1/3',
         'lg:w-1/2',
@@ -29,6 +30,9 @@ module.exports = {
       },
       width: {
         '2/7': '28.5714286%',
+      },
+      screens: {
+        xs: '360px',
       },
     },
   },

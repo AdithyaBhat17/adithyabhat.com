@@ -8,6 +8,8 @@ import useResetScroll from 'hooks/useResetScroll'
 import Image from 'next/image'
 import { calculateAge } from '@/utils/age'
 
+import aboutImage from '../public/static/about-hero.png'
+
 export default function About({ companies, age }) {
   useResetScroll()
   return (
@@ -19,9 +21,11 @@ export default function About({ companies, age }) {
             <Image
               width={250}
               height={250}
-              loading="eager"
+              // loading="eager"
+              placeholder="blur"
               className="block mx-auto"
-              src="/static/about_hero.svg"
+              src={aboutImage}
+              // blurDataURL="data:text/plain;base64,LCL;:J4T$|J:=_58pym+000L9v?v"
               alt="About Adithya"
             />
           </div>
