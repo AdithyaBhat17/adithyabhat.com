@@ -13,7 +13,7 @@ export default function About({ companies, age }) {
   return (
     <motion.div initial="initial" animate="animate" exit={{ opacity: 0 }}>
       <Head title="About - Adithya NR" />
-      <Container>
+      <Container className="2xl:px-96">
         <motion.div variants={fadeInUp} className="px-0 md:px-16 xl:px-32">
           <div className="flex justify-center">
             <Image
@@ -31,7 +31,7 @@ export default function About({ companies, age }) {
           <p className=" my-5 leading-8">
             As you might have guessed already, I&apos;m Adithya, a{' '}
             <span data-testid="age">{age}</span>
-            -year-old Full-Stack Designer from Bengaluru, India.
+            -year-old UX Engineer from Bengaluru, India.
           </p>
           <p className="my-5 leading-8">
             I&apos;m a React nanodegree graduate and an IDF certified UX
@@ -44,25 +44,40 @@ export default function About({ companies, age }) {
           <p className="my-5 leading-8">
             I studied computer science and engineering at RNS Institute of
             Technology, Bangalore. During my time at RNSIT, I volunteered as a
-            graphic designer with a small team that helped me jump start and
+            graphic designer with a small team that helped me jump-start and
             hone my digital designer skills.
           </p>
           <p className="my-5 leading-8">
-            Besides design, I also build web apps using React, Node and many
-            more tools. I&apos;m currently working at Betsol as a Web Architect
-            on a product called Leto. I&apos;m involved in the design (both
-            UI/UX and architecture) and the product development using React,
-            Redux, Node, and Postgres.
+            I&apos;m currently working on the{' '}
+            <a
+              href="https://www.softway.com/b2e"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="left text-blue-800 font-medium"
+            >
+              Culture+
+            </a>{' '}
+            product suite at{' '}
+            <a
+              href="https://www.softway.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="left text-blue-800 font-medium"
+            >
+              Softway
+            </a>{' '}
+            as a UX Engineer. Besides design, I also build web apps using React,
+            Node, and many more tools.
           </p>
           <h3 className="text-xl md:text-3xl my-20 text-left sm:text-center font-semibold">
             Companies I&apos;ve worked with
           </h3>
           <div className="flex flex-wrap mx-auto justify-between sm:justify-around items-center mb-5">
             {companies?.map((company) => (
-              <div key={company.name} className="w-1/2 md:w-1/4 mx-auto my-5">
+              <div key={company.name} className="w-1/2 md:w-1/5 mx-auto my-5">
                 <img
                   loading="lazy"
-                  className="mx-auto w-1/2 sm:w-2/3 company"
+                  className="mx-auto mb-10 w-1/2 sm:w-2/3 "
                   src={company.path}
                   alt={company.name}
                   title={company.name}
@@ -115,7 +130,7 @@ export default function About({ companies, age }) {
             Got a project in mind, a question or something else? Get in touch
             with me{' '}
             <Link href="/contact">
-              <a> here</a>
+              <a className="left"> here</a>
             </Link>
           </h1>
         </motion.div>

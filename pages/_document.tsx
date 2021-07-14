@@ -60,13 +60,13 @@ export default class MyDocument extends Document {
             dangerouslySetInnerHTML={{
               __html: `{
                 "name":"Adithya NR",
-                "description":"I am a Full stack Designer based in Bengaluru, India.",
+                "description":"I am a UX Engineer based in Bengaluru, India.",
                 "author":{
                   "@type":"Person",
                   "name":"Adithya NR"
                 },
                 "disambiguatingDescription": "Web Designer & Developer",
-                "jobTitle": "Full Stack Designer, Freelancer",
+                "jobTitle": "UX Engineer, Freelancer",
                 "@type":"WebSite",
                 "url":"https://adithyabhat.com/",
                 "publisher":{

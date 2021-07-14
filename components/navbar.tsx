@@ -29,7 +29,7 @@ function Navbar() {
   const getRoute = () => useRouter()?.pathname?.split('/')[1] ?? null
 
   return (
-    <nav className="navbar px-6 md:px-36 lg:px-48">
+    <nav className="navbar px-6 md:px-36 lg:px-48 ">
       <div className="flex justify-start items-center">
         <Link href="/">
           <a className="hover:border-white">

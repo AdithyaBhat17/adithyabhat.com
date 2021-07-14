@@ -24,16 +24,15 @@ export const Home = ({ data }: List): JSX.Element => {
 
       const limit = isTablet ? 4 : 3
 
-      ;(data as AllArticles).allArticles = (data as AllArticles).allArticles?.slice(
-        0,
-        limit
-      )
+      ;(data as AllArticles).allArticles = (
+        data as AllArticles
+      ).allArticles?.slice(0, limit)
     }
   }, [width])
 
   return (
     <motion.div initial="initial" animate="animate" exit={{ opacity: 0 }}>
-      <Head title="Adithya NR | A Full stack Designer based in Bengaluru, India." />
+      <Head title="Adithya NR | A UX Engineer based in Bengaluru, India." />
       <Hero />
       <Work data={data as AllProjects} />
       <Container>
