@@ -1,5 +1,9 @@
 export const companies = [
   {
+    name: 'Softway',
+    path: '/static/softway.svg',
+  },
+  {
     name: 'Dish',
     path: '/static/dish.svg',
   },

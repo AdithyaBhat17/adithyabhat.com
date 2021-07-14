@@ -35,7 +35,7 @@ function Hero() {
     <Container>
       <motion.div
         variants={stagger}
-        className="flex justify-between items-center flex-wrap md:flex-nowrap hero-wrapper"
+        className=" flex justify-between items-center flex-wrap md:flex-nowrap hero-wrapper"
       >
         <motion.div variants={fadeInUp}>
           <h1 className="font-semibold text-3xl md:text-4xl hero-title">
@@ -44,8 +44,8 @@ function Hero() {
           </h1>
           <p className="mt-5 w-full lg:w-3/4 leading-7 poppins hero-description">
             A UX engineer from Bengaluru, helping companies of all sizes get
-            ahead online. I am currently working on DevOps and Analytics
-            products at <span className="text-blue-800">Betsol</span>.
+            ahead online. I am currently working on <a href="https://www.softway.com/b2e" className="left text-blue-800 font-medium">B2E</a>
+            &nbsp;products at <a href="https://softway.com" target="_blank" rel="noopener noreferrer" className="left text-blue-800">Softway</a>.
           </p>
           <div className="mt-6 mb-8 flex justify-start items-center">
             <Link href="/about">
