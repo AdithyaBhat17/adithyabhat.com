@@ -42,13 +42,32 @@ export default function About({ companies, age }) {
             Background
           </h2>
           <p className="my-5 leading-8">
-          I studied computer science and engineering at RNS Institute of Technology, Bangalore. 
-          During my time at RNSIT, I volunteered as a graphic designer with a small team that helped me 
-          jump-start and hone my digital designer skills.
+            I studied computer science and engineering at RNS Institute of
+            Technology, Bangalore. During my time at RNSIT, I volunteered as a
+            graphic designer with a small team that helped me jump-start and
+            hone my digital designer skills.
           </p>
           <p className="my-5 leading-8">
-            I&apos;m currently working on the <a href="https://www.softway.com/b2e" className="left text-blue-800 font-medium">Culture+</a> product suite at <a href="https://www.softway.com/" className="left text-blue-800 font-medium">Softway</a> as a UX Engineer. 
-            Besides design, I also build web apps using React, Node, and many more tools.
+            I&apos;m currently working on the{' '}
+            <a
+              href="https://www.softway.com/b2e"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="left text-blue-800 font-medium"
+            >
+              Culture+
+            </a>{' '}
+            product suite at{' '}
+            <a
+              href="https://www.softway.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="left text-blue-800 font-medium"
+            >
+              Softway
+            </a>{' '}
+            as a UX Engineer. Besides design, I also build web apps using React,
+            Node, and many more tools.
           </p>
           <h3 className="text-xl md:text-3xl my-20 text-left sm:text-center font-semibold">
             Companies I&apos;ve worked with
