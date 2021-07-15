@@ -55,7 +55,7 @@ export default function About({ companies, age }) {
               rel="noopener noreferrer"
               className="left text-blue-800 font-medium"
             >
-              Culture+
+              Culture+™
             </a>{' '}
             product suite at{' '}
             <a
