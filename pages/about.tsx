@@ -26,7 +26,7 @@ export default function About({ companies, age }) {
             />
           </div>
           <h1 className="text-3xl md:text-4xl my-10 text-left sm:text-center font-semibold">
-            Hello, I&apos;m Adithya
+            About me
           </h1>
           <p className=" my-5 leading-8">
             As you might have guessed already, I&apos;m Adithya, a{' '}
