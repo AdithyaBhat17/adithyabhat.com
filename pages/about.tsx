@@ -50,7 +50,7 @@ export default function About({ companies, age }) {
           <p className="my-5 leading-8">
             I&apos;m currently working on the{' '}
             <a
-              href="https://www.softway.com/b2e"
+              href="https://www.culture-plus.com/"
               target="_blank"
               rel="noopener noreferrer"
               className="left text-blue-800 font-medium"

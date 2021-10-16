@@ -46,12 +46,12 @@ function Hero() {
             A UX engineer from Bengaluru, helping companies of all sizes get
             ahead online. I am currently working on{' '}
             <a
-              href="https://www.softway.com/b2e"
+              href="https://www.culture-plus.com/"
               target="_blank"
               rel="noopener noreferrer"
               className="left text-blue-800 font-medium"
             >
-              B2E
+              D&I
             </a>
             &nbsp;products at{' '}
             <a
