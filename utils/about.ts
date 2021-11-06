@@ -1,5 +1,13 @@
 export const companies = [
   {
+    name: 'Daikin',
+    path: '/static/daikin.svg',
+  },
+  {
+    name: 'Culture Plus',
+    path: '/static/culture_plus.svg',
+  },
+  {
     name: 'Softway',
     path: '/static/softway.svg',
   },
@@ -14,9 +22,5 @@ export const companies = [
   {
     name: 'Homero',
     path: '/static/Homero.svg',
-  },
-  {
-    name: 'Trayah Pottery',
-    path: '/static/trayahpottery.svg',
   },
 ]
