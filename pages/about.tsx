@@ -74,7 +74,7 @@ export default function About({ companies, age }) {
           </h3>
           <div className="flex flex-wrap mx-auto justify-between sm:justify-around items-center mb-5">
             {companies?.map((company) => (
-              <div key={company.name} className="w-1/2 md:w-1/5 mx-auto my-5">
+              <div key={company.name} className="w-1/2 md:w-1/6 mx-auto my-5">
                 <img
                   loading="lazy"
                   className="mx-auto mb-10 w-1/2 sm:w-2/3 "
