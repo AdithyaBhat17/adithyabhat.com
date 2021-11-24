@@ -21,6 +21,6 @@ export const companies = [
   },
   {
     name: 'Homero',
-    path: '/static/Homero.svg',
+    path: '/static/homero.svg',
   },
 ]
