@@ -1,11 +1,11 @@
-import React, { memo } from 'react'
 import Container from '@/components/container'
-import Socials from './socials'
-import Link from 'next/link'
-import useResizeObserver from 'hooks/useResizeObserver'
-import { motion } from 'framer-motion'
 import { fadeInUp, stagger } from '@/utils/motion'
+import { motion } from 'framer-motion'
+import useResizeObserver from 'hooks/useResizeObserver'
 import Image from 'next/image'
+import Link from 'next/link'
+import React, { memo } from 'react'
+import Socials from './socials'
 
 function Hero() {
   const [gif, showGif] = React.useState(false)
@@ -44,23 +44,15 @@ function Hero() {
           </h1>
           <p className="mt-5 w-full lg:w-3/4 leading-7 poppins hero-description">
             A UX engineer from Bengaluru, helping companies of all sizes get
-            ahead online. I am currently working on{' '}
+            ahead online. I am currently working on the Conversational CX
+            platform at{' '}
             <a
-              href="https://www.culture-plus.com/"
+              href="https://yellow.ai/"
               target="_blank"
               rel="noopener noreferrer"
               className="left text-blue-800 font-medium"
             >
-              D&I
-            </a>
-            &nbsp;products at{' '}
-            <a
-              href="https://softway.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="left text-blue-800"
-            >
-              Softway
+              yellow.ai
             </a>
             .
           </p>

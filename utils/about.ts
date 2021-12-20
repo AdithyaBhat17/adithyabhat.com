@@ -1,11 +1,11 @@
 export const companies = [
   {
-    name: 'Daikin',
-    path: '/static/daikin.svg',
+    name: 'Yellow.ai',
+    path: '/static/yellow_ai.svg',
   },
   {
-    name: 'Culture Plus',
-    path: '/static/culture_plus.svg',
+    name: 'Daikin',
+    path: '/static/daikin.svg',
   },
   {
     name: 'Softway',

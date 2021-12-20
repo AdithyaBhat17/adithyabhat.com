@@ -1,12 +1,12 @@
-import Head from '@/components/header'
 import Container from '@/components/container'
-import Link from 'next/link'
+import Head from '@/components/header'
 import { companies } from '@/utils/about'
-import { motion } from 'framer-motion'
+import { calculateAge } from '@/utils/age'
 import { fadeInUp } from '@/utils/motion'
+import { motion } from 'framer-motion'
 import useResetScroll from 'hooks/useResetScroll'
 import Image from 'next/image'
-import { calculateAge } from '@/utils/age'
+import Link from 'next/link'
 
 export default function About({ companies, age }) {
   useResetScroll()
@@ -34,50 +34,38 @@ export default function About({ companies, age }) {
             -year-old UX Engineer from Bengaluru, India.
           </p>
           <p className="my-5 leading-8">
-            I&apos;m a React nanodegree graduate and an IDF certified UX
-            Designer. Free time is hard to come by, but I freelance and craft
-            web apps for a living when it does.
-          </p>
-          <h2 className="text-md leading-8 uppercase opacity-50 mt-5 mb-3 font-semibold">
-            Background
-          </h2>
-          <p className="my-5 leading-8">
-            I studied computer science and engineering at RNS Institute of
-            Technology, Bangalore. During my time at RNSIT, I volunteered as a
-            graphic designer with a small team that helped me jump-start and
-            hone my digital designer skills.
+            For more than 3 years now, design has been the central piece of my
+            world. On this quick and mind-blowing journey, I have moved over the
+            years from being a graphic designer to a full-time UX Designer and
+            UI Engineer.
           </p>
           <p className="my-5 leading-8">
-            I&apos;m currently working on the{' '}
+            With a never-ending goal of maintaining a high standard for
+            usability & user experience, I have consistently worked with various
+            startups and clients worldwide and helped them create unique and
+            engaging digital products.
+          </p>
+          <p className="my-5 leading-8">
+            I&apos;m currently working on the Conversational CX platform at{' '}
             <a
-              href="https://www.culture-plus.com/"
+              href="http://yellow.ai"
               target="_blank"
               rel="noopener noreferrer"
-              className="left text-blue-800 font-medium"
+              className="left"
             >
-              Culture+™
+              yellow.ai
             </a>{' '}
-            product suite at{' '}
-            <a
-              href="https://www.softway.com/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="left text-blue-800 font-medium"
-            >
-              Softway
-            </a>{' '}
-            as a UX Engineer. Besides design, I also build web apps using React,
-            Node, and many more tools.
+            as a Software Engineer (SDE-2).
           </p>
           <h3 className="text-xl md:text-3xl my-20 text-left sm:text-center font-semibold">
             Companies I&apos;ve worked with
           </h3>
-          <div className="flex flex-wrap mx-auto justify-between sm:justify-around items-center mb-5">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-10 lg:gap-14 justify-center items-center mb-5">
             {companies?.map((company) => (
-              <div key={company.name} className="w-1/2 md:w-1/6 mx-auto my-5">
+              <div key={company.name} className="my-5">
                 <img
                   loading="lazy"
-                  className="mx-auto mb-10 w-1/2 sm:w-2/3 "
+                  className=""
                   src={company.path}
                   alt={company.name}
                   title={company.name}
