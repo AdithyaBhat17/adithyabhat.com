@@ -8,7 +8,7 @@ exports[`Home page matches snapshot 1`] = `
       data-testid="container"
     >
       <div
-        class="flex justify-between items-center flex-wrap md:flex-nowrap hero-wrapper"
+        class=" flex justify-between items-center flex-wrap md:flex-nowrap hero-wrapper"
       >
         <div
           style="opacity: 0; transform: translateY(20px) translateZ(0);"
@@ -31,12 +31,15 @@ exports[`Home page matches snapshot 1`] = `
           <p
             class="mt-5 w-full lg:w-3/4 leading-7 poppins hero-description"
           >
-            A UX engineer from Bengaluru, helping companies of all sizes get ahead online. I am currently working on DevOps and Analytics products at 
-            <span
-              class="text-blue-800"
+            A UX engineer from Bengaluru, helping companies of all sizes get ahead online. I am currently working on the Conversational CX platform at 
+            <a
+              class="left text-blue-800 font-medium"
+              href="https://yellow.ai/"
+              rel="noopener noreferrer"
+              target="_blank"
             >
-              Betsol
-            </span>
+              yellow.ai
+            </a>
             .
           </p>
           <div
@@ -124,6 +127,19 @@ exports[`Home page matches snapshot 1`] = `
                   alt="linkedin"
                   loading="lazy"
                   src="/static/linkedin.svg"
+                />
+              </a>
+              <a
+                class="text-black mr-5"
+                data-testid="socials-link"
+                href="https://www.youtube.com/@adithya-bhat"
+                rel="noreferrer noopener"
+                target="_blank"
+              >
+                <img
+                  alt="youtube"
+                  loading="lazy"
+                  src="/static/youtube.svg"
                 />
               </a>
             </div>

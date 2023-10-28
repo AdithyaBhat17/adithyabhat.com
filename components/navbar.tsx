@@ -34,7 +34,7 @@ function Navbar() {
 
   let padding = 'px-6 md:px-36 lg:px-48'
 
-  const useLargeContainer = useRouter().route === '/photos';
+  const useLargeContainer = useRouter()?.route === '/photos';
 
   if(useLargeContainer) {
     padding = 'px-6 md:px-16'
