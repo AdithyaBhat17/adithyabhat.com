@@ -13,7 +13,7 @@
     "test:coverage": "jest --coverage -u --silent",
     "test-all": "yarn lint && yarn type-check && yarn test:coverage",
     "build": "yarn test-all && next build",
-    "build:now": "next build"
+    "build:now": "NODE_OPTIONS=--openssl-legacy-provider next build"
   },
   "husky": {
     "hooks": {
