@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { useCallback, memo } from 'react'
+import { memo, useCallback } from 'react'
 
 export const routes = [
   {
@@ -16,6 +16,10 @@ export const routes = [
     link: '/work',
   },
   {
+    name: "Gallery",
+    link: '/photos',
+  },
+  {
     name: 'Contact',
     link: '/contact',
   },
@@ -28,8 +32,16 @@ function Navbar() {
 
   const getRoute = () => useRouter()?.pathname?.split('/')[1] ?? null
 
+  let padding = 'px-6 md:px-36 lg:px-48'
+
+  const useLargeContainer = useRouter().route === '/photos';
+
+  if(useLargeContainer) {
+    padding = 'px-6 md:px-16'
+  }
+
   return (
-    <nav className="navbar px-6 md:px-36 lg:px-48 ">
+    <nav className={`navbar ${padding}`}>
       <div className="flex justify-start items-center">
         <Link href="/">
           <a className="hover:border-white">
@@ -45,9 +57,9 @@ function Navbar() {
         </span>
       </div>
 
-      <ul className="flex justify-between">
+      <ul className="flex justify-between gap-x-4 md:gap-x-8 w-full md:w-auto">
         {routes?.map((route, i) => (
-          <li className="ml-6" key={i}>
+          <li key={i}>
             <Link href={`${route.link}`}>
               <a
                 data-testid="nav-link"

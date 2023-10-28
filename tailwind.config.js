@@ -1,3 +1,6 @@
+const { violet, blackA, mauve, green } = require('@radix-ui/colors');
+
+/** @type {import('tailwindcss').Config} */
 module.exports = {
   purge: {
     content: [
@@ -28,13 +31,21 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+        ...violet,
+        ...blackA,
+        ...mauve,
         green: {
+          ...green,
           500: '#50E3C2',
           600: '#29BC9B',
         },
       },
       width: {
         '2/7': '28.5714286%',
+      },
+      fonts: {
+        body: ['Inter', 'sans-serif'],
+        heading: ['Poppins', 'sans-serif'],
       },
     },
   },

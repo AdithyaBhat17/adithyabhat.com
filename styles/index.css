@@ -2,6 +2,8 @@
 @tailwind base;
 @tailwind components;
 
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Bebas+Neue&display=swap');
+
 @font-face {
   src: url('../public/static/SFMono.ttf');
   font-family: 'SF Mono';
@@ -36,6 +38,9 @@ h3 {
 .poppins {
   font-family: Poppins, sans-serif;
 }
+.passion-one {
+  font-family: 'Bebas Neue', sans-serif;
+}
 
 main {
   flex: 1;
@@ -43,6 +48,21 @@ main {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+}
+
+.masonry-grid {
+  display: -webkit-box; /* Not needed if autoprefixing */
+  display: -ms-flexbox; /* Not needed if autoprefixing */
+  display: flex;
+  margin-left: -30px; /* gutter size offset */
+  width: auto;
+}
+.masonry-grid_column {
+  padding-left: 30px; /* gutter size */
+  background-clip: padding-box;
+}
+.masonry-grid_column > div {
+  margin-bottom: 30px;
 }
 
 a {
@@ -146,6 +166,9 @@ code,
 .button_outlined:active {
   border: 1px solid #231f20;
 }
+.animate-once {
+  animation-iteration-count: 1;
+}
 
 .hover-card {
   transition: all 0.5s ease;
@@ -185,6 +208,18 @@ code,
 }
 
 @media (max-width: 600px) {
+  .masonry-grid {
+    margin-left: 0px !important;
+  }
+  .masonry-grid_column {
+    padding-left: 0px !important;
+  }
+  .masonry-grid_column:last-of-type {
+    padding-left: 6px !important;
+  }
+  .masonry-grid_column > div {
+    margin-bottom: 6px !important;
+  }
   .grid {
     width: 100%;
     flex-direction: column;
@@ -204,6 +239,12 @@ code,
   }
   .hover-card:hover {
     transform: none;
+  }
+  .navbar {
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
   }
 }
 

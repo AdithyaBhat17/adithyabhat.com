@@ -1,4 +1,3 @@
-import React from 'react'
 
 export const socials = [
   {
@@ -21,6 +20,10 @@ export const socials = [
     icon: 'linkedin',
     link: 'https://linkedin.com/in/adithya-nr',
   },
+  {
+    icon: 'youtube',
+    link: "https://www.youtube.com/@adithya-bhat"
+  }
 ]
 
 export default function Socials() {
