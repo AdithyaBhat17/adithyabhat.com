@@ -6,7 +6,7 @@ export type Article = {
   slug?: string
   content?: string
   id?: string
-  externalLink?: string
+  external_link?: string
   thumbnail?: {
     alt: string
     blurhash: string
@@ -21,7 +21,7 @@ export type Project = {
   id: string
   title: string
   tags?: string
-  externalLink?: string
+  external_link?: string
   thumbnail?: {
     alt: string
     blurhash: string
