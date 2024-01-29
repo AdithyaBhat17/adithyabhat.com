@@ -4,6 +4,7 @@ export const ALL_ARTICLES_QUERY = `
             date
             tags
             slug
+            external_link: externalLink
             thumbnail {
                 alt
                 blurhash
