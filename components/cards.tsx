@@ -1,11 +1,11 @@
 import { Article, List, Project } from '@/interfaces/content'
+import { fadeInUp, stagger } from '@/utils/motion'
 import dayjs from 'dayjs'
 import { motion } from 'framer-motion'
 import useCustomInView from 'hooks/customInView'
 import Link from 'next/link'
 import { memo } from 'react'
 import { Image } from 'react-datocms'
-import { fadeInUp, stagger } from '@/utils/motion'
 
 const renderMeta = (
   type: 'allArticles' | 'allProjects',
@@ -34,7 +34,7 @@ function CardsList({ data, type, columns }: List) {
         <Link
           data-testid="article"
           key={item.title}
-          href={`/${pathname}/[slug]`}
+          href={item.externalLink ? item.externalLink : `/${pathname}/[slug]`}
           as={`/${pathname}/${item.slug}`}
         >
           <motion.div
