@@ -8,7 +8,7 @@ import useResetScroll from 'hooks/useResetScroll'
 import Image from 'next/image'
 import Link from 'next/link'
 
-export default function About({ companies, age }) {
+export default function About({ companies }) {
   useResetScroll()
   return (
     <motion.div initial="initial" animate="animate" exit={{ opacity: 0 }}>
