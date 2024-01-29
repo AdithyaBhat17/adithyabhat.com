@@ -29,9 +29,7 @@ export default function About({ companies, age }) {
             About me
           </h1>
           <p className=" my-5 leading-8">
-            As you might have guessed already, I&apos;m Adithya, a{' '}
-            <span data-testid="age">{age}</span>
-            -year-old UX Engineer from Bengaluru, India.
+            As you might have guessed already, I&apos;m Adithya, a UX Engineer from Bengaluru, India.
           </p>
           <p className="my-5 leading-8">
             For more than 3 years now, design has been the central piece of my
