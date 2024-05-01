@@ -115,7 +115,7 @@ export default function About({ companies }) {
           <h1 className="text-2xl md:text-5xl font-semibold my-20 md:my-40 leading-relaxed md:leading-relaxed">
             Got a project in mind, a question or something else? Get in touch
             with me{' '}
-            <Link href="/contact">
+            <Link legacyBehavior href="/contact">
               <a className="left"> here</a>
             </Link>
           </h1>

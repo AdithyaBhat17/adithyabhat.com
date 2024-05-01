@@ -1,6 +1,6 @@
 import NextHead from 'next/head'
-import { SEO } from '../interfaces/seo'
 import { useEffect, useState } from 'react'
+import { SEO } from '../interfaces/seo'
 
 const defaultDescription =
   'A UX engineer from Bengaluru, helping companies of all sizes get ahead online. I am currently working on DevOps and Analytics products at Betsol.'
@@ -24,12 +24,12 @@ export default function Head({ title, description = defaultDescription }: SEO) {
       <link
         rel="preload"
         as="style"
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Poppins:wght@300;600&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Poppins:wght@300;600&family=Bebas+Neue&display=swap"
       />
 
       <link
         media={!hydrated ? 'print' : 'all'}
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Poppins:wght@400;600;700&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Poppins:wght@400;600;700&family=Bebas+Neue&display=swap"
         rel="stylesheet"
       />
       <title>{title || 'Adithya NR'}</title>

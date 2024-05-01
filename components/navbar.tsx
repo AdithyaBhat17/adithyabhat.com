@@ -43,7 +43,7 @@ function Navbar() {
   return (
     <nav className={`navbar ${padding}`}>
       <div className="flex justify-start items-center">
-        <Link href="/">
+        <Link legacyBehavior href="/">
           <a className="hover:border-white">
             <img
               className="fill-current lg:h-16 lg:w-16 w-12 h-12"
@@ -60,7 +60,7 @@ function Navbar() {
       <ul className="flex justify-between gap-x-4 md:gap-x-8 w-full md:w-auto">
         {routes?.map((route, i) => (
           <li key={i}>
-            <Link href={`${route.link}`}>
+            <Link legacyBehavior href={`${route.link}`}>
               <a
                 data-testid="nav-link"
                 className={`${activeStyle(

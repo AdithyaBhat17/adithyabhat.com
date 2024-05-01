@@ -2,8 +2,6 @@
 @tailwind base;
 @tailwind components;
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Bebas+Neue&display=swap');
-
 @font-face {
   src: url('../public/static/SFMono.ttf');
   font-family: 'SF Mono';
@@ -39,7 +37,8 @@ h3 {
   font-family: Poppins, sans-serif;
 }
 .passion-one {
-  font-family: 'Bebas Neue', sans-serif;
+  font-family: 'Bebas Neue', -apple-system, BlinkMacSystemFont, sans-serif !important;
+  text-transform: uppercase;
 }
 
 main {

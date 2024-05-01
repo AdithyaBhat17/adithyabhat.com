@@ -20,21 +20,20 @@ const renderMeta = (
   return desc
 }
 
-function CardsList({ data, type, columns }: List) {
+function CardsList({ data, type }: List) {
   const pathname = type === 'allArticles' ? 'blog' : 'work'
-  const cardWidth = `md:w-1/${Number(columns) - 1} lg:w-1/${columns}`
   const { ref, controls } = useCustomInView()
   return (
     <motion.div
       ref={ref}
       variants={stagger}
-      className="flex items-start flex-wrap -mx-5"
+      className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-9 mt-8"
     >
       {data[type]?.map((item: Article | Project, i: number) => (
         <Link
           data-testid="article"
           key={item.title}
-          href={item.external_link ? item.external_link : `/${pathname}/[slug]`}
+          href={item.externalLink ? item.externalLink : `/${pathname}/[slug]`}
           as={`/${pathname}/${item.slug}`}
         >
           <motion.div
@@ -43,7 +42,7 @@ function CardsList({ data, type, columns }: List) {
             animate={controls}
             whileHover={{ scale: 1.03 }}
             whileTap={{ scale: 0.97 }}
-            className={`w-full ${cardWidth} mt-8 cursor-pointer text-gray-900 px-5`}
+            className={`w-full mt-8 cursor-pointer text-gray-900`}
           >
             <Image
               className="rounded-lg shadow-sm"

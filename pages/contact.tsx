@@ -1,17 +1,21 @@
-import Head from '@/components/header'
 import Container from '@/components/container'
-import { useMemo, useState, BaseSyntheticEvent, useEffect } from 'react'
+import Head from '@/components/header'
+import { BaseSyntheticEvent, useEffect, useMemo, useState } from 'react'
 
-import { useForm } from 'react-hook-form'
 import FormErrorMessage from '@/components/error-message'
 import { ContactData, ContactResponse } from '@/interfaces/contact'
-import { motion } from 'framer-motion'
-import { fadeInUp, stagger } from '@/utils/motion'
 import { event as logEvent } from '@/lib/gtag'
+import { fadeInUp, stagger } from '@/utils/motion'
+import { motion } from 'framer-motion'
 import useResetScroll from 'hooks/useResetScroll'
+import { useForm } from 'react-hook-form'
 
 export default function Contact() {
-  const { register, handleSubmit, errors } = useForm()
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm()
   const [status, setStatus] = useState('idle')
 
   useResetScroll()
@@ -102,14 +106,14 @@ export default function Contact() {
               <input
                 className="input"
                 type="text"
-                ref={register({ required: 'Name cannot be empty 🙁' })}
                 name="name"
                 id="name"
                 data-testid="name"
                 placeholder="Mike Wazowski"
+                {...register('name', { required: 'Name cannot be empty 🙁' })}
               />
               {errors.name ? (
-                <FormErrorMessage message={errors.name.message} />
+                <FormErrorMessage message={errors.name.message as string} />
               ) : null}
             </motion.div>
             <motion.div variants={fadeInUp} className="form-group">
@@ -120,7 +124,7 @@ export default function Contact() {
                 className="input"
                 type="email"
                 data-testid="email"
-                ref={register({
+                {...register('email', {
                   required: 'Please provide your email address 😓',
                   pattern: {
                     value: /[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+/u,
@@ -132,7 +136,7 @@ export default function Contact() {
                 placeholder="mike@monstersinc.com"
               />
               {errors.email ? (
-                <FormErrorMessage message={errors.email.message} />
+                <FormErrorMessage message={errors.email.message as string} />
               ) : null}
             </motion.div>
             <motion.div variants={fadeInUp} className="form-group">
@@ -140,7 +144,7 @@ export default function Contact() {
                 Your message
               </label>
               <textarea
-                ref={register({
+                {...register('message', {
                   required: 'Please leave a message 😢',
                   minLength: { value: 10, message: 'Message too short 😞' },
                 })}
@@ -151,7 +155,7 @@ export default function Contact() {
                 rows={5}
               />
               {errors.message ? (
-                <FormErrorMessage message={errors.message.message} />
+                <FormErrorMessage message={errors.message.message as string} />
               ) : null}
             </motion.div>
             <motion.input

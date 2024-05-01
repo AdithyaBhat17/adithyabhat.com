@@ -24,7 +24,7 @@ function Thanks() {
         <span className="block mt-6 sm:mt-10 mb-2">
           Got a project in mind, a question, or something else?{' '}
         </span>
-        <Link href="/contact">
+        <Link legacyBehavior href="/contact">
           <a className="font-semibold left">Let&apos;s chat.</a>
         </Link>
       </motion.p>

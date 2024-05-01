@@ -1,9 +1,9 @@
-import Lottie from 'react-lottie'
+import Container from '@/components/container'
+import Head from '@/components/header'
+import { motion } from 'framer-motion'
 import animationData from 'lotties/Dog_news_paper.json'
 import Link from 'next/link'
-import Container from '@/components/container'
-import { motion } from 'framer-motion'
-import Head from '@/components/header'
+import Lottie from 'react-lottie'
 
 const defaultOptions = {
   loop: true,
@@ -29,7 +29,7 @@ function PageNotFound() {
         </h1>
         <p className="text-lg poppins">Marv just tore this page apart 🥺</p>
         <br />
-        <Link href="/">
+        <Link legacyBehavior href="/">
           <a className="button_primary poppins mt-5 text-lg">Go Home</a>
         </Link>
       </motion.div>

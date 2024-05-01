@@ -37,7 +37,8 @@
       "@/utils/*": [
         "utils/*"
       ]
-    }
+    },
+    "incremental": true
   },
   "exclude": [
     "node_modules",

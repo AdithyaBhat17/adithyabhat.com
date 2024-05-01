@@ -57,10 +57,10 @@ function Hero() {
             .
           </p>
           <div className="mt-6 mb-8 flex justify-start items-center">
-            <Link href="/about">
+            <Link legacyBehavior href="/about">
               <a className="button_primary mr-5">About me</a>
             </Link>
-            <Link href="/contact">
+            <Link legacyBehavior href="/contact">
               <a className="button_outlined">Get in touch</a>
             </Link>
           </div>

@@ -1,9 +1,10 @@
-import '../styles/index.css'
-import NProgress from 'nprogress'
-import * as gtag from '@/lib/gtag'
-import { Router } from 'next/router'
-import Navbar from '@/components/navbar'
 import Footer from '@/components/footer'
+import Navbar from '@/components/navbar'
+import * as gtag from '@/lib/gtag'
+import { SpeedInsights } from '@vercel/speed-insights/next'
+import { Router } from 'next/router'
+import NProgress from 'nprogress'
+import '../styles/index.css'
 
 const handleRouteChange = (url: string) => {
   gtag.pageview(url)
@@ -32,6 +33,7 @@ function MyApp({ Component, pageProps }) {
       <div className="mt-24 lg:mt-32">
         <Footer />
       </div>
+      <SpeedInsights />
     </div>
   )
 }

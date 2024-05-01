@@ -1,7 +1,7 @@
-import Container from './container'
 import Link from 'next/link'
-import { useCallback, memo } from 'react'
 import { useRouter } from 'next/router'
+import { memo, useCallback } from 'react'
+import Container from './container'
 import Socials from './socials'
 
 export const footerRoutes = [
@@ -50,7 +50,7 @@ function Footer() {
       <br />
       <footer className="footer flex-wrap">
         <div className="flex justify-start items-center my-5">
-          <Link href="/">
+          <Link legacyBehavior href="/">
             <a className="hover:border-white flex justify-start items-center">
               <img
                 className="fill-current lg:h-16 lg:w-12 w-12 h-12 mr-3"
@@ -67,7 +67,7 @@ function Footer() {
         <ul className="grid grid-flow-col gap-8 justify-between">
           {footerRoutes?.map((route, i) => (
             <li className="ml-0" key={i}>
-              <Link href={`${route.link}`}>
+              <Link legacyBehavior href={`${route.link}`}>
                 <a
                   data-testid="footer-link"
                   className={`${activeStyle(

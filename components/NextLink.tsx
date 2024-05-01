@@ -7,7 +7,7 @@ type Props = {
 
 export default function NextLink({ href, text }: Props) {
   return (
-    <Link href={href}>
+    <Link legacyBehavior href={href}>
       <a className="text-gray-900 hover:text-black poppins mt-16 mx-auto text-center flex items-center justify-center w-auto">
         {text} &nbsp;
         <svg

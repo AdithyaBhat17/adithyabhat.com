@@ -1,18 +1,18 @@
-import { fetchAPI } from '@/lib/datocms'
-import Head from '@/components/header'
-import processMarkdown from '@/lib/processMarkdown'
 import Container from '@/components/container'
+import Head from '@/components/header'
+import { fetchAPI } from '@/lib/datocms'
+import processMarkdown from '@/lib/processMarkdown'
 import NextHead from 'next/head'
 
-import { useRouter } from 'next/router'
-import ErrorPage from 'next/error'
-import { renderMetaTags } from 'react-datocms'
-import { CASE_STUDY, RECENT_WORK } from 'graphql/queries/work'
-import Link from 'next/link'
+import PreviewBanner from '@/components/PreviewBanner'
 import RecentProjects from '@/components/recent-articles'
 import { Project } from '@/interfaces/content'
 import { event as logEvent } from '@/lib/gtag'
-import PreviewBanner from '@/components/PreviewBanner'
+import { CASE_STUDY, RECENT_WORK } from 'graphql/queries/work'
+import ErrorPage from 'next/error'
+import Link from 'next/link'
+import { useRouter } from 'next/router'
+import { renderMetaTags } from 'react-datocms'
 
 type Props = {
   data: {
@@ -83,7 +83,7 @@ export default function CaseStudy({ data, preview }: Props) {
           />
           <h1 className="font-semibold text-4xl my-48 leading-relaxed">
             Have a similar project in mind? <br />{' '}
-            <Link href={`/contact?ref=${data?.project?.slug}`}>
+            <Link legacyBehavior href={`/contact?ref=${data?.project?.slug}`}>
               <a className="left">Let&apos;s chat!</a>
             </Link>
           </h1>
