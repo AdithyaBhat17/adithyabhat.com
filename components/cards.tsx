@@ -34,7 +34,9 @@ function CardsList({ data, type }: List) {
           data-testid="article"
           key={item.title}
           href={item.externalLink ? item.externalLink : `/${pathname}/[slug]`}
-          as={`/${pathname}/${item.slug}`}
+          {...(item.externalLink
+            ? { target: '_blank', rel: 'noopener noreferrer' }
+            : { as: `/${pathname}/${item.slug}` })}
         >
           <motion.div
             custom={i}
