@@ -27,6 +27,7 @@ export const HOME_PAGE_QUERY = `
             date
             tags
             slug
+            externalLink
             thumbnail {
               alt
               blurhash

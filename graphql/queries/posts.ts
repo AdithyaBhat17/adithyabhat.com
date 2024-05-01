@@ -48,6 +48,7 @@ export const ARTICLE_QUERY = `
             slug
             tags
             date
+            externalLink
             thumbnail {
                 alt
                 blurhash
@@ -75,6 +76,7 @@ export const FEATURED_ARTICLES = `
             date
             tags
             slug
+            externalLink
             thumbnail {
               alt
               blurhash
