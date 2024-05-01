@@ -1,6 +1,7 @@
 import Footer from '@/components/footer'
 import Navbar from '@/components/navbar'
 import * as gtag from '@/lib/gtag'
+import { Analytics } from '@vercel/analytics/react'
 import { SpeedInsights } from '@vercel/speed-insights/next'
 import { Router } from 'next/router'
 import NProgress from 'nprogress'
@@ -34,6 +35,7 @@ function MyApp({ Component, pageProps }) {
         <Footer />
       </div>
       <SpeedInsights />
+      <Analytics />
     </div>
   )
 }
