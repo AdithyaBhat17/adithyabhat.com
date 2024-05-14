@@ -1,5 +1,5 @@
-import { PhotoDialog } from '@/components/PhotoDialog'
 import Head from '@/components/header'
+import { PhotoDialog } from '@/components/PhotoDialog'
 import { fetchGalleryAPI } from '@/lib/datocms'
 import { fadeInUp, stagger } from '@/utils/motion'
 import { motion } from 'framer-motion'
@@ -44,6 +44,7 @@ export default function PhotosPage({ data }) {
     >
       <Head title="Photos | Adithya NR" />
       <motion.div variants={stagger}>
+        {/* @ts-ignore */}
         <Masonry
           breakpointCols={breakpointColumnsObj}
           className="masonry-grid"
