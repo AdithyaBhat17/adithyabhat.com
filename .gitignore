@@ -21,3 +21,4 @@ yarn-error.log*
 .env
 .vercel
 package-lock.json
+tsconfig.tsbuildinfo
