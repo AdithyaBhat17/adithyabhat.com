@@ -53,7 +53,7 @@ export default function About({ companies }) {
             >
               yellow.ai
             </a>{' '}
-            as a Software Engineer (SDE-2).
+            as a Software Engineer (SDE-3).
           </p>
           <h3 className="text-xl md:text-3xl my-20 text-left sm:text-center font-semibold">
             Companies I&apos;ve worked with
