@@ -23,6 +23,7 @@ exports[`Home page matches snapshot 1`] = `
               Adithya 
             </span>
             <span
+              aria-label="waving hand"
               role="img"
             >
               👋
