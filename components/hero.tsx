@@ -40,7 +40,7 @@ function Hero() {
         <motion.div variants={fadeInUp}>
           <h1 className="font-semibold text-3xl md:text-4xl hero-title">
             Hey, I&apos;m <span className="font-bold">Adithya </span>
-            <span role="img">👋</span>
+            <span role="img" aria-label='waving hand'>👋</span>
           </h1>
           <p className="mt-5 w-full lg:w-3/4 leading-7 poppins hero-description">
             A UX engineer from Bengaluru, helping companies of all sizes get
