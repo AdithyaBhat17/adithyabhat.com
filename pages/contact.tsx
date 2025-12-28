@@ -30,7 +30,7 @@ export default function Contact() {
     data: ContactData,
     event: BaseSyntheticEvent
   ) => {
-    const { name, email, message } = data
+    const { name, email, message, website } = data
     if (!name || !email || !message.trim()) {
       logEvent({
         action: 'User submitted form without filling details',
@@ -48,6 +48,7 @@ export default function Contact() {
           name: name.trim(),
           email,
           message: message.trim(),
+          website: website || '',
         }),
       })
       const contactStatus: ContactResponse = await contactResponse.json()
@@ -139,6 +140,28 @@ export default function Contact() {
                 <FormErrorMessage message={errors.email.message as string} />
               ) : null}
             </motion.div>
+            {/* Honeypot field - hidden from users, visible to bots */}
+            <div
+              aria-hidden="true"
+              style={{
+                position: 'absolute',
+                left: '-9999px',
+                top: '-9999px',
+                opacity: 0,
+                height: 0,
+                overflow: 'hidden',
+                pointerEvents: 'none',
+              }}
+            >
+              <label htmlFor="website">Website (leave empty)</label>
+              <input
+                type="text"
+                id="website"
+                autoComplete="off"
+                tabIndex={-1}
+                {...register('website')}
+              />
+            </div>
             <motion.div variants={fadeInUp} className="form-group">
               <label className="label" htmlFor="message">
                 Your message
