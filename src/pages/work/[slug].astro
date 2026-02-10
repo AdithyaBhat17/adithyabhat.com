@@ -25,9 +25,9 @@ const moreProjects = data.allProjects ?? [];
 
 <PageLayout title={project.title}>
   <Container>
-    <div class="w-full md:w-2/3 mx-auto">
+    <div class="w-full max-w-2xl mx-auto">
       <h1
-        class="font-serif text-4xl md:text-5xl mb-5"
+        class="font-display text-3xl md:text-4xl lg:text-5xl tracking-tight mt-8 leading-tight"
         data-animate
         transition:name={`card-${slug}`}
       >
@@ -36,18 +36,18 @@ const moreProjects = data.allProjects ?? [];
 
       <div class="content" set:html={project.caseStudy} />
 
-      <hr class="gradient-line mt-20 mb-16" />
+      <hr class="gradient-line mt-16 mb-12" />
 
       {project.link && (
         <a
           href={project.link}
           rel="noopener noreferrer"
           target="_blank"
-          class="inline-flex items-center gap-2 font-sans font-semibold text-lg text-[var(--foreground)] hover:text-[#153ec4] transition-colors link-underline"
+          class="inline-flex items-center gap-2 font-body font-semibold text-[var(--accent)] hover:text-[var(--accent-hover)] transition-colors"
         >
           <span>Visit Project</span>
           <svg
-            class="w-5 h-5"
+            class="w-4 h-4"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -63,10 +63,13 @@ const moreProjects = data.allProjects ?? [];
       )}
 
       {moreProjects.length > 0 && (
-        <div class="mt-16">
-          <h3 class="text-sm uppercase font-sans font-semibold mt-24 mb-6 tracking-wide text-[var(--muted-foreground)]">
-            Recent Projects
-          </h3>
+        <div class="mt-20">
+          <div class="flex items-center gap-4 mb-8">
+            <h3 class="text-sm uppercase font-body font-semibold tracking-widest text-[var(--text-muted)]">
+              More projects
+            </h3>
+            <span class="flex-1 h-[1px] bg-[var(--border)]"></span>
+          </div>
           <CardGrid
             items={moreProjects}
             type="project"
@@ -75,10 +78,10 @@ const moreProjects = data.allProjects ?? [];
         </div>
       )}
 
-      <div class="my-20 md:my-40" data-animate>
-        <h2 class="font-serif text-3xl md:text-4xl leading-relaxed">
+      <div class="my-24 md:my-32" data-animate>
+        <h2 class="font-display text-2xl md:text-3xl tracking-tight leading-snug">
           Have a similar project in mind?{' '}
-          <a href={`/contact?ref=${slug}`} class="link-underline gradient-text">
+          <a href={`/contact?ref=${slug}`} class="gradient-text hover:opacity-80 transition-opacity">
             Let's chat!
           </a>
         </h2>

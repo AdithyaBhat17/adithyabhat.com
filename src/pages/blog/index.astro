@@ -11,9 +11,15 @@ const articles = data.allArticles ?? [];
 
 <PageLayout title="Blog | Adithya NR">
   <Container>
-    <h1 class="font-serif text-5xl md:text-6xl mb-6" data-animate>
-      Articles
-    </h1>
+    <div class="mt-8 mb-12" data-animate>
+      <span class="inline-flex items-center gap-2 text-sm font-body font-medium text-[var(--accent)] tracking-wide uppercase mb-6">
+        <span class="inline-block w-6 h-[2px] bg-[var(--accent)]"></span>
+        Blog
+      </span>
+      <h1 class="font-display text-4xl md:text-5xl tracking-tight">
+        Articles
+      </h1>
+    </div>
     <CardGrid items={articles} type="article" />
   </Container>
 </PageLayout>

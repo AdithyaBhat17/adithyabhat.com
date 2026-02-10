@@ -1,0 +1,268 @@
+<!DOCTYPE html><html lang="en"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><!-- Preconnect --><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="preconnect" href="https://www.datocms-assets.com" crossorigin><!-- Fonts --><link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"><!-- SEO --><title>A beginner’s guide to understanding React’s context API</title><meta name="description" content="A UX engineer from Bengaluru, helping companies of all sizes get ahead online."><link rel="canonical" href="https://adithyabhat.com/blog/a-beginner-s-guide-to-understanding-react-s-context-api/"><link rel="icon" type="image/svg+xml" href="/static/logo_white.svg"><meta name="author" content="Adithya NR"><!-- Open Graph --><meta property="og:title" content="A beginner’s guide to understanding React’s context API"><meta property="og:description" content="A UX engineer from Bengaluru, helping companies of all sizes get ahead online."><meta property="og:url" content="https://adithyabhat.com/blog/a-beginner-s-guide-to-understanding-react-s-context-api/"><meta property="og:site_name" content="Adithya NR"><meta property="og:image" content="https://cdn.dribbble.com/users/2366701/screenshots/14499518/media/80880f845dd409a5d3108c8961c8d8e4.png"><!-- Twitter --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:site" content="@adithya__nr"><meta name="twitter:creator" content="@adithya__nr"><meta name="twitter:description" content="A UX engineer from Bengaluru, helping companies of all sizes get ahead online."><meta property="twitter:image" content="https://cdn.dribbble.com/users/2366701/screenshots/14499518/media/80880f845dd409a5d3108c8961c8d8e4.png"><meta name="keywords" content="front-end developer, front-end development, web designer, adithya, adithya nr, adithya bhat, web developer"><!-- Structured Data --><script type="application/ld+json">{"name":"Adithya NR","description":"I am a UX Engineer based in Bengaluru, India.","author":{"@type":"Person","name":"Adithya NR"},"disambiguatingDescription":"Web Designer & Developer","jobTitle":"UX Engineer, Freelancer","@type":"WebSite","url":"https://adithyabhat.com/","publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"https://raw.githubusercontent.com/AdithyaBhat17/adithyabhat17.github.io/version-3/public/adithya1.png"},"name":"Adithya NR"},"image":"https://raw.githubusercontent.com/AdithyaBhat17/adithyabhat17.github.io/version-3/public/adithya1.png","headline":"Adithya NR","sameAs":["https://twitter.com/adithya__nr","https://linkedin.com/in/adithya-nr/","https://github.com/AdithyaBhat17","https://instagram.com/adithyabhat__/","https://medium.com/adithya-nr"],"alternateName":"Adithya Bhat","@context":"http://schema.org"}</script><!-- Google Analytics --><script async src="https://www.googletagmanager.com/gtag/js?id=G-NJSH4MRBEQ"></script><script>(function(){const GA_TRACKING_ID = "G-NJSH4MRBEQ";
+
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', GA_TRACKING_ID, { page_path: window.location.pathname });
+    })();</script><!-- Cloudflare Analytics --><script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon="{&quot;token&quot;: &quot;6821738704c04aac971dbeae66fca2d6&quot;, &quot;spa&quot;: true}"></script><meta name="astro-view-transitions-enabled" content="true"><meta name="astro-view-transitions-fallback" content="animate"><script type="module" src="/_astro/ClientRouter.astro_astro_type_script_index_0_lang.CDGfc0hd.js"></script><link rel="stylesheet" href="/_astro/about.jAeyDxqC.css">
+<style>@keyframes astroFadeInOut{0%{opacity:1}to{opacity:0}}@keyframes astroFadeIn{0%{opacity:0;mix-blend-mode:plus-lighter}to{opacity:1;mix-blend-mode:plus-lighter}}@keyframes astroFadeOut{0%{opacity:1;mix-blend-mode:plus-lighter}to{opacity:0;mix-blend-mode:plus-lighter}}@keyframes astroSlideFromRight{0%{transform:translate(100%)}}@keyframes astroSlideFromLeft{0%{transform:translate(-100%)}}@keyframes astroSlideToRight{to{transform:translate(100%)}}@keyframes astroSlideToLeft{to{transform:translate(-100%)}}@media(prefers-reduced-motion){::view-transition-group(*),::view-transition-old(*),::view-transition-new(*){animation:none!important}[data-astro-transition-scope]{animation:none!important}}
+</style><script>window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+		var script = document.createElement('script');
+		script.defer = true;
+		script.src = '/_vercel/insights/script.js';
+		var head = document.querySelector('head');
+		head.appendChild(script);
+	</script><style>[data-astro-transition-scope="astro-3kflumnw-1"] { view-transition-name: card-a-beginner-s-guide-to-understanding-react-s-context-api; }@layer astro { ::view-transition-old(card-a-beginner-s-guide-to-understanding-react-s-context-api) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }::view-transition-new(card-a-beginner-s-guide-to-understanding-react-s-context-api) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back]::view-transition-old(card-a-beginner-s-guide-to-understanding-react-s-context-api) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back]::view-transition-new(card-a-beginner-s-guide-to-understanding-react-s-context-api) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; } }[data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-3kflumnw-1"],
+			[data-astro-transition-fallback="old"][data-astro-transition-scope="astro-3kflumnw-1"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-3kflumnw-1"],
+			[data-astro-transition-fallback="new"][data-astro-transition-scope="astro-3kflumnw-1"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back][data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-3kflumnw-1"],
+			[data-astro-transition=back][data-astro-transition-fallback="old"][data-astro-transition-scope="astro-3kflumnw-1"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back][data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-3kflumnw-1"],
+			[data-astro-transition=back][data-astro-transition-fallback="new"][data-astro-transition-scope="astro-3kflumnw-1"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }</style><style>[data-astro-transition-scope="astro-tusfcfki-2"] { view-transition-name: card-building-accessible-chatbots-at-yellow-ai; }@layer astro { ::view-transition-old(card-building-accessible-chatbots-at-yellow-ai) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }::view-transition-new(card-building-accessible-chatbots-at-yellow-ai) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back]::view-transition-old(card-building-accessible-chatbots-at-yellow-ai) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back]::view-transition-new(card-building-accessible-chatbots-at-yellow-ai) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; } }[data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-tusfcfki-2"],
+			[data-astro-transition-fallback="old"][data-astro-transition-scope="astro-tusfcfki-2"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-tusfcfki-2"],
+			[data-astro-transition-fallback="new"][data-astro-transition-scope="astro-tusfcfki-2"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back][data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-tusfcfki-2"],
+			[data-astro-transition=back][data-astro-transition-fallback="old"][data-astro-transition-scope="astro-tusfcfki-2"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back][data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-tusfcfki-2"],
+			[data-astro-transition=back][data-astro-transition-fallback="new"][data-astro-transition-scope="astro-tusfcfki-2"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }</style><style>[data-astro-transition-scope="astro-tusfcfki-3"] { view-transition-name: card-introduction-to-javascript-iterators-and-generators; }@layer astro { ::view-transition-old(card-introduction-to-javascript-iterators-and-generators) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }::view-transition-new(card-introduction-to-javascript-iterators-and-generators) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back]::view-transition-old(card-introduction-to-javascript-iterators-and-generators) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back]::view-transition-new(card-introduction-to-javascript-iterators-and-generators) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; } }[data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-tusfcfki-3"],
+			[data-astro-transition-fallback="old"][data-astro-transition-scope="astro-tusfcfki-3"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-tusfcfki-3"],
+			[data-astro-transition-fallback="new"][data-astro-transition-scope="astro-tusfcfki-3"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back][data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-tusfcfki-3"],
+			[data-astro-transition=back][data-astro-transition-fallback="old"][data-astro-transition-scope="astro-tusfcfki-3"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back][data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-tusfcfki-3"],
+			[data-astro-transition=back][data-astro-transition-fallback="new"][data-astro-transition-scope="astro-tusfcfki-3"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }</style><style>[data-astro-transition-scope="astro-tusfcfki-4"] { view-transition-name: card-generate-code-coverage-reports-for-your-unit-tests-using-jest; }@layer astro { ::view-transition-old(card-generate-code-coverage-reports-for-your-unit-tests-using-jest) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }::view-transition-new(card-generate-code-coverage-reports-for-your-unit-tests-using-jest) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back]::view-transition-old(card-generate-code-coverage-reports-for-your-unit-tests-using-jest) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back]::view-transition-new(card-generate-code-coverage-reports-for-your-unit-tests-using-jest) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; } }[data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-tusfcfki-4"],
+			[data-astro-transition-fallback="old"][data-astro-transition-scope="astro-tusfcfki-4"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-tusfcfki-4"],
+			[data-astro-transition-fallback="new"][data-astro-transition-scope="astro-tusfcfki-4"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back][data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-tusfcfki-4"],
+			[data-astro-transition=back][data-astro-transition-fallback="old"][data-astro-transition-scope="astro-tusfcfki-4"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back][data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-tusfcfki-4"],
+			[data-astro-transition=back][data-astro-transition-fallback="new"][data-astro-transition-scope="astro-tusfcfki-4"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }</style><style>[data-astro-transition-scope="astro-tusfcfki-5"] { view-transition-name: card-intro-to-javascript; }@layer astro { ::view-transition-old(card-intro-to-javascript) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }::view-transition-new(card-intro-to-javascript) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back]::view-transition-old(card-intro-to-javascript) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back]::view-transition-new(card-intro-to-javascript) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; } }[data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-tusfcfki-5"],
+			[data-astro-transition-fallback="old"][data-astro-transition-scope="astro-tusfcfki-5"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-tusfcfki-5"],
+			[data-astro-transition-fallback="new"][data-astro-transition-scope="astro-tusfcfki-5"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back][data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-tusfcfki-5"],
+			[data-astro-transition=back][data-astro-transition-fallback="old"][data-astro-transition-scope="astro-tusfcfki-5"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back][data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-tusfcfki-5"],
+			[data-astro-transition=back][data-astro-transition-fallback="new"][data-astro-transition-scope="astro-tusfcfki-5"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }</style><style>[data-astro-transition-scope="astro-tusfcfki-6"] { view-transition-name: card-javascript-variables; }@layer astro { ::view-transition-old(card-javascript-variables) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }::view-transition-new(card-javascript-variables) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back]::view-transition-old(card-javascript-variables) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back]::view-transition-new(card-javascript-variables) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; } }[data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-tusfcfki-6"],
+			[data-astro-transition-fallback="old"][data-astro-transition-scope="astro-tusfcfki-6"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-tusfcfki-6"],
+			[data-astro-transition-fallback="new"][data-astro-transition-scope="astro-tusfcfki-6"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back][data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-tusfcfki-6"],
+			[data-astro-transition=back][data-astro-transition-fallback="old"][data-astro-transition-scope="astro-tusfcfki-6"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back][data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-tusfcfki-6"],
+			[data-astro-transition=back][data-astro-transition-fallback="new"][data-astro-transition-scope="astro-tusfcfki-6"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }</style></head> <body>  <div class="flex flex-col justify-around min-h-screen"> <nav class="flex sticky w-full top-0 items-center justify-between py-5 z-50 bg-[#09090b]/70 backdrop-blur-xl border-b border-white/[0.04] px-6 md:px-12 lg:px-20 xl:px-32"> <div class="flex items-center gap-3"> <a href="/" class="group flex items-center gap-3 hover:opacity-90 transition-opacity"> <img class="h-9 w-9" src="/static/logo_white.svg" alt="Adithya NR logo"> <span class="hidden sm:inline font-display text-sm font-semibold text-[var(--text)] tracking-tight">
+adithya
+</span> </a> </div> <ul class="flex items-center gap-1"> <li> <a href="/about" class="text-sm font-body px-3 py-1.5 rounded-lg transition-all duration-200 text-[var(--text-muted)] hover:text-[var(--text)] hover:bg-white/[0.04]"> About </a> </li><li> <a href="/work" class="text-sm font-body px-3 py-1.5 rounded-lg transition-all duration-200 text-[var(--text-muted)] hover:text-[var(--text)] hover:bg-white/[0.04]"> Work </a> </li><li> <a href="/blog" class="text-sm font-body px-3 py-1.5 rounded-lg transition-all duration-200 text-[var(--text)] bg-white/[0.06]"> Blog </a> </li><li> <a href="/photos" class="text-sm font-body px-3 py-1.5 rounded-lg transition-all duration-200 text-[var(--text-muted)] hover:text-[var(--text)] hover:bg-white/[0.04]"> Gallery </a> </li><li> <a href="/contact" class="text-sm font-body px-3 py-1.5 rounded-lg transition-all duration-200 text-[var(--text-muted)] hover:text-[var(--text)] hover:bg-white/[0.04]"> Contact </a> </li> </ul> </nav> <main class="flex-1">  <div class="px-6 md:px-12 lg:px-20 xl:px-32 mb-6">  <article class="w-full max-w-2xl mx-auto"> <div class="mt-8 mb-10"> <small class="font-body text-[var(--text-muted)] text-sm" data-animate> 09 Sep, 2018 </small> <h1 class="font-display text-3xl md:text-4xl lg:text-5xl tracking-tight mt-3 leading-tight" data-animate data-astro-transition-scope="astro-3kflumnw-1"> A beginner’s guide to understanding React’s context API </h1> </div> <div class="content"><p>Have you ever experienced the pain of trying to get state from the top of your react tree to the bottom? This pain you’re feeling is called “prop threading” and it’s super annoying. You wind up having to pass props through components that don’t care about the data just so you can send it down to components that do care. And as you move components around, this pain is magnified.</p>
+<p><img src="https://www.datocms-assets.com/30465/1592913321-source.gif" alt="A ruckus indeed"></p>
+<h3>Let us go through the pain for one last time!</h3>
+<p>So our App is structured in such a way that the App component renders Parent, which renders Child, which renders Grandchild. However, what’s important to notice here is that the Grandchild component wants to render name — but the data for name lives inside the App component.  </p>
+<p>Because Grandchild is so deeply nested, we have to pass the name prop one-by-one from App through all the components until it reaches Grandchild. What’s more: we must do this even if any of the components along the way (Parent and Child) aren’t even concerned with the name data!  </p>
+<p>This process of “threading props” to send data to a child component can be tiresome, and perhaps even error-prone. Luckily, we can avoid it with React’s Context API.  </p>
+<p><img src="https://www.datocms-assets.com/30465/1592913430-13ubln2uuechv0vwpimvlzq.png" alt="Our App Component">  </p>
+<p><img src="https://www.datocms-assets.com/30465/1592913519-1mbvegvc56v2znbe3pjyg4q.png" alt="The parent component">  </p>
+<p><img src="https://www.datocms-assets.com/30465/1592913448-1kldcidnbx9ky6vj8bmocog.png" alt="The child component">  </p>
+<p><img src="https://www.datocms-assets.com/30465/1592913645-1eliqn0yjkoz6yr4esneznq.png" alt="The Grandchild component which finally renders the name">  </p>
+<p>All this trouble to display a name 😥  </p>
+<h3>Lets see how our app looks like…</h3>
+<p><img src="https://www.datocms-assets.com/30465/1592913712-1eiivpv3wne60h4lh19btma.png" alt="Our application now renders the name which passed down from App to Grandchild via Parent and Child">  </p>
+<p><img src="https://www.datocms-assets.com/30465/1592913842-source-1.gif" alt="Phew">  </p>
+<h3>Here comes the context API to save the day!</h3>
+<p><img src="https://www.datocms-assets.com/30465/1592914053-source-2.gif" alt="About damn time">  </p>
+<p>Now let’s take a look at how context api helps us to pass data only to the component which requires the specific data.  </p>
+<p>To begin, we’ll use React’s <code>createContext()</code> function to return an object with a <code>Provider</code> as well as a <code>Consumer</code>.  </p>
+<p><img src="https://www.datocms-assets.com/30465/1592914134-1b47dclg95o9n2967pulcwq.png" alt="">  </p>
+<p>The Provider component is used in the upper level of the component tree; that is, the component from which the data to be passed is held. In our case, this was the App component. We passed the name data as the value of Provider’s value prop:  </p>
+<p><img src="https://www.datocms-assets.com/30465/1592930879-12-p7rtowtxgm9wjukvzbqa.png" alt="Wrapping the Parent component with Context’s provider">  </p>
+<p>On the receiving end (i.e., a component “under” the Provider in the component hierarchy), we use the Consumer component. In our example, we passed Consumer a function as a child. This function accepts a value and returns some JSX:</p>
+<p><img src="https://www.datocms-assets.com/30465/1592930967-1wzfkm-ztn41ktvaascsaq.png" alt="Wrapping the Grandchild component within the context’s consumer which invokes a function with a specified value to render the JSX.">  </p>
+<p>As a result, we were able to render the Grandchild component with the correct name data without ever having to pass that data down the entire component thread! That’s a lot less code than the previous way we had to do it. So React’s Context API provides a brief, approachable way to easily communicate information from one component to another.  </p>
+<h3>Let’s take a look at our app now…</h3>
+<p><img src="https://www.datocms-assets.com/30465/1592914496-1eiivpv3wne60h4lh19btma-1.png" alt="Voila!! It works!!!">  </p>
+<p><strong>And we don’t have to pass the data as props down the parent and child components anymore!!</strong>  </p>
+<p><img src="https://www.datocms-assets.com/30465/1592931017-1iw0us0cguvn9gyagjx-c4q.png" alt="No more unnecessary passing of data!!!">   </p>
+<p><img src="https://www.datocms-assets.com/30465/1592914627-source-3.gif" alt="">  </p>
+<p>You can find the source code here : <a href="https://github.com/AdithyaBhat17/learning-context-api">https://github.com/AdithyaBhat17/learning-context-api</a>  </p>
+<p>Happy coding 🥳</p>
+</div> </article> <div class="max-w-4xl mx-auto mt-20"> <div class="flex items-center gap-4 mb-8"> <h3 class="text-sm uppercase font-body font-semibold tracking-widest text-[var(--text-muted)]">
+More articles
+</h3> <span class="flex-1 h-[1px] bg-[var(--border)]"></span> </div> <div class="grid gap-9 mt-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-3" data-card-grid data-animate> <div> <a href="https://tech.yellow.ai/p/building-accessible-chatbots-at-yellow" class="card flex flex-col h-full cursor-pointer group rounded-xl bg-[var(--bg-elevated)] border border-[var(--border-hover)] p-3 hover:border-[var(--accent)]/30 transition-all duration-400" target="_blank" rel="noopener noreferrer"> <div class="overflow-hidden rounded-lg aspect-[4/3] bg-[var(--bg-surface)]" data-astro-transition-scope="astro-tusfcfki-2"> <img src="https://www.datocms-assets.com/30465/1706545601-google-deepmind-q3bv2kqvouu-unsplash.jpg?ar64=NDoz&auto=format&fit=crop" srcset="https://www.datocms-assets.com/30465/1706545601-google-deepmind-q3bv2kqvouu-unsplash.jpg?ar64=NDoz&auto=format&dpr=0.25&fit=crop 720w,https://www.datocms-assets.com/30465/1706545601-google-deepmind-q3bv2kqvouu-unsplash.jpg?ar64=NDoz&auto=format&dpr=0.5&fit=crop 1440w,https://www.datocms-assets.com/30465/1706545601-google-deepmind-q3bv2kqvouu-unsplash.jpg?ar64=NDoz&auto=format&dpr=0.75&fit=crop 2160w,https://www.datocms-assets.com/30465/1706545601-google-deepmind-q3bv2kqvouu-unsplash.jpg?ar64=NDoz&auto=format&fit=crop 2880w" sizes="(max-width: 2880px) 100vw, 2880px" width="2880" height="2160" alt="Building accessible chatbots at yellow.ai" loading="lazy" decoding="async" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.03]" style="background-image: url(data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAoHBwgHBhUTDQ8PCg4NDg4JDgkJDxEJFgcYFxMZGBYVFhUaHysjGh0oHRUWJDUlKC0vMjIyGSI4PTcwPCsxMi8BCgsLDg0OFBANGC8cFhwvLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vL//AABEIABIAGAMBIgACEQEDEQH/xAAYAAEBAQEBAAAAAAAAAAAAAAAABQMEAv/EAB8QAAICAAcBAAAAAAAAAAAAAAAFAQMCBBMhIiMzEv/EABUBAQEAAAAAAAAAAAAAAAAAAAMC/8QAFhEBAQEAAAAAAAAAAAAAAAAAAQAh/9oADAMBAAIRAxEAPwC7jQ9ZOtQci9Wx1KyYwbRTJIEytjUl+cAPOXeRZAEyJW2yvkRHYAJO3AvncACRN//Z); background-size: cover;"> </div> <div class="pt-4 pb-1 px-1 flex-1 flex flex-col"> <h2 class="font-display font-semibold text-lg text-[var(--text)] group-hover:text-[var(--accent)] transition-colors duration-300"> Building accessible chatbots at yellow.ai </h2> <p class="text-[var(--text-muted)] font-body text-sm mt-auto pt-2"> Jan 2024 · chatbots, accessibility </p> </div> </a> </div><div> <a href="/blog/introduction-to-javascript-iterators-and-generators" class="card flex flex-col h-full cursor-pointer group rounded-xl bg-[var(--bg-elevated)] border border-[var(--border-hover)] p-3 hover:border-[var(--accent)]/30 transition-all duration-400"> <div class="overflow-hidden rounded-lg aspect-[4/3] bg-[var(--bg-surface)]" data-astro-transition-scope="astro-tusfcfki-3"> <img src="https://www.datocms-assets.com/30465/1609574417-tudor-baciu-vc3ivlznj8-unsplash.jpg?ar64=NDoz&auto=format&fit=crop" srcset="https://www.datocms-assets.com/30465/1609574417-tudor-baciu-vc3ivlznj8-unsplash.jpg?ar64=NDoz&auto=format&dpr=0.25&fit=crop 142w,https://www.datocms-assets.com/30465/1609574417-tudor-baciu-vc3ivlznj8-unsplash.jpg?ar64=NDoz&auto=format&dpr=0.5&fit=crop 284w,https://www.datocms-assets.com/30465/1609574417-tudor-baciu-vc3ivlznj8-unsplash.jpg?ar64=NDoz&auto=format&dpr=0.75&fit=crop 426w,https://www.datocms-assets.com/30465/1609574417-tudor-baciu-vc3ivlznj8-unsplash.jpg?ar64=NDoz&auto=format&fit=crop 569w" sizes="(max-width: 569px) 100vw, 569px" width="569" height="427" alt="monitor and a coffee mug" loading="lazy" decoding="async" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.03]" style="background-image: url(data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAoHBwgHBhQIEAgLEA0NFQ0NDQ0NDhENDg0YFxUZGBYTFhUaHysjGh0oHRUWJDUlKC0vMjIyGSI4PTcwPCsxMi8BCgsLDg0OHBANHDscFhwvLy8vLy87Ly8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vL//AABEIABMAGAMBIgACEQEDEQH/xAAXAAEBAQEAAAAAAAAAAAAAAAAABAMF/8QAHxAAAQMEAwEAAAAAAAAAAAAAAAECAwQREjETMlEj/8QAFgEBAQEAAAAAAAAAAAAAAAAAAwYE/8QAGxEAAgIDAQAAAAAAAAAAAAAAAAMCEQEhMRL/2gAMAwEAAhEDEQA/AOM+RGrcwmqUcljKaojx7EnPHfZQIciuhS9FufzuCV9S3i2A5vRfQrkceR7seymTXu9UAmU50bpFCOXDYABnnYJ//9k=); background-size: cover;"> </div> <div class="pt-4 pb-1 px-1 flex-1 flex flex-col"> <h2 class="font-display font-semibold text-lg text-[var(--text)] group-hover:text-[var(--accent)] transition-colors duration-300"> Introduction to JavaScript iterators and generators </h2> <p class="text-[var(--text-muted)] font-body text-sm mt-auto pt-2"> Jan 2021 · JavaScript </p> </div> </a> </div><div> <a href="/blog/generate-code-coverage-reports-for-your-unit-tests-using-jest" class="card flex flex-col h-full cursor-pointer group rounded-xl bg-[var(--bg-elevated)] border border-[var(--border-hover)] p-3 hover:border-[var(--accent)]/30 transition-all duration-400"> <div class="overflow-hidden rounded-lg aspect-[4/3] bg-[var(--bg-surface)]" data-astro-transition-scope="astro-tusfcfki-4"> <img src="https://www.datocms-assets.com/30465/1604228642-aqiyblbqsp4-1.png?ar64=NDoz&auto=format&fit=crop" srcset="https://www.datocms-assets.com/30465/1604228642-aqiyblbqsp4-1.png?ar64=NDoz&auto=format&dpr=0.25&fit=crop 142w,https://www.datocms-assets.com/30465/1604228642-aqiyblbqsp4-1.png?ar64=NDoz&auto=format&dpr=0.5&fit=crop 284w,https://www.datocms-assets.com/30465/1604228642-aqiyblbqsp4-1.png?ar64=NDoz&auto=format&dpr=0.75&fit=crop 426w,https://www.datocms-assets.com/30465/1604228642-aqiyblbqsp4-1.png?ar64=NDoz&auto=format&fit=crop 569w" sizes="(max-width: 569px) 100vw, 569px" width="569" height="427" alt="Deck of cards" loading="lazy" decoding="async" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.03]" style="background-image: url(data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAoHBwgHBgoICAgLEhEQDh8ODRYNDhUNDQ0YFxMZGBYfFiEaHysjHR0oHRUiJDUlKC0vMjIyGSI4PTcwPCsxMi8BCgsLDg0OHA0QHS8cFh07NS8vLy8vLy8vLy8vLzUvLy8vLy8vLzUvLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vL//AABEIABMAGAMBIgACEQEDEQH/xAAYAAEBAQEBAAAAAAAAAAAAAAAABQYEA//EACIQAAICAQIHAQAAAAAAAAAAAAECAAMFBkEUISIkMTRxEf/EABYBAQEBAAAAAAAAAAAAAAAAAAQDAv/EABsRAAICAwEAAAAAAAAAAAAAAAACARESMTID/9oADAMBAAIRAxEAPwDp0jg6KsevPaWjhqLSR+yNpy/sFAfaXKy6oXDTL3ZrzmMSDmtK0Oh6hE8M3lrVYoGiIRZoM7RkTNL2Pwi9R8TZ0k8Kee0RJvsr58mLzPst9iIiU0Cfo//Z); background-size: cover;"> </div> <div class="pt-4 pb-1 px-1 flex-1 flex flex-col"> <h2 class="font-display font-semibold text-lg text-[var(--text)] group-hover:text-[var(--accent)] transition-colors duration-300"> Generate code coverage reports for your unit tests using Jest  </h2> <p class="text-[var(--text-muted)] font-body text-sm mt-auto pt-2"> Aug 2020 · Unit testing </p> </div> </a> </div><div> <a href="/blog/intro-to-javascript" class="card flex flex-col h-full cursor-pointer group rounded-xl bg-[var(--bg-elevated)] border border-[var(--border-hover)] p-3 hover:border-[var(--accent)]/30 transition-all duration-400"> <div class="overflow-hidden rounded-lg aspect-[4/3] bg-[var(--bg-surface)]" data-astro-transition-scope="astro-tusfcfki-5"> <img src="https://www.datocms-assets.com/30465/1604413207-pankaj-patel-1iw4hquausu-unsplash.jpg?ar64=NDoz&auto=format&fit=crop" srcset="https://www.datocms-assets.com/30465/1604413207-pankaj-patel-1iw4hquausu-unsplash.jpg?ar64=NDoz&auto=format&dpr=0.25&fit=crop 142w,https://www.datocms-assets.com/30465/1604413207-pankaj-patel-1iw4hquausu-unsplash.jpg?ar64=NDoz&auto=format&dpr=0.5&fit=crop 284w,https://www.datocms-assets.com/30465/1604413207-pankaj-patel-1iw4hquausu-unsplash.jpg?ar64=NDoz&auto=format&dpr=0.75&fit=crop 426w,https://www.datocms-assets.com/30465/1604413207-pankaj-patel-1iw4hquausu-unsplash.jpg?ar64=NDoz&auto=format&fit=crop 569w" sizes="(max-width: 569px) 100vw, 569px" width="569" height="427" alt="JavaScript code snippet" loading="lazy" decoding="async" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.03]" style="background-image: url(data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAoHBwgHBg4PCA4HBw8HCw0HBwgHBxEJDREYFxUZGBYVFhUaHysjGh0oHSEiJDUlKC0vMjIyGSI4PTcwPCsxMi8BCgsLDg4OHA0NHS8cFigvLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vL//AABEIABMAGAMBIgACEQEDEQH/xAAZAAEBAAMBAAAAAAAAAAAAAAAABQMEBgL/xAAcEAACAgIDAAAAAAAAAAAAAAAAAQIEAxESITH/xAAWAQEBAQAAAAAAAAAAAAAAAAADBAL/xAAWEQEBAQAAAAAAAAAAAAAAAAABADH/2gAMAwEAAhEDEQA/AONzacSbYRUnBaJ9uHE2xlr4ugesMeSATOVNt7NO74AO05YqgAAaky//2Q==); background-size: cover;"> </div> <div class="pt-4 pb-1 px-1 flex-1 flex flex-col"> <h2 class="font-display font-semibold text-lg text-[var(--text)] group-hover:text-[var(--accent)] transition-colors duration-300"> Intro to JavaScript </h2> <p class="text-[var(--text-muted)] font-body text-sm mt-auto pt-2"> Mar 2020 · JavaScript </p> </div> </a> </div><div> <a href="/blog/javascript-variables" class="card flex flex-col h-full cursor-pointer group rounded-xl bg-[var(--bg-elevated)] border border-[var(--border-hover)] p-3 hover:border-[var(--accent)]/30 transition-all duration-400"> <div class="overflow-hidden rounded-lg aspect-[4/3] bg-[var(--bg-surface)]" data-astro-transition-scope="astro-tusfcfki-6"> <img src="https://www.datocms-assets.com/30465/1604412975-ferenc-almasi-ejsaenvvzcg-unsplash.jpg?ar64=NDoz&auto=format&fit=crop" srcset="https://www.datocms-assets.com/30465/1604412975-ferenc-almasi-ejsaenvvzcg-unsplash.jpg?ar64=NDoz&auto=format&dpr=0.25&fit=crop 142w,https://www.datocms-assets.com/30465/1604412975-ferenc-almasi-ejsaenvvzcg-unsplash.jpg?ar64=NDoz&auto=format&dpr=0.5&fit=crop 284w,https://www.datocms-assets.com/30465/1604412975-ferenc-almasi-ejsaenvvzcg-unsplash.jpg?ar64=NDoz&auto=format&dpr=0.75&fit=crop 426w,https://www.datocms-assets.com/30465/1604412975-ferenc-almasi-ejsaenvvzcg-unsplash.jpg?ar64=NDoz&auto=format&fit=crop 569w" sizes="(max-width: 569px) 100vw, 569px" width="569" height="427" alt="JavaScript variables code snippet" loading="lazy" decoding="async" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.03]" style="background-image: url(data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAoHBw4NDRENDQgHDg0IDQ0NDgcIBxEODhENFxUZGBYVIhUaHysjGh0oHRUWJDUlKC0vMjIyGSI4PTcwPCsxMi8BCgsLDg0OEA0QFy8cFhwvLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vL//AABEIABMAGAMBIgACEQEDEQH/xAAYAAADAQEAAAAAAAAAAAAAAAAAAQIDBv/EABYQAQEBAAAAAAAAAAAAAAAAAAABEf/EABcBAAMBAAAAAAAAAAAAAAAAAAECBAP/xAAYEQEBAAMAAAAAAAAAAAAAAAAAAQMREv/aAAwDAQACEQMRAD8A4GLjOVco2UciyLQTmp9sYuAKq2yGACpn/9k=); background-size: cover;"> </div> <div class="pt-4 pb-1 px-1 flex-1 flex flex-col"> <h2 class="font-display font-semibold text-lg text-[var(--text)] group-hover:text-[var(--accent)] transition-colors duration-300"> JavaScript Variables </h2> <p class="text-[var(--text-muted)] font-body text-sm mt-auto pt-2"> Feb 2020 · JavaScript </p> </div> </a> </div> </div> </div> </div>  </main> <div class="mt-20 lg:mt-28"> <footer class="px-6 md:px-12 lg:px-20 xl:px-32"> <hr class="gradient-line"> <div class="py-12 flex flex-col md:flex-row items-start md:items-center justify-between gap-8"> <!-- Left: Logo + name --> <div class="flex items-center gap-3"> <a href="/" class="flex items-center gap-3 hover:opacity-80 transition-opacity"> <img class="h-9 w-9" src="/static/logo_white.svg" alt="Adithya NR logo"> <span class="font-display text-sm font-semibold text-[var(--text)] tracking-tight">
+adithya nr
+</span> </a> </div> <!-- Center: Nav links --> <ul class="flex flex-wrap gap-x-6 gap-y-2"> <li> <a href="/about" class="text-sm font-body transition-colors duration-200 text-[var(--text-muted)] hover:text-[var(--text)]"> About </a> </li><li> <a href="/blog" class="text-sm font-body transition-colors duration-200 text-[var(--text)]"> Blog </a> </li><li> <a href="/work" class="text-sm font-body transition-colors duration-200 text-[var(--text-muted)] hover:text-[var(--text)]"> Work </a> </li><li> <a href="/contact" class="text-sm font-body transition-colors duration-200 text-[var(--text-muted)] hover:text-[var(--text)]"> Contact </a> </li><li> <a href="/resume.pdf" class="text-sm font-body transition-colors duration-200 text-[var(--text-muted)] hover:text-[var(--text)]"> Resume </a> </li><li> <a href="/uses" class="text-sm font-body transition-colors duration-200 text-[var(--text-muted)] hover:text-[var(--text)]"> Uses </a> </li><li> <a href="/legal" class="text-sm font-body transition-colors duration-200 text-[var(--text-muted)] hover:text-[var(--text)]"> Legal </a> </li> </ul> <!-- Right: Socials --> <div class="flex items-center gap-4"> <a href="https://behance.net/adithyabhat" target="_blank" rel="noreferrer noopener" class="block" aria-label="behance"> <img loading="lazy" src="/static/behance.svg" alt="behance" width="20" height="20" class="social-icon-dark"> </a><a href="https://dribbble.com/adithyanr" target="_blank" rel="noreferrer noopener" class="block" aria-label="dribbble"> <img loading="lazy" src="/static/dribbble.svg" alt="dribbble" width="20" height="20" class="social-icon-dark"> </a><a href="https://twitter.com/adithya__nr" target="_blank" rel="noreferrer noopener" class="block" aria-label="twitter"> <img loading="lazy" src="/static/twitter.svg" alt="twitter" width="20" height="20" class="social-icon-dark"> </a><a href="https://github.com/adithyabhat17" target="_blank" rel="noreferrer noopener" class="block" aria-label="github"> <img loading="lazy" src="/static/github.svg" alt="github" width="20" height="20" class="social-icon-dark"> </a><a href="https://linkedin.com/in/adithya-nr" target="_blank" rel="noreferrer noopener" class="block" aria-label="linkedin"> <img loading="lazy" src="/static/linkedin.svg" alt="linkedin" width="20" height="20" class="social-icon-dark"> </a><a href="https://www.youtube.com/@adithya-bhat" target="_blank" rel="noreferrer noopener" class="block" aria-label="youtube"> <img loading="lazy" src="/static/youtube.svg" alt="youtube" width="20" height="20" class="social-icon-dark"> </a> </div> </div> </footer> </div> </div>  <!-- Initialize scroll animations after page load + on view transition --> <script type="module" src="/_astro/BaseLayout.astro_astro_type_script_index_0_lang.T8wXqE0f.js"></script> </body> </html>

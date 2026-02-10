@@ -18,28 +18,30 @@ const articles = data.allArticles?.slice(0, 3) ?? [];
 
   <!-- Recent Work -->
   <Container>
-    <SectionHeading class="mt-16 xl:mt-24 mb-6">Recent work</SectionHeading>
+    <SectionHeading class="mt-24 xl:mt-32 mb-8">Selected work</SectionHeading>
     <CardGrid items={projects} type="project" />
     <ArrowLink href="/work" text="View all projects" />
   </Container>
 
   <!-- Featured Articles -->
   <Container>
-    <SectionHeading class="mt-24 xl:mt-32 mb-6">Featured articles</SectionHeading>
+    <SectionHeading class="mt-28 xl:mt-36 mb-8">Writing</SectionHeading>
     <CardGrid items={articles} type="article" />
     <ArrowLink href="/blog" text="Read more articles" />
   </Container>
 
   <!-- CTA -->
   <Container>
-    <div class="mt-24 xl:mt-32 mb-16" data-animate>
-      <h2 class="font-serif text-3xl sm:text-5xl leading-relaxed">
-        Thanks for stopping by!
+    <div class="relative mt-28 xl:mt-36 mb-20 py-16 px-8 md:px-16 rounded-2xl bg-[var(--bg-elevated)] border border-[var(--border)] overflow-hidden" data-animate>
+      <!-- Subtle accent glow -->
+      <div class="orb orb-orange w-[300px] h-[300px] -bottom-20 -right-20 absolute opacity-50"></div>
+      <h2 class="font-display text-3xl sm:text-4xl md:text-5xl tracking-tight leading-tight relative z-10">
+        Got something in mind?
       </h2>
-      <p class="font-sans text-xl mt-6">
-        Got a project in mind, a question, or something else?{' '}
-        <a href="/contact" class="link-underline font-semibold gradient-text">Let's chat.</a>
+      <p class="font-body text-lg text-[var(--text-secondary)] mt-4 relative z-10 max-w-md">
+        Whether it's a project, a question, or just to say hello —
       </p>
+      <a href="/contact" class="btn-primary mt-8 relative z-10">Let's talk</a>
     </div>
   </Container>
 </PageLayout>

@@ -6,14 +6,20 @@ import ContactForm from '@/components/react/ContactForm';
 
 <PageLayout title="Contact - Adithya NR">
   <Container>
-    <div class="md:w-2/3 w-full mx-auto">
-      <h1 class="font-serif text-4xl md:text-6xl mb-3" data-animate>
-        Get in touch
-      </h1>
-      <p class="font-sans text-[var(--muted-foreground)]" data-animate>
-        Send me a message here and I'll get back to you ASAP
-      </p>
-      <div class="mt-8" data-animate>
+    <div class="max-w-xl mx-auto">
+      <div class="mt-8 mb-12" data-animate>
+        <span class="inline-flex items-center gap-2 text-sm font-body font-medium text-[var(--accent)] tracking-wide uppercase mb-6">
+          <span class="inline-block w-6 h-[2px] bg-[var(--accent)]"></span>
+          Contact
+        </span>
+        <h1 class="font-display text-4xl md:text-5xl tracking-tight">
+          Get in touch
+        </h1>
+        <p class="font-body text-[var(--text-muted)] mt-3">
+          Send me a message and I'll get back to you.
+        </p>
+      </div>
+      <div data-animate>
         <ContactForm client:load />
       </div>
     </div>

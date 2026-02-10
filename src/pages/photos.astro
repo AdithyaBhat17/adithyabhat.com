@@ -6,10 +6,27 @@ import { GALLERY_PHOTOS } from '@/graphql/photos';
 
 const data = await fetchGalleryAPI(GALLERY_PHOTOS);
 const places = data.allPlaces ?? [];
+const totalPhotos = places.reduce((sum: number, p: any) => sum + (p.photos?.length ?? 0), 0);
 ---
 
 <PageLayout title="Photos | Adithya NR">
   <div class="px-6 md:px-16">
+    <!-- Header -->
+    <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-10 mt-4" data-animate>
+      <div>
+        <span class="inline-flex items-center gap-2 text-sm font-body font-medium text-[var(--accent)] tracking-wide uppercase mb-4">
+          <span class="inline-block w-6 h-[2px] bg-[var(--accent)]"></span>
+          Gallery
+        </span>
+        <h1 class="font-display text-4xl md:text-5xl tracking-tight">
+          Photos
+        </h1>
+      </div>
+      <p class="font-mono text-sm text-[var(--text-muted)] tabular-nums pb-1">
+        {totalPhotos} photos · {places.length} places
+      </p>
+    </div>
+
     <PhotoGallery places={places} client:visible />
   </div>
 </PageLayout>

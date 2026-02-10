@@ -23,8 +23,8 @@ const categories = [...new Set(stacks.map((s: any) => s.category))] as string[];
 ---
 
 <PageLayout title="Toolbox | Adithya NR">
-  <Container class="px-4">
-    <div class="justify-start max-w-screen-sm">
+  <Container>
+    <div class="max-w-2xl">
       <CategoryFilter stacks={stacks} categories={categories} client:visible />
     </div>
   </Container>

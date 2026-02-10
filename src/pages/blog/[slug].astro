@@ -30,26 +30,31 @@ const htmlContent = await marked(article.content ?? '');
 
 <PageLayout title={article.title}>
   <Container>
-    <article class="w-full md:w-3/4 mx-auto">
-      <h1
-        class="font-serif text-4xl md:text-5xl mb-5"
-        data-animate
-        transition:name={`card-${slug}`}
-      >
-        {article.title}
-      </h1>
-      <small class="font-sans text-[var(--muted-foreground)]" data-animate>
-        {dayjs(article.date).format('DD MMM, YYYY')}
-      </small>
+    <article class="w-full max-w-2xl mx-auto">
+      <div class="mt-8 mb-10">
+        <small class="font-body text-[var(--text-muted)] text-sm" data-animate>
+          {dayjs(article.date).format('DD MMM, YYYY')}
+        </small>
+        <h1
+          class="font-display text-3xl md:text-4xl lg:text-5xl tracking-tight mt-3 leading-tight"
+          data-animate
+          transition:name={`card-${slug}`}
+        >
+          {article.title}
+        </h1>
+      </div>
 
       <div class="content" set:html={htmlContent} />
     </article>
 
     {moreArticles.length > 0 && (
-      <div class="px-0 md:px-24 lg:px-24 mb-6 mt-16">
-        <h3 class="text-sm uppercase font-sans font-semibold mt-24 mb-6 tracking-wide text-[var(--muted-foreground)]">
-          Recent Posts
-        </h3>
+      <div class="max-w-4xl mx-auto mt-20">
+        <div class="flex items-center gap-4 mb-8">
+          <h3 class="text-sm uppercase font-body font-semibold tracking-widest text-[var(--text-muted)]">
+            More articles
+          </h3>
+          <span class="flex-1 h-[1px] bg-[var(--border)]"></span>
+        </div>
         <CardGrid items={moreArticles} type="article" />
       </div>
     )}

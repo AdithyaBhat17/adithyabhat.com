@@ -9,15 +9,15 @@ const { href, text } = Astro.props;
 
 <a
   href={href}
-  class="inline-flex items-center gap-2 mt-12 font-sans text-[var(--foreground)] hover:text-[#153ec4] transition-colors group"
+  class="inline-flex items-center gap-2 mt-10 font-body text-sm font-medium text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors group"
 >
   {text}
   <svg
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 20 20"
-    width="20"
+    width="16"
     fill="currentColor"
-    class="transition-transform group-hover:translate-x-1"
+    class="transition-transform duration-300 group-hover:translate-x-1.5"
   >
     <path
       fill-rule="evenodd"

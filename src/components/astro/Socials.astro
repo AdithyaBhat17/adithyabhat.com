@@ -9,20 +9,22 @@ const socials = [
 ];
 ---
 
-<div class="flex justify-start items-center gap-5">
+<div class="flex items-center gap-4">
   {socials.map((social) => (
     <a
       href={social.link}
       target="_blank"
       rel="noreferrer noopener"
-      class="text-[var(--foreground)] hover:opacity-70 transition-opacity"
+      class="block"
+      aria-label={social.icon}
     >
       <img
         loading="lazy"
         src={`/static/${social.icon}.svg`}
         alt={social.icon}
-        width="24"
-        height="24"
+        width="20"
+        height="20"
+        class="social-icon-dark"
       />
     </a>
   ))}

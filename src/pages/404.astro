@@ -5,41 +5,23 @@ import Container from '@/components/astro/Container.astro';
 
 <PageLayout title="404 - Page not found">
   <Container>
-    <div class="flex flex-col items-center justify-center text-center py-20" data-animate>
-      <!-- Animated 404 illustration using CSS instead of Lottie -->
-      <div class="relative mb-8">
-        <svg width="300" height="200" viewBox="0 0 300 200" class="animate-float">
-          <text x="50%" y="50%" dominant-baseline="central" text-anchor="middle"
-            class="font-serif" fill="url(#grad)" font-size="120" opacity="0.15">
-            404
-          </text>
-          <defs>
-            <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" style="stop-color:#153ec4" />
-              <stop offset="50%" style="stop-color:#99d4fb" />
-              <stop offset="100%" style="stop-color:#4497f8" />
-            </linearGradient>
-          </defs>
-        </svg>
+    <div class="flex flex-col items-center justify-center text-center py-32 relative" data-animate>
+      <!-- Background 404 -->
+      <div class="absolute inset-0 flex items-center justify-center pointer-events-none select-none">
+        <span class="font-display text-[12rem] md:text-[20rem] font-800 text-[var(--bg-surface)] leading-none tracking-tighter">
+          404
+        </span>
       </div>
 
-      <h1 class="font-serif text-4xl mb-4">
-        Oops, Page not found!
-      </h1>
-      <p class="font-sans text-lg text-[var(--muted-foreground)] mb-8">
-        Looks like this page doesn't exist.
-      </p>
-      <a href="/" class="btn-primary text-lg">Go Home</a>
+      <div class="relative z-10">
+        <h1 class="font-display text-4xl md:text-5xl tracking-tight mb-4">
+          Page not found
+        </h1>
+        <p class="font-body text-lg text-[var(--text-muted)] mb-10 max-w-md mx-auto">
+          The page you're looking for doesn't exist or has been moved.
+        </p>
+        <a href="/" class="btn-primary">Go home</a>
+      </div>
     </div>
   </Container>
 </PageLayout>
-
-<style>
-  @keyframes float {
-    0%, 100% { transform: translateY(0px); }
-    50% { transform: translateY(-10px); }
-  }
-  .animate-float {
-    animation: float 3s ease-in-out infinite;
-  }
-</style>

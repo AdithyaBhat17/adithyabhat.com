@@ -1,5 +1,5 @@
 export const companies = [
-  { name: 'Yellow.ai', path: '/static/yellow_ai.svg' },
+  { name: 'Yellow.ai', path: '/static/yellow_ai_dark.webp' },
   { name: 'Daikin', path: '/static/daikin.svg' },
   { name: 'Softway', path: '/static/softway.svg' },
   { name: 'Dish', path: '/static/dish.svg' },

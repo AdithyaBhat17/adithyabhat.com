@@ -5,46 +5,38 @@ import { companies } from '@/utils/about';
 ---
 
 <PageLayout title="About - Adithya NR">
-  <Container class="2xl:px-96">
-    <div class="px-0 md:px-16 xl:px-32">
-      <div class="flex justify-center" data-animate>
-        <img
-          width="250"
-          height="250"
-          loading="eager"
-          class="block mx-auto"
-          src="/static/about_hero.svg"
-          alt="About Adithya"
-        />
+  <Container>
+    <div class="max-w-2xl mx-auto">
+      <div class="mt-8 mb-16" data-animate>
+        <span class="inline-flex items-center gap-2 text-sm font-body font-medium text-[var(--accent)] tracking-wide uppercase mb-6">
+          <span class="inline-block w-6 h-[2px] bg-[var(--accent)]"></span>
+          About
+        </span>
+        <h1 class="font-display text-4xl md:text-5xl lg:text-6xl tracking-tight leading-[1.1]">
+          I craft digital experiences that people <span class="gradient-text">actually enjoy</span>
+        </h1>
       </div>
 
-      <h1 class="font-serif text-4xl md:text-5xl my-10 text-left sm:text-center" data-animate>
-        About me
-      </h1>
-
-      <div class="space-y-5" data-animate>
-        <p class="font-sans leading-8 text-[var(--muted-foreground)]">
-          As you might have guessed already, I'm Adithya, a UX Engineer from Bengaluru, India.
+      <div class="space-y-6" data-animate>
+        <p class="font-body leading-8 text-[var(--text-secondary)] text-lg">
+          I'm Adithya, a UX Engineer from Bengaluru, India. For more than
+          5 years, design has been the central piece of my world. I've
+          moved from being a graphic designer to a full-time UX Designer
+          and UI Engineer.
         </p>
-        <p class="font-sans leading-8 text-[var(--muted-foreground)]">
-          For more than 5 years now, design has been the central piece of my
-          world. On this quick and mind-blowing journey, I have moved over the
-          years from being a graphic designer to a full-time UX Designer and
-          UI Engineer.
-        </p>
-        <p class="font-sans leading-8 text-[var(--muted-foreground)]">
+        <p class="font-body leading-8 text-[var(--text-secondary)] text-lg">
           With a never-ending goal of maintaining a high standard for
-          usability & user experience, I have consistently worked with various
-          startups and clients worldwide and helped them create unique and
+          usability & user experience, I have consistently worked with
+          startups and clients worldwide, helping them create unique and
           engaging digital products.
         </p>
-        <p class="font-sans leading-8 text-[var(--muted-foreground)]">
-          I'm currently working on the Conversational CX platform at{' '}
+        <p class="font-body leading-8 text-[var(--text-secondary)] text-lg">
+          Currently working on the Conversational CX platform at{' '}
           <a
-            href="http://yellow.ai"
+            href="https://yellow.ai/"
             target="_blank"
             rel="noopener noreferrer"
-            class="link-underline text-[#153ec4]"
+            class="text-[var(--accent)] hover:underline"
           >
             yellow.ai
           </a>{' '}
@@ -53,61 +45,67 @@ import { companies } from '@/utils/about';
       </div>
 
       <!-- Companies -->
-      <h3 class="font-serif text-2xl md:text-4xl my-20 text-left sm:text-center" data-animate>
-        Companies I've worked with
-      </h3>
-      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-10 lg:gap-14 justify-center items-center mb-5" data-animate-stagger>
-        {companies.map((company, i) => (
-          <div class="my-5" data-animate style={`--stagger-index: ${i}`}>
-            <img
-              loading="lazy"
-              class="company-logo mx-auto"
-              src={company.path}
-              alt={company.name}
-              title={company.name}
-            />
-          </div>
-        ))}
+      <div class="mt-24" data-animate>
+        <div class="flex items-center gap-4 mb-10">
+          <h3 class="font-display text-xl md:text-2xl tracking-tight whitespace-nowrap">
+            Worked with
+          </h3>
+          <span class="flex-1 h-[1px] bg-[var(--border)]"></span>
+        </div>
+        <div class="grid grid-cols-3 md:grid-cols-6 gap-10 items-center" data-animate-stagger>
+          {companies.map((company, i) => (
+            <div data-animate style={`--stagger-index: ${i}`}>
+              <img
+                loading="lazy"
+                class="company-logo mx-auto h-8 md:h-10 object-contain"
+                src={company.path}
+                alt={company.name}
+                title={company.name}
+              />
+            </div>
+          ))}
+        </div>
       </div>
 
       <!-- Skills -->
-      <h3 class="font-serif text-2xl md:text-4xl mt-20 mb-16 text-left sm:text-center" data-animate>
-        Things I'm good at
-      </h3>
-      <img
-        loading="lazy"
-        class="mx-auto w-3/4 md:w-1/3 block h-56 sm:h-auto"
-        src="/static/skills.svg"
-        alt="Things I'm good at"
-        data-animate="scale"
-      />
-      <div class="flex flex-wrap mx-auto text-left md:text-center mt-16 md:mt-24 gap-12" data-animate>
-        <div class="w-full mx-auto sm:flex-1">
-          <h2 class="inline-flex items-center text-xl font-sans font-semibold">
-            <img src="/static/pen-tool.svg" class="mr-5" alt="Pen tool icon" />
-            Design
-          </h2>
-          <p class="block text-sm sm:w-4/5 sm:mx-auto leading-7 my-5 text-[var(--muted-foreground)]">
-            User Experience, User Interface, Wireframing, Prototyping, Web design
-          </p>
+      <div class="mt-24" data-animate>
+        <div class="flex items-center gap-4 mb-10">
+          <h3 class="font-display text-xl md:text-2xl tracking-tight whitespace-nowrap">
+            What I do
+          </h3>
+          <span class="flex-1 h-[1px] bg-[var(--border)]"></span>
         </div>
-        <div class="w-full mx-auto flex-1">
-          <h2 class="inline-flex items-center text-xl font-sans font-semibold">
-            <img src="/static/terminal.svg" class="mr-5" alt="Terminal icon" />
-            Development
-          </h2>
-          <p class="block text-sm sm:w-4/5 sm:mx-auto leading-7 my-5 text-[var(--muted-foreground)]">
-            JavaScript, Reactjs, Redux, Express, Nodejs, TypeScript, Nextjs, GraphQL, PostgreSQL
-          </p>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div class="p-6 rounded-xl bg-[var(--bg-elevated)] border border-[var(--border)]">
+            <div class="flex items-center gap-3 mb-4">
+              <div class="w-10 h-10 rounded-lg bg-[var(--accent-glow)] flex items-center justify-center">
+                <img src="/static/pen-tool.svg" class="w-5 h-5 invert" alt="Design" />
+              </div>
+              <h4 class="font-display text-lg font-semibold">Design</h4>
+            </div>
+            <p class="text-sm text-[var(--text-muted)] leading-relaxed font-body">
+              User Experience, User Interface, Wireframing, Prototyping, Web Design
+            </p>
+          </div>
+          <div class="p-6 rounded-xl bg-[var(--bg-elevated)] border border-[var(--border)]">
+            <div class="flex items-center gap-3 mb-4">
+              <div class="w-10 h-10 rounded-lg bg-[var(--accent-glow)] flex items-center justify-center">
+                <img src="/static/terminal.svg" class="w-5 h-5 invert" alt="Development" />
+              </div>
+              <h4 class="font-display text-lg font-semibold">Development</h4>
+            </div>
+            <p class="text-sm text-[var(--text-muted)] leading-relaxed font-body">
+              JavaScript, React, Redux, Express, Node.js, TypeScript, Next.js, GraphQL, PostgreSQL
+            </p>
+          </div>
         </div>
       </div>
 
       <!-- CTA -->
-      <div class="my-20 md:my-40" data-animate>
-        <h2 class="font-serif text-3xl md:text-5xl leading-relaxed md:leading-relaxed">
-          Got a project in mind, a question or something else? Get in touch
-          with me{' '}
-          <a href="/contact" class="link-underline gradient-text">here</a>
+      <div class="my-24 md:my-32" data-animate>
+        <h2 class="font-display text-3xl md:text-4xl tracking-tight leading-snug">
+          Got a project in mind?{' '}
+          <a href="/contact" class="gradient-text hover:opacity-80 transition-opacity">Let's talk.</a>
         </h2>
       </div>
     </div>

@@ -1,45 +1,125 @@
 ---
-import Container from './Container.astro';
 import Socials from './Socials.astro';
 ---
 
-<Container>
-  <div class="flex justify-between items-center flex-wrap md:flex-nowrap gap-8 md:gap-0">
-    <div class="max-w-xl" data-hero-title>
-      <h1 class="font-serif text-4xl md:text-6xl leading-tight">
-        Hey, I'm <span class="gradient-text font-serif italic">Adithya</span>
-        <span role="img" aria-label="waving hand"> 👋</span>
+<section class="relative min-h-[85vh] flex items-center overflow-hidden">
+  <!-- Ambient orbs -->
+  <div class="orb orb-orange w-[500px] h-[500px] -top-20 -right-32 absolute opacity-60"></div>
+  <div class="orb orb-blue w-[400px] h-[400px] top-1/2 -left-48 absolute opacity-40"></div>
+
+  <div class="w-full px-6 md:px-12 lg:px-20 xl:px-32">
+    <div class="max-w-4xl" data-hero-title>
+      <!-- Eyebrow -->
+      <div class="flex items-center gap-3 mb-8" data-hero-description>
+        <span class="inline-block w-8 h-[2px] bg-[var(--accent)]"></span>
+        <span class="text-sm font-body font-medium text-[var(--accent)] tracking-wide uppercase">
+          UX Engineer
+        </span>
+      </div>
+
+      <!-- Main heading -->
+      <h1 class="font-display text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-800 leading-[0.95] tracking-tighter">
+        Hey, I'm
+        <span class="gradient-text">Adithya</span>
       </h1>
-      <p class="mt-6 font-sans text-lg leading-8 text-[var(--muted-foreground)]" data-hero-description>
-        A UX engineer from Bengaluru, helping companies of all sizes get
-        ahead online. I am currently working on the Conversational CX
-        platform at{' '}
+
+      <!-- Description -->
+      <p class="mt-8 max-w-xl text-lg md:text-xl leading-relaxed text-[var(--text-secondary)]" data-hero-description>
+        A UX engineer from Bengaluru, building thoughtful digital
+        products. Currently shaping the Conversational CX platform at{' '}
         <a
           href="https://yellow.ai/"
           target="_blank"
           rel="noopener noreferrer"
-          class="link-underline text-[#153ec4] font-medium"
+          class="text-[var(--text)] hover:text-[var(--accent)] transition-colors font-medium"
         >
           yellow.ai
-        </a>.
+        </a>
       </p>
-      <div class="mt-8 mb-8 flex flex-wrap gap-4" data-hero-cta>
-        <a href="/about" class="btn-primary">About me</a>
+
+      <!-- CTAs -->
+      <div class="mt-10 flex flex-wrap items-center gap-4" data-hero-cta>
+        <a href="/work" class="btn-primary">View my work</a>
         <a href="/contact" class="btn-outlined">Get in touch</a>
       </div>
-      <div class="mb-5">
+
+      <!-- Socials -->
+      <div class="mt-12">
         <Socials />
       </div>
     </div>
-    <div class="mx-auto" data-hero-image>
-      <img
-        width="600"
-        height="600"
-        src="/static/hero.svg"
-        loading="eager"
-        class="block mx-auto w-full max-w-[600px]"
-        alt="Hero illustration"
-      />
-    </div>
   </div>
-</Container>
+
+  <!-- Scroll indicator -->
+  <div class="absolute bottom-8 left-1/2 -translate-x-1/2 scroll-cue">
+    <div class="scroll-track">
+      <div class="scroll-glow"></div>
+    </div>
+    <svg class="scroll-chevrons" width="14" height="24" viewBox="0 0 14 24" fill="none" overflow="visible">
+      <path class="chev chev-1" d="M1 2l6 5 6-5" stroke="var(--accent)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      <path class="chev chev-2" d="M1 9l6 5 6-5" stroke="var(--accent)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      <path class="chev chev-3" d="M1 16l6 5 6-5" stroke="var(--accent)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </div>
+
+  <style>
+    .scroll-cue {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      animation: cueIn 0.6s ease 2s both;
+    }
+
+    /* Vertical track with traveling light */
+    .scroll-track {
+      width: 1px;
+      height: 48px;
+      background: var(--border);
+      position: relative;
+      overflow: hidden;
+      border-radius: 1px;
+    }
+
+    .scroll-glow {
+      width: 100%;
+      height: 16px;
+      background: linear-gradient(to bottom, transparent, var(--accent), transparent);
+      position: absolute;
+      top: -16px;
+      animation: travelDown 2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+    }
+
+    /* Staggered chevrons */
+    .chev {
+      opacity: 0;
+      animation: chevPulse 2s ease-in-out infinite;
+    }
+    .chev-1 { animation-delay: 0s; }
+    .chev-2 { animation-delay: 0.15s; }
+    .chev-3 { animation-delay: 0.3s; }
+
+    @keyframes travelDown {
+      0%   { top: -16px; opacity: 0; }
+      20%  { opacity: 1; }
+      80%  { opacity: 1; }
+      100% { top: 48px; opacity: 0; }
+    }
+
+    @keyframes chevPulse {
+      0%, 100% { opacity: 0.15; transform: translateY(0); }
+      50%      { opacity: 0.8; transform: translateY(3px); }
+    }
+
+    @keyframes cueIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .scroll-glow, .chev { animation: none; }
+      .chev { opacity: 0.5; }
+      .scroll-glow { top: 16px; opacity: 1; }
+    }
+  </style>
+</section>

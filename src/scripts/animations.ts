@@ -51,67 +51,34 @@ export async function initGSAPAnimations() {
 
   // Hero entrance animation
   const heroTitle = document.querySelector('[data-hero-title]')
-  const heroDesc = document.querySelector('[data-hero-description]')
+  const heroDescs = document.querySelectorAll('[data-hero-description]')
   const heroCTA = document.querySelector('[data-hero-cta]')
-  const heroImage = document.querySelector('[data-hero-image]')
 
   if (heroTitle) {
     const tl = gsap.timeline({ defaults: { ease: 'power3.out' } })
 
     tl.from(heroTitle, {
-      y: 40,
+      y: 50,
       opacity: 0,
-      duration: 0.8,
+      duration: 0.9,
     })
 
-    if (heroDesc) {
-      tl.from(heroDesc, { y: 30, opacity: 0, duration: 0.6 }, '-=0.4')
-    }
+    heroDescs.forEach((desc) => {
+      tl.from(desc, { y: 30, opacity: 0, duration: 0.6 }, '-=0.5')
+    })
+
     if (heroCTA) {
       tl.from(heroCTA, { y: 20, opacity: 0, duration: 0.5 }, '-=0.3')
     }
-    if (heroImage) {
-      tl.from(heroImage, { x: 40, opacity: 0, duration: 0.8 }, '-=0.6')
-    }
   }
 
-  // Parallax floating for hero image
-  if (heroImage) {
-    gsap.to(heroImage, {
-      y: -30,
-      scrollTrigger: {
-        trigger: heroImage,
-        start: 'top center',
-        end: 'bottom top',
-        scrub: 1,
-      },
-    })
-  }
-
-  // Card grid stagger on scroll
-  document.querySelectorAll('[data-card-grid]').forEach((grid) => {
-    const cards = grid.querySelectorAll('.card')
-    if (!cards.length) return
-
-    gsap.from(cards, {
-      y: 40,
-      opacity: 0,
-      duration: 0.6,
-      stagger: 0.1,
-      ease: 'power2.out',
-      scrollTrigger: {
-        trigger: grid,
-        start: 'top 80%',
-      },
-    })
-  })
-
-  // Section heading parallax slide-in
+  // Section heading slide-in
   document.querySelectorAll('[data-section-heading]').forEach((heading) => {
     gsap.from(heading, {
       x: -30,
       opacity: 0,
-      duration: 0.6,
+      duration: 0.7,
+      ease: 'power2.out',
       scrollTrigger: {
         trigger: heading,
         start: 'top 85%',

@@ -1,0 +1,21 @@
+<svg width="536" height="533" viewBox="0 0 536 533" fill="none" xmlns="http://www.w3.org/2000/svg">
+<ellipse class="outline" cx="268" cy="266.057" rx="238" ry="236.057" stroke="white" stroke-width="60"/>
+<path class="logo" d="M169.886 314.721L267.514 147.057L305.886 197.086L202.429 374.371L169.886 314.721Z" fill="white"/>
+<path class="logo" d="M328.772 257.246L361.978 319.262L328.714 372.429L267.723 257.251L328.772 257.246Z" fill="white"/>
+<style>
+    .outline {
+        stroke: black;
+    }
+    .logo {
+        fill: black;
+    }
+    @media (prefers-color-scheme:dark) {
+        .outline {
+            stroke: white;
+        }
+        .logo {
+            fill: white;
+        }
+    }
+</style>
+</svg>
