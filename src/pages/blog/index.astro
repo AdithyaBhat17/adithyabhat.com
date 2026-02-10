@@ -1,0 +1,19 @@
+---
+import PageLayout from '@/layouts/PageLayout.astro';
+import Container from '@/components/astro/Container.astro';
+import CardGrid from '@/components/astro/CardGrid.astro';
+import { fetchAPI } from '@/lib/datocms';
+import { ALL_ARTICLES_QUERY } from '@/graphql/posts';
+
+const data = await fetchAPI(ALL_ARTICLES_QUERY);
+const articles = data.allArticles ?? [];
+---
+
+<PageLayout title="Blog | Adithya NR">
+  <Container>
+    <h1 class="font-serif text-5xl md:text-6xl mb-6" data-animate>
+      Articles
+    </h1>
+    <CardGrid items={articles} type="article" />
+  </Container>
+</PageLayout>

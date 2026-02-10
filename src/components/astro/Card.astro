@@ -1,0 +1,57 @@
+---
+import type { ResponsiveImage } from '@/types/content';
+import dayjs from 'dayjs';
+
+interface Props {
+  title: string;
+  href: string;
+  thumbnail?: { responsiveImage: ResponsiveImage };
+  date?: Date | string;
+  tags?: string;
+  type: 'article' | 'project';
+  external?: boolean;
+  transitionName?: string;
+}
+
+const { title, href, thumbnail, date, tags, type, external = false, transitionName } = Astro.props;
+
+const meta = (() => {
+  let desc = '';
+  if (type === 'article' && date) {
+    desc = `${dayjs(date as string).format('MMM YYYY')} | `;
+  }
+  if (tags) desc += tags;
+  return desc;
+})();
+---
+
+<a
+  href={href}
+  class="card block cursor-pointer group"
+  {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+>
+  {thumbnail?.responsiveImage && (
+    <div class="overflow-hidden rounded-[var(--radius)]" transition:name={transitionName}>
+      <img
+        src={thumbnail.responsiveImage.src}
+        srcset={thumbnail.responsiveImage.srcSet}
+        sizes={thumbnail.responsiveImage.sizes}
+        width={thumbnail.responsiveImage.width}
+        height={thumbnail.responsiveImage.height}
+        alt={thumbnail.responsiveImage.alt || title}
+        loading="lazy"
+        decoding="async"
+        class="w-full h-auto rounded-[var(--radius)] transition-transform duration-500 group-hover:scale-105"
+        style={thumbnail.responsiveImage.base64 ? `background-image: url(${thumbnail.responsiveImage.base64}); background-size: cover;` : ''}
+      />
+    </div>
+  )}
+  <h2 class="mt-3 font-sans font-semibold text-xl text-[var(--foreground)] group-hover:text-[#153ec4] transition-colors">
+    {title}
+  </h2>
+  {meta && (
+    <p class="text-[var(--muted-foreground)] font-sans text-sm mt-2">
+      {meta}
+    </p>
+  )}
+</a>

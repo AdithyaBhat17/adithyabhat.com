@@ -1,0 +1,42 @@
+---
+import Card from './Card.astro';
+import type { Article, Project } from '@/types/content';
+
+interface Props {
+  items: (Article | Project)[];
+  type: 'article' | 'project';
+  columns?: 2 | 3;
+}
+
+const { items, type, columns = 3 } = Astro.props;
+
+const gridCols = columns === 2
+  ? 'grid-cols-1 md:grid-cols-2'
+  : 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3';
+
+const pathname = type === 'article' ? 'blog' : 'work';
+---
+
+<div class:list={['grid gap-9 mt-8', gridCols]} data-card-grid data-animate-stagger>
+  {items.map((item, i) => {
+    const href = (item as Article).externalLink
+      ? (item as Article).externalLink!
+      : `/${pathname}/${item.slug}`;
+    const external = !!(item as Article).externalLink;
+
+    return (
+      <div data-animate style={`--stagger-index: ${i}`}>
+        <Card
+          title={item.title}
+          href={href}
+          thumbnail={item.thumbnail}
+          date={item.date}
+          tags={item.tags}
+          type={type}
+          external={external}
+          transitionName={`card-${item.slug}`}
+        />
+      </div>
+    );
+  })}
+</div>

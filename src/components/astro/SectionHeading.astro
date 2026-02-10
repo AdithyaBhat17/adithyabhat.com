@@ -1,0 +1,15 @@
+---
+interface Props {
+  class?: string;
+}
+
+const { class: className = '' } = Astro.props;
+---
+
+<h2
+  class:list={['font-serif text-3xl md:text-4xl text-[var(--foreground)]', className]}
+  data-section-heading
+  data-animate
+>
+  <slot />
+</h2>

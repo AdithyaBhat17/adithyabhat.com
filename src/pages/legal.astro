@@ -1,0 +1,20 @@
+---
+import PageLayout from '@/layouts/PageLayout.astro';
+import Container from '@/components/astro/Container.astro';
+import { fetchAPI } from '@/lib/datocms';
+import { marked } from 'marked';
+
+const result = await fetchAPI(`query Legal {
+  legal {
+    document
+  }
+}`);
+
+const html = await marked(result?.legal?.document ?? '');
+---
+
+<PageLayout title="Legal | Adithya NR">
+  <Container>
+    <div class="content" set:html={html} />
+  </Container>
+</PageLayout>

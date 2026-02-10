@@ -1,0 +1,45 @@
+---
+import Container from './Container.astro';
+import Socials from './Socials.astro';
+---
+
+<Container>
+  <div class="flex justify-between items-center flex-wrap md:flex-nowrap gap-8 md:gap-0">
+    <div class="max-w-xl" data-hero-title>
+      <h1 class="font-serif text-4xl md:text-6xl leading-tight">
+        Hey, I'm <span class="gradient-text font-serif italic">Adithya</span>
+        <span role="img" aria-label="waving hand"> 👋</span>
+      </h1>
+      <p class="mt-6 font-sans text-lg leading-8 text-[var(--muted-foreground)]" data-hero-description>
+        A UX engineer from Bengaluru, helping companies of all sizes get
+        ahead online. I am currently working on the Conversational CX
+        platform at{' '}
+        <a
+          href="https://yellow.ai/"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="link-underline text-[#153ec4] font-medium"
+        >
+          yellow.ai
+        </a>.
+      </p>
+      <div class="mt-8 mb-8 flex flex-wrap gap-4" data-hero-cta>
+        <a href="/about" class="btn-primary">About me</a>
+        <a href="/contact" class="btn-outlined">Get in touch</a>
+      </div>
+      <div class="mb-5">
+        <Socials />
+      </div>
+    </div>
+    <div class="mx-auto" data-hero-image>
+      <img
+        width="600"
+        height="600"
+        src="/static/hero.svg"
+        loading="eager"
+        class="block mx-auto w-full max-w-[600px]"
+        alt="Hero illustration"
+      />
+    </div>
+  </div>
+</Container>

@@ -1,0 +1,57 @@
+---
+import PageLayout from '@/layouts/PageLayout.astro';
+import Container from '@/components/astro/Container.astro';
+import CardGrid from '@/components/astro/CardGrid.astro';
+import { fetchAPI } from '@/lib/datocms';
+import { ALL_ARTICLES_QUERY, ARTICLE_QUERY } from '@/graphql/posts';
+import { marked } from 'marked';
+import dayjs from 'dayjs';
+
+export async function getStaticPaths() {
+  const data = await fetchAPI(ALL_ARTICLES_QUERY);
+  return (data?.allArticles ?? []).map((article: any) => ({
+    params: { slug: article.slug },
+  }));
+}
+
+const { slug } = Astro.params;
+const data = await fetchAPI(ARTICLE_QUERY, { variables: { slug } });
+
+if (!data?.article?.slug) {
+  return Astro.redirect('/404');
+}
+
+const article = data.article;
+const moreArticles = data.moreArticles ?? [];
+
+// Process markdown to HTML
+const htmlContent = await marked(article.content ?? '');
+---
+
+<PageLayout title={article.title}>
+  <Container>
+    <article class="w-full md:w-3/4 mx-auto">
+      <h1
+        class="font-serif text-4xl md:text-5xl mb-5"
+        data-animate
+        transition:name={`card-${slug}`}
+      >
+        {article.title}
+      </h1>
+      <small class="font-sans text-[var(--muted-foreground)]" data-animate>
+        {dayjs(article.date).format('DD MMM, YYYY')}
+      </small>
+
+      <div class="content" set:html={htmlContent} />
+    </article>
+
+    {moreArticles.length > 0 && (
+      <div class="px-0 md:px-24 lg:px-24 mb-6 mt-16">
+        <h3 class="text-sm uppercase font-sans font-semibold mt-24 mb-6 tracking-wide text-[var(--muted-foreground)]">
+          Recent Posts
+        </h3>
+        <CardGrid items={moreArticles} type="article" />
+      </div>
+    )}
+  </Container>
+</PageLayout>

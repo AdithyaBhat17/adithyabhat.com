@@ -1,0 +1,19 @@
+---
+import PageLayout from './PageLayout.astro';
+import Container from '@/components/astro/Container.astro';
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description } = Astro.props;
+---
+
+<PageLayout title={title} description={description}>
+  <Container>
+    <article class="w-full md:w-3/4 mx-auto">
+      <slot />
+    </article>
+  </Container>
+</PageLayout>

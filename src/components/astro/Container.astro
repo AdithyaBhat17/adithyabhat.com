@@ -1,0 +1,13 @@
+---
+interface Props {
+  class?: string;
+  wide?: boolean;
+}
+
+const { class: className = '', wide = false } = Astro.props;
+const padding = wide ? 'px-6 md:px-16' : 'px-6 md:px-36 lg:px-48';
+---
+
+<div class:list={[padding, 'mb-6', className]}>
+  <slot />
+</div>

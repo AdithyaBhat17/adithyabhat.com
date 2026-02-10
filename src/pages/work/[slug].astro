@@ -1,0 +1,88 @@
+---
+import PageLayout from '@/layouts/PageLayout.astro';
+import Container from '@/components/astro/Container.astro';
+import CardGrid from '@/components/astro/CardGrid.astro';
+import { fetchAPI } from '@/lib/datocms';
+import { CASE_STUDY, RECENT_WORK } from '@/graphql/work';
+
+export async function getStaticPaths() {
+  const data = await fetchAPI(RECENT_WORK);
+  return (data?.allProjects ?? []).map((project: any) => ({
+    params: { slug: project.slug },
+  }));
+}
+
+const { slug } = Astro.params;
+const data = await fetchAPI(CASE_STUDY, { variables: { slug } });
+
+if (!data?.project?.slug) {
+  return Astro.redirect('/404');
+}
+
+const project = data.project;
+const moreProjects = data.allProjects ?? [];
+---
+
+<PageLayout title={project.title}>
+  <Container>
+    <div class="w-full md:w-2/3 mx-auto">
+      <h1
+        class="font-serif text-4xl md:text-5xl mb-5"
+        data-animate
+        transition:name={`card-${slug}`}
+      >
+        {project.title}
+      </h1>
+
+      <div class="content" set:html={project.caseStudy} />
+
+      <hr class="gradient-line mt-20 mb-16" />
+
+      {project.link && (
+        <a
+          href={project.link}
+          rel="noopener noreferrer"
+          target="_blank"
+          class="inline-flex items-center gap-2 font-sans font-semibold text-lg text-[var(--foreground)] hover:text-[#153ec4] transition-colors link-underline"
+        >
+          <span>Visit Project</span>
+          <svg
+            class="w-5 h-5"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width={2}
+              d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+            />
+          </svg>
+        </a>
+      )}
+
+      {moreProjects.length > 0 && (
+        <div class="mt-16">
+          <h3 class="text-sm uppercase font-sans font-semibold mt-24 mb-6 tracking-wide text-[var(--muted-foreground)]">
+            Recent Projects
+          </h3>
+          <CardGrid
+            items={moreProjects}
+            type="project"
+            columns={moreProjects.length < 3 ? 2 : 3}
+          />
+        </div>
+      )}
+
+      <div class="my-20 md:my-40" data-animate>
+        <h2 class="font-serif text-3xl md:text-4xl leading-relaxed">
+          Have a similar project in mind?{' '}
+          <a href={`/contact?ref=${slug}`} class="link-underline gradient-text">
+            Let's chat!
+          </a>
+        </h2>
+      </div>
+    </div>
+  </Container>
+</PageLayout>

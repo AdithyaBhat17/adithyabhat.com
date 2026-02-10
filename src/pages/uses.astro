@@ -1,0 +1,31 @@
+---
+import PageLayout from '@/layouts/PageLayout.astro';
+import Container from '@/components/astro/Container.astro';
+import CategoryFilter from '@/components/react/CategoryFilter';
+import { fetchAPI } from '@/lib/datocms';
+
+const STACK_QUERY = `
+  query Stack {
+    allStacks (orderBy: product_ASC, first: 50) {
+      id
+      category
+      product
+      link
+      logo { url }
+      description
+    }
+  }
+`;
+
+const data = await fetchAPI(STACK_QUERY);
+const stacks = data.allStacks ?? [];
+const categories = [...new Set(stacks.map((s: any) => s.category))] as string[];
+---
+
+<PageLayout title="Toolbox | Adithya NR">
+  <Container class="px-4">
+    <div class="justify-start max-w-screen-sm">
+      <CategoryFilter stacks={stacks} categories={categories} client:visible />
+    </div>
+  </Container>
+</PageLayout>

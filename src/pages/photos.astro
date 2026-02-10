@@ -1,0 +1,15 @@
+---
+import PageLayout from '@/layouts/PageLayout.astro';
+import PhotoGallery from '@/components/react/PhotoGallery';
+import { fetchGalleryAPI } from '@/lib/datocms';
+import { GALLERY_PHOTOS } from '@/graphql/photos';
+
+const data = await fetchGalleryAPI(GALLERY_PHOTOS);
+const places = data.allPlaces ?? [];
+---
+
+<PageLayout title="Photos | Adithya NR">
+  <div class="px-6 md:px-16">
+    <PhotoGallery places={places} client:visible />
+  </div>
+</PageLayout>

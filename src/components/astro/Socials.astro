@@ -1,0 +1,29 @@
+---
+const socials = [
+  { icon: 'behance', link: 'https://behance.net/adithyabhat' },
+  { icon: 'dribbble', link: 'https://dribbble.com/adithyanr' },
+  { icon: 'twitter', link: 'https://twitter.com/adithya__nr' },
+  { icon: 'github', link: 'https://github.com/adithyabhat17' },
+  { icon: 'linkedin', link: 'https://linkedin.com/in/adithya-nr' },
+  { icon: 'youtube', link: 'https://www.youtube.com/@adithya-bhat' },
+];
+---
+
+<div class="flex justify-start items-center gap-5">
+  {socials.map((social) => (
+    <a
+      href={social.link}
+      target="_blank"
+      rel="noreferrer noopener"
+      class="text-[var(--foreground)] hover:opacity-70 transition-opacity"
+    >
+      <img
+        loading="lazy"
+        src={`/static/${social.icon}.svg`}
+        alt={social.icon}
+        width="24"
+        height="24"
+      />
+    </a>
+  ))}
+</div>

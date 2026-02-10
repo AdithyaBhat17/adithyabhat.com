@@ -1,0 +1,21 @@
+---
+import PageLayout from '@/layouts/PageLayout.astro';
+import Container from '@/components/astro/Container.astro';
+import ContactForm from '@/components/react/ContactForm';
+---
+
+<PageLayout title="Contact - Adithya NR">
+  <Container>
+    <div class="md:w-2/3 w-full mx-auto">
+      <h1 class="font-serif text-4xl md:text-6xl mb-3" data-animate>
+        Get in touch
+      </h1>
+      <p class="font-sans text-[var(--muted-foreground)]" data-animate>
+        Send me a message here and I'll get back to you ASAP
+      </p>
+      <div class="mt-8" data-animate>
+        <ContactForm client:load />
+      </div>
+    </div>
+  </Container>
+</PageLayout>

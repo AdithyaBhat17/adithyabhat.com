@@ -1,0 +1,19 @@
+---
+import PageLayout from '@/layouts/PageLayout.astro';
+import Container from '@/components/astro/Container.astro';
+import CardGrid from '@/components/astro/CardGrid.astro';
+import { fetchAPI } from '@/lib/datocms';
+import { RECENT_WORK } from '@/graphql/work';
+
+const data = await fetchAPI(RECENT_WORK);
+const projects = data.allProjects ?? [];
+---
+
+<PageLayout title="Work | Adithya NR">
+  <Container>
+    <h1 class="font-serif text-5xl md:text-6xl mb-6" data-animate>
+      Recent work
+    </h1>
+    <CardGrid items={projects} type="project" />
+  </Container>
+</PageLayout>

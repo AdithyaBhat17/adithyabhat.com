@@ -1,0 +1,55 @@
+---
+import Container from './Container.astro';
+import Socials from './Socials.astro';
+
+const footerRoutes = [
+  { name: 'About', link: '/about' },
+  { name: 'Blog', link: '/blog' },
+  { name: 'Work', link: '/work' },
+  { name: 'Contact', link: '/contact' },
+  { name: 'Resume', link: '/resume.pdf' },
+  { name: 'Uses', link: '/uses' },
+  { name: 'Legal', link: '/legal' },
+];
+
+const currentPath = Astro.url.pathname;
+---
+
+<Container>
+  <hr class="gradient-line mt-12" />
+  <br />
+  <footer class="flex flex-wrap items-center justify-between py-4 gap-y-6">
+    <div class="flex justify-start items-center">
+      <a href="/" class="hover:opacity-80 transition-opacity flex items-center gap-3">
+        <img
+          class="lg:h-16 lg:w-12 w-12 h-12"
+          src="/static/logo_black.svg"
+          alt="Adithya NR logo"
+        />
+        <span class="font-serif text-lg text-[var(--foreground)]">
+          adithya nr
+        </span>
+      </a>
+    </div>
+
+    <ul class="flex flex-wrap gap-6 md:gap-8">
+      {footerRoutes.map((route) => (
+        <li>
+          <a
+            href={route.link}
+            class:list={[
+              'text-sm font-sans transition-colors duration-200',
+              currentPath.startsWith(route.link)
+                ? 'text-[var(--foreground)] font-medium'
+                : 'text-[var(--muted-foreground)] hover:text-[var(--foreground)]'
+            ]}
+          >
+            {route.name}
+          </a>
+        </li>
+      ))}
+    </ul>
+
+    <Socials />
+  </footer>
+</Container>

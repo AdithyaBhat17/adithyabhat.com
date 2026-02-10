@@ -1,0 +1,115 @@
+---
+import { ClientRouter } from 'astro:transitions';
+import { GA_TRACKING_ID } from '@/lib/gtag';
+import '@/styles/global.css';
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description = 'A UX engineer from Bengaluru, helping companies of all sizes get ahead online.' } = Astro.props;
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+
+    <!-- Preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://www.datocms-assets.com" crossorigin />
+
+    <!-- Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400..700;1,400..700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- SEO -->
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalURL} />
+    <link rel="icon" type="image/svg+xml" href="/static/logo_white.svg" />
+    <meta name="author" content="Adithya NR" />
+
+    <!-- Open Graph -->
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:site_name" content="Adithya NR" />
+    <meta property="og:image" content="https://cdn.dribbble.com/users/2366701/screenshots/14499518/media/80880f845dd409a5d3108c8961c8d8e4.png" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@adithya__nr" />
+    <meta name="twitter:creator" content="@adithya__nr" />
+    <meta name="twitter:description" content={description} />
+    <meta property="twitter:image" content="https://cdn.dribbble.com/users/2366701/screenshots/14499518/media/80880f845dd409a5d3108c8961c8d8e4.png" />
+
+    <meta name="keywords" content="front-end developer, front-end development, web designer, adithya, adithya nr, adithya bhat, web developer" />
+
+    <!-- Structured Data -->
+    <script is:inline type="application/ld+json" set:html={JSON.stringify({
+      "name": "Adithya NR",
+      "description": "I am a UX Engineer based in Bengaluru, India.",
+      "author": { "@type": "Person", "name": "Adithya NR" },
+      "disambiguatingDescription": "Web Designer & Developer",
+      "jobTitle": "UX Engineer, Freelancer",
+      "@type": "WebSite",
+      "url": "https://adithyabhat.com/",
+      "publisher": {
+        "@type": "Organization",
+        "logo": { "@type": "ImageObject", "url": "https://raw.githubusercontent.com/AdithyaBhat17/adithyabhat17.github.io/version-3/public/adithya1.png" },
+        "name": "Adithya NR"
+      },
+      "image": "https://raw.githubusercontent.com/AdithyaBhat17/adithyabhat17.github.io/version-3/public/adithya1.png",
+      "headline": "Adithya NR",
+      "sameAs": [
+        "https://twitter.com/adithya__nr",
+        "https://linkedin.com/in/adithya-nr/",
+        "https://github.com/AdithyaBhat17",
+        "https://instagram.com/adithyabhat__/",
+        "https://medium.com/adithya-nr"
+      ],
+      "alternateName": "Adithya Bhat",
+      "@context": "http://schema.org"
+    })} />
+
+    <!-- Google Analytics -->
+    <script is:inline async src={`https://www.googletagmanager.com/gtag/js?id=${GA_TRACKING_ID}`}></script>
+    <script define:vars={{ GA_TRACKING_ID }} is:inline>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', GA_TRACKING_ID, { page_path: window.location.pathname });
+    </script>
+
+    <!-- Cloudflare Analytics -->
+    <script is:inline defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "6821738704c04aac971dbeae66fca2d6", "spa": true}'></script>
+
+    <ClientRouter />
+  </head>
+  <body>
+    <slot />
+
+    <!-- Initialize scroll animations after page load + on view transition -->
+    <script>
+      import { initScrollAnimations, initGSAPAnimations } from '@/scripts/animations';
+
+      function init() {
+        initScrollAnimations();
+        initGSAPAnimations();
+      }
+
+      // Initial load
+      init();
+
+      // Re-init after view transitions
+      document.addEventListener('astro:after-swap', init);
+    </script>
+  </body>
+</html>

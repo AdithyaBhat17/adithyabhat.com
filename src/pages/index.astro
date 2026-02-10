@@ -1,0 +1,45 @@
+---
+import PageLayout from '@/layouts/PageLayout.astro';
+import Hero from '@/components/astro/Hero.astro';
+import Container from '@/components/astro/Container.astro';
+import CardGrid from '@/components/astro/CardGrid.astro';
+import SectionHeading from '@/components/astro/SectionHeading.astro';
+import ArrowLink from '@/components/astro/ArrowLink.astro';
+import { fetchAPI } from '@/lib/datocms';
+import { HOME_PAGE_QUERY } from '@/graphql/index';
+
+const data = await fetchAPI(HOME_PAGE_QUERY);
+const projects = data.allProjects?.slice(0, 3) ?? [];
+const articles = data.allArticles?.slice(0, 3) ?? [];
+---
+
+<PageLayout title="Adithya NR | A UX Engineer based in Bengaluru, India.">
+  <Hero />
+
+  <!-- Recent Work -->
+  <Container>
+    <SectionHeading class="mt-16 xl:mt-24 mb-6">Recent work</SectionHeading>
+    <CardGrid items={projects} type="project" />
+    <ArrowLink href="/work" text="View all projects" />
+  </Container>
+
+  <!-- Featured Articles -->
+  <Container>
+    <SectionHeading class="mt-24 xl:mt-32 mb-6">Featured articles</SectionHeading>
+    <CardGrid items={articles} type="article" />
+    <ArrowLink href="/blog" text="Read more articles" />
+  </Container>
+
+  <!-- CTA -->
+  <Container>
+    <div class="mt-24 xl:mt-32 mb-16" data-animate>
+      <h2 class="font-serif text-3xl sm:text-5xl leading-relaxed">
+        Thanks for stopping by!
+      </h2>
+      <p class="font-sans text-xl mt-6">
+        Got a project in mind, a question, or something else?{' '}
+        <a href="/contact" class="link-underline font-semibold gradient-text">Let's chat.</a>
+      </p>
+    </div>
+  </Container>
+</PageLayout>
