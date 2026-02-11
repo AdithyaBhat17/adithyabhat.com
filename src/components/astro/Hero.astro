@@ -27,13 +27,8 @@ import Socials from './Socials.astro';
     <!-- Name with cursor -->
     <div data-hero-reveal>
       <h1 class="hero-name">
-        Adithya<span class="hero-dot">.</span><span class="hero-cursor" aria-hidden="true">|</span>
+        Adithya<span class="hero-dot">.</span>
       </h1>
-    </div>
-
-    <!-- Accent line with traveling glow -->
-    <div class="hero-line mt-4" data-hero-reveal>
-      <div class="hero-line-glow"></div>
     </div>
 
     <!-- Description -->
@@ -119,53 +114,6 @@ import Socials from './Socials.astro';
 
     .hero-name:hover .hero-dot {
       color: var(--text);
-    }
-
-    /* Blinking cursor */
-    .hero-cursor {
-      color: var(--accent);
-      font-weight: 300;
-      margin-left: 2px;
-      animation: cursorBlink 0.75s step-end infinite;
-    }
-
-    .hero-cursor.fade-out {
-      animation: cursorFadeOut 0.5s ease forwards;
-    }
-
-    @keyframes cursorBlink {
-      50% { opacity: 0; }
-    }
-
-    @keyframes cursorFadeOut {
-      to { opacity: 0; }
-    }
-
-    /* ===== ACCENT LINE WITH GLOW ===== */
-    .hero-line {
-      height: 2px;
-      width: min(120px, 20vw);
-      background: var(--border);
-      position: relative;
-      overflow: hidden;
-      border-radius: 1px;
-    }
-
-    .hero-line-glow {
-      position: absolute;
-      top: 0;
-      left: -40px;
-      height: 100%;
-      width: 40px;
-      background: linear-gradient(90deg, transparent, var(--accent), transparent);
-      animation: lineTravel 2.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-    }
-
-    @keyframes lineTravel {
-      0%   { left: -40px; opacity: 0; }
-      15%  { opacity: 1; }
-      85%  { opacity: 1; }
-      100% { left: calc(100% + 10px); opacity: 0; }
     }
 
     /* ===== DESCRIPTION ===== */
@@ -360,8 +308,6 @@ import Socials from './Socials.astro';
 
     /* ===== REDUCED MOTION ===== */
     @media (prefers-reduced-motion: reduce) {
-      .hero-cursor { animation: none; opacity: 1; }
-      .hero-line-glow { animation: none; left: 40px; opacity: 1; }
       .shape { animation: none; }
       .scroll-glow, .chev { animation: none; }
       .chev { opacity: 0.5; }
@@ -394,11 +340,6 @@ import Socials from './Socials.astro';
       });
     }
 
-    // Fade out blinking cursor after a few seconds
-    const cursor = hero.querySelector('.hero-cursor');
-    if (cursor) {
-      setTimeout(() => cursor.classList.add('fade-out'), 3000);
-    }
   }
 
   initHero();
