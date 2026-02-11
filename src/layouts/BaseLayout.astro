@@ -13,10 +13,26 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="dark">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+
+    <!-- Theme: apply saved preference before first paint to prevent FOUC -->
+    <script is:inline>
+      (function() {
+        var saved = localStorage.getItem('theme');
+        var theme = saved || (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+        document.documentElement.setAttribute('data-theme', theme);
+        // Update logos immediately
+        document.addEventListener('DOMContentLoaded', function() {
+          document.querySelectorAll('.nav-logo, .footer-logo').forEach(function(img) {
+            var src = theme === 'light' ? img.dataset.lightSrc : img.dataset.darkSrc;
+            if (src) img.src = src;
+          });
+        });
+      })();
+    </script>
 
     <!-- Preconnect -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -25,7 +41,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 
     <!-- Fonts -->
     <link
-      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Google+Sans+Code:wght@400;500;700&display=swap"
       rel="stylesheet"
     />
 
@@ -105,11 +121,41 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
         initGSAPAnimations();
       }
 
+      function applyTheme() {
+        const saved = localStorage.getItem('theme');
+        const theme = saved || (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+        document.documentElement.setAttribute('data-theme', theme);
+        document.querySelectorAll<HTMLImageElement>('.nav-logo, .footer-logo').forEach((img) => {
+          const src = theme === 'light' ? img.dataset.lightSrc : img.dataset.darkSrc;
+          if (src) img.src = src;
+        });
+      }
+
+      // Cursor spotlight tracking
+      function initCursor() {
+        let rafId: number | null = null;
+        document.addEventListener('mousemove', (e) => {
+          if (rafId) return;
+          rafId = requestAnimationFrame(() => {
+            document.body.style.setProperty('--cursor-x', e.clientX + 'px');
+            document.body.style.setProperty('--cursor-y', e.clientY + 'px');
+            if (!document.body.classList.contains('cursor-active')) {
+              document.body.classList.add('cursor-active');
+            }
+            rafId = null;
+          });
+        });
+      }
+
       // Initial load
       init();
+      initCursor();
 
       // Re-init after view transitions
-      document.addEventListener('astro:after-swap', init);
+      document.addEventListener('astro:after-swap', () => {
+        applyTheme();
+        init();
+      });
     </script>
   </body>
 </html>

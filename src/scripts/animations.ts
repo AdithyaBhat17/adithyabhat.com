@@ -49,28 +49,8 @@ export async function initGSAPAnimations() {
   const { ScrollTrigger } = await import('gsap/ScrollTrigger')
   gsap.registerPlugin(ScrollTrigger)
 
-  // Hero entrance animation
-  const heroTitle = document.querySelector('[data-hero-title]')
-  const heroDescs = document.querySelectorAll('[data-hero-description]')
-  const heroCTA = document.querySelector('[data-hero-cta]')
-
-  if (heroTitle) {
-    const tl = gsap.timeline({ defaults: { ease: 'power3.out' } })
-
-    tl.from(heroTitle, {
-      y: 50,
-      opacity: 0,
-      duration: 0.9,
-    })
-
-    heroDescs.forEach((desc) => {
-      tl.from(desc, { y: 30, opacity: 0, duration: 0.6 }, '-=0.5')
-    })
-
-    if (heroCTA) {
-      tl.from(heroCTA, { y: 20, opacity: 0, duration: 0.5 }, '-=0.3')
-    }
-  }
+  // Hero entrance is handled by CSS @keyframes in Hero.astro
+  // GSAP is only used for scroll-triggered sections below
 
   // Section heading slide-in
   document.querySelectorAll('[data-section-heading]').forEach((heading) => {

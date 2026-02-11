@@ -123,7 +123,7 @@ function ImageCard({ item, index, onOpen }: { item: FlatPhoto; index: number; on
   return (
     <div
       ref={ref}
-      className="mb-3 break-inside-avoid cursor-zoom-in group relative overflow-hidden rounded-lg"
+      className="mb-3 break-inside-avoid cursor-zoom-in group relative overflow-hidden rounded-lg ring-1 ring-[var(--border)]"
       onClick={onOpen}
       style={{
         opacity: visible ? 1 : 0,
@@ -156,11 +156,11 @@ function ImageCard({ item, index, onOpen }: { item: FlatPhoto; index: number; on
             <h3 className="text-white font-display text-lg font-semibold tracking-tight leading-tight">
               {item.city}
             </h3>
-            <p className="text-white/60 text-xs font-body mt-0.5">
+            <p className="text-white/70 text-xs font-body mt-0.5">
               {item.district}, {item.state}
             </p>
           </div>
-          <span className="text-white/40 text-[10px] font-mono whitespace-nowrap">
+          <span className="text-white/60 text-[10px] font-mono whitespace-nowrap">
             {formattedDate}
           </span>
         </div>

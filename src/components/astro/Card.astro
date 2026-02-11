@@ -57,3 +57,19 @@ const meta = (() => {
     )}
   </div>
 </a>
+
+<script>
+  document.querySelectorAll<HTMLElement>('.card').forEach((card) => {
+    card.addEventListener('mousemove', (e) => {
+      const rect = card.getBoundingClientRect();
+      const x = ((e.clientX - rect.left) / rect.width) * 100;
+      const y = ((e.clientY - rect.top) / rect.height) * 100;
+      card.style.setProperty('--card-mx', `${x}%`);
+      card.style.setProperty('--card-my', `${y}%`);
+    });
+    card.addEventListener('mouseleave', () => {
+      card.style.setProperty('--card-mx', '50%');
+      card.style.setProperty('--card-my', '50%');
+    });
+  });
+</script>

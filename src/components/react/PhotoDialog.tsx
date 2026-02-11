@@ -57,14 +57,14 @@ export default function PhotoDialog({ item, onClose, onPrev, onNext, counter }: 
       {/* Top bar */}
       <div className="absolute top-0 left-0 right-0 z-20 flex items-center justify-between px-5 py-4">
         {/* Left: counter */}
-        <span className="font-mono text-xs text-white/40">
+        <span className="font-mono text-xs text-white/60">
           {counter}
         </span>
 
         {/* Center: title */}
         <div className="text-center">
           <h2 className="font-display text-sm font-semibold text-white tracking-tight">{item.city}</h2>
-          <p className="text-[11px] text-white/40 font-body">{item.district} · {formattedDate}</p>
+          <p className="text-[11px] text-white/60 font-body">{item.district} · {formattedDate}</p>
         </div>
 
         {/* Right: close */}
@@ -116,8 +116,8 @@ export default function PhotoDialog({ item, onClose, onPrev, onNext, counter }: 
 
       {/* Bottom bar: metadata */}
       <div className="absolute bottom-0 left-0 right-0 z-20 flex items-center justify-center gap-6 px-5 py-4">
-        <span className="text-[11px] text-white/30 font-body">{item.camera}</span>
-        <span className="text-[11px] text-white/30 font-body">{item.distance}</span>
+        <span className="text-[11px] text-white/50 font-body">{item.camera}</span>
+        <span className="text-[11px] text-white/50 font-body">{item.distance}</span>
         <a
           href={item.location}
           target="_blank"

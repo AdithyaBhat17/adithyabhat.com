@@ -2,51 +2,65 @@
 import Socials from './Socials.astro';
 ---
 
-<section class="relative min-h-[85vh] flex items-center overflow-hidden">
-  <!-- Ambient orbs -->
-  <div class="orb orb-orange w-[500px] h-[500px] -top-20 -right-32 absolute opacity-60"></div>
-  <div class="orb orb-blue w-[400px] h-[400px] top-1/2 -left-48 absolute opacity-40"></div>
+<section class="hero-section relative min-h-[calc(100vh-5rem)] flex flex-col justify-center overflow-hidden">
+  <!-- Floating geometric shapes -->
+  <div class="hero-shapes" aria-hidden="true">
+    <div class="shape shape-circle"></div>
+    <div class="shape shape-diamond"></div>
+    <div class="shape shape-square"></div>
+    <div class="shape shape-ring"></div>
+    <div class="shape shape-cross"></div>
+    <div class="shape shape-dot"></div>
+  </div>
 
-  <div class="w-full px-6 md:px-12 lg:px-20 xl:px-32">
-    <div class="max-w-4xl" data-hero-title>
-      <!-- Eyebrow -->
-      <div class="flex items-center gap-3 mb-8" data-hero-description>
-        <span class="inline-block w-8 h-[2px] bg-[var(--accent)]"></span>
-        <span class="text-sm font-body font-medium text-[var(--accent)] tracking-wide uppercase">
-          UX Engineer
-        </span>
-      </div>
+  <div class="w-full px-6 md:px-12 lg:px-20 xl:px-32 relative z-10">
+    <!-- Role label -->
+    <div data-hero-reveal>
+      <span class="hero-role-text">UX Engineer</span>
+    </div>
 
-      <!-- Main heading -->
-      <h1 class="font-display text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-800 leading-[0.95] tracking-tighter">
-        Hey, I'm
-        <span class="gradient-text">Adithya</span>
+    <!-- Greeting -->
+    <div class="mt-6" data-hero-reveal>
+      <p class="hero-greeting">Hey, I'm</p>
+    </div>
+
+    <!-- Name with cursor -->
+    <div data-hero-reveal>
+      <h1 class="hero-name">
+        Adithya<span class="hero-dot">.</span><span class="hero-cursor" aria-hidden="true">|</span>
       </h1>
+    </div>
 
-      <!-- Description -->
-      <p class="mt-8 max-w-xl text-lg md:text-xl leading-relaxed text-[var(--text-secondary)]" data-hero-description>
-        A UX engineer from Bengaluru, building thoughtful digital
+    <!-- Accent line with traveling glow -->
+    <div class="hero-line mt-4" data-hero-reveal>
+      <div class="hero-line-glow"></div>
+    </div>
+
+    <!-- Description -->
+    <div data-hero-reveal>
+      <p class="hero-desc mt-6 max-w-lg">
+        A UX engineer in Abu Dhabi, building thoughtful digital
         products. Currently shaping the Conversational CX platform at{' '}
         <a
           href="https://yellow.ai/"
           target="_blank"
           rel="noopener noreferrer"
-          class="text-[var(--text)] hover:text-[var(--accent)] transition-colors font-medium"
+          class="hero-link"
         >
           yellow.ai
         </a>
       </p>
+    </div>
 
-      <!-- CTAs -->
-      <div class="mt-10 flex flex-wrap items-center gap-4" data-hero-cta>
-        <a href="/work" class="btn-primary">View my work</a>
-        <a href="/contact" class="btn-outlined">Get in touch</a>
-      </div>
+    <!-- CTAs -->
+    <div class="mt-8 flex flex-wrap items-center gap-4" data-hero-reveal>
+      <a href="/work" class="btn-primary">View my work</a>
+      <a href="/contact" class="btn-outlined">Get in touch</a>
+    </div>
 
-      <!-- Socials -->
-      <div class="mt-12">
-        <Socials />
-      </div>
+    <!-- Socials -->
+    <div class="mt-10" data-hero-reveal>
+      <Socials />
     </div>
   </div>
 
@@ -63,15 +77,249 @@ import Socials from './Socials.astro';
   </div>
 
   <style>
+    /* ===== ROLE LABEL ===== */
+    .hero-role-text {
+      font-family: 'Google Sans Code', 'JetBrains Mono', 'SF Mono', monospace;
+      font-size: clamp(0.7rem, 1.2vw, 0.875rem);
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+
+    /* ===== GREETING ===== */
+    .hero-greeting {
+      font-family: 'Bricolage Grotesque', Georgia, serif;
+      font-size: clamp(1.25rem, 2.5vw, 1.75rem);
+      font-weight: 400;
+      color: var(--text-secondary);
+      line-height: 1.4;
+      margin-bottom: 0.25rem;
+    }
+
+    /* ===== NAME ===== */
+    .hero-name {
+      font-family: 'Bricolage Grotesque', Georgia, serif;
+      font-size: clamp(3.5rem, 10vw, 8rem);
+      font-weight: 800;
+      line-height: 1;
+      letter-spacing: -0.03em;
+      color: var(--text);
+      cursor: default;
+      transition: color 0.3s ease;
+    }
+
+    .hero-name:hover {
+      color: var(--accent);
+    }
+
+    .hero-dot {
+      color: var(--accent);
+      transition: color 0.3s ease;
+    }
+
+    .hero-name:hover .hero-dot {
+      color: var(--text);
+    }
+
+    /* Blinking cursor */
+    .hero-cursor {
+      color: var(--accent);
+      font-weight: 300;
+      margin-left: 2px;
+      animation: cursorBlink 0.75s step-end infinite;
+    }
+
+    .hero-cursor.fade-out {
+      animation: cursorFadeOut 0.5s ease forwards;
+    }
+
+    @keyframes cursorBlink {
+      50% { opacity: 0; }
+    }
+
+    @keyframes cursorFadeOut {
+      to { opacity: 0; }
+    }
+
+    /* ===== ACCENT LINE WITH GLOW ===== */
+    .hero-line {
+      height: 2px;
+      width: min(120px, 20vw);
+      background: var(--border);
+      position: relative;
+      overflow: hidden;
+      border-radius: 1px;
+    }
+
+    .hero-line-glow {
+      position: absolute;
+      top: 0;
+      left: -40px;
+      height: 100%;
+      width: 40px;
+      background: linear-gradient(90deg, transparent, var(--accent), transparent);
+      animation: lineTravel 2.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+    }
+
+    @keyframes lineTravel {
+      0%   { left: -40px; opacity: 0; }
+      15%  { opacity: 1; }
+      85%  { opacity: 1; }
+      100% { left: calc(100% + 10px); opacity: 0; }
+    }
+
+    /* ===== DESCRIPTION ===== */
+    .hero-desc {
+      font-size: clamp(1.125rem, 2vw, 1.25rem);
+      line-height: 1.7;
+      color: var(--text-secondary);
+    }
+
+    .hero-link {
+      color: var(--text);
+      font-weight: 500;
+      transition: color 0.2s ease;
+    }
+
+    .hero-link:hover {
+      color: var(--accent);
+    }
+
+    /* ===== FLOATING GEOMETRIC SHAPES ===== */
+    .hero-shapes {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .shape {
+      position: absolute;
+      border: 1.5px solid var(--accent);
+      opacity: 0.15;
+    }
+
+    .shape-circle {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      top: 18%;
+      right: 12%;
+      animation: shapeFloat1 9s ease-in-out infinite;
+    }
+
+    .shape-diamond {
+      width: 18px;
+      height: 18px;
+      top: 55%;
+      right: 22%;
+      animation: shapeFloat2 11s ease-in-out infinite;
+    }
+
+    .shape-square {
+      width: 22px;
+      height: 22px;
+      border-radius: 5px;
+      bottom: 22%;
+      left: 6%;
+      animation: shapeFloat3 13s ease-in-out infinite;
+    }
+
+    .shape-ring {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      top: 35%;
+      left: 15%;
+      border-width: 1px;
+      animation: shapeFloat4 14s ease-in-out infinite;
+    }
+
+    .shape-cross {
+      width: 16px;
+      height: 16px;
+      border: none;
+      top: 12%;
+      right: 35%;
+      animation: shapeFloat5 10s ease-in-out infinite;
+    }
+
+    .shape-cross::before,
+    .shape-cross::after {
+      content: '';
+      position: absolute;
+      background: var(--accent);
+      border-radius: 1px;
+    }
+
+    .shape-cross::before {
+      width: 100%;
+      height: 1.5px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    .shape-cross::after {
+      width: 1.5px;
+      height: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .shape-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--accent);
+      border: none;
+      bottom: 35%;
+      right: 8%;
+      opacity: 0.2;
+      animation: shapeFloat6 8s ease-in-out infinite;
+    }
+
+    @keyframes shapeFloat1 {
+      0%, 100% { transform: translate(0, 0) rotate(0deg); }
+      33%      { transform: translate(15px, -20px) rotate(120deg); }
+      66%      { transform: translate(-10px, 12px) rotate(240deg); }
+    }
+
+    @keyframes shapeFloat2 {
+      0%, 100% { transform: rotate(45deg) translate(0, 0); }
+      50%      { transform: rotate(225deg) translate(18px, -14px); }
+    }
+
+    @keyframes shapeFloat3 {
+      0%, 100% { transform: translate(0, 0) rotate(0deg); }
+      25%      { transform: translate(12px, 10px) rotate(90deg); }
+      50%      { transform: translate(-8px, 18px) rotate(180deg); }
+      75%      { transform: translate(-14px, -8px) rotate(270deg); }
+    }
+
+    @keyframes shapeFloat4 {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      50%      { transform: translate(-12px, -16px) scale(0.85); }
+    }
+
+    @keyframes shapeFloat5 {
+      0%, 100% { transform: translate(0, 0) rotate(0deg); }
+      50%      { transform: translate(10px, 12px) rotate(90deg); }
+    }
+
+    @keyframes shapeFloat6 {
+      0%, 100% { transform: translate(0, 0); opacity: 0.2; }
+      50%      { transform: translate(-8px, -10px); opacity: 0.35; }
+    }
+
+    /* ===== SCROLL INDICATOR ===== */
     .scroll-cue {
       display: flex;
       flex-direction: column;
       align-items: center;
       gap: 8px;
-      animation: cueIn 0.6s ease 2s both;
     }
 
-    /* Vertical track with traveling light */
     .scroll-track {
       width: 1px;
       height: 48px;
@@ -90,7 +338,6 @@ import Socials from './Socials.astro';
       animation: travelDown 2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
     }
 
-    /* Staggered chevrons */
     .chev {
       opacity: 0;
       animation: chevPulse 2s ease-in-out infinite;
@@ -111,15 +358,49 @@ import Socials from './Socials.astro';
       50%      { opacity: 0.8; transform: translateY(3px); }
     }
 
-    @keyframes cueIn {
-      from { opacity: 0; transform: translateY(8px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-
+    /* ===== REDUCED MOTION ===== */
     @media (prefers-reduced-motion: reduce) {
+      .hero-cursor { animation: none; opacity: 1; }
+      .hero-line-glow { animation: none; left: 40px; opacity: 1; }
+      .shape { animation: none; }
       .scroll-glow, .chev { animation: none; }
       .chev { opacity: 0.5; }
       .scroll-glow { top: 16px; opacity: 1; }
     }
   </style>
 </section>
+
+<script>
+  function initHero() {
+    const hero = document.querySelector<HTMLElement>('.hero-section');
+    if (!hero) return;
+
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    // Staggered entrance — JS-driven so content is visible by default
+    if (!prefersReducedMotion) {
+      const reveals = hero.querySelectorAll<HTMLElement>('[data-hero-reveal]');
+      reveals.forEach((el) => {
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(16px)';
+      });
+
+      reveals.forEach((el, i) => {
+        setTimeout(() => {
+          el.style.transition = 'opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1)';
+          el.style.opacity = '1';
+          el.style.transform = 'translateY(0)';
+        }, 100 + i * 100);
+      });
+    }
+
+    // Fade out blinking cursor after a few seconds
+    const cursor = hero.querySelector('.hero-cursor');
+    if (cursor) {
+      setTimeout(() => cursor.classList.add('fade-out'), 3000);
+    }
+  }
+
+  initHero();
+  document.addEventListener('astro:after-swap', initHero);
+</script>

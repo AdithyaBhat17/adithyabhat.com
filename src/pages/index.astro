@@ -31,17 +31,163 @@ const articles = data.allArticles?.slice(0, 3) ?? [];
   </Container>
 
   <!-- CTA -->
-  <Container>
-    <div class="relative mt-28 xl:mt-36 mb-20 py-16 px-8 md:px-16 rounded-2xl bg-[var(--bg-elevated)] border border-[var(--border)] overflow-hidden" data-animate>
-      <!-- Subtle accent glow -->
-      <div class="orb orb-orange w-[300px] h-[300px] -bottom-20 -right-20 absolute opacity-50"></div>
-      <h2 class="font-display text-3xl sm:text-4xl md:text-5xl tracking-tight leading-tight relative z-10">
-        Got something in mind?
-      </h2>
-      <p class="font-body text-lg text-[var(--text-secondary)] mt-4 relative z-10 max-w-md">
-        Whether it's a project, a question, or just to say hello —
-      </p>
-      <a href="/contact" class="btn-primary mt-8 relative z-10">Let's talk</a>
+  <section class="cta-section mt-28 xl:mt-36 mb-20 overflow-hidden">
+    <!-- Scrolling marquee -->
+    <div class="cta-marquee-wrap" aria-hidden="true">
+      <div class="cta-marquee">
+        <span>LET'S TALK&nbsp;&nbsp;&middot;&nbsp;&nbsp;</span>
+        <span>GOT A PROJECT?&nbsp;&nbsp;&middot;&nbsp;&nbsp;</span>
+        <span>LET'S TALK&nbsp;&nbsp;&middot;&nbsp;&nbsp;</span>
+        <span>GOT A PROJECT?&nbsp;&nbsp;&middot;&nbsp;&nbsp;</span>
+        <span>LET'S TALK&nbsp;&nbsp;&middot;&nbsp;&nbsp;</span>
+        <span>GOT A PROJECT?&nbsp;&nbsp;&middot;&nbsp;&nbsp;</span>
+        <span>LET'S TALK&nbsp;&nbsp;&middot;&nbsp;&nbsp;</span>
+        <span>GOT A PROJECT?&nbsp;&nbsp;&middot;&nbsp;&nbsp;</span>
+      </div>
     </div>
-  </Container>
+
+    <Container>
+      <div class="cta-card relative py-20 md:py-28 px-8 md:px-16 rounded-2xl bg-[var(--bg-elevated)] border border-[var(--border)] overflow-hidden" data-animate style="--cta-x:50%;--cta-y:50%;">
+        <!-- Cursor glow -->
+        <div class="cta-spotlight" aria-hidden="true"></div>
+
+        <!-- Decorative shapes -->
+        <div class="cta-shape cta-shape-1" aria-hidden="true"></div>
+        <div class="cta-shape cta-shape-2" aria-hidden="true"></div>
+
+        <h2 class="cta-heading font-display tracking-tight leading-[1.05] relative z-10">
+          Got something<br/>in mind?
+        </h2>
+        <p class="font-body text-xl text-[var(--text-secondary)] mt-6 relative z-10 max-w-md">
+          Whether it's a project, a question, or just to say hello —
+        </p>
+        <a href="/contact" class="btn-primary mt-10 relative z-10" data-magnetic>Let's talk</a>
+      </div>
+    </Container>
+  </section>
+
+  <style>
+    /* ===== MARQUEE ===== */
+    .cta-marquee-wrap {
+      overflow: hidden;
+      white-space: nowrap;
+      padding: 1rem 0;
+      margin-bottom: 1.5rem;
+    }
+
+    .cta-marquee {
+      display: inline-flex;
+      animation: marqueeScroll 25s linear infinite;
+    }
+
+    .cta-marquee span {
+      font-family: 'Bricolage Grotesque', Georgia, serif;
+      font-size: clamp(0.875rem, 1.5vw, 1.125rem);
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      color: var(--text-muted);
+      opacity: 0.3;
+    }
+
+    @keyframes marqueeScroll {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+
+    /* ===== CTA CARD ===== */
+    .cta-heading {
+      font-size: clamp(2.5rem, 7vw, 5rem);
+    }
+
+    /* Cursor spotlight */
+    .cta-spotlight {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(
+        500px circle at var(--cta-x) var(--cta-y),
+        var(--accent-glow) 0%,
+        transparent 50%
+      );
+      pointer-events: none;
+      z-index: 1;
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+
+    .cta-card:hover .cta-spotlight {
+      opacity: 1;
+    }
+
+    /* Decorative shapes */
+    .cta-shape {
+      position: absolute;
+      border: 1.5px solid var(--accent);
+      opacity: 0.08;
+      pointer-events: none;
+    }
+
+    .cta-shape-1 {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      top: -20px;
+      right: 10%;
+      animation: ctaFloat1 10s ease-in-out infinite;
+    }
+
+    .cta-shape-2 {
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+      bottom: 15%;
+      right: 5%;
+      animation: ctaFloat2 13s ease-in-out infinite;
+    }
+
+    @keyframes ctaFloat1 {
+      0%, 100% { transform: translate(0, 0) rotate(0deg); }
+      50%      { transform: translate(-15px, 12px) rotate(180deg); }
+    }
+
+    @keyframes ctaFloat2 {
+      0%, 100% { transform: rotate(0deg) translate(0, 0); }
+      33%      { transform: rotate(120deg) translate(10px, -8px); }
+      66%      { transform: rotate(240deg) translate(-8px, 10px); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .cta-marquee { animation: none; }
+      .cta-shape { animation: none; }
+    }
+  </style>
+
+  <script>
+    function initCTA() {
+      // Magnetic button
+      document.querySelectorAll<HTMLElement>('[data-magnetic]').forEach((btn) => {
+        const strength = 0.3;
+        btn.addEventListener('mousemove', (e) => {
+          const rect = btn.getBoundingClientRect();
+          const x = e.clientX - rect.left - rect.width / 2;
+          const y = e.clientY - rect.top - rect.height / 2;
+          btn.style.transform = `translate(${x * strength}px, ${y * strength}px)`;
+        });
+        btn.addEventListener('mouseleave', () => {
+          btn.style.transform = '';
+        });
+      });
+
+      // CTA spotlight
+      const ctaCard = document.querySelector<HTMLElement>('.cta-card');
+      if (ctaCard) {
+        ctaCard.addEventListener('mousemove', (e) => {
+          const rect = ctaCard.getBoundingClientRect();
+          ctaCard.style.setProperty('--cta-x', `${e.clientX - rect.left}px`);
+          ctaCard.style.setProperty('--cta-y', `${e.clientY - rect.top}px`);
+        });
+      }
+    }
+    initCTA();
+    document.addEventListener('astro:after-swap', initCTA);
+  </script>
 </PageLayout>

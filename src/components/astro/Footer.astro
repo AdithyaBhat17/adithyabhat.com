@@ -1,14 +1,22 @@
 ---
-import Socials from './Socials.astro';
+const currentYear = new Date().getFullYear();
 
-const footerRoutes = [
-  { name: 'About', link: '/about' },
-  { name: 'Blog', link: '/blog' },
-  { name: 'Work', link: '/work' },
-  { name: 'Contact', link: '/contact' },
-  { name: 'Resume', link: '/resume.pdf' },
-  { name: 'Uses', link: '/uses' },
-  { name: 'Legal', link: '/legal' },
+const navLinks = [
+  { name: 'About', href: '/about' },
+  { name: 'Work', href: '/work' },
+  { name: 'Blog', href: '/blog' },
+  { name: 'Photos', href: '/photos' },
+  { name: 'Uses', href: '/uses' },
+  { name: 'Contact', href: '/contact' },
+];
+
+const socialLinks = [
+  { name: 'Behance', href: 'https://behance.net/adithyabhat' },
+  { name: 'Dribbble', href: 'https://dribbble.com/adithyanr' },
+  { name: 'Twitter', href: 'https://twitter.com/adithya__nr' },
+  { name: 'GitHub', href: 'https://github.com/adithyabhat17' },
+  { name: 'LinkedIn', href: 'https://linkedin.com/in/adithya-nr' },
+  { name: 'YouTube', href: 'https://www.youtube.com/@adithya-bhat' },
 ];
 
 const currentPath = Astro.url.pathname;
@@ -17,41 +25,240 @@ const currentPath = Astro.url.pathname;
 <footer class="px-6 md:px-12 lg:px-20 xl:px-32">
   <hr class="gradient-line" />
 
-  <div class="py-12 flex flex-col md:flex-row items-start md:items-center justify-between gap-8">
-    <!-- Left: Logo + name -->
-    <div class="flex items-center gap-3">
-      <a href="/" class="flex items-center gap-3 hover:opacity-80 transition-opacity">
-        <img
-          class="h-9 w-9"
-          src="/static/logo_white.svg"
-          alt="Adithya NR logo"
-        />
-        <span class="font-display text-sm font-semibold text-[var(--text)] tracking-tight">
-          adithya nr
-        </span>
-      </a>
+  <!-- Three-column grid -->
+  <div class="py-16 md:py-20 grid grid-cols-2 md:grid-cols-3 gap-12 md:gap-8">
+    <!-- Navigate -->
+    <div>
+      <h3 class="footer-col-title">Navigate</h3>
+      <ul class="footer-links">
+        {navLinks.map((link) => (
+          <li>
+            <a
+              href={link.href}
+              class:list={['footer-link', currentPath.startsWith(link.href) && 'is-active']}
+            >
+              {link.name}
+            </a>
+          </li>
+        ))}
+      </ul>
     </div>
 
-    <!-- Center: Nav links -->
-    <ul class="flex flex-wrap gap-x-6 gap-y-2">
-      {footerRoutes.map((route) => (
-        <li>
-          <a
-            href={route.link}
-            class:list={[
-              'text-sm font-body transition-colors duration-200',
-              currentPath.startsWith(route.link)
-                ? 'text-[var(--text)]'
-                : 'text-[var(--text-muted)] hover:text-[var(--text)]'
-            ]}
-          >
-            {route.name}
-          </a>
-        </li>
-      ))}
-    </ul>
+    <!-- Connect -->
+    <div>
+      <h3 class="footer-col-title">Connect</h3>
+      <ul class="footer-links">
+        {socialLinks.map((link) => (
+          <li>
+            <a
+              href={link.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="footer-link footer-link-ext"
+            >
+              {link.name}
+              <svg class="footer-arrow" width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M2 10L10 2M10 2H4M10 2v6" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
 
-    <!-- Right: Socials -->
-    <Socials />
+    <!-- Info -->
+    <div>
+      <h3 class="footer-col-title">Info</h3>
+      <div class="footer-info">
+        <div class="footer-info-item">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+            <circle cx="12" cy="10" r="3"/>
+          </svg>
+          <span>Abu Dhabi, UAE</span>
+        </div>
+        <div class="footer-info-item">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="7" width="20" height="14" rx="2" ry="2"/>
+            <polyline points="2,7 12,13 22,7"/>
+          </svg>
+          <a href="/contact" class="footer-link">Get in touch</a>
+        </div>
+        <div class="footer-info-item mt-5">
+          <span class="footer-availability">
+            <span class="footer-status-dot"></span>
+            Available for projects
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="gradient-line" />
+
+  <!-- Bottom bar -->
+  <div class="py-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+    <a href="/" class="flex items-center gap-3 hover:opacity-80 transition-opacity">
+      <img
+        class="footer-logo h-8 w-8"
+        src="/static/logo_white.svg"
+        data-light-src="/static/logo_black.svg"
+        data-dark-src="/static/logo_white.svg"
+        alt="Adithya NR logo"
+      />
+      <span class="footer-brand">adithya nr</span>
+    </a>
+
+    <div class="flex items-center gap-6">
+      <span class="footer-copyright">&copy; {currentYear} Adithya NR</span>
+      <button class="footer-top-btn" id="back-to-top" aria-label="Back to top">
+        Top &uarr;
+      </button>
+    </div>
   </div>
 </footer>
+
+<style>
+  /* ===== COLUMN TITLES ===== */
+  .footer-col-title {
+    font-family: 'Google Sans Code', 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 1.25rem;
+    font-weight: 500;
+  }
+
+  /* ===== LINKS ===== */
+  .footer-links {
+    display: flex;
+    flex-direction: column;
+    gap: 0.625rem;
+  }
+
+  .footer-link {
+    font-size: 0.9375rem;
+    color: var(--text-muted);
+    transition: color 0.2s ease, transform 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .footer-link:hover {
+    color: var(--text);
+    transform: translateX(3px);
+  }
+
+  .footer-link.is-active {
+    color: var(--text);
+  }
+
+  /* External arrow icon */
+  .footer-arrow {
+    opacity: 0;
+    transform: translate(-2px, 2px);
+    transition: all 0.2s ease;
+  }
+
+  .footer-link-ext:hover .footer-arrow {
+    opacity: 1;
+    transform: translate(0, 0);
+  }
+
+  /* ===== INFO COLUMN ===== */
+  .footer-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.625rem;
+  }
+
+  .footer-info-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9375rem;
+    color: var(--text-muted);
+  }
+
+  .footer-info-item svg {
+    color: var(--text-muted);
+    flex-shrink: 0;
+  }
+
+  /* Availability badge */
+  .footer-availability {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.8125rem;
+    color: #10b981;
+    font-family: 'Google Sans Code', 'JetBrains Mono', monospace;
+  }
+
+  .footer-status-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #10b981;
+    animation: pulseDot 2s ease-in-out infinite;
+  }
+
+  @keyframes pulseDot {
+    0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); }
+    50%      { opacity: 0.7; box-shadow: 0 0 0 4px rgba(16, 185, 129, 0); }
+  }
+
+  /* ===== BOTTOM BAR ===== */
+  .footer-brand {
+    font-family: 'Bricolage Grotesque', Georgia, serif;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--text);
+    letter-spacing: -0.02em;
+  }
+
+  .footer-copyright {
+    font-size: 0.8125rem;
+    color: var(--text-muted);
+  }
+
+  .footer-top-btn {
+    font-family: 'Google Sans Code', 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    letter-spacing: 0.05em;
+    padding: 0.375rem 0.75rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: transparent;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .footer-top-btn:hover {
+    color: var(--accent);
+    border-color: var(--accent);
+    transform: translateY(-1px);
+  }
+
+  /* ===== LOGO THEME ===== */
+  .footer-logo {
+    filter: brightness(0) invert(calc(1 - var(--logo-invert)));
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .footer-status-dot { animation: none; opacity: 1; }
+  }
+</style>
+
+<script>
+  function initFooter() {
+    document.getElementById('back-to-top')?.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  }
+  initFooter();
+  document.addEventListener('astro:after-swap', initFooter);
+</script>

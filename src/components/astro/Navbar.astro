@@ -18,15 +18,16 @@ function isActive(link: string): boolean {
 ---
 
 <nav class:list={[
-  'flex sticky w-full top-0 items-center justify-between py-5 z-50',
-  'bg-[#09090b]/70 backdrop-blur-xl border-b border-white/[0.04]',
+  'navbar flex sticky w-full top-0 items-center justify-between py-5 z-50',
   padding
 ]}>
   <div class="flex items-center gap-3">
     <a href="/" class="group flex items-center gap-3 hover:opacity-90 transition-opacity">
       <img
-        class="h-9 w-9"
+        class="nav-logo h-9 w-9"
         src="/static/logo_white.svg"
+        data-light-src="/static/logo_black.svg"
+        data-dark-src="/static/logo_white.svg"
         alt="Adithya NR logo"
       />
       <span class="hidden sm:inline font-display text-sm font-semibold text-[var(--text)] tracking-tight">
@@ -35,21 +36,87 @@ function isActive(link: string): boolean {
     </a>
   </div>
 
-  <ul class="flex items-center gap-1">
-    {routes.map((route) => (
-      <li>
-        <a
-          href={route.link}
-          class:list={[
-            'text-sm font-body px-3 py-1.5 rounded-lg transition-all duration-200',
-            isActive(route.link)
-              ? 'text-[var(--text)] bg-white/[0.06]'
-              : 'text-[var(--text-muted)] hover:text-[var(--text)] hover:bg-white/[0.04]'
-          ]}
-        >
-          {route.name}
-        </a>
-      </li>
-    ))}
-  </ul>
+  <div class="flex items-center gap-2">
+    <ul class="flex items-center gap-1">
+      {routes.map((route) => (
+        <li>
+          <a
+            href={route.link}
+            class:list={[
+              'nav-link text-sm font-body px-3 py-1.5 rounded-lg transition-all duration-200',
+              isActive(route.link) ? 'nav-link-active' : ''
+            ]}
+          >
+            {route.name}
+          </a>
+        </li>
+      ))}
+    </ul>
+
+    <button
+      id="theme-toggle"
+      class="ml-2 p-2 rounded-lg transition-all duration-200 hover:bg-[var(--nav-hover-bg)]"
+      aria-label="Toggle theme"
+    >
+      <svg class="theme-icon-sun w-4 h-4 text-[var(--text-muted)]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-4.773-4.227-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z" />
+      </svg>
+      <svg class="theme-icon-moon w-4 h-4 text-[var(--text-muted)]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M21.752 15.002A9.72 9.72 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-5.998Z" />
+      </svg>
+    </button>
+  </div>
 </nav>
+
+<style>
+  .navbar {
+    background: var(--nav-bg);
+    border-bottom: 1px solid var(--nav-border);
+  }
+
+  .nav-link {
+    color: var(--text-muted);
+  }
+
+  .nav-link:hover {
+    color: var(--text);
+    background: var(--nav-hover-bg);
+  }
+
+  .nav-link-active {
+    color: var(--text);
+    background: var(--nav-active-bg);
+  }
+
+  /* Show sun in dark mode, moon in light mode */
+  .theme-icon-moon { display: none; }
+  .theme-icon-sun { display: block; }
+
+  [data-theme="light"] .theme-icon-moon { display: block; }
+  [data-theme="light"] .theme-icon-sun { display: none; }
+</style>
+
+<script>
+  function initThemeToggle() {
+    const btn = document.getElementById('theme-toggle');
+    if (!btn) return;
+
+    btn.addEventListener('click', () => {
+      const html = document.documentElement;
+      const current = html.getAttribute('data-theme') || 'dark';
+      const next = current === 'dark' ? 'light' : 'dark';
+
+      html.setAttribute('data-theme', next);
+      localStorage.setItem('theme', next);
+
+      // Update logos
+      document.querySelectorAll<HTMLImageElement>('.nav-logo, .footer-logo').forEach((img) => {
+        const src = next === 'light' ? img.dataset.lightSrc : img.dataset.darkSrc;
+        if (src) img.src = src;
+      });
+    });
+  }
+
+  initThemeToggle();
+  document.addEventListener('astro:after-swap', initThemeToggle);
+</script>

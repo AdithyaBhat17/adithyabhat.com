@@ -1,31 +1,69 @@
 ---
 const socials = [
-  { icon: 'behance', link: 'https://behance.net/adithyabhat' },
-  { icon: 'dribbble', link: 'https://dribbble.com/adithyanr' },
-  { icon: 'twitter', link: 'https://twitter.com/adithya__nr' },
-  { icon: 'github', link: 'https://github.com/adithyabhat17' },
-  { icon: 'linkedin', link: 'https://linkedin.com/in/adithya-nr' },
-  { icon: 'youtube', link: 'https://www.youtube.com/@adithya-bhat' },
+  {
+    name: 'Behance',
+    link: 'https://behance.net/adithyabhat',
+    icon: `<svg width="18" height="12" viewBox="0 0 21 14" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M18.07 1.35H13V2.76H18.09L18.07 1.35ZM17 11.05C16.615 11.305 16.161 11.434 15.7 11.42C15.395 11.452 15.086 11.42 14.794 11.327C14.501 11.235 14.231 11.082 14 10.88C13.573 10.396 13.351 9.765 13.38 9.12H20C20.048 8.449 19.99 7.774 19.83 7.12C19.675 6.498 19.403 5.911 19.03 5.39C18.654 4.885 18.169 4.471 17.61 4.18C16.988 3.874 16.303 3.719 15.61 3.73C14.958 3.725 14.312 3.851 13.71 4.1C13.159 4.333 12.659 4.672 12.24 5.1C11.822 5.536 11.499 6.054 11.29 6.62C11.066 7.232 10.954 7.879 10.96 8.53C10.95 9.191 11.058 9.848 11.28 10.47C11.469 11.034 11.768 11.554 12.16 12C12.566 12.438 13.065 12.78 13.62 13C14.239 13.236 14.898 13.351 15.56 13.34C16.489 13.369 17.407 13.126 18.2 12.64C19.001 12.071 19.578 11.24 19.83 10.29H17.62C17.502 10.604 17.284 10.871 17 11.05ZM13.57 6.93C13.648 6.681 13.777 6.45 13.949 6.254C14.122 6.058 14.333 5.9 14.57 5.79C14.884 5.649 15.226 5.58 15.57 5.59C15.819 5.569 16.069 5.602 16.304 5.686C16.538 5.771 16.752 5.905 16.93 6.08C17.27 6.496 17.488 6.998 17.56 7.53H13.41C13.426 7.327 13.463 7.126 13.52 6.93H13.57ZM8.28 6.45C8.789 6.238 9.231 5.893 9.56 5.45C9.862 4.98 10.012 4.428 9.99 3.87C10.01 3.361 9.91 2.854 9.7 2.39C9.523 1.988 9.24 1.642 8.88 1.39C8.499 1.128 8.066 .951 7.61 .87C7.071 .757 6.521 .703 5.97 .71H0V13.29H6.1C6.657 13.29 7.211 13.22 7.75 13.08C8.261 12.948 8.745 12.728 9.18 12.43C9.602 12.138 9.945 11.746 10.18 11.29C10.44 10.78 10.567 10.212 10.55 9.64C10.569 8.931 10.37 8.233 9.98 7.64C9.561 7.044 8.939 6.621 8.23 6.45H8.28ZM2.77 2.86H5.36C5.598 2.86 5.835 2.88 6.07 2.92C6.286 2.952 6.493 3.027 6.68 3.14C6.86 3.242 7.006 3.395 7.1 3.58C7.216 3.802 7.271 4.05 7.26 4.3C7.279 4.515 7.246 4.732 7.164 4.932C7.082 5.132 6.954 5.309 6.79 5.45C6.432 5.696 6.004 5.819 5.57 5.8H2.77V2.86ZM7.61 10.3C7.507 10.504 7.352 10.677 7.16 10.8C6.96 10.924 6.74 11.012 6.51 11.06C6.254 11.117 5.992 11.144 5.73 11.14H2.73V7.69H5.73C6.245 7.667 6.753 7.811 7.18 8.1C7.373 8.273 7.522 8.489 7.616 8.731C7.71 8.972 7.745 9.232 7.72 9.49C7.747 9.765 7.709 10.042 7.61 10.3Z"/></svg>`,
+  },
+  {
+    name: 'Dribbble',
+    link: 'https://dribbble.com/adithyanr',
+    icon: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="10"/><path d="M19.13 5.09C15.22 9.14 10 10.44 2.25 10.94"/><path d="M21.75 12.84c-6.62-1.41-12.14 1-16.38 6.32"/><path d="M8.56 2.75c4.37 6 6 9.42 8 17.72"/></svg>`,
+  },
+  {
+    name: 'Twitter',
+    link: 'https://twitter.com/adithya__nr',
+    icon: `<svg width="18" height="16" viewBox="0 0 20 18" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M20 2.8a8.2 8.2 0 0 1-2.36.64A4.13 4.13 0 0 0 19.45 1.17a8.2 8.2 0 0 1-2.61.99A4.1 4.1 0 0 0 9.84 5.91 11.65 11.65 0 0 1 1.39 1.62a4.1 4.1 0 0 0 1.27 5.48 4.07 4.07 0 0 1-1.86-.51v.05a4.1 4.1 0 0 0 3.29 4.02c-.37.1-.75.15-1.14.15-.28 0-.55-.03-.81-.07a4.1 4.1 0 0 0 3.83 2.85A8.23 8.23 0 0 1 0 15.28a11.62 11.62 0 0 0 6.29 1.84c7.55 0 11.68-6.26 11.68-11.68l-.01-.53A8.35 8.35 0 0 0 20 2.8Z"/></svg>`,
+  },
+  {
+    name: 'GitHub',
+    link: 'https://github.com/adithyabhat17',
+    icon: `<svg width="18" height="18" viewBox="0 0 20 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M10 .25a9.75 9.75 0 0 0-3.08 19c.49.09.67-.21.67-.47v-1.7C5 17.61 4.35 16.53 4.15 15.97a3.65 3.65 0 0 0-1.03-1.41c-.35-.19-.85-.66.01-.67.67.04 1.28.43 1.63 1.02.79 1.36 2.09 .97 2.6.74.05-.58.28-1.05.56-1.3-2.22-.25-4.55-1.11-4.55-4.94a3.87 3.87 0 0 1 1.03-2.69 3.6 3.6 0 0 1 .1-2.64s.84-.27 2.75 1.02a9.5 9.5 0 0 1 5 0c1.91-1.3 2.75-1.02 2.75-1.02.37.84.4 1.79.1 2.64a3.87 3.87 0 0 1 1.02 2.69c0 3.84-2.34 4.69-4.57 4.94.36.38.55.9.53 1.43v2.12c0 .26.18.57.68.47A9.75 9.75 0 0 0 10 .25Z"/></svg>`,
+  },
+  {
+    name: 'LinkedIn',
+    link: 'https://linkedin.com/in/adithya-nr',
+    icon: `<svg width="18" height="18" viewBox="0 0 20 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M18.47 0H1.53A1.52 1.52 0 0 0 .06 1.43v17.14A1.52 1.52 0 0 0 1.53 20h16.94a1.52 1.52 0 0 0 1.47-1.43V1.43A1.52 1.52 0 0 0 18.47 0ZM6.09 16.74h-3V7.74h3v9ZM4.59 6.48a1.56 1.56 0 1 1 0-3.12 1.56 1.56 0 0 1 0 3.12Zm12.32 10.26h-3v-4.83c0-1.21-.43-2-1.52-2a1.64 1.64 0 0 0-1.54 1.1c-.08.23-.1.48-.1.73v5h-3s.04-8.19 0-9h3v1.27a2.98 2.98 0 0 1 2.71-1.5c1.98 0 3.46 1.3 3.46 4.07v5.17Z"/></svg>`,
+  },
+  {
+    name: 'YouTube',
+    link: 'https://www.youtube.com/@adithya-bhat',
+    icon: `<svg width="20" height="16" viewBox="0 0 24 18" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M23.5 3.51a3.02 3.02 0 0 0-2.12-2.14C19.5.78 12 .78 12 .78s-7.5 0-9.38.59A3.02 3.02 0 0 0 .5 3.51 31.6 31.6 0 0 0 0 9s0 5.49.5 5.49a3.02 3.02 0 0 0 2.12 2.14C4.5 17.22 12 17.22 12 17.22s7.5 0 9.38-.59a3.02 3.02 0 0 0 2.12-2.14c.5-1.86.5-5.49.5-5.49s0-3.63-.5-5.49ZM9.6 12.6V5.4L15.84 9 9.6 12.6Z"/></svg>`,
+  },
 ];
 ---
 
-<div class="flex items-center gap-4">
+<div class="social-links flex items-center gap-2">
   {socials.map((social) => (
     <a
       href={social.link}
       target="_blank"
       rel="noreferrer noopener"
-      class="block"
-      aria-label={social.icon}
+      class="social-link"
+      aria-label={social.name}
     >
-      <img
-        loading="lazy"
-        src={`/static/${social.icon}.svg`}
-        alt={social.icon}
-        width="20"
-        height="20"
-        class="social-icon-dark"
-      />
+      <Fragment set:html={social.icon} />
     </a>
   ))}
 </div>
+
+<style>
+  .social-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    color: var(--text-muted);
+    border: 1px solid transparent;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .social-link:hover {
+    color: var(--accent);
+    background: var(--accent-glow);
+    border-color: var(--accent-glow-strong);
+    transform: translateY(-2px);
+  }
+</style>
