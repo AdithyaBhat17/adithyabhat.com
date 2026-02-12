@@ -16,7 +16,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 <html lang="en" data-theme="dark">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 
     <!-- Theme: apply saved preference before first paint to prevent FOUC -->
     <script is:inline>
@@ -115,6 +115,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     <!-- Initialize scroll animations after page load + on view transition -->
     <script>
       import { initScrollAnimations, initGSAPAnimations } from '@/scripts/animations';
+      import { initEasterEggs } from '@/scripts/easter-eggs';
 
       function init() {
         initScrollAnimations();
@@ -150,6 +151,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
       // Initial load
       init();
       initCursor();
+      initEasterEggs();
 
       // Re-init after view transitions
       document.addEventListener('astro:after-swap', () => {

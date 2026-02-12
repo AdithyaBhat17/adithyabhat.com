@@ -66,4 +66,24 @@ const socials = [
     border-color: var(--accent-glow-strong);
     transform: translateY(-2px);
   }
+
+  /* Bigger touch targets on mobile */
+  @media (max-width: 767px) {
+    .social-link {
+      width: 44px;
+      height: 44px;
+    }
+  }
+
+  @media (hover: none) and (pointer: coarse) {
+    .social-link:hover {
+      transform: none;
+    }
+
+    .social-link:active {
+      color: var(--accent);
+      background: var(--accent-glow);
+      transform: scale(0.92);
+    }
+  }
 </style>

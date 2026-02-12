@@ -8,6 +8,6 @@ const { class: className = '', wide = false } = Astro.props;
 const padding = wide ? 'px-6 md:px-16' : 'px-6 md:px-12 lg:px-20 xl:px-32';
 ---
 
-<div class:list={[padding, 'mb-6', className]}>
+<div class:list={[padding, 'mb-6 max-w-[1400px] mx-auto', className]}>
   <slot />
 </div>

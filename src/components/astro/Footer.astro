@@ -22,11 +22,11 @@ const socialLinks = [
 const currentPath = Astro.url.pathname;
 ---
 
-<footer class="px-6 md:px-12 lg:px-20 xl:px-32">
+<footer class="px-6 md:px-12 lg:px-20 xl:px-32 max-w-[1400px] mx-auto footer-safe-area">
   <hr class="gradient-line" />
 
   <!-- Three-column grid -->
-  <div class="py-16 md:py-20 grid grid-cols-2 md:grid-cols-3 gap-12 md:gap-8">
+  <div class="py-12 md:py-20 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10 md:gap-8">
     <!-- Navigate -->
     <div>
       <h3 class="footer-col-title">Navigate</h3>
@@ -151,6 +151,21 @@ const currentPath = Astro.url.pathname;
     transform: translateX(3px);
   }
 
+  @media (max-width: 767px) {
+    .footer-link {
+      padding: 0.25rem 0;
+      min-height: 36px;
+      display: inline-flex;
+      align-items: center;
+    }
+  }
+
+  @media (hover: none) and (pointer: coarse) {
+    .footer-link:hover {
+      transform: none;
+    }
+  }
+
   .footer-link.is-active {
     color: var(--text);
   }
@@ -246,6 +261,11 @@ const currentPath = Astro.url.pathname;
   /* ===== LOGO THEME ===== */
   .footer-logo {
     filter: brightness(0) invert(calc(1 - var(--logo-invert)));
+  }
+
+  /* ===== SAFE AREA (iPhone home bar) ===== */
+  :global(.footer-safe-area) {
+    padding-bottom: env(safe-area-inset-bottom, 0px);
   }
 
   @media (prefers-reduced-motion: reduce) {

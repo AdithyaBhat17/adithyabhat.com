@@ -8,7 +8,7 @@ const { class: className = '' } = Astro.props;
 
 <div class:list={['flex items-center gap-4', className]} data-section-heading data-animate>
   <span class="inline-block w-2.5 h-2.5 rounded-full bg-[var(--accent)] shrink-0"></span>
-  <h2 class="font-display text-4xl md:text-5xl tracking-tight text-[var(--text)]">
+  <h2 class="font-display text-3xl md:text-5xl tracking-tight text-[var(--text)] whitespace-nowrap">
     <slot />
   </h2>
   <span class="flex-1 h-[1px] bg-[var(--border)]"></span>

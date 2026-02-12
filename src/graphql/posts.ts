@@ -35,6 +35,24 @@ export const ARTICLE_QUERY = `
             content
             date
             slug
+            tags
+            thumbnail {
+                alt
+                blurhash
+                title
+                responsiveImage(imgixParams: {fit: crop, ar: "16:9", auto: format}) {
+                    srcSet
+                    webpSrcSet
+                    sizes
+                    src
+                    width
+                    height
+                    aspectRatio
+                    alt
+                    title
+                    base64
+                }
+            }
             seo: _seoMetaTags {
                 attributes
                 tag

@@ -17,15 +17,15 @@ const gridCols = columns === 2
 const pathname = type === 'article' ? 'blog' : 'work';
 ---
 
-<div class:list={['grid gap-9 mt-8', gridCols]} data-card-grid data-animate>
-  {items.map((item) => {
+<div class:list={['grid gap-9 mt-8', gridCols]} data-animate-stagger>
+  {items.map((item, i) => {
     const href = (item as Article).externalLink
       ? (item as Article).externalLink!
       : `/${pathname}/${item.slug}`;
     const external = !!(item as Article).externalLink;
 
     return (
-      <div>
+      <div data-animate>
         <Card
           title={item.title}
           href={href}
@@ -35,6 +35,7 @@ const pathname = type === 'article' ? 'blog' : 'work';
           type={type}
           external={external}
           transitionName={`card-${item.slug}`}
+          index={i}
         />
       </div>
     );

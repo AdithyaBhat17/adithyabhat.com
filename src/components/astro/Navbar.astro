@@ -17,106 +17,652 @@ function isActive(link: string): boolean {
 }
 ---
 
-<nav class:list={[
-  'navbar flex sticky w-full top-0 items-center justify-between py-5 z-50',
-  padding
-]}>
-  <div class="flex items-center gap-3">
-    <a href="/" class="group flex items-center gap-3 hover:opacity-90 transition-opacity">
-      <img
-        class="nav-logo h-9 w-9"
-        src="/static/logo_white.svg"
-        data-light-src="/static/logo_black.svg"
-        data-dark-src="/static/logo_white.svg"
-        alt="Adithya NR logo"
-      />
-      <span class="hidden sm:inline font-display text-sm font-semibold text-[var(--text)] tracking-tight">
-        adithya
-      </span>
-    </a>
-  </div>
+<nav class="navbar sticky w-full top-0 z-50">
+  <div class:list={[
+    'navbar-inner flex items-center justify-between py-4 md:py-5 max-w-[1400px] mx-auto',
+    padding
+  ]}>
+    <div class="flex items-center gap-3">
+      <a href="/" class="nav-brand group flex items-center gap-3">
+        <img
+          class="nav-logo h-8 w-8 md:h-9 md:w-9"
+          src="/static/logo_white.svg"
+          data-light-src="/static/logo_black.svg"
+          data-dark-src="/static/logo_white.svg"
+          alt="Adithya NR logo"
+        />
+        <span class="hidden sm:inline font-display text-sm font-semibold text-[var(--text)] tracking-tight">
+          adithya
+        </span>
+      </a>
+    </div>
 
-  <div class="flex items-center gap-2">
-    <ul class="flex items-center gap-1">
-      {routes.map((route) => (
-        <li>
+    <!-- Desktop nav -->
+    <div class="hidden md:flex items-center gap-2">
+      <ul class="flex items-center gap-1">
+        {routes.map((route) => (
+          <li>
+            <a
+              href={route.link}
+              class:list={[
+                'nav-link text-sm font-body px-3 py-1.5 rounded-lg transition-all duration-200',
+                isActive(route.link) ? 'nav-link-active' : ''
+              ]}
+            >
+              {route.name}
+            </a>
+          </li>
+        ))}
+      </ul>
+
+      <button
+        id="theme-toggle"
+        class="theme-toggle ml-2 p-2 rounded-lg transition-all duration-200 hover:bg-[var(--nav-hover-bg)]"
+        aria-label="Toggle theme"
+      >
+        <svg class="theme-icon-sun w-4 h-4 text-[var(--text-muted)]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-4.773-4.227-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z" />
+        </svg>
+        <svg class="theme-icon-moon w-4 h-4 text-[var(--text-muted)]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M21.752 15.002A9.72 9.72 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-5.998Z" />
+        </svg>
+      </button>
+    </div>
+
+    <!-- Mobile controls -->
+    <div class="flex md:hidden items-center gap-1">
+      <button
+        id="theme-toggle-mobile"
+        class="theme-toggle p-2.5 rounded-lg transition-all duration-200"
+        aria-label="Toggle theme"
+      >
+        <svg class="theme-icon-sun w-5 h-5 text-[var(--text-muted)]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-4.773-4.227-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z" />
+        </svg>
+        <svg class="theme-icon-moon w-5 h-5 text-[var(--text-muted)]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M21.752 15.002A9.72 9.72 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-5.998Z" />
+        </svg>
+      </button>
+
+      <button
+        id="mobile-menu-btn"
+        class="mobile-menu-btn p-2.5 rounded-lg transition-all duration-200"
+        aria-label="Open menu"
+        aria-expanded="false"
+      >
+        <svg class="hamburger-icon w-5 h-5 text-[var(--text)]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 9h16.5m-16.5 6.75h16.5" />
+        </svg>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- Full-screen mobile menu -->
+<div id="mobile-menu" class="mobile-fullscreen" aria-hidden="true">
+  <!-- Close button — prominent, top-right -->
+  <button id="mobile-menu-close" class="menu-close-btn" aria-label="Close menu">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <line x1="18" y1="6" x2="6" y2="18" />
+      <line x1="6" y1="6" x2="18" y2="18" />
+    </svg>
+  </button>
+
+  <!-- Ambient glow -->
+  <div class="menu-orb" aria-hidden="true"></div>
+  <div class="menu-orb-2" aria-hidden="true"></div>
+
+  <!-- Decorative floating ring -->
+  <div class="menu-deco-ring" aria-hidden="true"></div>
+
+  <!-- Navigation links -->
+  <div class="menu-content">
+    <ul class="menu-links">
+      {routes.map((route, i) => (
+        <li class="menu-link-item" style={`--i: ${i}`}>
           <a
             href={route.link}
             class:list={[
-              'nav-link text-sm font-body px-3 py-1.5 rounded-lg transition-all duration-200',
-              isActive(route.link) ? 'nav-link-active' : ''
+              'menu-link',
+              isActive(route.link) ? 'menu-link-active' : ''
             ]}
           >
-            {route.name}
+            <span class="menu-link-index">{String(i + 1).padStart(2, '0')}</span>
+            <span class="menu-link-text">{route.name}</span>
+            <span class="menu-link-arrow">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="5" y1="12" x2="19" y2="12" />
+                <polyline points="12 5 19 12 12 19" />
+              </svg>
+            </span>
           </a>
+          <div class="menu-link-divider"></div>
         </li>
       ))}
     </ul>
 
-    <button
-      id="theme-toggle"
-      class="ml-2 p-2 rounded-lg transition-all duration-200 hover:bg-[var(--nav-hover-bg)]"
-      aria-label="Toggle theme"
-    >
-      <svg class="theme-icon-sun w-4 h-4 text-[var(--text-muted)]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-4.773-4.227-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z" />
-      </svg>
-      <svg class="theme-icon-moon w-4 h-4 text-[var(--text-muted)]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M21.752 15.002A9.72 9.72 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-5.998Z" />
-      </svg>
-    </button>
+    <!-- Bottom area -->
+    <div class="menu-footer">
+      <p class="menu-footer-label">Say hello</p>
+      <a href="mailto:hello@adithyabhat.com" class="menu-footer-email">hello@adithyabhat.com</a>
+    </div>
   </div>
-</nav>
+</div>
 
 <style>
   .navbar {
     background: var(--nav-bg);
     border-bottom: 1px solid var(--nav-border);
+    transition: border-color 0.4s ease, box-shadow 0.4s ease;
+    -webkit-backdrop-filter: saturate(180%) blur(20px);
+    backdrop-filter: saturate(180%) blur(20px);
   }
 
+  /* Cursor spotlight on the navbar */
+  .navbar::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+      600px circle at var(--cursor-x, 50%) var(--cursor-y, 50%),
+      var(--accent-glow) 0%,
+      transparent 40%
+    );
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+  }
+
+  :global(body.cursor-active) .navbar::before {
+    opacity: 1;
+  }
+
+  @media (hover: none) {
+    .navbar::before { display: none; }
+  }
+
+  .navbar-inner {
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Scrolled state */
+  .navbar.is-scrolled {
+    box-shadow: 0 4px 24px -8px rgba(0, 0, 0, 0.2);
+    border-bottom-color: color-mix(in srgb, var(--accent) 12%, var(--nav-border));
+  }
+
+  /* Logo hover */
+  .nav-logo {
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  .nav-brand:hover .nav-logo {
+    transform: rotate(-12deg) scale(1.1);
+  }
+
+  /* Nav links */
   .nav-link {
     color: var(--text-muted);
+    position: relative;
+  }
+
+  .nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: 2px;
+    left: 50%;
+    width: 0;
+    height: 2px;
+    background: var(--accent);
+    border-radius: 1px;
+    transition: width 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transform: translateX(-50%);
   }
 
   .nav-link:hover {
     color: var(--text);
-    background: var(--nav-hover-bg);
+  }
+
+  .nav-link:hover::after {
+    width: 50%;
   }
 
   .nav-link-active {
     color: var(--text);
-    background: var(--nav-active-bg);
   }
 
-  /* Show sun in dark mode, moon in light mode */
+  .nav-link-active::after {
+    width: 50%;
+  }
+
+  /* Theme toggle */
+  .theme-toggle svg {
+    transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  .theme-toggle:active svg {
+    transform: rotate(180deg) scale(0.85);
+  }
+
   .theme-icon-moon { display: none; }
   .theme-icon-sun { display: block; }
 
-  [data-theme="light"] .theme-icon-moon { display: block; }
-  [data-theme="light"] .theme-icon-sun { display: none; }
+  :global([data-theme="light"]) .theme-icon-moon { display: block; }
+  :global([data-theme="light"]) .theme-icon-sun { display: none; }
+
+  /* ===== MOBILE MENU BUTTON ===== */
+  .mobile-menu-btn {
+    position: relative;
+    z-index: 60;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* ===== CLOSE BUTTON (inside fullscreen menu) ===== */
+  .menu-close-btn {
+    position: absolute;
+    top: 1rem;
+    right: 1.25rem;
+    right: calc(1.25rem + env(safe-area-inset-right, 0px));
+    z-index: 10;
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+    background: var(--bg-surface);
+    color: var(--text);
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    opacity: 0;
+    transform: rotate(-90deg) scale(0.5);
+    transition: opacity 0.4s ease 0.3s, transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 0.3s,
+                background 0.2s ease, border-color 0.2s ease;
+  }
+
+  .mobile-fullscreen.is-open .menu-close-btn {
+    opacity: 1;
+    transform: rotate(0deg) scale(1);
+  }
+
+  .menu-close-btn:active {
+    background: var(--accent-glow);
+    border-color: var(--accent);
+    color: var(--accent);
+    transform: rotate(90deg) scale(0.9);
+    transition: all 0.2s ease;
+  }
+
+  /* ===== FULL-SCREEN MOBILE MENU ===== */
+  .mobile-fullscreen {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    background: var(--bg);
+    display: flex;
+    flex-direction: column;
+
+    /* Clip-path reveal from top-right (where the burger is) */
+    clip-path: circle(0% at calc(100% - 2.5rem) 2rem);
+    transition: clip-path 0.6s cubic-bezier(0.65, 0, 0.35, 1);
+
+    pointer-events: none;
+    overflow: hidden;
+  }
+
+  .mobile-fullscreen.is-open {
+    clip-path: circle(150% at calc(100% - 2.5rem) 2rem);
+    pointer-events: auto;
+    transition: clip-path 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  /* ===== AMBIENT ORBS ===== */
+  .menu-orb {
+    position: absolute;
+    width: 300px;
+    height: 300px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(249, 115, 22, 0.15) 0%, rgba(249, 115, 22, 0.04) 50%, transparent 70%);
+    top: -60px;
+    right: -80px;
+    pointer-events: none;
+    opacity: 0;
+    transform: scale(0.5);
+    transition: opacity 0.8s ease 0.2s, transform 1s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s;
+  }
+
+  .mobile-fullscreen.is-open .menu-orb {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  .menu-orb-2 {
+    position: absolute;
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(59, 130, 246, 0.08) 0%, rgba(59, 130, 246, 0.02) 50%, transparent 70%);
+    bottom: 10%;
+    left: -40px;
+    pointer-events: none;
+    opacity: 0;
+    transform: scale(0.5);
+    transition: opacity 0.8s ease 0.4s, transform 1s cubic-bezier(0.34, 1.56, 0.64, 1) 0.4s;
+  }
+
+  .mobile-fullscreen.is-open .menu-orb-2 {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  :global([data-theme="light"]) .menu-orb {
+    background: radial-gradient(circle, rgba(249, 115, 22, 0.12) 0%, rgba(249, 115, 22, 0.03) 50%, transparent 70%);
+  }
+
+  /* ===== DECORATIVE RING ===== */
+  .menu-deco-ring {
+    position: absolute;
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    border: 1.5px solid var(--accent);
+    opacity: 0;
+    bottom: 20%;
+    right: 8%;
+    pointer-events: none;
+    transform: scale(0) rotate(-90deg);
+    transition: all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.3s;
+  }
+
+  .mobile-fullscreen.is-open .menu-deco-ring {
+    opacity: 0.08;
+    transform: scale(1) rotate(0deg);
+  }
+
+  /* ===== MENU CONTENT ===== */
+  .menu-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 5rem 2rem 3rem;
+    padding-left: calc(2rem + env(safe-area-inset-left, 0px));
+    padding-right: calc(2rem + env(safe-area-inset-right, 0px));
+    padding-bottom: calc(3rem + env(safe-area-inset-bottom, 0px));
+    position: relative;
+    z-index: 2;
+  }
+
+  /* ===== LINK LIST ===== */
+  .menu-links {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .menu-link-item {
+    overflow: hidden;
+  }
+
+  .menu-link {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 0.25rem;
+    text-decoration: none;
+    position: relative;
+
+    /* Slide-up reveal */
+    opacity: 0;
+    transform: translateY(40px);
+  }
+
+  .mobile-fullscreen.is-open .menu-link {
+    opacity: 1;
+    transform: translateY(0);
+    transition:
+      opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+      transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transition-delay: calc(var(--i) * 80ms + 200ms);
+  }
+
+  /* Close animation — quick fade */
+  .mobile-fullscreen:not(.is-open) .menu-link {
+    transition:
+      opacity 0.15s ease,
+      transform 0.15s ease;
+  }
+
+  .menu-link-index {
+    font-family: 'Google Sans Code', 'JetBrains Mono', monospace;
+    font-size: 0.6875rem;
+    color: var(--accent);
+    opacity: 0.5;
+    letter-spacing: 0.05em;
+    min-width: 1.5rem;
+    transition: opacity 0.3s ease;
+  }
+
+  .menu-link-text {
+    font-family: 'Bricolage Grotesque', Georgia, serif;
+    font-size: clamp(1.75rem, 8vw, 2.5rem);
+    font-weight: 700;
+    color: var(--text-secondary);
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+    transition: color 0.3s ease, transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  .menu-link-arrow {
+    margin-left: auto;
+    color: var(--accent);
+    opacity: 0;
+    transform: translateX(-8px);
+    transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  /* Divider between links */
+  .menu-link-divider {
+    height: 1px;
+    background: linear-gradient(90deg, var(--border) 0%, transparent 100%);
+    transform: scaleX(0);
+    transform-origin: left;
+  }
+
+  .mobile-fullscreen.is-open .menu-link-divider {
+    transform: scaleX(1);
+    transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+    transition-delay: calc(var(--i) * 80ms + 350ms);
+  }
+
+  /* Active link */
+  .menu-link-active .menu-link-text {
+    color: var(--text);
+  }
+
+  .menu-link-active .menu-link-index {
+    opacity: 1;
+  }
+
+  .menu-link-active .menu-link-arrow {
+    opacity: 0.4;
+    transform: translateX(0);
+  }
+
+  /* Touch interaction */
+  .menu-link:active .menu-link-text {
+    color: var(--accent);
+    transform: translateX(4px);
+  }
+
+  .menu-link:active .menu-link-index {
+    opacity: 1;
+  }
+
+  .menu-link:active .menu-link-arrow {
+    opacity: 1;
+    transform: translateX(4px);
+  }
+
+  /* ===== MENU FOOTER ===== */
+  .menu-footer {
+    margin-top: auto;
+    padding-top: 2rem;
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  .mobile-fullscreen.is-open .menu-footer {
+    opacity: 1;
+    transform: translateY(0);
+    transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.6s;
+  }
+
+  .menu-footer-label {
+    font-family: 'Google Sans Code', 'JetBrains Mono', monospace;
+    font-size: 0.625rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 0.5rem;
+  }
+
+  .menu-footer-email {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    transition: color 0.2s ease;
+  }
+
+  .menu-footer-email:active {
+    color: var(--accent);
+  }
+
+  /* ===== HIDE ON DESKTOP ===== */
+  @media (min-width: 768px) {
+    .mobile-fullscreen {
+      display: none !important;
+    }
+  }
+
+  /* ===== REDUCED MOTION ===== */
+  @media (prefers-reduced-motion: reduce) {
+    .mobile-fullscreen {
+      clip-path: none;
+      opacity: 0;
+      transition: opacity 0.01ms;
+    }
+
+    .mobile-fullscreen.is-open {
+      opacity: 1;
+    }
+
+    .burger-line {
+      transition: none;
+    }
+
+    .menu-close-btn {
+      opacity: 1;
+      transform: none;
+      transition: none;
+    }
+
+    .menu-link,
+    .menu-link-divider,
+    .menu-footer,
+    .menu-orb,
+    .menu-orb-2,
+    .menu-deco-ring {
+      opacity: 1;
+      transform: none;
+      transition: none;
+    }
+  }
 </style>
 
 <script>
   function initThemeToggle() {
-    const btn = document.getElementById('theme-toggle');
-    if (!btn) return;
-
-    btn.addEventListener('click', () => {
+    const toggleTheme = () => {
       const html = document.documentElement;
       const current = html.getAttribute('data-theme') || 'dark';
       const next = current === 'dark' ? 'light' : 'dark';
-
       html.setAttribute('data-theme', next);
       localStorage.setItem('theme', next);
-
-      // Update logos
       document.querySelectorAll<HTMLImageElement>('.nav-logo, .footer-logo').forEach((img) => {
         const src = next === 'light' ? img.dataset.lightSrc : img.dataset.darkSrc;
         if (src) img.src = src;
       });
+    };
+
+    const btn = document.getElementById('theme-toggle');
+    if (btn && !btn.dataset.themeInit) {
+      btn.dataset.themeInit = 'true';
+      btn.addEventListener('click', toggleTheme);
+    }
+
+    const btnMobile = document.getElementById('theme-toggle-mobile');
+    if (btnMobile && !btnMobile.dataset.themeInit) {
+      btnMobile.dataset.themeInit = 'true';
+      btnMobile.addEventListener('click', toggleTheme);
+    }
+  }
+
+  function initNavScroll() {
+    const nav = document.querySelector('.navbar');
+    if (!nav) return;
+    const update = () => nav.classList.toggle('is-scrolled', window.scrollY > 20);
+    update();
+    window.addEventListener('scroll', update, { passive: true });
+  }
+
+  function initMobileMenu() {
+    const btn = document.getElementById('mobile-menu-btn') as HTMLButtonElement | null;
+    const closeBtn = document.getElementById('mobile-menu-close') as HTMLButtonElement | null;
+    const menu = document.getElementById('mobile-menu');
+    if (!btn || !menu) return;
+    if (btn.dataset.menuInit) return;
+    btn.dataset.menuInit = 'true';
+
+    function openMenu() {
+      btn!.setAttribute('aria-expanded', 'true');
+      menu!.classList.add('is-open');
+      menu!.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeMenu() {
+      btn!.setAttribute('aria-expanded', 'false');
+      menu!.classList.remove('is-open');
+      menu!.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+    }
+
+    btn.addEventListener('click', openMenu);
+
+    // Close button inside menu
+    closeBtn?.addEventListener('click', closeMenu);
+
+    // Close on link click
+    menu.querySelectorAll('.menu-link').forEach((link) => {
+      link.addEventListener('click', closeMenu);
+    });
+
+    // Close on escape
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && menu.classList.contains('is-open')) {
+        closeMenu();
+      }
     });
   }
 
   initThemeToggle();
-  document.addEventListener('astro:after-swap', initThemeToggle);
+  initNavScroll();
+  initMobileMenu();
+  document.addEventListener('astro:after-swap', () => {
+    initThemeToggle();
+    initNavScroll();
+    initMobileMenu();
+  });
 </script>

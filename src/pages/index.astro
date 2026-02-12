@@ -18,36 +18,48 @@ const articles = data.allArticles?.slice(0, 3) ?? [];
 
   <!-- Recent Work -->
   <Container>
-    <SectionHeading class="mt-24 xl:mt-32 mb-8">Selected work</SectionHeading>
+    <SectionHeading class="mt-16 md:mt-24 xl:mt-32 mb-6 md:mb-8">Selected work</SectionHeading>
     <CardGrid items={projects} type="project" />
     <ArrowLink href="/work" text="View all projects" />
   </Container>
 
   <!-- Featured Articles -->
   <Container>
-    <SectionHeading class="mt-28 xl:mt-36 mb-8">Writing</SectionHeading>
+    <SectionHeading class="mt-16 md:mt-28 xl:mt-36 mb-6 md:mb-8">Writing</SectionHeading>
     <CardGrid items={articles} type="article" />
     <ArrowLink href="/blog" text="Read more articles" />
   </Container>
 
   <!-- CTA -->
-  <section class="cta-section mt-28 xl:mt-36 mb-20 overflow-hidden">
-    <!-- Scrolling marquee -->
+  <section class="cta-section mt-16 md:mt-28 xl:mt-36 mb-12 md:mb-20 overflow-hidden">
+    <!-- Scrolling marquee (two identical tracks for seamless loop) -->
     <div class="cta-marquee-wrap" aria-hidden="true">
       <div class="cta-marquee">
-        <span>LET'S TALK&nbsp;&nbsp;&middot;&nbsp;&nbsp;</span>
-        <span>GOT A PROJECT?&nbsp;&nbsp;&middot;&nbsp;&nbsp;</span>
-        <span>LET'S TALK&nbsp;&nbsp;&middot;&nbsp;&nbsp;</span>
-        <span>GOT A PROJECT?&nbsp;&nbsp;&middot;&nbsp;&nbsp;</span>
-        <span>LET'S TALK&nbsp;&nbsp;&middot;&nbsp;&nbsp;</span>
-        <span>GOT A PROJECT?&nbsp;&nbsp;&middot;&nbsp;&nbsp;</span>
-        <span>LET'S TALK&nbsp;&nbsp;&middot;&nbsp;&nbsp;</span>
-        <span>GOT A PROJECT?&nbsp;&nbsp;&middot;&nbsp;&nbsp;</span>
+        <div class="cta-marquee-track">
+          <span>LET'S TALK&nbsp;&nbsp;&middot;&nbsp;&nbsp;</span>
+          <span>GOT A PROJECT?&nbsp;&nbsp;&middot;&nbsp;&nbsp;</span>
+          <span>LET'S TALK&nbsp;&nbsp;&middot;&nbsp;&nbsp;</span>
+          <span>GOT A PROJECT?&nbsp;&nbsp;&middot;&nbsp;&nbsp;</span>
+          <span>LET'S TALK&nbsp;&nbsp;&middot;&nbsp;&nbsp;</span>
+          <span>GOT A PROJECT?&nbsp;&nbsp;&middot;&nbsp;&nbsp;</span>
+          <span>LET'S TALK&nbsp;&nbsp;&middot;&nbsp;&nbsp;</span>
+          <span>GOT A PROJECT?&nbsp;&nbsp;&middot;&nbsp;&nbsp;</span>
+        </div>
+        <div class="cta-marquee-track">
+          <span>LET'S TALK&nbsp;&nbsp;&middot;&nbsp;&nbsp;</span>
+          <span>GOT A PROJECT?&nbsp;&nbsp;&middot;&nbsp;&nbsp;</span>
+          <span>LET'S TALK&nbsp;&nbsp;&middot;&nbsp;&nbsp;</span>
+          <span>GOT A PROJECT?&nbsp;&nbsp;&middot;&nbsp;&nbsp;</span>
+          <span>LET'S TALK&nbsp;&nbsp;&middot;&nbsp;&nbsp;</span>
+          <span>GOT A PROJECT?&nbsp;&nbsp;&middot;&nbsp;&nbsp;</span>
+          <span>LET'S TALK&nbsp;&nbsp;&middot;&nbsp;&nbsp;</span>
+          <span>GOT A PROJECT?&nbsp;&nbsp;&middot;&nbsp;&nbsp;</span>
+        </div>
       </div>
     </div>
 
     <Container>
-      <div class="cta-card relative py-20 md:py-28 px-8 md:px-16 rounded-2xl bg-[var(--bg-elevated)] border border-[var(--border)] overflow-hidden" data-animate style="--cta-x:50%;--cta-y:50%;">
+      <div class="cta-card relative py-14 md:py-28 px-6 md:px-16 rounded-2xl bg-[var(--bg-elevated)] border border-[var(--border)] overflow-hidden" data-animate style="--cta-x:50%;--cta-y:50%;">
         <!-- Cursor glow -->
         <div class="cta-spotlight" aria-hidden="true"></div>
 
@@ -76,17 +88,24 @@ const articles = data.allArticles?.slice(0, 3) ?? [];
     }
 
     .cta-marquee {
-      display: inline-flex;
-      animation: marqueeScroll 25s linear infinite;
+      display: flex;
+      width: max-content;
+      animation: marqueeScroll 30s linear infinite;
     }
 
-    .cta-marquee span {
+    .cta-marquee-track {
+      display: flex;
+      flex-shrink: 0;
+    }
+
+    .cta-marquee-track span {
       font-family: 'Bricolage Grotesque', Georgia, serif;
       font-size: clamp(0.875rem, 1.5vw, 1.125rem);
       font-weight: 700;
       letter-spacing: 0.15em;
       color: var(--text-muted);
       opacity: 0.3;
+      white-space: nowrap;
     }
 
     @keyframes marqueeScroll {

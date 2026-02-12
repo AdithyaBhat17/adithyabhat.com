@@ -91,6 +91,8 @@
 /* ===== BASE STYLES ===== */
 html {
   scroll-behavior: smooth;
+  /* iPhone safe area support */
+  padding: env(safe-area-inset-top, 0) env(safe-area-inset-right, 0) env(safe-area-inset-bottom, 0) env(safe-area-inset-left, 0);
 }
 
 body {
@@ -101,6 +103,8 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
+  /* Prevent iOS rubber-banding from showing background behind safe area */
+  -webkit-text-size-adjust: 100%;
 }
 
 * {
@@ -268,19 +272,21 @@ a {
   transform: translateY(-2px);
 }
 
-/* ===== CARDS ===== */
-.card {
-  border-radius: var(--radius-lg);
-  overflow: hidden;
-  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-  --card-mx: 50%;
-  --card-my: 50%;
-}
+/* ===== MOBILE BUTTON SIZING ===== */
+@media (max-width: 767px) {
+  .btn-primary,
+  .btn-outlined {
+    padding: 0.875rem 1.75rem;
+    font-size: 0.9375rem;
+    /* Ensure min 44px touch target */
+    min-height: 44px;
+  }
 
-.card:hover {
-  transform: perspective(800px) rotateX(calc((var(--card-my) - 50%) * -0.04deg)) rotateY(calc((var(--card-mx) - 50%) * 0.04deg)) translateY(-4px);
-  box-shadow: 0 8px 32px var(--accent-glow), 0 0 0 1px var(--accent-glow-strong);
-  background-image: radial-gradient(circle at var(--card-mx) var(--card-my), var(--accent-glow) 0%, transparent 60%);
+  .submit-button {
+    width: 100%;
+    min-height: 48px;
+    justify-content: center;
+  }
 }
 
 /* ===== CONTENT (blog/case study prose) ===== */
@@ -388,6 +394,31 @@ a {
 
 .content a:hover {
   text-decoration-color: var(--accent);
+}
+
+/* ===== MOBILE CONTENT ===== */
+@media (max-width: 767px) {
+  .content > h2 {
+    font-size: 1.5rem;
+    margin-top: 2rem;
+  }
+
+  .content > h3 {
+    font-size: 1.25rem;
+    margin-top: 2rem;
+  }
+
+  .content > p {
+    line-height: 1.85;
+    font-size: 0.9375rem;
+  }
+
+  .content pre {
+    font-size: 0.8125rem;
+    padding: 1rem;
+    margin: 1.25rem -0.5rem;
+    border-radius: var(--radius);
+  }
 }
 
 /* ===== FORM ===== */
@@ -589,6 +620,56 @@ a {
 /* Accent wipe bar during transitions */
 ::view-transition-group(root) {
   animation-duration: 0.4s;
+}
+
+/* ===== EASTER EGG TOAST ===== */
+.easter-egg-toast {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: var(--bg-elevated);
+  border: 1px solid var(--accent);
+  color: var(--text);
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius);
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  z-index: 10000;
+  opacity: 0;
+  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), 0 0 0 1px var(--accent-glow);
+  pointer-events: none;
+}
+
+.easter-egg-toast.is-visible {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* ===== MOBILE TOUCH / HOVER FIXES ===== */
+@media (hover: none) and (pointer: coarse) {
+  /* Remove sticky hover states on touch devices */
+  .btn-primary:hover {
+    transform: none;
+    box-shadow: none;
+  }
+
+  .btn-outlined:hover {
+    transform: none;
+  }
+
+  /* Active state instead for touch feedback */
+  .btn-primary:active {
+    transform: scale(0.97);
+    opacity: 0.9;
+  }
+
+  .btn-outlined:active {
+    transform: scale(0.97);
+    background: var(--bg-elevated);
+  }
 }
 
 /* ===== REDUCED MOTION ===== */

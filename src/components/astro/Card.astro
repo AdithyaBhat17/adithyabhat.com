@@ -11,27 +11,23 @@ interface Props {
   type: 'article' | 'project';
   external?: boolean;
   transitionName?: string;
+  index?: number;
 }
 
-const { title, href, thumbnail, date, tags, type, external = false, transitionName } = Astro.props;
+const { title, href, thumbnail, date, tags, type, external = false, transitionName, index = 0 } = Astro.props;
 
-const meta = (() => {
-  let desc = '';
-  if (type === 'article' && date) {
-    desc = `${dayjs(date as string).format('MMM YYYY')} · `;
-  }
-  if (tags) desc += tags;
-  return desc;
-})();
+const formattedDate = (type === 'article' && date) ? dayjs(date as string).format('MMM YYYY') : '';
+const tagList = tags ? tags.split(/[,·]/).map(t => t.trim()).filter(Boolean) : [];
+const indexLabel = String(index + 1).padStart(2, '0');
 ---
 
 <a
   href={href}
-  class="card flex flex-col h-full cursor-pointer group rounded-xl bg-[var(--bg-elevated)] border border-[var(--border-hover)] p-3 hover:border-[var(--accent)]/30 transition-all duration-400"
+  class="card"
   {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
 >
   {thumbnail?.responsiveImage && (
-    <div class="overflow-hidden rounded-lg aspect-[4/3] bg-[var(--bg-surface)]" transition:name={transitionName}>
+    <div class="card-visual" transition:name={transitionName}>
       <img
         src={thumbnail.responsiveImage.src}
         srcset={thumbnail.responsiveImage.srcSet}
@@ -41,35 +37,319 @@ const meta = (() => {
         alt={thumbnail.responsiveImage.alt || title}
         loading="lazy"
         decoding="async"
-        class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+        class="card-img"
         style={thumbnail.responsiveImage.base64 ? `background-image: url(${thumbnail.responsiveImage.base64}); background-size: cover;` : ''}
       />
+      <span class="card-index" aria-hidden="true">{indexLabel}</span>
     </div>
   )}
-  <div class="pt-4 pb-1 px-1 flex-1 flex flex-col">
-    <h2 class="font-display font-semibold text-lg text-[var(--text)] group-hover:text-[var(--accent)] transition-colors duration-300">
-      {title}
-    </h2>
-    {meta && (
-      <p class="text-[var(--text-muted)] font-body text-sm mt-auto pt-2">
-        {meta}
-      </p>
-    )}
+
+  <div class="card-body">
+    <div class="card-title-row">
+      <h2 class="card-title">{title}</h2>
+      <span class="card-arrow" aria-hidden="true">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="7" y1="17" x2="17" y2="7" />
+          <polyline points="7 7 17 7 17 17" />
+        </svg>
+      </span>
+    </div>
+
+    <div class="card-meta">
+      {formattedDate && <time class="card-date">{formattedDate}</time>}
+      {tagList.length > 0 && (
+        <div class="card-tags">
+          {tagList.map(tag => (
+            <span class="card-tag">{tag}</span>
+          ))}
+        </div>
+      )}
+    </div>
   </div>
+
+  <div class="card-accent-bar" aria-hidden="true"></div>
 </a>
 
+<style>
+  .card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    border-radius: var(--radius-xl);
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    overflow: hidden;
+    cursor: pointer;
+    transition:
+      transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1),
+      box-shadow 0.4s ease,
+      border-color 0.3s ease;
+    --card-mx: 50%;
+    --card-my: 50%;
+  }
+
+  /* Spotlight gradient that follows the cursor */
+  .card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+      600px circle at var(--card-mx) var(--card-my),
+      var(--accent-glow-strong) 0%,
+      transparent 50%
+    );
+    pointer-events: none;
+    z-index: 3;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    border-radius: inherit;
+  }
+
+  .card:hover::before {
+    opacity: 1;
+  }
+
+  .card:hover {
+    transform: translateY(-10px);
+    border-color: color-mix(in srgb, var(--accent) 40%, transparent);
+    box-shadow:
+      0 24px 48px -12px rgba(0, 0, 0, 0.35),
+      0 0 0 1px var(--accent-glow-strong),
+      0 0 80px -20px var(--accent-glow);
+  }
+
+  /* ===== Image ===== */
+  .card-visual {
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 4/3;
+    background: var(--bg-surface);
+    z-index: 1;
+  }
+
+  .card-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .card:hover .card-img {
+    transform: scale(1.07);
+  }
+
+  /* Decorative index number on image */
+  .card-index {
+    position: absolute;
+    bottom: 0.625rem;
+    right: 0.875rem;
+    font-family: 'Bricolage Grotesque', Georgia, serif;
+    font-size: 3.5rem;
+    font-weight: 800;
+    line-height: 1;
+    color: white;
+    opacity: 0;
+    transform: translateY(8px);
+    transition:
+      opacity 0.4s ease,
+      transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    pointer-events: none;
+    text-shadow: 0 2px 16px rgba(0, 0, 0, 0.5);
+    z-index: 2;
+  }
+
+  .card:hover .card-index {
+    opacity: 0.3;
+    transform: translateY(0);
+  }
+
+  /* ===== Content ===== */
+  .card-body {
+    padding: 1.25rem 1.25rem 1.125rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    z-index: 2;
+  }
+
+  .card-title-row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 0.75rem;
+  }
+
+  .card-title {
+    font-family: 'Bricolage Grotesque', Georgia, serif;
+    font-weight: 600;
+    font-size: 1.125rem;
+    line-height: 1.35;
+    color: var(--text);
+    letter-spacing: -0.01em;
+    transition: color 0.3s ease;
+  }
+
+  .card:hover .card-title {
+    color: var(--accent);
+  }
+
+  /* Arrow indicator — slides in on hover */
+  .card-arrow {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    color: var(--accent);
+    background: var(--accent-glow);
+    opacity: 0;
+    transform: translate(-6px, 4px) rotate(-45deg);
+    transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  .card:hover .card-arrow {
+    opacity: 1;
+    transform: translate(0, 0) rotate(0deg);
+  }
+
+  /* ===== Meta ===== */
+  .card-meta {
+    margin-top: auto;
+    padding-top: 0.75rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.375rem 0.625rem;
+  }
+
+  .card-date {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.8125rem;
+    color: var(--text-muted);
+    font-weight: 500;
+    letter-spacing: 0.02em;
+  }
+
+  /* Tag pills */
+  .card-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3rem;
+  }
+
+  .card-tag {
+    display: inline-block;
+    padding: 0.175rem 0.6rem;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.6875rem;
+    font-weight: 500;
+    color: var(--accent);
+    background: var(--accent-glow);
+    border: 1px solid transparent;
+    border-radius: 100px;
+    letter-spacing: 0.02em;
+    transition: all 0.3s ease;
+  }
+
+  .card:hover .card-tag {
+    background: var(--accent-glow-strong);
+    border-color: color-mix(in srgb, var(--accent) 30%, transparent);
+  }
+
+  /* ===== Accent bar at bottom ===== */
+  .card-accent-bar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: var(--gradient-accent);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    z-index: 4;
+  }
+
+  .card:hover .card-accent-bar {
+    transform: scaleX(1);
+  }
+
+  /* ===== Mobile touch adjustments ===== */
+  @media (hover: none) and (pointer: coarse) {
+    .card:hover {
+      transform: none;
+      box-shadow: none;
+      border-color: var(--border);
+    }
+
+    .card:hover::before {
+      opacity: 0;
+    }
+
+    .card:hover .card-img {
+      transform: none;
+    }
+
+    .card:hover .card-index {
+      opacity: 0;
+    }
+
+    .card:active {
+      transform: scale(0.98);
+      transition-duration: 0.1s;
+    }
+
+    /* Always show the arrow on mobile for discoverability */
+    .card-arrow {
+      opacity: 0.6;
+      transform: none;
+    }
+
+    /* Always show accent bar on mobile */
+    .card-accent-bar {
+      transform: scaleX(1);
+      opacity: 0.5;
+    }
+  }
+
+  /* ===== Reduced motion ===== */
+  @media (prefers-reduced-motion: reduce) {
+    .card,
+    .card-img,
+    .card-index,
+    .card-arrow,
+    .card-tag,
+    .card-accent-bar,
+    .card::before {
+      transition-duration: 0.01ms !important;
+    }
+  }
+</style>
+
 <script>
-  document.querySelectorAll<HTMLElement>('.card').forEach((card) => {
-    card.addEventListener('mousemove', (e) => {
-      const rect = card.getBoundingClientRect();
-      const x = ((e.clientX - rect.left) / rect.width) * 100;
-      const y = ((e.clientY - rect.top) / rect.height) * 100;
-      card.style.setProperty('--card-mx', `${x}%`);
-      card.style.setProperty('--card-my', `${y}%`);
+  function initCards() {
+    document.querySelectorAll<HTMLElement>('.card').forEach((card) => {
+      if (card.dataset.cardInit) return;
+      card.dataset.cardInit = 'true';
+
+      card.addEventListener('mousemove', (e) => {
+        const rect = card.getBoundingClientRect();
+        const x = ((e.clientX - rect.left) / rect.width) * 100;
+        const y = ((e.clientY - rect.top) / rect.height) * 100;
+        card.style.setProperty('--card-mx', `${x}%`);
+        card.style.setProperty('--card-my', `${y}%`);
+      });
+
+      card.addEventListener('mouseleave', () => {
+        card.style.setProperty('--card-mx', '50%');
+        card.style.setProperty('--card-my', '50%');
+      });
     });
-    card.addEventListener('mouseleave', () => {
-      card.style.setProperty('--card-mx', '50%');
-      card.style.setProperty('--card-my', '50%');
-    });
-  });
+  }
+
+  initCards();
+  document.addEventListener('astro:after-swap', initCards);
 </script>
