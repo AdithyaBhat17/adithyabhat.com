@@ -9,26 +9,31 @@
     "build": "astro check && astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "check": "astro check"
+    "check": "astro check",
+    "test": "vitest run"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.0",
     "@astrojs/react": "^4.2.0",
     "@astrojs/sitemap": "^3.2.0",
     "@astrojs/vercel": "^8.1.0",
+    "@tailwindcss/vite": "^4.0.0",
     "astro": "^5.3.0",
     "dayjs": "^1.11.13",
     "gsap": "^3.12.7",
+    "isomorphic-dompurify": "^3.0.0-rc.2",
     "marked": "^15.0.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-hook-form": "^7.54.0",
     "tailwindcss": "^4.0.0",
-    "@tailwindcss/vite": "^4.0.0",
     "typescript": "^5.7.0"
   },
   "devDependencies": {
+    "@types/dompurify": "^3.2.0",
     "@types/react": "^19.0.0",
-    "@types/react-dom": "^19.0.0"
+    "@types/react-dom": "^19.0.0",
+    "happy-dom": "^20.6.1",
+    "vitest": "^4.0.18"
   }
 }

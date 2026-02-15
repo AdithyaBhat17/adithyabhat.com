@@ -6,7 +6,7 @@ interface Props {
 const { class: className = '' } = Astro.props;
 ---
 
-<div class:list={['flex items-center gap-4', className]} data-section-heading data-animate>
+<div class:list={['flex items-center gap-4', className]} data-animate="fade-right">
   <span class="inline-block w-2.5 h-2.5 rounded-full bg-[var(--accent)] shrink-0"></span>
   <h2 class="font-display text-3xl md:text-5xl tracking-tight text-[var(--text)] whitespace-nowrap">
     <slot />

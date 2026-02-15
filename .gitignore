@@ -22,3 +22,4 @@ yarn-error.log*
 .vercel
 package-lock.json
 tsconfig.tsbuildinfo
+dist/

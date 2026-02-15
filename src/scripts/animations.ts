@@ -1,7 +1,6 @@
 /**
  * Scroll-driven animation observer
  * Uses IntersectionObserver for lightweight fade/slide reveals
- * GSAP is loaded separately for complex sequences
  */
 
 export function initScrollAnimations() {
@@ -36,33 +35,4 @@ export function initScrollAnimations() {
   )
 
   elements.forEach((el) => observer.observe(el))
-}
-
-/**
- * Initialize GSAP-powered animations for hero and complex sequences
- */
-export async function initGSAPAnimations() {
-  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-  if (prefersReducedMotion) return
-
-  const { gsap } = await import('gsap')
-  const { ScrollTrigger } = await import('gsap/ScrollTrigger')
-  gsap.registerPlugin(ScrollTrigger)
-
-  // Hero entrance is handled by CSS @keyframes in Hero.astro
-  // GSAP is only used for scroll-triggered sections below
-
-  // Section heading slide-in
-  document.querySelectorAll('[data-section-heading]').forEach((heading) => {
-    gsap.from(heading, {
-      x: -30,
-      opacity: 0,
-      duration: 0.7,
-      ease: 'power2.out',
-      scrollTrigger: {
-        trigger: heading,
-        start: 'top 85%',
-      },
-    })
-  })
 }

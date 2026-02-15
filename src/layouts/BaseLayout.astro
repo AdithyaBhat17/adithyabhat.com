@@ -39,11 +39,19 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="preconnect" href="https://www.datocms-assets.com" crossorigin />
 
-    <!-- Fonts -->
+    <!-- Fonts (async to avoid render-blocking) -->
     <link
-      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Google+Sans+Code:wght@400;500;700&display=swap"
-      rel="stylesheet"
+      rel="preload"
+      as="style"
+      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;600;800&family=Space+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
+      onload="this.onload=null;this.rel='stylesheet'"
     />
+    <noscript>
+      <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;600;800&family=Space+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
+      />
+    </noscript>
 
     <!-- SEO -->
     <title>{title}</title>
@@ -114,12 +122,11 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 
     <!-- Initialize scroll animations after page load + on view transition -->
     <script>
-      import { initScrollAnimations, initGSAPAnimations } from '@/scripts/animations';
+      import { initScrollAnimations } from '@/scripts/animations';
       import { initEasterEggs } from '@/scripts/easter-eggs';
 
       function init() {
         initScrollAnimations();
-        initGSAPAnimations();
       }
 
       function applyTheme() {
@@ -150,7 +157,9 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 
       // Initial load
       init();
-      initCursor();
+      if (window.matchMedia('(hover: hover)').matches) {
+        initCursor();
+      }
       initEasterEggs();
 
       // Re-init after view transitions

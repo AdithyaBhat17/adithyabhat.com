@@ -331,16 +331,23 @@ const indexLabel = String(index + 1).padStart(2, '0');
 
 <script>
   function initCards() {
+    if (!window.matchMedia('(hover: hover)').matches) return;
+
     document.querySelectorAll<HTMLElement>('.card').forEach((card) => {
       if (card.dataset.cardInit) return;
       card.dataset.cardInit = 'true';
 
+      let rafId: number | null = null;
       card.addEventListener('mousemove', (e) => {
-        const rect = card.getBoundingClientRect();
-        const x = ((e.clientX - rect.left) / rect.width) * 100;
-        const y = ((e.clientY - rect.top) / rect.height) * 100;
-        card.style.setProperty('--card-mx', `${x}%`);
-        card.style.setProperty('--card-my', `${y}%`);
+        if (rafId) return;
+        rafId = requestAnimationFrame(() => {
+          const rect = card.getBoundingClientRect();
+          const x = ((e.clientX - rect.left) / rect.width) * 100;
+          const y = ((e.clientY - rect.top) / rect.height) * 100;
+          card.style.setProperty('--card-mx', `${x}%`);
+          card.style.setProperty('--card-my', `${y}%`);
+          rafId = null;
+        });
       });
 
       card.addEventListener('mouseleave', () => {

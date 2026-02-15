@@ -352,9 +352,10 @@ import Socials from './Socials.astro';
     if (!hero) return;
 
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const hasHover = window.matchMedia('(hover: hover)').matches;
 
-    // Staggered entrance — JS-driven so content is visible by default
-    if (!prefersReducedMotion) {
+    // Staggered entrance — JS-driven, only on desktop (mobile renders immediately)
+    if (!prefersReducedMotion && hasHover) {
       const reveals = hero.querySelectorAll<HTMLElement>('[data-hero-reveal]');
       reveals.forEach((el) => {
         el.style.opacity = '0';

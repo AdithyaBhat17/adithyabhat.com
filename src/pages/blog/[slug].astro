@@ -5,6 +5,7 @@ import CardGrid from '@/components/astro/CardGrid.astro';
 import { fetchAPI } from '@/lib/datocms';
 import { ALL_ARTICLES_QUERY, ARTICLE_QUERY } from '@/graphql/posts';
 import { marked } from 'marked';
+import { sanitizeHtml } from '@/lib/sanitize';
 import dayjs from 'dayjs';
 
 export async function getStaticPaths() {
@@ -24,7 +25,7 @@ if (!data?.article?.slug) {
 const article = data.article;
 const moreArticles = data.moreArticles ?? [];
 
-const htmlContent = await marked(article.content ?? '');
+const htmlContent = sanitizeHtml(await marked(article.content ?? ''));
 
 // Reading time estimate
 const wordCount = (article.content ?? '').split(/\s+/).filter(Boolean).length;

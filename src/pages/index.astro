@@ -17,21 +17,25 @@ const articles = data.allArticles?.slice(0, 3) ?? [];
   <Hero />
 
   <!-- Recent Work -->
-  <Container>
-    <SectionHeading class="mt-16 md:mt-24 xl:mt-32 mb-6 md:mb-8">Selected work</SectionHeading>
-    <CardGrid items={projects} type="project" />
-    <ArrowLink href="/work" text="View all projects" />
-  </Container>
+  <section style="content-visibility:auto;contain-intrinsic-size:auto 800px;">
+    <Container>
+      <SectionHeading class="mt-16 md:mt-24 xl:mt-32 mb-6 md:mb-8">Selected work</SectionHeading>
+      <CardGrid items={projects} type="project" />
+      <ArrowLink href="/work" text="View all projects" />
+    </Container>
+  </section>
 
   <!-- Featured Articles -->
-  <Container>
-    <SectionHeading class="mt-16 md:mt-28 xl:mt-36 mb-6 md:mb-8">Writing</SectionHeading>
-    <CardGrid items={articles} type="article" />
-    <ArrowLink href="/blog" text="Read more articles" />
-  </Container>
+  <section style="content-visibility:auto;contain-intrinsic-size:auto 600px;">
+    <Container>
+      <SectionHeading class="mt-16 md:mt-28 xl:mt-36 mb-6 md:mb-8">Writing</SectionHeading>
+      <CardGrid items={articles} type="article" />
+      <ArrowLink href="/blog" text="Read more articles" />
+    </Container>
+  </section>
 
   <!-- CTA -->
-  <section class="cta-section mt-16 md:mt-28 xl:mt-36 mb-12 md:mb-20 overflow-hidden">
+  <section class="cta-section mt-16 md:mt-28 xl:mt-36 mb-12 md:mb-20 overflow-hidden" style="content-visibility:auto;contain-intrinsic-size:auto 500px;">
     <!-- Scrolling marquee (two identical tracks for seamless loop) -->
     <div class="cta-marquee-wrap" aria-hidden="true">
       <div class="cta-marquee">
@@ -182,6 +186,8 @@ const articles = data.allArticles?.slice(0, 3) ?? [];
 
   <script>
     function initCTA() {
+      if (!window.matchMedia('(hover: hover)').matches) return;
+
       // Magnetic button
       document.querySelectorAll<HTMLElement>('[data-magnetic]').forEach((btn) => {
         const strength = 0.3;

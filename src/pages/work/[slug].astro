@@ -3,6 +3,7 @@ import PageLayout from '@/layouts/PageLayout.astro';
 import Container from '@/components/astro/Container.astro';
 import CardGrid from '@/components/astro/CardGrid.astro';
 import { fetchAPI } from '@/lib/datocms';
+import { sanitizeHtml } from '@/lib/sanitize';
 import { CASE_STUDY, RECENT_WORK } from '@/graphql/work';
 
 export async function getStaticPaths() {
@@ -34,7 +35,7 @@ const moreProjects = data.allProjects ?? [];
         {project.title}
       </h1>
 
-      <div class="content" set:html={project.caseStudy} />
+      <div class="content" set:html={sanitizeHtml(project.caseStudy ?? '')} />
 
       <hr class="gradient-line mt-16 mb-12" />
 
