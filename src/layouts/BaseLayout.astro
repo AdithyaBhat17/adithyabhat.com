@@ -39,19 +39,11 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="preconnect" href="https://www.datocms-assets.com" crossorigin />
 
-    <!-- Fonts (async to avoid render-blocking) -->
+    <!-- Fonts -->
     <link
-      rel="preload"
-      as="style"
+      rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;600;800&family=Space+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
-      onload="this.onload=null;this.rel='stylesheet'"
     />
-    <noscript>
-      <link
-        rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;600;800&family=Space+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
-      />
-    </noscript>
 
     <!-- SEO -->
     <title>{title}</title>
@@ -65,14 +57,14 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonicalURL} />
     <meta property="og:site_name" content="Adithya NR" />
-    <meta property="og:image" content="https://cdn.dribbble.com/users/2366701/screenshots/14499518/media/80880f845dd409a5d3108c8961c8d8e4.png" />
+    <meta property="og:image" content="https://adithyabhat.com/static/og.png" />
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:site" content="@adithya__nr" />
     <meta name="twitter:creator" content="@adithya__nr" />
     <meta name="twitter:description" content={description} />
-    <meta property="twitter:image" content="https://cdn.dribbble.com/users/2366701/screenshots/14499518/media/80880f845dd409a5d3108c8961c8d8e4.png" />
+    <meta property="twitter:image" content="https://adithyabhat.com/static/og.png" />
 
     <meta name="keywords" content="front-end developer, front-end development, web designer, adithya, adithya nr, adithya bhat, web developer" />
 
