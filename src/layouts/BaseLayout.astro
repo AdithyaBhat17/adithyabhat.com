@@ -8,7 +8,7 @@ interface Props {
   description?: string;
 }
 
-const { title, description = 'A UX engineer from Bengaluru, helping companies of all sizes get ahead online.' } = Astro.props;
+const { title, description = 'A UX engineer in Abu Dhabi, helping companies of all sizes get ahead online.' } = Astro.props;
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 ---
 
@@ -79,7 +79,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     <!-- Structured Data -->
     <script is:inline type="application/ld+json" set:html={JSON.stringify({
       "name": "Adithya NR",
-      "description": "I am a UX Engineer based in Bengaluru, India.",
+      "description": "I am a UX Engineer based in Abu Dhabi, UAE.",
       "author": { "@type": "Person", "name": "Adithya NR" },
       "disambiguatingDescription": "Web Designer & Developer",
       "jobTitle": "UX Engineer, Freelancer",
