@@ -1,6 +1,7 @@
 import { useForm } from 'react-hook-form';
 import { useState, useEffect, useMemo } from 'react';
 import type { ContactData, ContactResponse } from '@/types/contact';
+import { tapFeedback, errorFeedback, successFeedback } from '@/scripts/haptics';
 
 export default function ContactForm() {
   const {
@@ -22,6 +23,8 @@ export default function ContactForm() {
     const { name, email, message, website } = data;
     if (!name || !email || !message.trim()) return;
 
+    tapFeedback();
+
     try {
       setStatus('sending');
       const response = await fetch('/api/contact', {
@@ -37,12 +40,15 @@ export default function ContactForm() {
       const result: ContactResponse = await response.json();
       if (result.success) {
         setStatus('success');
+        successFeedback();
         reset();
       } else {
         setStatus('error');
+        errorFeedback();
       }
     } catch {
       setStatus('error');
+      errorFeedback();
     }
   };
 
@@ -54,7 +60,7 @@ export default function ContactForm() {
   }, [status]);
 
   return (
-    <form onSubmit={handleSubmit(submitMessage)}>
+    <form onSubmit={handleSubmit(submitMessage, () => errorFeedback())}>
       <div className="form-group">
         <label className="label" htmlFor="name">Your name</label>
         <input

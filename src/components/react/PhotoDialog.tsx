@@ -1,4 +1,5 @@
 import { useEffect, useCallback } from 'react';
+import { tapFeedback } from '@/scripts/haptics';
 
 interface PhotoDialogProps {
   item: {
@@ -24,9 +25,9 @@ interface PhotoDialogProps {
 
 export default function PhotoDialog({ item, onClose, onPrev, onNext, counter }: PhotoDialogProps) {
   const handleKeyDown = useCallback((e: KeyboardEvent) => {
-    if (e.key === 'Escape') onClose();
-    if (e.key === 'ArrowLeft' && onPrev) onPrev();
-    if (e.key === 'ArrowRight' && onNext) onNext();
+    if (e.key === 'Escape') { tapFeedback(); onClose(); }
+    if (e.key === 'ArrowLeft' && onPrev) { tapFeedback(); onPrev(); }
+    if (e.key === 'ArrowRight' && onNext) { tapFeedback(); onNext(); }
   }, [onClose, onPrev, onNext]);
 
   useEffect(() => {
@@ -71,7 +72,7 @@ export default function PhotoDialog({ item, onClose, onPrev, onNext, counter }: 
         <button
           className="w-9 h-9 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 transition-colors text-white"
           aria-label="Close"
-          onClick={onClose}
+          onClick={() => { tapFeedback(); onClose(); }}
         >
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
             <line x1="18" y1="6" x2="6" y2="18" />
@@ -83,7 +84,7 @@ export default function PhotoDialog({ item, onClose, onPrev, onNext, counter }: 
       {/* Nav arrows */}
       {onPrev && (
         <button
-          onClick={(e) => { e.stopPropagation(); onPrev(); }}
+          onClick={(e) => { e.stopPropagation(); tapFeedback(); onPrev(); }}
           className="absolute left-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 transition-colors flex items-center justify-center text-white"
           aria-label="Previous photo"
         >
@@ -94,7 +95,7 @@ export default function PhotoDialog({ item, onClose, onPrev, onNext, counter }: 
       )}
       {onNext && (
         <button
-          onClick={(e) => { e.stopPropagation(); onNext(); }}
+          onClick={(e) => { e.stopPropagation(); tapFeedback(); onNext(); }}
           className="absolute right-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 transition-colors flex items-center justify-center text-white"
           aria-label="Next photo"
         >
