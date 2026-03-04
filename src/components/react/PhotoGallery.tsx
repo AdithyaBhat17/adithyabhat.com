@@ -102,31 +102,35 @@ export default function PhotoGallery({ places }: { places: Place[] }) {
 
 function ImageCard({ item, index, onOpen }: { item: FlatPhoto; index: number; onOpen: () => void }) {
   const ref = useRef<HTMLDivElement>(null);
-  const [visible, setVisible] = useState(index < 12);
+  const [animated, setAnimated] = useState(index < 12);
 
   useEffect(() => {
+    if (animated) return;
     const el = ref.current;
     if (!el) return;
     const obs = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) { setVisible(true); obs.disconnect(); } },
+      ([entry]) => { if (entry.isIntersecting) { setAnimated(true); obs.disconnect(); } },
       { threshold: 0.1 }
     );
     obs.observe(el);
     return () => obs.disconnect();
-  }, []);
+  }, [animated]);
 
   const formattedDate = dateFormatter.format(new Date(item.date));
 
+  // Images are always visible (opacity in CSS defaults to 1).
+  // The fade-in animation is progressive enhancement — if JS is
+  // slow or observers are throttled, content is still visible.
   return (
     <div
       ref={ref}
       className="mb-3 break-inside-avoid cursor-zoom-in group relative overflow-hidden rounded-lg ring-1 ring-[var(--border)]"
       onClick={onOpen}
-      style={{
-        opacity: visible ? 1 : 0,
-        transform: visible ? 'translateY(0)' : 'translateY(20px)',
+      style={animated ? {
+        opacity: 1,
+        transform: 'translateY(0)',
         transition: `opacity 0.5s ease ${index % 8 * 0.06}s, transform 0.5s ease ${index % 8 * 0.06}s`,
-      }}
+      } : undefined}
     >
       <img
         src={item.photo.responsiveImage.src}
