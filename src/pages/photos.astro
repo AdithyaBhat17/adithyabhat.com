@@ -68,7 +68,7 @@ const cameras = [...new Set(places.map((p: any) => p.camera).filter(Boolean))];
     </div>
 
     <!-- Gallery -->
-    <div class="photos-gallery" data-animate>
+    <div class="photos-gallery">
       <PhotoGallery places={places} client:load />
     </div>
   </div>
