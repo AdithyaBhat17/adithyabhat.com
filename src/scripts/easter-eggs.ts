@@ -32,13 +32,13 @@ function activatePartyMode() {
 
   showToast('Party mode activated! 🎉🥳')
 
-  const interval: ReturnType<typeof setInterval> = setInterval(() => {
+  const interval = window.setInterval(() => {
     root.style.setProperty('--accent', colors[index % colors.length])
     index++
   }, 200)
 
-  setTimeout(() => {
-    clearInterval(interval)
+  window.setTimeout(() => {
+    window.clearInterval(interval)
     root.style.removeProperty('--accent')
   }, 5000)
 }
