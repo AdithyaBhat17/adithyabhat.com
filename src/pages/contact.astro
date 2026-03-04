@@ -2,26 +2,185 @@
 import PageLayout from '@/layouts/PageLayout.astro';
 import Container from '@/components/astro/Container.astro';
 import ContactForm from '@/components/react/ContactForm';
+import FloatingShapes from '@/components/astro/FloatingShapes.astro';
 ---
 
 <PageLayout title="Contact - Adithya NR">
   <Container>
-    <div class="max-w-xl mx-auto">
-      <div class="mt-8 mb-12" data-animate>
-        <span class="inline-flex items-center gap-2 text-sm font-body font-medium text-[var(--accent)] tracking-wide uppercase mb-6">
-          <span class="inline-block w-6 h-[2px] bg-[var(--accent)]"></span>
-          Contact
-        </span>
-        <h1 class="font-display text-4xl md:text-5xl tracking-tight">
-          Get in touch
-        </h1>
-        <p class="font-body text-[var(--text-muted)] mt-3">
-          Send me a message and I'll get back to you.
-        </p>
-      </div>
-      <div data-animate>
-        <ContactForm client:load />
+    <div class="contact-page">
+      <FloatingShapes />
+
+      <div class="contact-grid">
+        <!-- Left: Header + personality -->
+        <div class="contact-intro" data-animate>
+          <span class="inline-flex items-center gap-2 text-sm font-body font-medium text-[var(--accent)] tracking-wide uppercase mb-6">
+            <span class="inline-block w-6 h-[2px] bg-[var(--accent)]"></span>
+            Contact
+          </span>
+
+          <h1 class="font-display text-4xl md:text-5xl lg:text-6xl tracking-tight leading-[1.1]">
+            Let's make<br />
+            something <span class="gradient-text">cool</span>
+            <span class="waving-hand" aria-hidden="true">&#9996;&#65039;</span>
+          </h1>
+
+          <p class="font-body text-[var(--text-secondary)] mt-5 text-lg leading-relaxed max-w-md">
+            Got a project in mind? Want to collaborate? Or just want to say hi?
+            I'd love to hear from you.
+          </p>
+
+          <!-- Quick links -->
+          <div class="contact-channels" data-animate>
+            <p class="font-body text-[var(--text-muted)] text-sm uppercase tracking-wider mb-4 mt-10">
+              Or find me on
+            </p>
+            <div class="channel-pills">
+              <a href="https://twitter.com/AdiNRao" target="_blank" rel="noopener noreferrer" class="channel-pill">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                <span>Twitter</span>
+              </a>
+              <a href="https://github.com/adiNR" target="_blank" rel="noopener noreferrer" class="channel-pill">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                <span>GitHub</span>
+              </a>
+              <a href="https://linkedin.com/in/adinr" target="_blank" rel="noopener noreferrer" class="channel-pill">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+                <span>LinkedIn</span>
+              </a>
+              <a href="mailto:hey@adithyabhat.com" class="channel-pill">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+                <span>Email</span>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Form -->
+        <div class="contact-form-wrapper" data-animate>
+          <div class="form-card">
+            <div class="form-card-glow" aria-hidden="true"></div>
+            <ContactForm client:load />
+          </div>
+        </div>
       </div>
     </div>
   </Container>
 </PageLayout>
+
+<style>
+  .contact-page {
+    position: relative;
+    padding: 2rem 0 6rem;
+    min-height: calc(100vh - 200px);
+  }
+
+  /* ===== GRID LAYOUT ===== */
+  .contact-grid {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 3rem;
+    align-items: start;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  @media (min-width: 900px) {
+    .contact-grid {
+      grid-template-columns: 1fr 1.1fr;
+      gap: 4rem;
+    }
+
+    .contact-intro {
+      position: sticky;
+      top: 120px;
+    }
+  }
+
+  /* ===== WAVING HAND ===== */
+  .waving-hand {
+    display: inline-block;
+    margin-left: 0.25rem;
+    animation: wave 2.5s ease-in-out infinite;
+    transform-origin: 70% 70%;
+  }
+
+  @keyframes wave {
+    0% { transform: rotate(0deg); }
+    10% { transform: rotate(14deg); }
+    20% { transform: rotate(-8deg); }
+    30% { transform: rotate(14deg); }
+    40% { transform: rotate(-4deg); }
+    50% { transform: rotate(10deg); }
+    60% { transform: rotate(0deg); }
+    100% { transform: rotate(0deg); }
+  }
+
+  /* ===== CHANNEL PILLS ===== */
+  .channel-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.625rem;
+  }
+
+  .channel-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    text-decoration: none;
+  }
+
+  .channel-pill:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: var(--accent-glow);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px var(--accent-glow);
+  }
+
+  .channel-pill svg {
+    flex-shrink: 0;
+  }
+
+  /* ===== FORM CARD ===== */
+  .form-card {
+    position: relative;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-xl);
+    padding: 2rem;
+  }
+
+  .form-card-glow {
+    position: absolute;
+    top: -1px;
+    left: 20%;
+    right: 20%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--accent), transparent);
+    opacity: 0.6;
+  }
+
+  @media (min-width: 640px) {
+    .form-card {
+      padding: 2.5rem;
+    }
+  }
+
+  /* ===== REDUCED MOTION ===== */
+  @media (prefers-reduced-motion: reduce) {
+    .waving-hand {
+      animation: none;
+    }
+  }
+</style>

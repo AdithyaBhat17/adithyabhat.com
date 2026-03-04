@@ -1,25 +1,502 @@
 ---
 import PageLayout from '@/layouts/PageLayout.astro';
 import Container from '@/components/astro/Container.astro';
-import CardGrid from '@/components/astro/CardGrid.astro';
+import FloatingShapes from '@/components/astro/FloatingShapes.astro';
 import { fetchAPI } from '@/lib/datocms';
 import { RECENT_WORK } from '@/graphql/work';
+import type { Project } from '@/types/content';
+import dayjs from 'dayjs';
 
 const data = await fetchAPI(RECENT_WORK);
-const projects = data.allProjects ?? [];
+const projects: Project[] = data.allProjects ?? [];
+
+const allTags = [...new Set(
+  projects.flatMap((p: any) => p.tags ? p.tags.split(/[,·]/).map((t: string) => t.trim()).filter(Boolean) : [])
+)];
 ---
 
 <PageLayout title="Work | Adithya NR">
-  <Container>
-    <div class="mt-8 mb-12" data-animate>
-      <span class="inline-flex items-center gap-2 text-sm font-body font-medium text-[var(--accent)] tracking-wide uppercase mb-6">
-        <span class="inline-block w-6 h-[2px] bg-[var(--accent)]"></span>
-        Portfolio
-      </span>
-      <h1 class="font-display text-4xl md:text-5xl tracking-tight">
-        Selected work
-      </h1>
-    </div>
-    <CardGrid items={projects} type="project" />
-  </Container>
+  <div class="work-page">
+    <FloatingShapes />
+
+    <!-- Hero -->
+    <Container>
+      <div class="work-hero" data-animate>
+        <div class="work-hero-inner">
+          <span class="inline-flex items-center gap-2 text-sm font-body font-medium text-[var(--accent)] tracking-wide uppercase mb-5">
+            <span class="inline-block w-6 h-[2px] bg-[var(--accent)]"></span>
+            Portfolio
+          </span>
+
+          <h1 class="font-display text-4xl md:text-5xl lg:text-6xl tracking-tight leading-[1.1]">
+            Selected<br />
+            <span class="gradient-text">work</span>
+            <span class="rocket-icon" aria-hidden="true">&#x1F680;</span>
+          </h1>
+
+          <p class="font-body text-[var(--text-secondary)] mt-4 text-lg leading-relaxed max-w-lg">
+            A collection of projects spanning design systems, product development, and creative experiments.
+          </p>
+        </div>
+
+        <!-- Stats + tags -->
+        <div class="work-meta" data-animate>
+          <div class="work-stats">
+            <span class="stat-number font-display">{projects.length}</span>
+            <span class="stat-label font-body">{projects.length === 1 ? 'project' : 'projects'}</span>
+          </div>
+
+          {allTags.length > 0 && (
+            <div class="work-tags">
+              {allTags.slice(0, 8).map((tag) => (
+                <span class="work-tag">{tag}</span>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+    </Container>
+
+  <!-- Projects -->
+  <div class="work-list" data-animate-stagger>
+    {projects.map((project, i) => {
+      const img = project.thumbnail?.responsiveImage;
+      const tagList = project.tags ? project.tags.split(/[,·]/).map((t: string) => t.trim()).filter(Boolean) : [];
+      const href = `/work/${project.slug}`;
+      const indexLabel = String(i + 1).padStart(2, '0');
+      const isEven = i % 2 === 1;
+      const year = project.date ? dayjs(project.date as string).format('YYYY') : '';
+
+      return (
+        <a
+          href={href}
+          class:list={['work-project', isEven && 'work-project--flipped']}
+          data-animate
+        >
+          <Container wide>
+            <div class="work-project-inner">
+              {/* Image side */}
+              {img && (
+                <div class="work-project-visual" transition:name={`card-${project.slug}`}>
+                  <div class="work-project-img-wrap">
+                    <img
+                      src={img.src}
+                      srcset={img.srcSet}
+                      sizes="(min-width: 1024px) 55vw, 90vw"
+                      width={img.width}
+                      height={img.height}
+                      alt={img.alt || project.title}
+                      loading="lazy"
+                      decoding="async"
+                      class="work-project-img"
+                      style={img.base64 ? `background-image: url(${img.base64}); background-size: cover;` : ''}
+                    />
+                  </div>
+                </div>
+              )}
+
+              {/* Info side */}
+              <div class="work-project-info">
+                <span class="work-project-num" aria-hidden="true">{indexLabel}</span>
+                <h2 class="work-project-title">{project.title}</h2>
+                {tagList.length > 0 && (
+                  <div class="work-project-tags">
+                    {tagList.map(tag => (
+                      <span class="work-project-tag">{tag}</span>
+                    ))}
+                  </div>
+                )}
+                {year && <span class="work-project-year">{year}</span>}
+                <div class="work-project-cta">
+                  <span class="work-project-cta-text">View project</span>
+                  <svg class="work-project-cta-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="7" y1="17" x2="17" y2="7" />
+                    <polyline points="7 7 17 7 17 17" />
+                  </svg>
+                </div>
+              </div>
+            </div>
+          </Container>
+
+          {/* Bottom accent line */}
+          <div class="work-project-accent" aria-hidden="true"></div>
+        </a>
+      );
+    })}
+  </div>
+  </div>
 </PageLayout>
+
+<style>
+  /* ===== PAGE ===== */
+  .work-page {
+    position: relative;
+  }
+
+  /* ===== HERO ===== */
+  .work-hero {
+    position: relative;
+    z-index: 1;
+    padding-top: 2rem;
+    padding-bottom: 3rem;
+  }
+
+  .work-hero-inner {
+    max-width: 640px;
+  }
+
+  /* ===== ROCKET ICON ===== */
+  .rocket-icon {
+    display: inline-block;
+    margin-left: 0.25rem;
+    animation: launch 3s ease-in-out infinite;
+  }
+
+  @keyframes launch {
+    0%, 100% { transform: translate(0, 0) rotate(0deg); }
+    15% { transform: translate(3px, -5px) rotate(-5deg); }
+    30% { transform: translate(0, 0) rotate(0deg); }
+  }
+
+  /* ===== META ROW ===== */
+  .work-meta {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    margin-top: 2rem;
+    padding: 1rem 1.5rem;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    width: fit-content;
+    max-width: 100%;
+    flex-wrap: wrap;
+  }
+
+  .work-stats {
+    display: flex;
+    align-items: baseline;
+    gap: 0.375rem;
+    flex-shrink: 0;
+  }
+
+  .stat-number {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text);
+    letter-spacing: -0.02em;
+    line-height: 1;
+  }
+
+  .stat-label {
+    font-size: 0.8125rem;
+    color: var(--text-muted);
+    font-weight: 500;
+  }
+
+  .work-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.375rem;
+    border-left: 1px solid var(--border);
+    padding-left: 1.25rem;
+  }
+
+  .work-tag {
+    display: inline-block;
+    padding: 0.2rem 0.65rem;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.6875rem;
+    font-weight: 500;
+    color: var(--accent);
+    background: var(--accent-glow);
+    border-radius: 100px;
+    letter-spacing: 0.02em;
+  }
+
+  @media (max-width: 480px) {
+    .work-meta {
+      gap: 0.75rem;
+      padding: 1rem 1.25rem;
+    }
+
+    .work-tags {
+      border-left: none;
+      padding-left: 0;
+      border-top: 1px solid var(--border);
+      padding-top: 0.75rem;
+      width: 100%;
+    }
+
+    .stat-number {
+      font-size: 1.25rem;
+    }
+  }
+
+  /* ===== PROJECT LIST ===== */
+  .work-list {
+    padding-bottom: 2rem;
+  }
+
+  /* ===== SINGLE PROJECT ROW ===== */
+  .work-project {
+    display: block;
+    position: relative;
+    border-top: 1px solid var(--border);
+    transition: background 0.4s ease;
+  }
+
+  .work-project:last-child {
+    border-bottom: 1px solid var(--border);
+  }
+
+  .work-project:hover {
+    background: var(--bg-elevated);
+  }
+
+  .work-project-inner {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    padding: 3rem 0;
+  }
+
+  @media (min-width: 1024px) {
+    .work-project-inner {
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 3.5rem;
+      align-items: center;
+      padding: 4rem 0;
+    }
+
+    /* Flip layout for even rows */
+    .work-project--flipped .work-project-inner {
+      grid-template-columns: 0.85fr 1.15fr;
+    }
+
+    .work-project--flipped .work-project-visual {
+      order: 2;
+    }
+
+    .work-project--flipped .work-project-info {
+      order: 1;
+    }
+  }
+
+  /* ===== IMAGE ===== */
+  .work-project-visual {
+    position: relative;
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+  }
+
+  .work-project-img-wrap {
+    overflow: hidden;
+    border-radius: inherit;
+  }
+
+  .work-project-img {
+    width: 100%;
+    height: auto;
+    display: block;
+    transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: transform;
+  }
+
+  .work-project:hover .work-project-img {
+    transform: scale(1.04);
+  }
+
+  /* ===== INFO SIDE ===== */
+  .work-project-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .work-project-num {
+    font-family: 'Bricolage Grotesque', Georgia, serif;
+    font-size: clamp(4rem, 8vw, 6.5rem);
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -0.04em;
+    color: var(--border);
+    transition: color 0.4s ease;
+    margin-bottom: 0.75rem;
+  }
+
+  .work-project:hover .work-project-num {
+    color: var(--accent-glow-strong);
+  }
+
+  [data-theme="light"] .work-project:hover .work-project-num {
+    color: color-mix(in srgb, var(--accent) 20%, transparent);
+  }
+
+  .work-project-title {
+    font-family: 'Bricolage Grotesque', Georgia, serif;
+    font-size: clamp(1.5rem, 3vw, 2.25rem);
+    font-weight: 700;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    color: var(--text);
+    transition: color 0.3s ease;
+  }
+
+  .work-project:hover .work-project-title {
+    color: var(--accent);
+  }
+
+  .work-project-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-top: 1rem;
+  }
+
+  .work-project-tag {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.6875rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--accent);
+    background: var(--accent-glow);
+    padding: 0.25rem 0.7rem;
+    border-radius: 100px;
+    border: 1px solid transparent;
+    transition: all 0.3s ease;
+  }
+
+  .work-project:hover .work-project-tag {
+    background: var(--accent-glow-strong);
+    border-color: color-mix(in srgb, var(--accent) 25%, transparent);
+  }
+
+  .work-project-year {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8125rem;
+    color: var(--text-muted);
+    letter-spacing: 0.04em;
+    margin-top: 1rem;
+  }
+
+  /* CTA link */
+  .work-project-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 1.75rem;
+    color: var(--text-muted);
+    transition: color 0.3s ease;
+  }
+
+  .work-project:hover .work-project-cta {
+    color: var(--accent);
+  }
+
+  .work-project-cta-text {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.875rem;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+  }
+
+  .work-project-cta-arrow {
+    transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  .work-project:hover .work-project-cta-arrow {
+    transform: translate(3px, -3px);
+  }
+
+  /* Accent line at bottom */
+  .work-project-accent {
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: var(--gradient-accent);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .work-project:hover .work-project-accent {
+    transform: scaleX(1);
+  }
+
+  /* ===== MOBILE ===== */
+  @media (max-width: 767px) {
+    .work-hero {
+      padding-top: 1rem;
+      padding-bottom: 2rem;
+    }
+
+    .work-project-inner {
+      padding: 2rem 0;
+      gap: 1.25rem;
+    }
+
+    .work-project-num {
+      font-size: 3rem;
+      margin-bottom: 0.25rem;
+    }
+  }
+
+  /* ===== TOUCH ===== */
+  @media (hover: none) and (pointer: coarse) {
+    .work-project:hover {
+      background: transparent;
+    }
+
+    .work-project:hover .work-project-img {
+      transform: none;
+    }
+
+    .work-project:hover .work-project-title {
+      color: var(--text);
+    }
+
+    .work-project:hover .work-project-num {
+      color: var(--border);
+    }
+
+    .work-project:active {
+      opacity: 0.85;
+      transition: opacity 0.1s ease;
+    }
+
+    /* Always show CTA styled */
+    .work-project-cta {
+      color: var(--accent);
+    }
+
+    /* Always show accent */
+    .work-project-accent {
+      transform: scaleX(1);
+      opacity: 0.3;
+    }
+  }
+
+  /* ===== REDUCED MOTION ===== */
+  @media (prefers-reduced-motion: reduce) {
+    .rocket-icon {
+      animation: none;
+    }
+
+    .work-project-img,
+    .work-project-accent,
+    .work-project-cta-arrow,
+    .work-project-num,
+    .work-project-title,
+    .work-project-tag,
+    .work-project-cta,
+    .work-project {
+      transition-duration: 0.01ms !important;
+    }
+  }
+</style>

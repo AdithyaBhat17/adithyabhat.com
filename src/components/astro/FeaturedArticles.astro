@@ -1,0 +1,552 @@
+---
+import type { Article } from '@/types/content';
+import dayjs from 'dayjs';
+
+interface Props {
+  articles: Article[];
+}
+
+const { articles } = Astro.props;
+const [featured, ...rest] = articles;
+---
+
+<div class="wr" data-animate-stagger>
+  {/* ===== FEATURED ARTICLE — big hero card ===== */}
+  {featured && (() => {
+    const img = featured.thumbnail?.responsiveImage;
+    const href = featured.externalLink || `/blog/${featured.slug}`;
+    const external = !!featured.externalLink;
+    const date = featured.date ? dayjs(featured.date as string).format('MMM D, YYYY') : '';
+    const tagList = featured.tags ? featured.tags.split(/[,·]/).map(t => t.trim()).filter(Boolean) : [];
+
+    return (
+      <a
+        href={href}
+        class="wr-hero"
+        data-animate
+        {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+      >
+        {img && (
+          <div class="wr-hero-visual" transition:name={`card-${featured.slug}`}>
+            <div class="wr-hero-img-wrap">
+              <img
+                src={img.src}
+                srcset={img.srcSet}
+                sizes="(min-width: 1024px) 58vw, 95vw"
+                width={img.width}
+                height={img.height}
+                alt={img.alt || featured.title}
+                loading="lazy"
+                decoding="async"
+                class="wr-hero-img"
+                style={img.base64 ? `background-image: url(${img.base64}); background-size: cover;` : ''}
+              />
+            </div>
+          </div>
+        )}
+        <div class="wr-hero-info">
+          <div class="wr-hero-top">
+            <span class="wr-hero-badge">Featured</span>
+            {date && <time class="wr-hero-date">{date}</time>}
+          </div>
+          <h3 class="wr-hero-title">{featured.title}</h3>
+          {tagList.length > 0 && (
+            <div class="wr-hero-tags">
+              {tagList.map(tag => (
+                <span class="wr-hero-tag">{tag}</span>
+              ))}
+            </div>
+          )}
+          <div class="wr-hero-cta">
+            <span class="wr-hero-cta-text">Read article</span>
+            <svg class="wr-hero-cta-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="7" y1="17" x2="17" y2="7" />
+              <polyline points="7 7 17 7 17 17" />
+            </svg>
+            {external && (
+              <svg class="wr-hero-external" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                <polyline points="15 3 21 3 21 9" />
+                <line x1="10" y1="14" x2="21" y2="3" />
+              </svg>
+            )}
+          </div>
+        </div>
+        <div class="wr-hero-accent" aria-hidden="true"></div>
+      </a>
+    );
+  })()}
+
+  {/* ===== SECONDARY ARTICLES — side by side ===== */}
+  {rest.length > 0 && (
+    <div class="wr-secondary">
+      {rest.map((article, i) => {
+        const img = article.thumbnail?.responsiveImage;
+        const href = article.externalLink || `/blog/${article.slug}`;
+        const external = !!article.externalLink;
+        const date = article.date ? dayjs(article.date as string).format('MMM YYYY') : '';
+        const tagList = article.tags ? article.tags.split(/[,·]/).map(t => t.trim()).filter(Boolean) : [];
+
+        return (
+          <a
+            href={href}
+            class="wr-card"
+            data-animate
+            {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+          >
+            {img && (
+              <div class="wr-card-visual" transition:name={`card-${article.slug}`}>
+                <img
+                  src={img.src}
+                  srcset={img.srcSet}
+                  sizes="(min-width: 768px) 45vw, 95vw"
+                  width={img.width}
+                  height={img.height}
+                  alt={img.alt || article.title}
+                  loading="lazy"
+                  decoding="async"
+                  class="wr-card-img"
+                  style={img.base64 ? `background-image: url(${img.base64}); background-size: cover;` : ''}
+                />
+              </div>
+            )}
+            <div class="wr-card-body">
+              <div class="wr-card-meta">
+                {date && <time class="wr-card-date">{date}</time>}
+                {tagList.length > 0 && tagList.map(tag => (
+                  <span class="wr-card-tag">{tag}</span>
+                ))}
+                {external && (
+                  <svg class="wr-card-external" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                    <polyline points="15 3 21 3 21 9" />
+                    <line x1="10" y1="14" x2="21" y2="3" />
+                  </svg>
+                )}
+              </div>
+              <h3 class="wr-card-title">{article.title}</h3>
+            </div>
+            <div class="wr-card-accent" aria-hidden="true"></div>
+          </a>
+        );
+      })}
+    </div>
+  )}
+</div>
+
+<style>
+  /* ===== CONTAINER ===== */
+  .wr {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    margin-top: 2.5rem;
+  }
+
+  /* ===== HERO FEATURED ARTICLE ===== */
+  .wr-hero {
+    display: grid;
+    grid-template-columns: 1fr;
+    position: relative;
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    cursor: pointer;
+    text-decoration: none;
+    transition:
+      border-color 0.4s ease,
+      box-shadow 0.5s ease;
+  }
+
+  @media (min-width: 768px) {
+    .wr-hero {
+      grid-template-columns: 1.15fr 0.85fr;
+    }
+  }
+
+  .wr-hero:hover {
+    border-color: color-mix(in srgb, var(--accent) 30%, transparent);
+    box-shadow:
+      0 28px 56px -16px rgba(0, 0, 0, 0.3),
+      0 0 0 1px color-mix(in srgb, var(--accent) 6%, transparent);
+  }
+
+  [data-theme="light"] .wr-hero:hover {
+    box-shadow:
+      0 28px 56px -16px rgba(0, 0, 0, 0.08),
+      0 0 0 1px color-mix(in srgb, var(--accent) 12%, transparent);
+  }
+
+  /* Hero image */
+  .wr-hero-visual {
+    overflow: hidden;
+    background: var(--bg-surface);
+  }
+
+  .wr-hero-img-wrap {
+    overflow: hidden;
+    aspect-ratio: 4/3;
+  }
+
+  @media (min-width: 768px) {
+    .wr-hero-img-wrap {
+      aspect-ratio: auto;
+      height: 100%;
+    }
+  }
+
+  .wr-hero-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: transform;
+  }
+
+  .wr-hero:hover .wr-hero-img {
+    transform: scale(1.04);
+  }
+
+  /* Hero info */
+  .wr-hero-info {
+    padding: 1.75rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0.75rem;
+  }
+
+  @media (min-width: 768px) {
+    .wr-hero-info {
+      padding: 2.5rem;
+      gap: 1rem;
+    }
+  }
+
+  .wr-hero-top {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .wr-hero-badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.625rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--accent);
+    background: var(--accent-glow);
+    padding: 0.2rem 0.6rem;
+    border-radius: 100px;
+    border: 1px solid color-mix(in srgb, var(--accent) 20%, transparent);
+  }
+
+  .wr-hero-date {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.6875rem;
+    color: var(--text-muted);
+    letter-spacing: 0.04em;
+  }
+
+  .wr-hero-title {
+    font-family: 'Bricolage Grotesque', Georgia, serif;
+    font-weight: 700;
+    font-size: clamp(1.375rem, 2.5vw, 1.875rem);
+    line-height: 1.25;
+    letter-spacing: -0.02em;
+    color: var(--text);
+    transition: color 0.3s ease;
+  }
+
+  .wr-hero:hover .wr-hero-title {
+    color: var(--accent);
+  }
+
+  .wr-hero-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3rem;
+  }
+
+  .wr-hero-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.5625rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--accent);
+    background: var(--accent-glow);
+    padding: 0.175rem 0.5rem;
+    border-radius: 100px;
+    border: 1px solid transparent;
+    transition: border-color 0.3s ease, background 0.3s ease;
+  }
+
+  .wr-hero:hover .wr-hero-tag {
+    border-color: color-mix(in srgb, var(--accent) 20%, transparent);
+    background: var(--accent-glow-strong);
+  }
+
+  /* Hero CTA */
+  .wr-hero-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+    color: var(--text-muted);
+    transition: color 0.3s ease;
+  }
+
+  .wr-hero:hover .wr-hero-cta {
+    color: var(--accent);
+  }
+
+  .wr-hero-cta-text {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.875rem;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+  }
+
+  .wr-hero-cta-arrow {
+    transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  .wr-hero:hover .wr-hero-cta-arrow {
+    transform: translate(3px, -3px);
+  }
+
+  .wr-hero-external {
+    opacity: 0.5;
+  }
+
+  .wr-hero-accent {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--gradient-accent);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 1;
+  }
+
+  .wr-hero:hover .wr-hero-accent {
+    transform: scaleX(1);
+  }
+
+  /* ===== SECONDARY CARDS ===== */
+  .wr-secondary {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+
+  @media (min-width: 768px) {
+    .wr-secondary {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  .wr-card {
+    display: flex;
+    flex-direction: column;
+    border-radius: var(--radius-xl);
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    overflow: hidden;
+    cursor: pointer;
+    text-decoration: none;
+    position: relative;
+    transition:
+      border-color 0.4s ease,
+      box-shadow 0.5s ease,
+      transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .wr-card:hover {
+    border-color: color-mix(in srgb, var(--accent) 30%, transparent);
+    transform: translateY(-6px);
+    box-shadow:
+      0 24px 48px -12px rgba(0, 0, 0, 0.25),
+      0 0 0 1px color-mix(in srgb, var(--accent) 6%, transparent);
+  }
+
+  [data-theme="light"] .wr-card:hover {
+    box-shadow:
+      0 24px 48px -12px rgba(0, 0, 0, 0.08),
+      0 0 0 1px color-mix(in srgb, var(--accent) 12%, transparent);
+  }
+
+  .wr-card-visual {
+    overflow: hidden;
+    aspect-ratio: 16/10;
+    background: var(--bg-surface);
+  }
+
+  .wr-card-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: transform;
+  }
+
+  .wr-card:hover .wr-card-img {
+    transform: scale(1.05);
+  }
+
+  .wr-card-body {
+    padding: 1.25rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .wr-card-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.375rem;
+  }
+
+  .wr-card-date {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.6875rem;
+    color: var(--text-muted);
+    letter-spacing: 0.04em;
+  }
+
+  .wr-card-tag {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.625rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-muted);
+  }
+
+  .wr-card-tag::before {
+    content: '·';
+    margin-right: 0.375rem;
+    color: var(--border-hover);
+  }
+
+  .wr-card-external {
+    color: var(--text-muted);
+    opacity: 0.5;
+  }
+
+  .wr-card-title {
+    font-family: 'Bricolage Grotesque', Georgia, serif;
+    font-weight: 700;
+    font-size: 1.0625rem;
+    line-height: 1.35;
+    letter-spacing: -0.01em;
+    color: var(--text);
+    transition: color 0.3s ease;
+  }
+
+  .wr-card:hover .wr-card-title {
+    color: var(--accent);
+  }
+
+  .wr-card-accent {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--gradient-accent);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 1;
+  }
+
+  .wr-card:hover .wr-card-accent {
+    transform: scaleX(1);
+  }
+
+  /* ===== TOUCH ===== */
+  @media (hover: none) and (pointer: coarse) {
+    .wr-hero:hover {
+      border-color: var(--border);
+      box-shadow: none;
+    }
+
+    .wr-hero:hover .wr-hero-img {
+      transform: none;
+    }
+
+    .wr-hero:hover .wr-hero-title {
+      color: var(--text);
+    }
+
+    .wr-hero-cta {
+      color: var(--accent);
+    }
+
+    .wr-hero-accent {
+      transform: scaleX(1);
+      opacity: 0.4;
+    }
+
+    .wr-hero:active,
+    .wr-card:active {
+      opacity: 0.85;
+      transition: opacity 0.1s ease;
+    }
+
+    .wr-card:hover {
+      border-color: var(--border);
+      box-shadow: none;
+      transform: none;
+    }
+
+    .wr-card:hover .wr-card-img {
+      transform: none;
+    }
+
+    .wr-card:hover .wr-card-title {
+      color: var(--text);
+    }
+
+    .wr-card-accent {
+      transform: scaleX(1);
+      opacity: 0.4;
+    }
+  }
+
+  /* ===== MOBILE ===== */
+  @media (max-width: 767px) {
+    .wr-hero-info {
+      padding: 1.5rem;
+    }
+
+    .wr-card:hover {
+      transform: none;
+    }
+  }
+
+  /* ===== REDUCED MOTION ===== */
+  @media (prefers-reduced-motion: reduce) {
+    .wr-hero,
+    .wr-hero-img,
+    .wr-hero-cta-arrow,
+    .wr-hero-accent,
+    .wr-hero-tag,
+    .wr-card,
+    .wr-card-img,
+    .wr-card-accent {
+      transition-duration: 0.01ms !important;
+    }
+  }
+</style>

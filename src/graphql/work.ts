@@ -8,7 +8,7 @@ export const RECENT_WORK = `
               alt
               blurhash
               title
-              responsiveImage(imgixParams: { fit: crop, ar: "4:3", auto: format }) {
+              responsiveImage(imgixParams: { auto: format }) {
                 srcSet
                 webpSrcSet
                 sizes

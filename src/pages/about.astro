@@ -67,7 +67,7 @@ import { companies } from '@/utils/about';
         </div>
       </div>
 
-      <!-- Skills -->
+      <!-- What I Do -->
       <div class="mt-16 md:mt-24" data-animate>
         <div class="flex items-center gap-4 mb-10">
           <h3 class="font-display text-xl md:text-2xl tracking-tight whitespace-nowrap">
@@ -75,39 +75,499 @@ import { companies } from '@/utils/about';
           </h3>
           <span class="flex-1 h-[1px] bg-[var(--border)]"></span>
         </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <div class="p-6 rounded-xl bg-[var(--bg-elevated)] border border-[var(--border)]">
-            <div class="flex items-center gap-3 mb-4">
-              <div class="w-10 h-10 rounded-lg bg-[var(--accent-glow)] flex items-center justify-center">
-                <img src="/static/pen-tool.svg" class="w-5 h-5 invert" alt="Design" />
+
+        <div class="wid-grid" data-animate-stagger>
+          {[
+            {
+              emoji: '🎨',
+              label: 'Design',
+              desc: 'Turning ideas into interfaces people love using.',
+              skills: ['User Experience', 'User Interface', 'Wireframing', 'Prototyping', 'Design Systems', 'Web Design'],
+              accent: '249, 115, 22',
+              pattern: 'dots',
+            },
+            {
+              emoji: '⚡',
+              label: 'Development',
+              desc: 'Building fast, accessible products with modern tools.',
+              skills: ['TypeScript', 'React', 'Next.js', 'Node.js', 'GraphQL', 'PostgreSQL', 'Redux', 'Express'],
+              accent: '59, 130, 246',
+              pattern: 'code',
+            },
+            {
+              emoji: '🛠',
+              label: 'Tools',
+              desc: 'My daily drivers for shipping great work.',
+              skills: ['Figma', 'Cursor', 'Claude Code', 'Git', 'Storybook'],
+              accent: '16, 185, 129',
+              pattern: 'grid',
+            },
+          ].map((cat, ci) => (
+            <div class="wid-card" data-animate style={`--stagger-index: ${ci}; --card-accent: ${cat.accent}`}>
+              {/* Animated background pattern */}
+              <div class="wid-pattern-wrap" aria-hidden="true">
+                {cat.pattern === 'dots' && (
+                  <svg class="wid-pattern wid-pattern--dots" viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="20" cy="20" r="2" fill={`rgba(${cat.accent}, 0.3)`}><animate attributeName="r" values="2;3.5;2" dur="3s" repeatCount="indefinite" /></circle>
+                    <circle cx="60" cy="15" r="1.5" fill={`rgba(${cat.accent}, 0.2)`}><animate attributeName="r" values="1.5;3;1.5" dur="4s" repeatCount="indefinite" /></circle>
+                    <circle cx="100" cy="30" r="2.5" fill={`rgba(${cat.accent}, 0.25)`}><animate attributeName="r" values="2.5;4;2.5" dur="3.5s" repeatCount="indefinite" /></circle>
+                    <circle cx="140" cy="10" r="1.5" fill={`rgba(${cat.accent}, 0.15)`}><animate attributeName="r" values="1.5;2.5;1.5" dur="5s" repeatCount="indefinite" /></circle>
+                    <circle cx="170" cy="40" r="2" fill={`rgba(${cat.accent}, 0.2)`}><animate attributeName="r" values="2;3;2" dur="3.8s" repeatCount="indefinite" /></circle>
+                    <circle cx="40" cy="50" r="3" fill={`rgba(${cat.accent}, 0.15)`}><animate attributeName="r" values="3;5;3" dur="4.5s" repeatCount="indefinite" /></circle>
+                    <circle cx="120" cy="60" r="2" fill={`rgba(${cat.accent}, 0.2)`}><animate attributeName="r" values="2;3.5;2" dur="3.2s" repeatCount="indefinite" /></circle>
+                    <circle cx="80" cy="80" r="1.5" fill={`rgba(${cat.accent}, 0.1)`}><animate attributeName="r" values="1.5;2.5;1.5" dur="4.8s" repeatCount="indefinite" /></circle>
+                    <circle cx="160" cy="75" r="2.5" fill={`rgba(${cat.accent}, 0.15)`}><animate attributeName="r" values="2.5;4;2.5" dur="3.6s" repeatCount="indefinite" /></circle>
+                  </svg>
+                )}
+                {cat.pattern === 'code' && (
+                  <svg class="wid-pattern wid-pattern--code" viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg">
+                    <text x="10" y="25" font-family="JetBrains Mono, monospace" font-size="11" fill={`rgba(${cat.accent}, 0.12)`}>&lt;/&gt;</text>
+                    <text x="70" y="18" font-family="JetBrains Mono, monospace" font-size="9" fill={`rgba(${cat.accent}, 0.1)`}>{'{ }'}</text>
+                    <text x="130" y="30" font-family="JetBrains Mono, monospace" font-size="13" fill={`rgba(${cat.accent}, 0.08)`}>fn()</text>
+                    <text x="25" y="55" font-family="JetBrains Mono, monospace" font-size="10" fill={`rgba(${cat.accent}, 0.1)`}>===</text>
+                    <text x="90" y="65" font-family="JetBrains Mono, monospace" font-size="12" fill={`rgba(${cat.accent}, 0.07)`}>=&gt;</text>
+                    <text x="150" y="50" font-family="JetBrains Mono, monospace" font-size="9" fill={`rgba(${cat.accent}, 0.12)`}>[ ]</text>
+                    <text x="50" y="90" font-family="JetBrains Mono, monospace" font-size="11" fill={`rgba(${cat.accent}, 0.06)`}>**</text>
+                    <text x="115" y="95" font-family="JetBrains Mono, monospace" font-size="10" fill={`rgba(${cat.accent}, 0.09)`}>::</text>
+                    <text x="170" y="85" font-family="JetBrains Mono, monospace" font-size="8" fill={`rgba(${cat.accent}, 0.1)`}>;</text>
+                  </svg>
+                )}
+                {cat.pattern === 'grid' && (
+                  <svg class="wid-pattern wid-pattern--grid" viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="15" y="12" width="14" height="14" rx="3" fill="none" stroke={`rgba(${cat.accent}, 0.12)`} stroke-width="1" />
+                    <rect x="65" y="8" width="10" height="10" rx="2" fill={`rgba(${cat.accent}, 0.08)`} />
+                    <rect x="120" y="20" width="18" height="12" rx="3" fill="none" stroke={`rgba(${cat.accent}, 0.1)`} stroke-width="1" />
+                    <rect x="165" y="15" width="8" height="8" rx="2" fill={`rgba(${cat.accent}, 0.1)`} />
+                    <rect x="35" y="50" width="12" height="16" rx="3" fill="none" stroke={`rgba(${cat.accent}, 0.08)`} stroke-width="1" />
+                    <rect x="90" y="55" width="16" height="10" rx="2" fill={`rgba(${cat.accent}, 0.06)`} />
+                    <rect x="145" y="48" width="10" height="10" rx="2" fill="none" stroke={`rgba(${cat.accent}, 0.12)`} stroke-width="1" />
+                    <rect x="20" y="85" width="8" height="8" rx="2" fill={`rgba(${cat.accent}, 0.07)`} />
+                    <rect x="75" y="90" width="14" height="8" rx="2" fill="none" stroke={`rgba(${cat.accent}, 0.09)`} stroke-width="1" />
+                    <rect x="140" y="82" width="12" height="12" rx="3" fill={`rgba(${cat.accent}, 0.05)`} />
+                  </svg>
+                )}
               </div>
-              <h4 class="font-display text-lg font-semibold">Design</h4>
-            </div>
-            <p class="text-sm text-[var(--text-muted)] leading-relaxed font-body">
-              User Experience, User Interface, Wireframing, Prototyping, Web Design
-            </p>
-          </div>
-          <div class="p-6 rounded-xl bg-[var(--bg-elevated)] border border-[var(--border)]">
-            <div class="flex items-center gap-3 mb-4">
-              <div class="w-10 h-10 rounded-lg bg-[var(--accent-glow)] flex items-center justify-center">
-                <img src="/static/terminal.svg" class="w-5 h-5 invert" alt="Development" />
+
+              {/* Gradient glow */}
+              <div class="wid-glow" aria-hidden="true"></div>
+
+              {/* Content */}
+              <div class="wid-hero-area">
+                <span class="wid-emoji">{cat.emoji}</span>
+                <span class="wid-num" aria-hidden="true">{String(ci + 1).padStart(2, '0')}</span>
               </div>
-              <h4 class="font-display text-lg font-semibold">Development</h4>
+              <h4 class="wid-label">{cat.label}</h4>
+              <p class="wid-desc">{cat.desc}</p>
+              <div class="wid-skills">
+                {cat.skills.map((skill, si) => (
+                  <span class="wid-pill" style={`--pill-i: ${si}`}>{skill}</span>
+                ))}
+              </div>
             </div>
-            <p class="text-sm text-[var(--text-muted)] leading-relaxed font-body">
-              JavaScript, React, Redux, Express, Node.js, TypeScript, Next.js, GraphQL, PostgreSQL
-            </p>
-          </div>
+          ))}
         </div>
       </div>
 
+      <style>
+        /* ===== WHAT I DO GRID ===== */
+        .wid-grid {
+          display: grid;
+          grid-template-columns: 1fr;
+          gap: 1rem;
+        }
+
+        @media (min-width: 640px) {
+          .wid-grid {
+            grid-template-columns: repeat(3, 1fr);
+          }
+        }
+
+        /* ===== CARD ===== */
+        .wid-card {
+          position: relative;
+          padding: 0 1.5rem 1.5rem;
+          border-radius: var(--radius-xl);
+          background: var(--bg-elevated);
+          border: 1px solid var(--border);
+          display: flex;
+          flex-direction: column;
+          gap: 0.5rem;
+          overflow: hidden;
+          transition:
+            border-color 0.4s ease,
+            transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1),
+            box-shadow 0.5s ease;
+        }
+
+        .wid-card:hover {
+          border-color: rgba(var(--card-accent), 0.4);
+          transform: translateY(-6px);
+          box-shadow:
+            0 24px 48px -12px rgba(0, 0, 0, 0.25),
+            0 0 30px -8px rgba(var(--card-accent), 0.15),
+            inset 0 1px 0 rgba(var(--card-accent), 0.1);
+        }
+
+        /* Gradient accent border top */
+        .wid-card::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          height: 3px;
+          background: linear-gradient(
+            90deg,
+            transparent 0%,
+            rgba(var(--card-accent), 0.7) 50%,
+            transparent 100%
+          );
+          opacity: 0;
+          transition: opacity 0.4s ease;
+        }
+
+        .wid-card:hover::before {
+          opacity: 1;
+        }
+
+        /* ===== PATTERN BACKGROUND ===== */
+        .wid-pattern-wrap {
+          position: absolute;
+          top: 0;
+          right: 0;
+          width: 100%;
+          height: 120px;
+          pointer-events: none;
+          opacity: 0.6;
+          transition: opacity 0.4s ease;
+        }
+
+        .wid-card:hover .wid-pattern-wrap {
+          opacity: 1;
+        }
+
+        .wid-pattern {
+          width: 100%;
+          height: 100%;
+        }
+
+        .wid-pattern--dots {
+          animation: widPatternDrift 20s ease-in-out infinite;
+        }
+
+        .wid-pattern--code {
+          animation: widPatternDrift 25s ease-in-out infinite reverse;
+        }
+
+        .wid-pattern--grid {
+          animation: widPatternDrift 22s ease-in-out infinite;
+        }
+
+        @keyframes widPatternDrift {
+          0%, 100% { transform: translate(0, 0); }
+          25%      { transform: translate(4px, -3px); }
+          50%      { transform: translate(-3px, 4px); }
+          75%      { transform: translate(2px, 2px); }
+        }
+
+        /* ===== GLOW ===== */
+        .wid-glow {
+          position: absolute;
+          top: -40px;
+          right: -40px;
+          width: 140px;
+          height: 140px;
+          border-radius: 50%;
+          background: radial-gradient(
+            circle,
+            rgba(var(--card-accent), 0.12) 0%,
+            transparent 70%
+          );
+          pointer-events: none;
+          transition: transform 0.6s ease, opacity 0.4s ease;
+        }
+
+        .wid-card:hover .wid-glow {
+          transform: scale(1.4);
+          opacity: 1.5;
+        }
+
+        /* ===== HERO AREA (emoji + number) ===== */
+        .wid-hero-area {
+          display: flex;
+          align-items: flex-start;
+          justify-content: space-between;
+          padding-top: 1.5rem;
+          position: relative;
+          z-index: 1;
+        }
+
+        .wid-emoji {
+          font-size: 2.5rem;
+          line-height: 1;
+          transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+          filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.15));
+        }
+
+        .wid-card:hover .wid-emoji {
+          transform: scale(1.15) rotate(-6deg);
+        }
+
+        .wid-num {
+          font-family: 'Bricolage Grotesque', Georgia, serif;
+          font-size: 2.5rem;
+          font-weight: 800;
+          line-height: 1;
+          letter-spacing: -0.04em;
+          color: rgba(var(--card-accent), 0.08);
+          transition: color 0.4s ease;
+        }
+
+        .wid-card:hover .wid-num {
+          color: rgba(var(--card-accent), 0.18);
+        }
+
+        /* ===== LABEL ===== */
+        .wid-label {
+          font-family: 'Bricolage Grotesque', Georgia, serif;
+          font-size: 1.375rem;
+          font-weight: 700;
+          color: var(--text);
+          letter-spacing: -0.02em;
+          position: relative;
+          z-index: 1;
+        }
+
+        /* ===== DESCRIPTION ===== */
+        .wid-desc {
+          font-family: 'Space Grotesk', sans-serif;
+          font-size: 0.8125rem;
+          line-height: 1.6;
+          color: var(--text-muted);
+          position: relative;
+          z-index: 1;
+          margin-bottom: 0.25rem;
+        }
+
+        /* ===== SKILLS ===== */
+        .wid-skills {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 0.3rem;
+          position: relative;
+          z-index: 1;
+          padding-top: 0.5rem;
+          border-top: 1px solid var(--border);
+        }
+
+        .wid-pill {
+          display: inline-flex;
+          align-items: center;
+          padding: 0.3rem 0.7rem;
+          border-radius: 100px;
+          font-family: 'Space Grotesk', sans-serif;
+          font-size: 0.75rem;
+          font-weight: 500;
+          color: var(--text-secondary);
+          background: var(--bg-surface);
+          border: 1px solid var(--border);
+          transition:
+            border-color 0.3s ease calc(var(--pill-i, 0) * 20ms),
+            color 0.3s ease calc(var(--pill-i, 0) * 20ms),
+            background 0.3s ease calc(var(--pill-i, 0) * 20ms),
+            transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) calc(var(--pill-i, 0) * 20ms);
+        }
+
+        .wid-card:hover .wid-pill {
+          border-color: rgba(var(--card-accent), 0.3);
+          color: var(--text);
+          background: rgba(var(--card-accent), 0.06);
+          transform: translateY(-1px);
+        }
+
+        /* ===== Touch ===== */
+        @media (hover: none) and (pointer: coarse) {
+          .wid-card:hover {
+            transform: none;
+            box-shadow: none;
+            border-color: var(--border);
+          }
+
+          .wid-card:hover::before {
+            opacity: 0;
+          }
+
+          .wid-card:hover .wid-emoji {
+            transform: none;
+          }
+
+          .wid-card:hover .wid-pill {
+            border-color: var(--border);
+            color: var(--text-secondary);
+            background: var(--bg-surface);
+            transform: none;
+          }
+        }
+
+        /* ===== Reduced motion ===== */
+        @media (prefers-reduced-motion: reduce) {
+          .wid-card,
+          .wid-pill,
+          .wid-emoji,
+          .wid-glow,
+          .wid-pattern-wrap {
+            transition-duration: 0.01ms !important;
+          }
+
+          .wid-pattern {
+            animation: none !important;
+          }
+
+          .wid-pattern circle animate {
+            display: none;
+          }
+        }
+      </style>
+
       <!-- CTA -->
-      <div class="my-16 md:my-24 lg:my-32" data-animate>
-        <h2 class="font-display text-3xl md:text-4xl tracking-tight leading-snug">
-          Got a project in mind?{' '}
-          <a href="/contact" class="gradient-text hover:opacity-80 transition-opacity">Let's talk.</a>
-        </h2>
+      <div class="about-cta my-16 md:my-24 lg:my-32" data-animate>
+        <div class="about-cta-card">
+          <div class="about-cta-shapes" aria-hidden="true">
+            <div class="about-cta-shape about-cta-shape-1"></div>
+            <div class="about-cta-shape about-cta-shape-2"></div>
+          </div>
+          <h2 class="about-cta-text">
+            <span class="about-cta-quiet">Got a project in mind?</span>
+            <a href="/contact" class="about-cta-link">
+              Let's talk<span class="about-cta-dot">.</span>
+              <svg class="about-cta-arrow" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="7" y1="17" x2="17" y2="7" />
+                <polyline points="7 7 17 7 17 17" />
+              </svg>
+            </a>
+          </h2>
+        </div>
       </div>
+
+      <style>
+        .about-cta-card {
+          position: relative;
+          padding: 3rem 2rem;
+          border-radius: var(--radius-xl);
+          background: var(--bg-elevated);
+          border: 1px solid var(--border);
+          overflow: hidden;
+          transition: border-color 0.4s ease;
+        }
+
+        .about-cta-card:hover {
+          border-color: color-mix(in srgb, var(--accent) 25%, transparent);
+        }
+
+        @media (min-width: 768px) {
+          .about-cta-card {
+            padding: 4rem 3rem;
+          }
+        }
+
+        .about-cta-shapes {
+          position: absolute;
+          inset: 0;
+          pointer-events: none;
+        }
+
+        .about-cta-shape {
+          position: absolute;
+          border: 1.5px solid var(--accent);
+          opacity: 0.06;
+        }
+
+        .about-cta-shape-1 {
+          width: 80px;
+          height: 80px;
+          border-radius: 50%;
+          top: -20px;
+          right: 15%;
+          animation: aboutFloat1 10s ease-in-out infinite;
+        }
+
+        .about-cta-shape-2 {
+          width: 36px;
+          height: 36px;
+          border-radius: 8px;
+          bottom: 20%;
+          right: 8%;
+          animation: aboutFloat2 13s ease-in-out infinite;
+        }
+
+        @keyframes aboutFloat1 {
+          0%, 100% { transform: translate(0, 0) rotate(0deg); }
+          50%      { transform: translate(-12px, 10px) rotate(180deg); }
+        }
+
+        @keyframes aboutFloat2 {
+          0%, 100% { transform: rotate(0deg) translate(0, 0); }
+          33%      { transform: rotate(120deg) translate(8px, -6px); }
+          66%      { transform: rotate(240deg) translate(-6px, 8px); }
+        }
+
+        .about-cta-text {
+          position: relative;
+          z-index: 1;
+          display: flex;
+          flex-direction: column;
+          gap: 0.25rem;
+        }
+
+        .about-cta-quiet {
+          font-family: 'Space Grotesk', sans-serif;
+          font-size: 0.875rem;
+          font-weight: 400;
+          text-transform: uppercase;
+          letter-spacing: 0.08em;
+          color: var(--text-muted);
+        }
+
+        .about-cta-link {
+          font-family: 'Bricolage Grotesque', Georgia, serif;
+          font-size: clamp(2rem, 5vw, 3.5rem);
+          font-weight: 800;
+          letter-spacing: -0.03em;
+          line-height: 1.15;
+          color: var(--text);
+          text-decoration: none;
+          display: inline-flex;
+          align-items: baseline;
+          gap: 0.3em;
+          transition: color 0.3s ease;
+        }
+
+        .about-cta-link:hover {
+          color: var(--accent);
+        }
+
+        .about-cta-dot {
+          color: var(--accent);
+        }
+
+        .about-cta-arrow {
+          display: inline-block;
+          vertical-align: middle;
+          color: var(--accent);
+          opacity: 0.6;
+          transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s ease;
+        }
+
+        .about-cta-link:hover .about-cta-arrow {
+          transform: translate(4px, -4px);
+          opacity: 1;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+          .about-cta-shape { animation: none; }
+          .about-cta-arrow { transition-duration: 0.01ms !important; }
+        }
+      </style>
     </div>
   </Container>
 </PageLayout>

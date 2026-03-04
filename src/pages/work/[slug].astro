@@ -1,7 +1,7 @@
 ---
 import PageLayout from '@/layouts/PageLayout.astro';
 import Container from '@/components/astro/Container.astro';
-import CardGrid from '@/components/astro/CardGrid.astro';
+import RelatedProjects from '@/components/astro/RelatedProjects.astro';
 import { fetchAPI } from '@/lib/datocms';
 import { sanitizeHtml } from '@/lib/sanitize';
 import { CASE_STUDY, RECENT_WORK } from '@/graphql/work';
@@ -71,11 +71,7 @@ const moreProjects = data.allProjects ?? [];
             </h3>
             <span class="flex-1 h-[1px] bg-[var(--border)]"></span>
           </div>
-          <CardGrid
-            items={moreProjects}
-            type="project"
-            columns={moreProjects.length < 3 ? 2 : 3}
-          />
+          <RelatedProjects projects={moreProjects} />
         </div>
       )}
 

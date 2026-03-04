@@ -102,7 +102,7 @@ export default function PhotoGallery({ places }: { places: Place[] }) {
 
 function ImageCard({ item, index, onOpen }: { item: FlatPhoto; index: number; onOpen: () => void }) {
   const ref = useRef<HTMLDivElement>(null);
-  const [visible, setVisible] = useState(false);
+  const [visible, setVisible] = useState(index < 12);
 
   useEffect(() => {
     const el = ref.current;

@@ -1,0 +1,30 @@
+---
+/**
+ * Subtle dot grid background for page headers.
+ * Place inside a position:relative container.
+ */
+---
+
+<div class="bg-decor" aria-hidden="true">
+  <div class="bg-dot-grid"></div>
+</div>
+
+<style>
+  .bg-decor {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+  }
+
+  .bg-dot-grid {
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(circle, var(--border) 1px, transparent 1px);
+    background-size: 28px 28px;
+    opacity: 0.4;
+    mask-image: radial-gradient(ellipse 70% 50% at 50% 0%, black 0%, transparent 70%);
+    -webkit-mask-image: radial-gradient(ellipse 70% 50% at 50% 0%, black 0%, transparent 70%);
+  }
+</style>

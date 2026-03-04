@@ -2,9 +2,10 @@
 import PageLayout from '@/layouts/PageLayout.astro';
 import Hero from '@/components/astro/Hero.astro';
 import Container from '@/components/astro/Container.astro';
-import CardGrid from '@/components/astro/CardGrid.astro';
-import SectionHeading from '@/components/astro/SectionHeading.astro';
+import FeaturedArticles from '@/components/astro/FeaturedArticles.astro';
+import ProjectShowcase from '@/components/astro/ProjectShowcase.astro';
 import ArrowLink from '@/components/astro/ArrowLink.astro';
+import Testimonials from '@/components/astro/Testimonials.astro';
 import { fetchAPI } from '@/lib/datocms';
 import { HOME_PAGE_QUERY } from '@/graphql/index';
 
@@ -19,8 +20,18 @@ const articles = data.allArticles?.slice(0, 3) ?? [];
   <!-- Recent Work -->
   <section style="content-visibility:auto;contain-intrinsic-size:auto 800px;">
     <Container>
-      <SectionHeading class="mt-16 md:mt-24 xl:mt-32 mb-6 md:mb-8">Selected work</SectionHeading>
-      <CardGrid items={projects} type="project" />
+      <div class="section-head mt-16 md:mt-24 xl:mt-32 mb-6 md:mb-8" data-animate>
+        <h2 class="sh-text">
+          <span class="sh-quiet">Some of my</span>
+          <span class="sh-loud">
+            <span class="sh-highlight">selected</span> work<span class="sh-dot">.</span>
+          </span>
+        </h2>
+        <span class="sh-count">{String(projects.length).padStart(2, '0')} projects</span>
+      </div>
+    </Container>
+    <ProjectShowcase projects={projects} />
+    <Container>
       <ArrowLink href="/work" text="View all projects" />
     </Container>
   </section>
@@ -28,10 +39,38 @@ const articles = data.allArticles?.slice(0, 3) ?? [];
   <!-- Featured Articles -->
   <section style="content-visibility:auto;contain-intrinsic-size:auto 600px;">
     <Container>
-      <SectionHeading class="mt-16 md:mt-28 xl:mt-36 mb-6 md:mb-8">Writing</SectionHeading>
-      <CardGrid items={articles} type="article" />
+      <div class="section-head mt-16 md:mt-28 xl:mt-36 mb-6 md:mb-8" data-animate>
+        <h2 class="sh-text">
+          <span class="sh-quiet">Things I've been</span>
+          <span class="sh-loud">
+            writing<span class="sh-dot">.</span>
+          </span>
+        </h2>
+      </div>
+      <FeaturedArticles articles={articles} />
       <ArrowLink href="/blog" text="Read more articles" />
     </Container>
+  </section>
+
+  <!-- Testimonials -->
+  <section style="content-visibility:auto;contain-intrinsic-size:auto 500px;">
+    <Container>
+      <div class="testimonial-heading mt-16 md:mt-28 xl:mt-36 mb-6 md:mb-8" data-animate>
+        <h2 class="testimonial-heading-text">
+          <span class="th-line1">Don't just take</span>
+          <span class="th-line2">
+            <span class="th-my">my</span>
+            <span class="th-word-for-it">word for it</span>
+            <span class="th-arrow" aria-hidden="true">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M7 7l10 10M17 7v10H7" />
+              </svg>
+            </span>
+          </span>
+        </h2>
+      </div>
+    </Container>
+    <Testimonials />
   </section>
 
   <!-- CTA -->
@@ -181,6 +220,172 @@ const articles = data.allArticles?.slice(0, 3) ?? [];
     @media (prefers-reduced-motion: reduce) {
       .cta-marquee { animation: none; }
       .cta-shape { animation: none; }
+    }
+
+    /* ===== SECTION HEADINGS ===== */
+    .section-head {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .sh-text {
+      font-family: 'Bricolage Grotesque', Georgia, serif;
+      font-size: clamp(2.25rem, 6vw, 4rem);
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      color: var(--text);
+      display: flex;
+      flex-direction: column;
+      gap: 0.05em;
+    }
+
+    .sh-quiet {
+      color: var(--text-muted);
+      font-weight: 400;
+      font-size: 0.375em;
+      letter-spacing: 0.08em;
+      font-family: 'Space Grotesk', sans-serif;
+      text-transform: uppercase;
+    }
+
+    .sh-loud {
+      display: inline;
+    }
+
+    .sh-highlight {
+      font-style: italic;
+      color: var(--accent);
+      position: relative;
+    }
+
+    .sh-highlight::after {
+      content: '';
+      position: absolute;
+      bottom: 0.02em;
+      left: -0.05em;
+      right: -0.05em;
+      height: 0.12em;
+      background: var(--accent);
+      opacity: 0.3;
+      border-radius: 1em;
+      transform: rotate(-1deg);
+    }
+
+    .sh-dot {
+      color: var(--accent);
+    }
+
+    .sh-count {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      letter-spacing: 0.04em;
+      white-space: nowrap;
+      padding-bottom: 0.4em;
+    }
+
+    @media (max-width: 767px) {
+      .sh-count {
+        display: none;
+      }
+    }
+
+    /* ===== TESTIMONIAL HEADING ===== */
+    .testimonial-heading-text {
+      font-family: 'Bricolage Grotesque', Georgia, serif;
+      font-size: clamp(2.25rem, 6vw, 4rem);
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      color: var(--text);
+      display: flex;
+      flex-direction: column;
+      gap: 0.1em;
+    }
+
+    .th-line1 {
+      color: var(--text-muted);
+      font-weight: 400;
+      font-size: 0.375em;
+      letter-spacing: 0.08em;
+      font-family: 'Space Grotesk', sans-serif;
+      text-transform: uppercase;
+    }
+
+    .th-line2 {
+      display: flex;
+      align-items: baseline;
+      gap: 0.25em;
+      flex-wrap: wrap;
+    }
+
+    .th-my {
+      font-style: italic;
+      color: var(--accent);
+      position: relative;
+    }
+
+    /* Scribble underline on "my" */
+    .th-my::after {
+      content: '';
+      position: absolute;
+      bottom: 0.02em;
+      left: -0.05em;
+      right: -0.05em;
+      height: 0.12em;
+      background: var(--accent);
+      opacity: 0.3;
+      border-radius: 1em;
+      transform: rotate(-1.5deg);
+    }
+
+    .th-word-for-it {
+      color: var(--text);
+    }
+
+    .th-arrow {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 1.2em;
+      height: 1.2em;
+      border-radius: 50%;
+      border: 2px solid var(--border);
+      color: var(--text-muted);
+      font-size: 0.5em;
+      flex-shrink: 0;
+      transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), border-color 0.3s ease, color 0.3s ease;
+      animation: thBounce 3s ease-in-out infinite;
+    }
+
+    .testimonial-heading:hover .th-arrow {
+      border-color: var(--accent);
+      color: var(--accent);
+      transform: rotate(0deg) scale(1.1);
+    }
+
+    @keyframes thBounce {
+      0%, 100% { transform: translateY(0); }
+      50%      { transform: translateY(-4px); }
+    }
+
+    @media (max-width: 767px) {
+      .th-arrow {
+        width: 1.4em;
+        height: 1.4em;
+      }
+
+      .th-arrow svg {
+        width: 18px;
+        height: 18px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .th-arrow { animation: none; }
     }
   </style>
 
