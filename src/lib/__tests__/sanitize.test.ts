@@ -2,6 +2,7 @@
  * @vitest-environment happy-dom
  */
 import { describe, it, expect } from 'vitest';
+// @ts-ignore - dompurify is a transitive dep of isomorphic-dompurify; types may not resolve under pnpm strict hoisting
 import DOMPurify from 'dompurify';
 
 // Since isomorphic-dompurify has jsdom ESM issues in tests,

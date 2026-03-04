@@ -5,8 +5,6 @@ import FloatingShapes from '@/components/astro/FloatingShapes.astro';
 import { fetchAPI } from '@/lib/datocms';
 import { RECENT_WORK } from '@/graphql/work';
 import type { Project } from '@/types/content';
-import dayjs from 'dayjs';
-
 const data = await fetchAPI(RECENT_WORK);
 const projects: Project[] = data.allProjects ?? [];
 
@@ -65,7 +63,7 @@ const allTags = [...new Set(
       const href = `/work/${project.slug}`;
       const indexLabel = String(i + 1).padStart(2, '0');
       const isEven = i % 2 === 1;
-      const year = project.date ? dayjs(project.date as string).format('YYYY') : '';
+      const year = project.date ? new Date(project.date as string).getFullYear().toString() : '';
 
       return (
         <a

@@ -1,6 +1,8 @@
 import { useForm } from 'react-hook-form';
-import { useState, useEffect, useMemo, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import type { ContactData, ContactResponse } from '@/types/contact';
+
+type FormStatus = 'idle' | 'sending' | 'success' | 'error';
 
 export default function ContactForm() {
   const {
@@ -9,9 +11,7 @@ export default function ContactForm() {
     formState: { errors },
     reset,
   } = useForm<ContactData>();
-  const [status, setStatus] = useState('idle');
-  const [focusedField, setFocusedField] = useState<string | null>(null);
-  const formRef = useRef<HTMLFormElement>(null);
+  const [status, setStatus] = useState<FormStatus>('idle');
 
   useEffect(() => {
     if (status === 'success' || status === 'error') {
@@ -109,8 +109,8 @@ export default function ContactForm() {
 
   return (
     <>
-      <form ref={formRef} onSubmit={handleSubmit(submitMessage)} className="contact-form-inner">
-        <div className={`form-field ${focusedField === 'name' ? 'is-focused' : ''} ${errors.name ? 'has-error' : ''}`}>
+      <form onSubmit={handleSubmit(submitMessage)} className="contact-form-inner">
+        <div className={`form-field ${errors.name ? 'has-error' : ''}`}>
           <label className="field-label" htmlFor="name">
             <span className="field-label-text">What's your name?</span>
             <span className="field-label-icon" aria-hidden="true">
@@ -123,15 +123,13 @@ export default function ContactForm() {
             id="name"
             placeholder="Mike Wazowski"
             {...register('name', { required: 'Name cannot be empty' })}
-            onFocus={() => setFocusedField('name')}
-            onBlur={() => setFocusedField(null)}
           />
           {errors.name && (
             <span className="field-error">{errors.name.message}</span>
           )}
         </div>
 
-        <div className={`form-field ${focusedField === 'email' ? 'is-focused' : ''} ${errors.email ? 'has-error' : ''}`}>
+        <div className={`form-field ${errors.email ? 'has-error' : ''}`}>
           <label className="field-label" htmlFor="email">
             <span className="field-label-text">Where can I reach you?</span>
             <span className="field-label-icon" aria-hidden="true">
@@ -150,8 +148,6 @@ export default function ContactForm() {
                 message: 'Invalid email address',
               },
             })}
-            onFocus={() => setFocusedField('email')}
-            onBlur={() => setFocusedField(null)}
           />
           {errors.email && (
             <span className="field-error">{errors.email.message}</span>
@@ -181,7 +177,7 @@ export default function ContactForm() {
           />
         </div>
 
-        <div className={`form-field ${focusedField === 'message' ? 'is-focused' : ''} ${errors.message ? 'has-error' : ''}`}>
+        <div className={`form-field ${errors.message ? 'has-error' : ''}`}>
           <label className="field-label" htmlFor="message">
             <span className="field-label-text">What's on your mind?</span>
             <span className="field-label-icon" aria-hidden="true">
@@ -197,8 +193,6 @@ export default function ContactForm() {
               required: 'Please leave a message',
               minLength: { value: 10, message: 'Message too short' },
             })}
-            onFocus={() => setFocusedField('message')}
-            onBlur={() => setFocusedField(null)}
           />
           {errors.message && (
             <span className="field-error">{errors.message.message}</span>
@@ -255,11 +249,11 @@ export default function ContactForm() {
           transition: all 0.3s ease;
         }
 
-        .is-focused .field-label {
+        .form-field:focus-within .field-label {
           color: var(--accent);
         }
 
-        .is-focused .field-label-icon {
+        .form-field:focus-within .field-label-icon {
           opacity: 1;
           color: var(--accent);
           transform: scale(1.1);

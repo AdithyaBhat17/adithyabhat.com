@@ -32,7 +32,7 @@ function activatePartyMode() {
 
   showToast('Party mode activated! 🎉🥳')
 
-  const interval = setInterval(() => {
+  const interval: ReturnType<typeof setInterval> = setInterval(() => {
     root.style.setProperty('--accent', colors[index % colors.length])
     index++
   }, 200)

@@ -41,6 +41,8 @@ interface FlatPhoto {
   photo: Photo;
 }
 
+const dateFormatter = new Intl.DateTimeFormat('en-US', { month: 'short', year: 'numeric' });
+
 export default function PhotoGallery({ places }: { places: Place[] }) {
   const photos = useMemo(() => {
     const all = places.flatMap((place) =>
@@ -55,24 +57,22 @@ export default function PhotoGallery({ places }: { places: Place[] }) {
         photo,
       }))
     );
-    return all.sort((a, b) => (new Date(b.date) > new Date(a.date) ? 1 : -1));
+    return all.sort((a, b) => b.date.localeCompare(a.date));
   }, [places]);
 
-  const [dialogItem, setDialogItem] = useState<FlatPhoto | null>(null);
   const [dialogIndex, setDialogIndex] = useState(-1);
+  const dialogItem = dialogIndex >= 0 ? photos[dialogIndex] : null;
 
-  const openDialog = useCallback((item: FlatPhoto, index: number) => {
-    setDialogItem(item);
+  const openDialog = useCallback((_item: FlatPhoto, index: number) => {
     setDialogIndex(index);
   }, []);
 
   const navigate = useCallback((dir: 1 | -1) => {
-    const next = dialogIndex + dir;
-    if (next >= 0 && next < photos.length) {
-      setDialogItem(photos[next]);
-      setDialogIndex(next);
-    }
-  }, [dialogIndex, photos]);
+    setDialogIndex(prev => {
+      const next = prev + dir;
+      return (next >= 0 && next < photos.length) ? next : prev;
+    });
+  }, [photos.length]);
 
   return (
     <>
@@ -90,7 +90,7 @@ export default function PhotoGallery({ places }: { places: Place[] }) {
       {dialogItem && (
         <PhotoDialog
           item={dialogItem}
-          onClose={() => { setDialogItem(null); setDialogIndex(-1); }}
+          onClose={() => setDialogIndex(-1)}
           onPrev={dialogIndex > 0 ? () => navigate(-1) : undefined}
           onNext={dialogIndex < photos.length - 1 ? () => navigate(1) : undefined}
           counter={`${dialogIndex + 1} / ${photos.length}`}
@@ -115,10 +115,7 @@ function ImageCard({ item, index, onOpen }: { item: FlatPhoto; index: number; on
     return () => obs.disconnect();
   }, []);
 
-  const formattedDate = new Intl.DateTimeFormat('en-US', {
-    month: 'short',
-    year: 'numeric',
-  }).format(new Date(item.date));
+  const formattedDate = dateFormatter.format(new Date(item.date));
 
   return (
     <div
