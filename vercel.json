@@ -5,7 +5,8 @@
     { "source": "/twitter", "destination": "https://twitter.com/adithya__nr", "permanent": true },
     { "source": "/dribbble", "destination": "https://dribbble.com/adithyanr", "permanent": true },
     { "source": "/behance", "destination": "https://behance.net/adithyabhat", "permanent": true },
-    { "source": "/resume", "destination": "/resume.pdf", "permanent": true }
+    { "source": "/resume", "destination": "/resume.pdf", "permanent": true },
+    { "source": "/resume-mar-26", "destination": "/resume-mar-2026.pdf", "permanent": true }
   ],
   "headers": [
     {
