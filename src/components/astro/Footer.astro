@@ -84,12 +84,6 @@ const currentPath = Astro.url.pathname;
           </svg>
           <a href="/contact" class="footer-link">Get in touch</a>
         </div>
-        <div class="footer-info-item mt-5">
-          <span class="footer-availability">
-            <span class="footer-status-dot"></span>
-            Available for projects
-          </span>
-        </div>
       </div>
     </div>
   </div>
@@ -202,29 +196,6 @@ const currentPath = Astro.url.pathname;
     flex-shrink: 0;
   }
 
-  /* Availability badge */
-  .footer-availability {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-size: 0.8125rem;
-    color: #10b981;
-    font-family: 'Google Sans Code', 'JetBrains Mono', monospace;
-  }
-
-  .footer-status-dot {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: #10b981;
-    animation: pulseDot 2s ease-in-out infinite;
-  }
-
-  @keyframes pulseDot {
-    0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); }
-    50%      { opacity: 0.7; box-shadow: 0 0 0 4px rgba(16, 185, 129, 0); }
-  }
-
   /* ===== BOTTOM BAR ===== */
   .footer-brand {
     font-family: 'Bricolage Grotesque', Georgia, serif;
@@ -268,9 +239,6 @@ const currentPath = Astro.url.pathname;
     padding-bottom: env(safe-area-inset-bottom, 0px);
   }
 
-  @media (prefers-reduced-motion: reduce) {
-    .footer-status-dot { animation: none; opacity: 1; }
-  }
 </style>
 
 <script>
