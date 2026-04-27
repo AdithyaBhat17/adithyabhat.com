@@ -1,0 +1,200 @@
+---
+import PageLayout from '@/layouts/PageLayout.astro';
+import Container from '@/components/astro/Container.astro';
+
+const sounds = [
+  { id: 'tick',    name: 'Soft tick',     desc: 'Short 1kHz sine blip — subtle mechanical-keyboard feel' },
+  { id: 'pop',     name: 'Tap pop',       desc: 'Filtered noise burst — iOS keyboard tap' },
+  { id: 'ping',    name: 'Glass ping',    desc: '2kHz sine with quick decay — premium, Apple-like' },
+  { id: 'knock',   name: 'Wood knock',    desc: 'Low triangle at 200Hz — warm and organic' },
+  { id: 'marimba', name: 'Marimba note',  desc: '800Hz sine with exponential decay — musical, playful' },
+  { id: 'flick',   name: 'Switch flick',  desc: 'Two-tone chirp low→high — toggle/affirm feel' },
+  { id: 'bubble',  name: 'Bubble',        desc: 'Pitch-rising sine — light and fun' },
+  { id: 'mxkey',   name: 'Mechanical key', desc: 'Cherry MX-style click + thock (synthesized)' },
+];
+---
+
+<PageLayout title="Sound preview | Adithya NR">
+  <Container>
+    <div class="max-w-2xl">
+      <h1 class="text-3xl md:text-4xl font-semibold mb-3">Sound preview</h1>
+      <p class="text-[var(--text-muted)] mb-8">
+        Click any button to audition the click sound. Haptic buzz fires alongside on supported devices
+        (Android/Chrome — iOS Safari ignores <code>navigator.vibrate</code>).
+      </p>
+
+      <ul class="flex flex-col gap-3">
+        {sounds.map((s, i) => (
+          <li class="sound-row">
+            <button class="sound-btn" data-sound={s.id} type="button">
+              <span class="sound-num">{String(i + 1).padStart(2, '0')}</span>
+              <span class="sound-text">
+                <span class="sound-name">{s.name}</span>
+                <span class="sound-desc">{s.desc}</span>
+              </span>
+              <span class="sound-play" aria-hidden="true">Play &rarr;</span>
+            </button>
+          </li>
+        ))}
+      </ul>
+
+      <p class="mt-10 text-sm text-[var(--text-muted)]">
+        Tell me which number(s) you want and I'll wire it across the site's buttons.
+      </p>
+    </div>
+  </Container>
+</PageLayout>
+
+<style>
+  .sound-row {
+    list-style: none;
+  }
+
+  .sound-btn {
+    width: 100%;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 1.25rem;
+    text-align: left;
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    color: var(--text);
+    cursor: pointer;
+    transition: border-color 0.2s ease, transform 0.15s ease, background 0.2s ease;
+  }
+
+  .sound-btn:hover {
+    border-color: var(--accent);
+    transform: translateY(-1px);
+  }
+
+  .sound-btn:active {
+    transform: translateY(0);
+  }
+
+  .sound-num {
+    font-family: 'Google Sans Code', 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+  }
+
+  .sound-text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+  }
+
+  .sound-name {
+    font-size: 0.9375rem;
+    font-weight: 500;
+  }
+
+  .sound-desc {
+    font-size: 0.8125rem;
+    color: var(--text-muted);
+  }
+
+  .sound-play {
+    font-family: 'Google Sans Code', 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    letter-spacing: 0.05em;
+  }
+
+  .sound-btn:hover .sound-play {
+    color: var(--accent);
+  }
+</style>
+
+<script>
+  type SoundId = 'tick' | 'pop' | 'ping' | 'knock' | 'marimba' | 'flick' | 'bubble' | 'mxkey';
+
+  let ctx: AudioContext | null = null;
+  function getCtx(): AudioContext {
+    if (!ctx) ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
+    return ctx;
+  }
+
+  function envelope(gain: GainNode, t0: number, peak: number, attack: number, release: number) {
+    gain.gain.setValueAtTime(0, t0);
+    gain.gain.linearRampToValueAtTime(peak, t0 + attack);
+    gain.gain.exponentialRampToValueAtTime(0.0001, t0 + attack + release);
+  }
+
+  function tone(type: OscillatorType, freq: number, attack: number, release: number, peak = 0.25, freqEnd?: number) {
+    const ac = getCtx();
+    const t0 = ac.currentTime;
+    const osc = ac.createOscillator();
+    const g = ac.createGain();
+    osc.type = type;
+    osc.frequency.setValueAtTime(freq, t0);
+    if (freqEnd != null) osc.frequency.exponentialRampToValueAtTime(freqEnd, t0 + attack + release);
+    envelope(g, t0, peak, attack, release);
+    osc.connect(g).connect(ac.destination);
+    osc.start(t0);
+    osc.stop(t0 + attack + release + 0.02);
+  }
+
+  function noiseBurst(duration: number, peak = 0.2, lowpass = 2000, startOffset = 0) {
+    const ac = getCtx();
+    const t0 = ac.currentTime + startOffset;
+    const buffer = ac.createBuffer(1, Math.ceil(ac.sampleRate * duration), ac.sampleRate);
+    const data = buffer.getChannelData(0);
+    for (let i = 0; i < data.length; i++) data[i] = (Math.random() * 2 - 1);
+    const src = ac.createBufferSource();
+    src.buffer = buffer;
+    const filter = ac.createBiquadFilter();
+    filter.type = 'lowpass';
+    filter.frequency.value = lowpass;
+    const g = ac.createGain();
+    envelope(g, t0, peak, 0.002, duration);
+    src.connect(filter).connect(g).connect(ac.destination);
+    src.start(t0);
+    src.stop(t0 + duration + 0.02);
+  }
+
+  function mxKey() {
+    const ac = getCtx();
+    const t0 = ac.currentTime;
+    // Click: bright, very short noise burst (the switch contact)
+    noiseBurst(0.012, 0.45, 6000, 0);
+    // Thock: low triangle hit (keycap bottoming out), 8ms later
+    const osc = ac.createOscillator();
+    const g = ac.createGain();
+    osc.type = 'triangle';
+    osc.frequency.setValueAtTime(180, t0 + 0.008);
+    osc.frequency.exponentialRampToValueAtTime(90, t0 + 0.060);
+    envelope(g, t0 + 0.008, 0.30, 0.003, 0.055);
+    osc.connect(g).connect(ac.destination);
+    osc.start(t0 + 0.008);
+    osc.stop(t0 + 0.080);
+  }
+
+  const players: Record<SoundId, () => void> = {
+    tick:    () => tone('sine',     1000, 0.002, 0.030, 0.20),
+    pop:     () => noiseBurst(0.020, 0.30, 1500),
+    ping:    () => tone('sine',     2000, 0.003, 0.120, 0.18),
+    knock:   () => tone('triangle',  200, 0.004, 0.060, 0.35),
+    marimba: () => tone('sine',      800, 0.003, 0.250, 0.22),
+    flick:   () => tone('square',    400, 0.003, 0.050, 0.10, 1200),
+    bubble:  () => tone('sine',      300, 0.005, 0.080, 0.20, 900),
+    mxkey:   () => mxKey(),
+  };
+
+  function init() {
+    document.querySelectorAll<HTMLButtonElement>('.sound-btn').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const id = btn.dataset.sound as SoundId | undefined;
+        if (id && players[id]) players[id]();
+        if ('vibrate' in navigator) navigator.vibrate(10);
+      });
+    });
+  }
+
+  init();
+  document.addEventListener('astro:after-swap', init);
+</script>
