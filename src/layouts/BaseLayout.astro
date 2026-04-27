@@ -116,6 +116,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     <script>
       import { initScrollAnimations } from '@/scripts/animations';
       import { initEasterEggs } from '@/scripts/easter-eggs';
+      import { initClickFeedback } from '@/scripts/click-feedback';
 
       function init() {
         initScrollAnimations();
@@ -153,6 +154,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
         initCursor();
       }
       initEasterEggs();
+      initClickFeedback();
 
       // Re-init after view transitions
       document.addEventListener('astro:after-swap', () => {
