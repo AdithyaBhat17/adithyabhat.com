@@ -5,9 +5,9 @@
 
 let ctx: AudioContext | null = null;
 let bound = false;
+const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
 function getCtx(): AudioContext | null {
-  if (typeof window === 'undefined') return null;
   if (!ctx) {
     const Ctor = window.AudioContext || (window as any).webkitAudioContext;
     if (!Ctor) return null;
@@ -19,6 +19,8 @@ function getCtx(): AudioContext | null {
 function playBubble() {
   const ac = getCtx();
   if (!ac) return;
+  // Safari starts the context suspended until a user gesture resumes it.
+  if (ac.state === 'suspended') ac.resume();
   const t0 = ac.currentTime;
   const osc = ac.createOscillator();
   const g = ac.createGain();
@@ -34,10 +36,8 @@ function playBubble() {
 }
 
 function isEnabled(): boolean {
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return false;
+  if (reducedMotion.matches) return false;
   if (localStorage.getItem('clickFeedback') === 'off') return false;
-  // Skip on the sound preview page so its buttons play their own samples.
-  if (location.pathname.startsWith('/sounds')) return false;
   return true;
 }
 
