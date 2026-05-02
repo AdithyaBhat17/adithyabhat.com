@@ -1,6 +1,7 @@
 ---
 import { ClientRouter } from 'astro:transitions';
 import { GA_TRACKING_ID } from '@/lib/gtag';
+import CommandPalette from '@/components/astro/CommandPalette.astro';
 import '@/styles/global.css';
 
 interface Props {
@@ -111,6 +112,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
   </head>
   <body>
     <slot />
+    <CommandPalette />
 
     <!-- Initialize scroll animations after page load + on view transition -->
     <script>

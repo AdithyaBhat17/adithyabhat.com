@@ -17,7 +17,7 @@ const SOCIAL_KEYWORDS: Record<string, string> = {
 };
 
 const items: Item[] = [
-  { label: 'Top of page', href: '#top', group: 'Sections', keywords: 'home hero start' },
+  { label: 'Back to top', href: '#top', group: 'Sections', keywords: 'scroll up top start beginning' },
   { label: 'Selected work', href: '#work', group: 'Sections', keywords: 'projects portfolio case studies' },
   { label: 'Writing', href: '#writing', group: 'Sections', keywords: 'articles blog posts' },
   { label: 'Testimonials', href: '#testimonials', group: 'Sections', keywords: 'reviews kind words' },
@@ -342,9 +342,14 @@ const itemsJson = JSON.stringify(items);
     }
 
     function visibleItems(): Item[] {
-      // Hide on-page section anchors when not on the home page
-      if (isHome()) return items;
-      return items.filter((i) => i.group !== 'Sections');
+      const path = window.location.pathname.replace(/\/$/, '') || '/';
+      return items.filter((item) => {
+        // Hide section anchors (except "Back to top") when not on the home page
+        if (item.group === 'Sections' && item.href !== '#top' && !isHome()) return false;
+        // Hide the page the user is already on
+        if (item.group === 'Pages' && item.href === path) return false;
+        return true;
+      });
     }
 
     function render() {
@@ -424,18 +429,15 @@ const itemsJson = JSON.stringify(items);
         window.open(item.href, '_blank', 'noopener,noreferrer');
         return;
       }
+      if (item.href === '#top') {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        history.replaceState(null, '', window.location.pathname);
+        return;
+      }
       if (item.href.startsWith('#')) {
-        if (!isHome()) {
-          window.location.href = `/${item.href}`;
-          return;
-        }
-        if (item.href === '#top') {
-          window.scrollTo({ top: 0, behavior: 'smooth' });
-        } else {
-          const el = document.querySelector(item.href);
-          if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
-        history.replaceState(null, '', item.href === '#top' ? '/' : item.href);
+        const el = document.querySelector(item.href);
+        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        history.replaceState(null, '', item.href);
         return;
       }
       window.location.href = item.href;
