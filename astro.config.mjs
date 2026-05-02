@@ -3,18 +3,16 @@ import react from '@astrojs/react';
 import vercel from '@astrojs/vercel';
 import sitemap from '@astrojs/sitemap';
 import tailwindcss from '@tailwindcss/vite';
-import { loadEnv } from 'vite';
-
-const { DATOCMS_API_TOKEN } = loadEnv(process.env.NODE_ENV ?? '', process.cwd(), '');
 
 async function fetchDato(query) {
-  if (!DATOCMS_API_TOKEN) return null;
+  const token = process.env.DATOCMS_API_TOKEN;
+  if (!token) return null;
   try {
     const res = await fetch('https://graphql.datocms.com', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${DATOCMS_API_TOKEN}`,
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({ query }),
     });
