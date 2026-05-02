@@ -1,5 +1,6 @@
 ---
 import PageLayout from '@/layouts/PageLayout.astro';
+import Container from '@/components/astro/Container.astro';
 import PhotoGallery from '@/components/react/PhotoGallery';
 import FloatingShapes from '@/components/astro/FloatingShapes.astro';
 import { fetchGalleryAPI } from '@/lib/datocms';
@@ -16,7 +17,7 @@ const cameras = [...new Set(places.map((p: any) => p.camera).filter(Boolean))];
 ---
 
 <PageLayout title="Photos | Adithya NR">
-  <div class="photos-page">
+  <Container class="relative pb-16 md:pb-24">
     <FloatingShapes />
 
     <!-- Hero header -->
@@ -71,23 +72,10 @@ const cameras = [...new Set(places.map((p: any) => p.camera).filter(Boolean))];
     <div class="photos-gallery">
       <PhotoGallery places={places} client:load />
     </div>
-  </div>
+  </Container>
 </PageLayout>
 
 <style>
-  .photos-page {
-    position: relative;
-    padding: 0 1.5rem 4rem;
-    max-width: 1400px;
-    margin: 0 auto;
-  }
-
-  @media (min-width: 768px) {
-    .photos-page {
-      padding: 0 4rem 6rem;
-    }
-  }
-
   /* ===== HEADER ===== */
   .photos-header {
     position: relative;
