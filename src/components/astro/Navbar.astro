@@ -8,8 +8,6 @@ const routes = [
 ];
 
 const currentPath = Astro.url.pathname;
-const isPhotosPage = currentPath === '/photos';
-const padding = isPhotosPage ? 'px-6 md:px-16' : 'px-6 md:px-12 lg:px-20 xl:px-32';
 
 function isActive(link: string): boolean {
   if (link === '/') return currentPath === '/';
@@ -18,10 +16,7 @@ function isActive(link: string): boolean {
 ---
 
 <nav class="navbar sticky w-full top-0 z-50">
-  <div class:list={[
-    'navbar-inner flex items-center justify-between py-4 md:py-5 max-w-[1400px] mx-auto',
-    padding
-  ]}>
+  <div class="navbar-inner flex items-center justify-between py-4 md:py-5 max-w-[1400px] mx-auto px-6 md:px-12 lg:px-20 xl:px-32">
     <div class="flex items-center gap-3">
       <a href="/" class="nav-brand group flex items-center gap-3">
         <img

@@ -429,6 +429,24 @@ import HeroAside from './HeroAside.astro';
       }
     }
 
+    /* ===== STAGGERED REVEAL ===== */
+    /* Hide reveal targets up-front on hover-capable, motion-allowed devices
+       so the JS-driven stagger doesn't flash visible content first. */
+    @media (hover: hover) and (prefers-reduced-motion: no-preference) {
+      [data-hero-reveal] {
+        opacity: 0;
+        transform: translateY(16px);
+        transition:
+          opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+          transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+
+      [data-hero-reveal].is-revealed {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
     /* ===== REDUCED MOTION ===== */
     @media (prefers-reduced-motion: reduce) {
       .shape { animation: none; }
@@ -447,19 +465,13 @@ import HeroAside from './HeroAside.astro';
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const hasHover = window.matchMedia('(hover: hover)').matches;
 
-    // Staggered entrance — JS-driven, only on desktop (mobile renders immediately)
+    // Staggered entrance — JS-driven, only on desktop (mobile renders immediately).
+    // Initial hidden state lives in CSS so nothing paints visible before the stagger runs.
     if (!prefersReducedMotion && hasHover) {
       const reveals = hero.querySelectorAll<HTMLElement>('[data-hero-reveal]');
-      reveals.forEach((el) => {
-        el.style.opacity = '0';
-        el.style.transform = 'translateY(16px)';
-      });
-
       reveals.forEach((el, i) => {
         setTimeout(() => {
-          el.style.transition = 'opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1)';
-          el.style.opacity = '1';
-          el.style.transform = 'translateY(0)';
+          el.classList.add('is-revealed');
         }, 100 + i * 100);
       });
     }
