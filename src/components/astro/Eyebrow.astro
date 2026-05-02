@@ -1,0 +1,34 @@
+---
+interface Props {
+  /** When true, renders the leading orange dash mark. */
+  dash?: boolean;
+  class?: string;
+}
+const { dash = true, class: className = '' } = Astro.props;
+---
+
+<span class:list={['eyebrow', className]}>
+  {dash && <span class="eyebrow-dash" aria-hidden="true"></span>}
+  <slot />
+</span>
+
+<style>
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.625rem;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+
+  .eyebrow-dash {
+    display: inline-block;
+    width: 1.5rem;
+    height: 2px;
+    background: var(--accent);
+  }
+</style>

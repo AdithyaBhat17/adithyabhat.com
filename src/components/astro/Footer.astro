@@ -1,4 +1,6 @@
 ---
+import { socialLinks } from '@/utils/socials';
+
 const currentYear = new Date().getFullYear();
 
 const navLinks = [
@@ -8,15 +10,6 @@ const navLinks = [
   { name: 'Photos', href: '/photos' },
   { name: 'Uses', href: '/uses' },
   { name: 'Contact', href: '/contact' },
-];
-
-const socialLinks = [
-  { name: 'Behance', href: 'https://behance.net/adithyabhat' },
-  { name: 'Dribbble', href: 'https://dribbble.com/adithyanr' },
-  { name: 'Twitter', href: 'https://twitter.com/adithya__nr' },
-  { name: 'GitHub', href: 'https://github.com/adithyabhat17' },
-  { name: 'LinkedIn', href: 'https://linkedin.com/in/adithya-nr' },
-  { name: 'YouTube', href: 'https://www.youtube.com/@adithya-bhat' },
 ];
 
 const currentPath = Astro.url.pathname;

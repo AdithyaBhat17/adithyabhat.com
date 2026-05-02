@@ -1,9 +1,10 @@
 ---
 import Socials from './Socials.astro';
+import HeroAside from './HeroAside.astro';
+import CommandPalette from './CommandPalette.astro';
 ---
 
 <section class="hero-section relative flex flex-col justify-center overflow-hidden">
-  <!-- Floating geometric shapes -->
   <div class="hero-shapes" aria-hidden="true">
     <div class="shape shape-circle"></div>
     <div class="shape shape-diamond"></div>
@@ -14,52 +15,58 @@ import Socials from './Socials.astro';
   </div>
 
   <div class="w-full px-6 md:px-12 lg:px-20 xl:px-32 max-w-[1400px] mx-auto relative z-10">
-    <!-- Role label -->
-    <div data-hero-reveal>
-      <span class="hero-role-text">UX Engineer</span>
-    </div>
+    <div class="hero-grid">
+      <div class="hero-main">
+        <div data-hero-reveal>
+          <span class="hero-role-text">UX Engineer</span>
+        </div>
 
-    <!-- Greeting -->
-    <div class="mt-6" data-hero-reveal>
-      <p class="hero-greeting">Hey, I'm</p>
-    </div>
+        <div class="mt-6" data-hero-reveal>
+          <p class="hero-greeting">Hey, I'm</p>
+        </div>
 
-    <!-- Name with cursor -->
-    <div data-hero-reveal>
-      <h1 class="hero-name">
-        Adithya<span class="hero-dot">.</span>
-      </h1>
-    </div>
+        <div data-hero-reveal>
+          <h1 class="hero-name">
+            Adithya<span class="hero-dot">.</span>
+          </h1>
+        </div>
 
-    <!-- Description -->
-    <div data-hero-reveal>
-      <p class="hero-desc mt-6 max-w-lg">
-        A UX engineer in Abu Dhabi, building thoughtful digital
-        products. Currently shaping the Conversational CX platform at{' '}
-        <a
-          href="https://yellow.ai/"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="hero-link"
-        >
-          yellow.ai
-        </a>
-      </p>
-    </div>
+        <div data-hero-reveal>
+          <p class="hero-desc mt-6 max-w-lg">
+            A UX engineer in Abu Dhabi, building thoughtful digital
+            products. Currently shaping the Conversational CX platform at{' '}
+            <a
+              href="https://yellow.ai/"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="hero-link"
+            >
+              yellow.ai
+            </a>
+          </p>
+        </div>
 
-    <!-- CTAs -->
-    <div class="mt-8 flex flex-wrap items-center gap-4" data-hero-reveal>
-      <a href="/work" class="btn-primary">View my work</a>
-      <a href="/contact" class="btn-outlined">Get in touch</a>
-    </div>
+        <div class="mt-8 hero-cta-row flex flex-wrap items-center gap-4" data-hero-reveal>
+          <a href="/work" class="btn-primary">View my work</a>
+          <a href="/contact" class="btn-outlined">Get in touch</a>
+          <button type="button" class="press-k-hint" data-cmd-open aria-label="Search the site">
+            <span>or press</span>
+            <kbd>K</kbd>
+          </button>
+        </div>
 
-    <!-- Socials -->
-    <div class="mt-10" data-hero-reveal>
-      <Socials />
+        <!-- Socials show on mobile only; desktop renders them inside HeroAside -->
+        <div class="mt-10 hero-mobile-socials" data-hero-reveal>
+          <Socials />
+        </div>
+      </div>
+
+      <div data-hero-reveal>
+        <HeroAside />
+      </div>
     </div>
   </div>
 
-  <!-- Scroll indicator -->
   <div class="absolute bottom-8 left-1/2 -translate-x-1/2 scroll-cue">
     <div class="scroll-track">
       <div class="scroll-glow"></div>
@@ -77,6 +84,93 @@ import Socials from './Socials.astro';
       min-height: calc(100vh - 4rem);
       min-height: calc(100dvh - 4rem);
       padding-bottom: 3rem;
+    }
+
+    /* ===== HERO GRID (single column below lg, two columns from lg) ===== */
+    .hero-grid {
+      display: grid;
+      gap: 3rem;
+    }
+
+    @media (min-width: 1024px) {
+      .hero-grid {
+        grid-template-columns: minmax(0, 1fr) minmax(280px, 360px);
+        align-items: end;
+        gap: 4rem;
+      }
+    }
+
+    /* ===== PRESS K HINT ===== */
+    .press-k-hint {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: transparent;
+      border: none;
+      padding: 0.5rem 0.25rem;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: color 0.2s ease;
+    }
+
+    .press-k-hint:hover {
+      color: var(--text);
+    }
+
+    .press-k-hint kbd {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 1.5rem;
+      height: 1.5rem;
+      padding: 0 0.4rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      box-shadow: 0 1px 0 var(--border);
+      transition: border-color 0.2s ease, color 0.2s ease;
+    }
+
+    .press-k-hint:hover kbd {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    @media (max-width: 767px) {
+      .press-k-hint {
+        display: none;
+      }
+    }
+
+    /* On phones, keep View my work + Get in touch on the same row,
+       sharing the available width equally. */
+    @media (max-width: 600px) {
+      .hero-cta-row {
+        flex-wrap: nowrap;
+        gap: 0.6rem;
+      }
+
+      .hero-cta-row .btn-primary,
+      .hero-cta-row .btn-outlined {
+        flex: 1 1 0;
+        min-width: 0;
+        padding: 0.85rem 0.75rem;
+        justify-content: center;
+        white-space: nowrap;
+      }
+    }
+
+    /* Hide the duplicate socials strip on desktop — they live in the aside */
+    @media (min-width: 1024px) {
+      .hero-mobile-socials {
+        display: none;
+      }
     }
 
     @media (max-width: 767px) {
@@ -376,3 +470,5 @@ import Socials from './Socials.astro';
   initHero();
   document.addEventListener('astro:after-swap', initHero);
 </script>
+
+<CommandPalette />

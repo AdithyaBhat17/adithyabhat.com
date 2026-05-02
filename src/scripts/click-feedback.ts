@@ -41,6 +41,12 @@ function isEnabled(): boolean {
   return true;
 }
 
+export function playClickFeedback() {
+  if (!isEnabled()) return;
+  playBubble();
+  if ('vibrate' in navigator) navigator.vibrate(8);
+}
+
 function shouldHandle(e: MouseEvent): HTMLElement | null {
   if (e.defaultPrevented) return null;
   if (e.button !== 0) return null;

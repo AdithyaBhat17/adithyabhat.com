@@ -1,0 +1,187 @@
+---
+// 4:5 portrait slideshow with B/W treatment, hover zoom, and crossfade between slots.
+// Drop optimized images at public/static/portrait/portrait-{slot}-{w}.{webp,jpg}.
+// Slots that 404 are silently dropped from the cycle on load.
+
+interface Props {
+  slots?: number[];
+  alt?: string;
+  /** Crossfade interval in ms */
+  interval?: number;
+}
+
+const { slots = [1, 2, 3, 4], alt = 'Portrait of Adithya', interval = 5000 } = Astro.props;
+const widths = [480, 720, 960, 1200];
+const sizes = '(min-width: 1024px) 360px, (min-width: 640px) 480px, 80vw';
+---
+
+<div class="portrait-slideshow" data-portrait data-interval={interval} aria-hidden="true">
+  {slots.map((slot, i) => (
+    <picture class="portrait-slide" data-portrait-slide data-active={i === 0 ? 'true' : 'false'}>
+      <source
+        type="image/webp"
+        srcset={widths.map((w) => `/static/portrait/portrait-${slot}-${w}.webp ${w}w`).join(', ')}
+        sizes={sizes}
+      />
+      <img
+        src={`/static/portrait/portrait-${slot}-960.jpg`}
+        srcset={widths.map((w) => `/static/portrait/portrait-${slot}-${w}.jpg ${w}w`).join(', ')}
+        sizes={sizes}
+        alt={i === 0 ? alt : ''}
+        loading={i === 0 ? 'eager' : 'lazy'}
+        decoding="async"
+        width="960"
+        height="1200"
+      />
+    </picture>
+  ))}
+</div>
+
+<style>
+  .portrait-slideshow {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    border: 1px solid var(--border);
+    background: var(--bg-elevated);
+    isolation: isolate;
+  }
+
+  .portrait-slide {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+    will-change: opacity;
+  }
+
+  .portrait-slide[data-active='true'] {
+    opacity: 1;
+  }
+
+  .portrait-slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    filter: grayscale(100%) contrast(1.04);
+    transform: scale(1);
+    transition: transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: transform;
+    display: block;
+  }
+
+  .portrait-slideshow:hover .portrait-slide[data-active='true'] img {
+    transform: scale(1.04);
+  }
+
+  /* Top/bottom vignette to ground the image into the dark UI */
+  .portrait-slideshow::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(
+      180deg,
+      rgba(0, 0, 0, 0.0) 60%,
+      rgba(0, 0, 0, 0.25) 100%
+    );
+    z-index: 1;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .portrait-slide {
+      transition-duration: 0.01ms;
+    }
+
+    .portrait-slideshow:hover .portrait-slide[data-active='true'] img {
+      transform: none;
+    }
+  }
+</style>
+
+<script>
+  const initialized = new WeakSet<HTMLElement>();
+
+  function initPortraitSlideshow() {
+    const roots = document.querySelectorAll<HTMLElement>('[data-portrait]');
+    roots.forEach((root) => {
+      if (initialized.has(root)) return;
+      initialized.add(root);
+
+      const intervalMs = Number(root.dataset.interval || 5000);
+      const slides = Array.from(
+        root.querySelectorAll<HTMLElement>('[data-portrait-slide]')
+      );
+
+      // Drop slides whose <img> failed to load (404 etc.).
+      const ready: HTMLElement[] = [];
+      const checks = slides.map(
+        (slide) =>
+          new Promise<void>((resolve) => {
+            const img = slide.querySelector('img');
+            if (!img) return resolve();
+            const ok = () => {
+              if (img.naturalWidth > 0) ready.push(slide);
+              else slide.remove();
+              resolve();
+            };
+            if (img.complete) ok();
+            else {
+              img.addEventListener('load', ok, { once: true });
+              img.addEventListener(
+                'error',
+                () => {
+                  slide.remove();
+                  resolve();
+                },
+                { once: true }
+              );
+            }
+          })
+      );
+
+      Promise.all(checks).then(() => {
+        if (ready.length <= 1) return;
+        let active = 0;
+        ready.forEach((s, i) => s.setAttribute('data-active', i === 0 ? 'true' : 'false'));
+
+        const tick = () => {
+          ready[active].setAttribute('data-active', 'false');
+          active = (active + 1) % ready.length;
+          ready[active].setAttribute('data-active', 'true');
+        };
+
+        // Only run the timer while the slideshow is on-screen (saves cycles
+        // when scrolled away). Don't start until the observer confirms visibility,
+        // so we don't briefly tick + immediately clear on initial load.
+        let timer = 0;
+        const io = new IntersectionObserver((entries) => {
+          for (const e of entries) {
+            if (e.isIntersecting) {
+              if (!timer) timer = window.setInterval(tick, intervalMs);
+            } else if (timer) {
+              window.clearInterval(timer);
+              timer = 0;
+            }
+          }
+        });
+        io.observe(root);
+
+        document.addEventListener(
+          'astro:before-swap',
+          () => {
+            if (timer) window.clearInterval(timer);
+            io.disconnect();
+          },
+          { once: true }
+        );
+      });
+    });
+  }
+
+  initPortraitSlideshow();
+  document.addEventListener('astro:after-swap', initPortraitSlideshow);
+</script>

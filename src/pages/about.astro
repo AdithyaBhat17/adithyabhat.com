@@ -1,573 +1,713 @@
 ---
 import PageLayout from '@/layouts/PageLayout.astro';
 import Container from '@/components/astro/Container.astro';
+import PortraitSlideshow from '@/components/astro/PortraitSlideshow.astro';
+import CtaCard from '@/components/astro/CtaCard.astro';
+import Eyebrow from '@/components/astro/Eyebrow.astro';
 import { companies } from '@/utils/about';
+
+const careers = [
+  {
+    year: '2024',
+    role: 'Software Engineer (SDE-3)',
+    company: 'yellow.ai',
+    summary: 'Agentic AI — Nexus, Forge, Analyze, Search SDK',
+    current: true,
+  },
+  {
+    year: '2022',
+    role: 'Software Engineer (SDE-2)',
+    company: 'yellow.ai',
+    summary: 'Chat widget at 300k DAU · WCAG AA · i18n',
+  },
+  {
+    year: '2021',
+    role: 'UX Engineer',
+    company: 'Softway',
+    summary: 'Culture+ measurement platform',
+  },
+  {
+    year: '2019',
+    role: 'Software Engineer',
+    company: 'Betsol',
+    summary: 'Leto DevOps tooling · SlingTV dashboards',
+  },
+];
+
+const practiceColumns = [
+  {
+    title: 'Design',
+    desc: 'Untangling vague briefs into interfaces people get without a tour.',
+    skills: [
+      { label: 'User Experience', meta: '7y' },
+      { label: 'UI Design', meta: '7y' },
+      { label: 'Wireframing', meta: '7y' },
+      { label: 'Prototyping', meta: '7y' },
+      { label: 'Design Systems', meta: '5y' },
+      { label: 'Web Design', meta: '7y' },
+    ],
+  },
+  {
+    title: 'Development',
+    desc: 'Production code that ships fast, ages well, and doesn\'t page anyone at 3am.',
+    skills: [
+      { label: 'TypeScript', meta: '6y' },
+      { label: 'React, Redux', meta: '6y' },
+      { label: 'Next.js', meta: '3y' },
+      { label: 'Node.js', meta: '5y' },
+      { label: 'GraphQL', meta: '3y' },
+      { label: 'PostgreSQL', meta: '3y' },
+      { label: 'Jest, RTL, Playwright', meta: '5y' },
+    ],
+  },
+  {
+    title: 'Tools',
+    desc: 'Day-one installs on every new laptop — the kind that save me an hour every day.',
+    skills: [
+      { label: 'Figma', meta: 'daily' },
+      { label: 'VS Code, Cursor', meta: 'daily' },
+      { label: 'Claude Code', meta: 'daily' },
+      { label: 'Git', meta: 'daily' },
+      { label: 'Jira, Linear, DevRev', meta: 'work' },
+    ],
+  },
+];
 ---
 
 <PageLayout title="About - Adithya NR">
   <Container>
-    <div class="max-w-2xl mx-auto">
-      <div class="mt-8 mb-16" data-animate>
-        <span class="inline-flex items-center gap-2 text-sm font-body font-medium text-[var(--accent)] tracking-wide uppercase mb-6">
-          <span class="inline-block w-6 h-[2px] bg-[var(--accent)]"></span>
-          About
-        </span>
-        <h1 class="font-display text-[1.75rem] sm:text-4xl md:text-5xl lg:text-6xl tracking-tight leading-[1.1]">
-          I craft digital experiences that people <span class="gradient-text">actually enjoy</span>
-        </h1>
-      </div>
+    <!-- ===== HERO ===== -->
+    <section class="about-hero-section mt-10 md:mt-16 mb-24 md:mb-36 lg:mb-44" data-animate>
+      <div class="about-hero-grid">
+        <div class="about-hero-text">
+          <Eyebrow>About · 2026</Eyebrow>
+          <h1 class="font-display text-[1.75rem] sm:text-4xl md:text-5xl lg:text-6xl tracking-tight leading-[1.1] mt-6">
+            I craft digital experiences that people <span class="gradient-text">actually enjoy</span>
+          </h1>
 
-      <div class="space-y-6" data-animate>
-        <p class="font-body leading-8 text-[var(--text-secondary)] text-lg">
-          I'm Adithya, a UX Engineer in Abu Dhabi, UAE. For more than
-          6 years, design has been the central piece of my world. I've
-          moved from being a graphic designer to a full-time UX Designer
-          and UI Engineer.
-        </p>
-        <p class="font-body leading-8 text-[var(--text-secondary)] text-lg">
-          With a never-ending goal of maintaining a high standard for
-          usability & user experience, I have consistently worked with
-          startups and clients worldwide, helping them create unique and
-          engaging digital products.
-        </p>
-        <p class="font-body leading-8 text-[var(--text-secondary)] text-lg">
-          Currently working on the Conversational CX platform at{' '}
-          <a
-            href="https://yellow.ai/"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="text-[var(--accent)] hover:underline"
-          >
-            yellow.ai
-          </a>{' '}
-          as a Software Engineer (SDE-3).
-        </p>
-      </div>
+          <div class="about-paragraphs">
+            <p class="font-body leading-8 text-[var(--text-secondary)] text-lg">
+              I'm Adithya, a UX Engineer in Abu Dhabi, UAE. For more than
+              7 years, design has been the central piece of my world. I've
+              moved from being a graphic designer to a full-time UX Designer
+              and UI Engineer.
+            </p>
+            <p class="font-body leading-8 text-[var(--text-secondary)] text-lg">
+              With a never-ending goal of maintaining a high standard for
+              usability & user experience, I have consistently worked with
+              startups and clients worldwide, helping them create unique and
+              engaging digital products.
+            </p>
+            <p class="font-body leading-8 text-[var(--text-secondary)] text-lg">
+              Currently working on the Conversational CX platform at{' '}
+              <a
+                href="https://yellow.ai/"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="text-[var(--accent)] hover:underline"
+              >
+                yellow.ai
+              </a>{' '}
+              as a Software Engineer (SDE-3).
+            </p>
+          </div>
 
-      <!-- Companies -->
-      <div class="mt-16 md:mt-24" data-animate>
-        <div class="flex items-center gap-4 mb-10">
-          <h3 class="font-display text-xl md:text-2xl tracking-tight whitespace-nowrap">
-            Worked with
-          </h3>
-          <span class="flex-1 h-[1px] bg-[var(--border)]"></span>
+          <div class="about-aside-block">
+            <Eyebrow>Outside the screen</Eyebrow>
+            <p class="about-aside-text">
+              When I'm not near a keyboard, you'll usually find me on a motorcycle —
+              long road days, weekend offroad trails, or out chasing a good coffee
+              spot. Riding is my reset button between hard problems.
+            </p>
+          </div>
         </div>
-        <div class="grid grid-cols-3 md:grid-cols-6 gap-10 items-center" data-animate-stagger>
-          {companies.map((company, i) => (
-            <div data-animate style={`--stagger-index: ${i}`}>
+
+        <aside class="about-hero-aside" aria-label="Quick facts">
+          <PortraitSlideshow alt="Adithya NR" interval={5500} />
+
+          <dl class="facts-list">
+            <div class="fact-row">
+              <dt>Located</dt>
+              <dd>Abu Dhabi · UAE</dd>
+            </div>
+            <div class="fact-row">
+              <dt>Currently</dt>
+              <dd><span class="fact-dot" aria-hidden="true"></span>SDE-3 @ yellow.ai</dd>
+            </div>
+            <div class="fact-row">
+              <dt>Experience</dt>
+              <dd>7 years</dd>
+            </div>
+            <div class="fact-row">
+              <dt>Speaks</dt>
+              <dd>EN · HI · KN</dd>
+            </div>
+            <div class="fact-row">
+              <dt>CV</dt>
+              <dd>
+                <a href="/resume.pdf" target="_blank" rel="noopener" class="fact-cv-link">
+                  Download PDF
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M12 5v14"></path>
+                    <polyline points="19 12 12 19 5 12"></polyline>
+                  </svg>
+                </a>
+              </dd>
+            </div>
+          </dl>
+        </aside>
+      </div>
+    </section>
+
+    <!-- ===== TRUSTED BY ===== -->
+    <section class="trusted-section mb-24 md:mb-36 lg:mb-44" data-animate>
+      <Eyebrow>Brands I've worked with</Eyebrow>
+
+      <div class="trusted-marquee">
+        <div class="trusted-track">
+          {[...companies, ...companies].map((company, i) => (
+            <span
+              class:list={[
+                'trusted-mark',
+                company.stayMono && 'is-stay-mono',
+                company.hoverPath && 'has-hover-logo',
+              ]}
+              title={company.name}
+              aria-hidden={i >= companies.length ? 'true' : undefined}
+            >
               <img
                 loading="lazy"
-                class="company-logo mx-auto h-8 md:h-10 object-contain"
+                class="company-logo trusted-logo trusted-logo-default"
                 src={company.path}
-                alt={company.name}
-                title={company.name}
+                alt={i < companies.length ? company.name : ''}
               />
-            </div>
+              {company.hoverPath && (
+                <img
+                  loading="lazy"
+                  class="trusted-logo trusted-logo-hover"
+                  src={company.hoverPath}
+                  alt=""
+                  aria-hidden="true"
+                />
+              )}
+            </span>
           ))}
         </div>
       </div>
+    </section>
 
-      <!-- What I Do -->
-      <div class="mt-16 md:mt-24" data-animate>
-        <div class="flex items-center gap-4 mb-10">
-          <h3 class="font-display text-xl md:text-2xl tracking-tight whitespace-nowrap">
-            What I do
-          </h3>
-          <span class="flex-1 h-[1px] bg-[var(--border)]"></span>
-        </div>
-
-        <div class="wid-grid" data-animate-stagger>
-          {[
-            {
-              emoji: '🎨',
-              label: 'Design',
-              desc: 'Turning ideas into interfaces people love using.',
-              skills: ['User Experience', 'User Interface', 'Wireframing', 'Prototyping', 'Design Systems', 'Web Design'],
-              accent: '249, 115, 22',
-              pattern: 'dots',
-            },
-            {
-              emoji: '⚡',
-              label: 'Development',
-              desc: 'Building fast, accessible products with modern tools.',
-              skills: ['TypeScript', 'React', 'Next.js', 'Node.js', 'GraphQL', 'PostgreSQL', 'Redux', 'Express'],
-              accent: '59, 130, 246',
-              pattern: 'code',
-            },
-            {
-              emoji: '🛠',
-              label: 'Tools',
-              desc: 'My daily drivers for shipping great work.',
-              skills: ['Figma', 'Cursor', 'Claude Code', 'Git', 'Storybook'],
-              accent: '16, 185, 129',
-              pattern: 'grid',
-            },
-          ].map((cat, ci) => (
-            <div class="wid-card" data-animate style={`--stagger-index: ${ci}; --card-accent: ${cat.accent}`}>
-              {/* Animated background pattern */}
-              <div class="wid-pattern-wrap" aria-hidden="true">
-                {cat.pattern === 'dots' && (
-                  <svg class="wid-pattern wid-pattern--dots" viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg">
-                    <circle cx="20" cy="20" r="2" fill={`rgba(${cat.accent}, 0.3)`}><animate attributeName="r" values="2;3.5;2" dur="3s" repeatCount="indefinite" /></circle>
-                    <circle cx="60" cy="15" r="1.5" fill={`rgba(${cat.accent}, 0.2)`}><animate attributeName="r" values="1.5;3;1.5" dur="4s" repeatCount="indefinite" /></circle>
-                    <circle cx="100" cy="30" r="2.5" fill={`rgba(${cat.accent}, 0.25)`}><animate attributeName="r" values="2.5;4;2.5" dur="3.5s" repeatCount="indefinite" /></circle>
-                    <circle cx="140" cy="10" r="1.5" fill={`rgba(${cat.accent}, 0.15)`}><animate attributeName="r" values="1.5;2.5;1.5" dur="5s" repeatCount="indefinite" /></circle>
-                    <circle cx="170" cy="40" r="2" fill={`rgba(${cat.accent}, 0.2)`}><animate attributeName="r" values="2;3;2" dur="3.8s" repeatCount="indefinite" /></circle>
-                    <circle cx="40" cy="50" r="3" fill={`rgba(${cat.accent}, 0.15)`}><animate attributeName="r" values="3;5;3" dur="4.5s" repeatCount="indefinite" /></circle>
-                    <circle cx="120" cy="60" r="2" fill={`rgba(${cat.accent}, 0.2)`}><animate attributeName="r" values="2;3.5;2" dur="3.2s" repeatCount="indefinite" /></circle>
-                    <circle cx="80" cy="80" r="1.5" fill={`rgba(${cat.accent}, 0.1)`}><animate attributeName="r" values="1.5;2.5;1.5" dur="4.8s" repeatCount="indefinite" /></circle>
-                    <circle cx="160" cy="75" r="2.5" fill={`rgba(${cat.accent}, 0.15)`}><animate attributeName="r" values="2.5;4;2.5" dur="3.6s" repeatCount="indefinite" /></circle>
-                  </svg>
-                )}
-                {cat.pattern === 'code' && (
-                  <svg class="wid-pattern wid-pattern--code" viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg">
-                    <text x="10" y="25" font-family="JetBrains Mono, monospace" font-size="11" fill={`rgba(${cat.accent}, 0.12)`}>&lt;/&gt;</text>
-                    <text x="70" y="18" font-family="JetBrains Mono, monospace" font-size="9" fill={`rgba(${cat.accent}, 0.1)`}>{'{ }'}</text>
-                    <text x="130" y="30" font-family="JetBrains Mono, monospace" font-size="13" fill={`rgba(${cat.accent}, 0.08)`}>fn()</text>
-                    <text x="25" y="55" font-family="JetBrains Mono, monospace" font-size="10" fill={`rgba(${cat.accent}, 0.1)`}>===</text>
-                    <text x="90" y="65" font-family="JetBrains Mono, monospace" font-size="12" fill={`rgba(${cat.accent}, 0.07)`}>=&gt;</text>
-                    <text x="150" y="50" font-family="JetBrains Mono, monospace" font-size="9" fill={`rgba(${cat.accent}, 0.12)`}>[ ]</text>
-                    <text x="50" y="90" font-family="JetBrains Mono, monospace" font-size="11" fill={`rgba(${cat.accent}, 0.06)`}>**</text>
-                    <text x="115" y="95" font-family="JetBrains Mono, monospace" font-size="10" fill={`rgba(${cat.accent}, 0.09)`}>::</text>
-                    <text x="170" y="85" font-family="JetBrains Mono, monospace" font-size="8" fill={`rgba(${cat.accent}, 0.1)`}>;</text>
-                  </svg>
-                )}
-                {cat.pattern === 'grid' && (
-                  <svg class="wid-pattern wid-pattern--grid" viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg">
-                    <rect x="15" y="12" width="14" height="14" rx="3" fill="none" stroke={`rgba(${cat.accent}, 0.12)`} stroke-width="1" />
-                    <rect x="65" y="8" width="10" height="10" rx="2" fill={`rgba(${cat.accent}, 0.08)`} />
-                    <rect x="120" y="20" width="18" height="12" rx="3" fill="none" stroke={`rgba(${cat.accent}, 0.1)`} stroke-width="1" />
-                    <rect x="165" y="15" width="8" height="8" rx="2" fill={`rgba(${cat.accent}, 0.1)`} />
-                    <rect x="35" y="50" width="12" height="16" rx="3" fill="none" stroke={`rgba(${cat.accent}, 0.08)`} stroke-width="1" />
-                    <rect x="90" y="55" width="16" height="10" rx="2" fill={`rgba(${cat.accent}, 0.06)`} />
-                    <rect x="145" y="48" width="10" height="10" rx="2" fill="none" stroke={`rgba(${cat.accent}, 0.12)`} stroke-width="1" />
-                    <rect x="20" y="85" width="8" height="8" rx="2" fill={`rgba(${cat.accent}, 0.07)`} />
-                    <rect x="75" y="90" width="14" height="8" rx="2" fill="none" stroke={`rgba(${cat.accent}, 0.09)`} stroke-width="1" />
-                    <rect x="140" y="82" width="12" height="12" rx="3" fill={`rgba(${cat.accent}, 0.05)`} />
-                  </svg>
-                )}
-              </div>
-
-              {/* Gradient glow */}
-              <div class="wid-glow" aria-hidden="true"></div>
-
-              {/* Content */}
-              <div class="wid-hero-area">
-                <span class="wid-emoji">{cat.emoji}</span>
-                <span class="wid-num" aria-hidden="true">{String(ci + 1).padStart(2, '0')}</span>
-              </div>
-              <h4 class="wid-label">{cat.label}</h4>
-              <p class="wid-desc">{cat.desc}</p>
-              <div class="wid-skills">
-                {cat.skills.map((skill, si) => (
-                  <span class="wid-pill" style={`--pill-i: ${si}`}>{skill}</span>
-                ))}
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      <style>
-        /* ===== WHAT I DO GRID ===== */
-        .wid-grid {
-          display: grid;
-          grid-template-columns: 1fr;
-          gap: 1rem;
-        }
-
-        @media (min-width: 640px) {
-          .wid-grid {
-            grid-template-columns: repeat(3, 1fr);
-          }
-        }
-
-        /* ===== CARD ===== */
-        .wid-card {
-          position: relative;
-          padding: 0 1.5rem 1.5rem;
-          border-radius: var(--radius-xl);
-          background: var(--bg-elevated);
-          border: 1px solid var(--border);
-          display: flex;
-          flex-direction: column;
-          gap: 0.5rem;
-          overflow: hidden;
-          transition:
-            border-color 0.4s ease,
-            transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1),
-            box-shadow 0.5s ease;
-        }
-
-        .wid-card:hover {
-          border-color: rgba(var(--card-accent), 0.4);
-          transform: translateY(-6px);
-          box-shadow:
-            0 24px 48px -12px rgba(0, 0, 0, 0.25),
-            0 0 30px -8px rgba(var(--card-accent), 0.15),
-            inset 0 1px 0 rgba(var(--card-accent), 0.1);
-        }
-
-        /* Gradient accent border top */
-        .wid-card::before {
-          content: '';
-          position: absolute;
-          top: 0;
-          left: 0;
-          right: 0;
-          height: 3px;
-          background: linear-gradient(
-            90deg,
-            transparent 0%,
-            rgba(var(--card-accent), 0.7) 50%,
-            transparent 100%
-          );
-          opacity: 0;
-          transition: opacity 0.4s ease;
-        }
-
-        .wid-card:hover::before {
-          opacity: 1;
-        }
-
-        /* ===== PATTERN BACKGROUND ===== */
-        .wid-pattern-wrap {
-          position: absolute;
-          top: 0;
-          right: 0;
-          width: 100%;
-          height: 120px;
-          pointer-events: none;
-          opacity: 0.6;
-          transition: opacity 0.4s ease;
-        }
-
-        .wid-card:hover .wid-pattern-wrap {
-          opacity: 1;
-        }
-
-        .wid-pattern {
-          width: 100%;
-          height: 100%;
-        }
-
-        .wid-pattern--dots {
-          animation: widPatternDrift 20s ease-in-out infinite;
-        }
-
-        .wid-pattern--code {
-          animation: widPatternDrift 25s ease-in-out infinite reverse;
-        }
-
-        .wid-pattern--grid {
-          animation: widPatternDrift 22s ease-in-out infinite;
-        }
-
-        @keyframes widPatternDrift {
-          0%, 100% { transform: translate(0, 0); }
-          25%      { transform: translate(4px, -3px); }
-          50%      { transform: translate(-3px, 4px); }
-          75%      { transform: translate(2px, 2px); }
-        }
-
-        /* ===== GLOW ===== */
-        .wid-glow {
-          position: absolute;
-          top: -40px;
-          right: -40px;
-          width: 140px;
-          height: 140px;
-          border-radius: 50%;
-          background: radial-gradient(
-            circle,
-            rgba(var(--card-accent), 0.12) 0%,
-            transparent 70%
-          );
-          pointer-events: none;
-          transition: transform 0.6s ease, opacity 0.4s ease;
-        }
-
-        .wid-card:hover .wid-glow {
-          transform: scale(1.4);
-          opacity: 1.5;
-        }
-
-        /* ===== HERO AREA (emoji + number) ===== */
-        .wid-hero-area {
-          display: flex;
-          align-items: flex-start;
-          justify-content: space-between;
-          padding-top: 1.5rem;
-          position: relative;
-          z-index: 1;
-        }
-
-        .wid-emoji {
-          font-size: 2.5rem;
-          line-height: 1;
-          transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-          filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.15));
-        }
-
-        .wid-card:hover .wid-emoji {
-          transform: scale(1.15) rotate(-6deg);
-        }
-
-        .wid-num {
-          font-family: 'Bricolage Grotesque', Georgia, serif;
-          font-size: 2.5rem;
-          font-weight: 800;
-          line-height: 1;
-          letter-spacing: -0.04em;
-          color: rgba(var(--card-accent), 0.08);
-          transition: color 0.4s ease;
-        }
-
-        .wid-card:hover .wid-num {
-          color: rgba(var(--card-accent), 0.18);
-        }
-
-        /* ===== LABEL ===== */
-        .wid-label {
-          font-family: 'Bricolage Grotesque', Georgia, serif;
-          font-size: 1.375rem;
-          font-weight: 700;
-          color: var(--text);
-          letter-spacing: -0.02em;
-          position: relative;
-          z-index: 1;
-        }
-
-        /* ===== DESCRIPTION ===== */
-        .wid-desc {
-          font-family: 'Space Grotesk', sans-serif;
-          font-size: 0.8125rem;
-          line-height: 1.6;
-          color: var(--text-muted);
-          position: relative;
-          z-index: 1;
-          margin-bottom: 0.25rem;
-        }
-
-        /* ===== SKILLS ===== */
-        .wid-skills {
-          display: flex;
-          flex-wrap: wrap;
-          gap: 0.3rem;
-          position: relative;
-          z-index: 1;
-          padding-top: 0.5rem;
-          border-top: 1px solid var(--border);
-        }
-
-        .wid-pill {
-          display: inline-flex;
-          align-items: center;
-          padding: 0.3rem 0.7rem;
-          border-radius: 100px;
-          font-family: 'Space Grotesk', sans-serif;
-          font-size: 0.75rem;
-          font-weight: 500;
-          color: var(--text-secondary);
-          background: var(--bg-surface);
-          border: 1px solid var(--border);
-          transition:
-            border-color 0.3s ease calc(var(--pill-i, 0) * 20ms),
-            color 0.3s ease calc(var(--pill-i, 0) * 20ms),
-            background 0.3s ease calc(var(--pill-i, 0) * 20ms),
-            transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) calc(var(--pill-i, 0) * 20ms);
-        }
-
-        .wid-card:hover .wid-pill {
-          border-color: rgba(var(--card-accent), 0.3);
-          color: var(--text);
-          background: rgba(var(--card-accent), 0.06);
-          transform: translateY(-1px);
-        }
-
-        /* ===== Touch ===== */
-        @media (hover: none) and (pointer: coarse) {
-          .wid-card:hover {
-            transform: none;
-            box-shadow: none;
-            border-color: var(--border);
-          }
-
-          .wid-card:hover::before {
-            opacity: 0;
-          }
-
-          .wid-card:hover .wid-emoji {
-            transform: none;
-          }
-
-          .wid-card:hover .wid-pill {
-            border-color: var(--border);
-            color: var(--text-secondary);
-            background: var(--bg-surface);
-            transform: none;
-          }
-        }
-
-        /* ===== Reduced motion ===== */
-        @media (prefers-reduced-motion: reduce) {
-          .wid-card,
-          .wid-pill,
-          .wid-emoji,
-          .wid-glow,
-          .wid-pattern-wrap {
-            transition-duration: 0.01ms !important;
-          }
-
-          .wid-pattern {
-            animation: none !important;
-          }
-
-          .wid-pattern circle animate {
-            display: none;
-          }
-        }
-      </style>
-
-      <!-- CTA -->
-      <div class="about-cta my-16 md:my-24 lg:my-32" data-animate>
-        <div class="about-cta-card">
-          <div class="about-cta-shapes" aria-hidden="true">
-            <div class="about-cta-shape about-cta-shape-1"></div>
-            <div class="about-cta-shape about-cta-shape-2"></div>
-          </div>
-          <h2 class="about-cta-text">
-            <span class="about-cta-quiet">Got a project in mind?</span>
-            <a href="/contact" class="about-cta-link">
-              Let's talk<span class="about-cta-dot">.</span>
-              <svg class="about-cta-arrow" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <line x1="7" y1="17" x2="17" y2="7" />
-                <polyline points="7 7 17 7 17 17" />
-              </svg>
-            </a>
+    <!-- ===== CAREER HISTORY ===== -->
+    <section class="career-section mb-24 md:mb-36 lg:mb-44" data-animate>
+      <div class="career-grid">
+        <div class="career-head">
+          <Eyebrow>Career</Eyebrow>
+          <h2 class="career-title">
+            A short<br />
+            <span class="career-title-em">history<span class="career-dot">.</span></span>
           </h2>
         </div>
+
+        <ol class="career-timeline">
+          {careers.map((c, i) => (
+            <li class="career-row" data-animate style={`--stagger-index: ${i}`}>
+              <span class="career-year" data-current={c.current ? 'true' : 'false'}>
+                {c.year}
+                {c.current && (
+                  <svg class="career-year-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                    <polyline points="12 5 19 12 12 19"></polyline>
+                  </svg>
+                )}
+              </span>
+              <div class="career-meta">
+                <h3 class="career-role">{c.role}</h3>
+                <p class="career-company">{c.company}</p>
+              </div>
+              <p class="career-summary">{c.summary}</p>
+            </li>
+          ))}
+        </ol>
       </div>
+    </section>
+
+    <style>
+      /* ===== HERO GRID ===== */
+      .about-hero-grid {
+        display: grid;
+        gap: 3rem;
+      }
+
+      @media (min-width: 1024px) {
+        .about-hero-grid {
+          grid-template-columns: minmax(0, 1.25fr) minmax(320px, 420px);
+          gap: 4.5rem;
+          align-items: start;
+        }
+      }
+
+      .about-paragraphs {
+        margin-top: 2rem;
+        display: grid;
+        gap: 1.5rem;
+      }
+
+      .about-aside-block {
+        margin-top: 2.75rem;
+        max-width: 58ch;
+      }
+
+      .about-aside-block :global(.eyebrow) {
+        margin-bottom: 1rem;
+      }
+
+      .about-aside-text {
+        font-family: 'Space Grotesk', sans-serif;
+        font-size: 1.05rem;
+        line-height: 1.7;
+        color: var(--text-secondary);
+        margin: 0;
+      }
+
+      @media (min-width: 1024px) {
+        .about-paragraphs {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      /* ===== FACTS LIST ===== */
+      .facts-list {
+        margin-top: 1.75rem;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .fact-row {
+        display: grid;
+        grid-template-columns: 110px 1fr;
+        align-items: center;
+        gap: 1.25rem;
+        padding: 0.85rem 0;
+        border-top: 1px dashed var(--border);
+      }
+
+      .fact-row:first-child {
+        border-top: none;
+      }
+
+      .fact-row dt {
+        font-family: 'Space Grotesk', sans-serif;
+        font-size: 0.7rem;
+        font-weight: 500;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: var(--text-muted);
+      }
+
+      .fact-row dd {
+        font-family: 'Space Grotesk', sans-serif;
+        font-size: 0.95rem;
+        font-weight: 500;
+        color: var(--text);
+        margin: 0;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .fact-dot {
+        display: inline-block;
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--accent);
+        box-shadow: 0 0 0 4px var(--accent-glow);
+      }
+
+      .fact-cv-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        color: var(--accent);
+        text-decoration: underline;
+        text-underline-offset: 4px;
+        text-decoration-color: var(--accent-glow-strong);
+        transition: text-decoration-color 0.2s ease, color 0.2s ease;
+      }
+
+      .fact-cv-link:hover {
+        color: var(--accent-hover);
+        text-decoration-color: var(--accent);
+      }
+
+      /* ===== TRUSTED BY ===== */
+      .trusted-section :global(.eyebrow) {
+        margin-bottom: 1.25rem;
+      }
+
+      /* Continuous-scroll marquee strip */
+      .trusted-marquee {
+        position: relative;
+        overflow: hidden;
+        padding: 1.75rem 0;
+        border-top: 1px dashed var(--border);
+        border-bottom: 1px dashed var(--border);
+        mask-image: linear-gradient(
+          90deg,
+          transparent 0%,
+          #000 8%,
+          #000 92%,
+          transparent 100%
+        );
+        -webkit-mask-image: linear-gradient(
+          90deg,
+          transparent 0%,
+          #000 8%,
+          #000 92%,
+          transparent 100%
+        );
+      }
+
+      .trusted-track {
+        display: flex;
+        align-items: center;
+        gap: 4.5rem;
+        width: max-content;
+        animation: trustedScroll 50s linear infinite;
+      }
+
+      .trusted-marquee:hover .trusted-track {
+        animation-play-state: paused;
+      }
+
+      @keyframes trustedScroll {
+        from { transform: translateX(0); }
+        to   { transform: translateX(-50%); }
+      }
+
+      .trusted-mark {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        height: 56px;
+        padding: 0 0.25rem;
+        cursor: default;
+      }
+
+      .trusted-logo {
+        max-height: 32px;
+        max-width: 160px;
+        width: auto;
+        object-fit: contain;
+        transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+      }
+
+      .trusted-mark:hover .trusted-logo {
+        transform: scale(1.12);
+      }
+
+      /* Hover-swap colored variant */
+      .trusted-logo-hover {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        max-height: 32px;
+        max-width: 160px;
+        opacity: 0;
+        filter: none !important;
+        transition: opacity 0.3s ease, transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        pointer-events: none;
+      }
+
+      .trusted-mark.has-hover-logo:hover .trusted-logo-default {
+        opacity: 0;
+      }
+
+      .trusted-mark.has-hover-logo:hover .trusted-logo-hover {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1.12);
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .trusted-track {
+          animation: none;
+        }
+        .trusted-logo,
+        .trusted-logo-hover {
+          transition: none;
+        }
+        .trusted-mark:hover .trusted-logo,
+        .trusted-mark.has-hover-logo:hover .trusted-logo-hover {
+          transform: translate(-50%, -50%) scale(1);
+        }
+      }
+
+      /* ===== CAREER ===== */
+      .career-grid {
+        display: grid;
+        gap: 3rem;
+      }
+
+      @media (min-width: 1024px) {
+        .career-grid {
+          grid-template-columns: minmax(220px, 320px) minmax(0, 1fr);
+          gap: 4.5rem;
+          align-items: start;
+        }
+      }
+
+      .career-title {
+        font-family: 'Bricolage Grotesque', Georgia, serif;
+        font-size: clamp(2.5rem, 6vw, 4.5rem);
+        font-weight: 800;
+        line-height: 1.05;
+        letter-spacing: -0.03em;
+        color: var(--text);
+        margin-top: 1rem;
+      }
+
+      .career-title-em {
+        color: var(--accent);
+      }
+
+      .career-dot {
+        color: var(--accent);
+      }
+
+      .career-timeline {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        border-top: 1px solid var(--border);
+      }
+
+      .career-row {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 0.5rem 1.5rem;
+        padding: 1.5rem 0;
+        border-bottom: 1px solid var(--border);
+      }
+
+      @media (min-width: 768px) {
+        .career-row {
+          grid-template-columns: 96px minmax(0, 1.2fr) minmax(0, 1fr);
+          align-items: start;
+          gap: 1.5rem;
+          padding: 1.75rem 0;
+        }
+      }
+
+      .career-year {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.875rem;
+        font-weight: 500;
+        color: var(--text-muted);
+        letter-spacing: 0.04em;
+      }
+
+      .career-year[data-current='true'] {
+        color: var(--accent);
+      }
+
+      .career-year-arrow {
+        color: var(--accent);
+      }
+
+      .career-role {
+        font-family: 'Bricolage Grotesque', Georgia, serif;
+        font-size: 1.125rem;
+        font-weight: 700;
+        letter-spacing: -0.01em;
+        color: var(--text);
+        margin: 0;
+      }
+
+      @media (min-width: 768px) {
+        .career-role {
+          font-size: 1.25rem;
+        }
+      }
+
+      .career-company {
+        font-family: 'Space Grotesk', sans-serif;
+        font-size: 0.875rem;
+        color: var(--text-muted);
+        margin: 0.2rem 0 0;
+      }
+
+      .career-summary {
+        font-family: 'Space Grotesk', sans-serif;
+        font-size: 0.9rem;
+        color: var(--text-secondary);
+        line-height: 1.6;
+        margin: 0;
+      }
+    </style>
+
+      <!-- ===== WHAT I ACTUALLY DO ===== -->
+      <section class="practice-section mb-24 md:mb-36 lg:mb-44" data-animate>
+        <Eyebrow>Craft</Eyebrow>
+        <h2 class="practice-title">
+          What I <span class="practice-title-em">actually</span> do<span class="practice-dot">.</span>
+        </h2>
+
+        <div class="practice-grid" data-animate-stagger>
+          {practiceColumns.map((col, i) => (
+            <article class="practice-col" data-animate style={`--stagger-index: ${i}`}>
+              <div class="practice-col-head">
+                <h3 class="practice-col-title">{col.title}</h3>
+                <span class="practice-col-num">{String(i + 1).padStart(2, '0')}</span>
+              </div>
+              <p class="practice-col-desc">{col.desc}</p>
+              <ul class="practice-col-list">
+                {col.skills.map((skill) => (
+                  <li class="practice-col-row">
+                    <span class="practice-row-label">{skill.label}</span>
+                    <span class="practice-row-meta">{skill.meta}</span>
+                  </li>
+                ))}
+              </ul>
+            </article>
+          ))}
+        </div>
+      </section>
 
       <style>
-        .about-cta-card {
-          position: relative;
-          padding: 3rem 2rem;
-          border-radius: var(--radius-xl);
-          background: var(--bg-elevated);
-          border: 1px solid var(--border);
-          overflow: hidden;
-          transition: border-color 0.4s ease;
-        }
-
-        .about-cta-card:hover {
-          border-color: color-mix(in srgb, var(--accent) 25%, transparent);
+        .practice-title {
+          font-family: 'Bricolage Grotesque', Georgia, serif;
+          font-size: clamp(2.5rem, 6vw, 4.5rem);
+          font-weight: 800;
+          line-height: 1.05;
+          letter-spacing: -0.03em;
+          color: var(--text);
+          margin: 1rem 0 3rem;
+          max-width: 900px;
         }
 
         @media (min-width: 768px) {
-          .about-cta-card {
-            padding: 4rem 3rem;
+          .practice-title {
+            margin-bottom: 4.5rem;
           }
         }
 
-        .about-cta-shapes {
-          position: absolute;
-          inset: 0;
-          pointer-events: none;
+        .practice-title-em {
+          color: var(--accent);
+          font-style: italic;
         }
 
-        .about-cta-shape {
-          position: absolute;
-          border: 1.5px solid var(--accent);
-          opacity: 0.06;
+        .practice-dot {
+          color: var(--accent);
         }
 
-        .about-cta-shape-1 {
-          width: 80px;
-          height: 80px;
-          border-radius: 50%;
-          top: -20px;
-          right: 15%;
-          animation: aboutFloat1 10s ease-in-out infinite;
+        .practice-grid {
+          display: grid;
+          gap: 3rem;
         }
 
-        .about-cta-shape-2 {
-          width: 36px;
-          height: 36px;
-          border-radius: 8px;
-          bottom: 20%;
-          right: 8%;
-          animation: aboutFloat2 13s ease-in-out infinite;
+        @media (min-width: 768px) {
+          .practice-grid {
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 3rem;
+          }
         }
 
-        @keyframes aboutFloat1 {
-          0%, 100% { transform: translate(0, 0) rotate(0deg); }
-          50%      { transform: translate(-12px, 10px) rotate(180deg); }
-        }
-
-        @keyframes aboutFloat2 {
-          0%, 100% { transform: rotate(0deg) translate(0, 0); }
-          33%      { transform: rotate(120deg) translate(8px, -6px); }
-          66%      { transform: rotate(240deg) translate(-6px, 8px); }
-        }
-
-        .about-cta-text {
-          position: relative;
-          z-index: 1;
+        .practice-col {
           display: flex;
           flex-direction: column;
-          gap: 0.25rem;
         }
 
-        .about-cta-quiet {
-          font-family: 'Space Grotesk', sans-serif;
-          font-size: 0.875rem;
-          font-weight: 400;
-          text-transform: uppercase;
-          letter-spacing: 0.08em;
-          color: var(--text-muted);
-        }
-
-        .about-cta-link {
-          font-family: 'Bricolage Grotesque', Georgia, serif;
-          font-size: clamp(2rem, 5vw, 3.5rem);
-          font-weight: 800;
-          letter-spacing: -0.03em;
-          line-height: 1.15;
-          color: var(--text);
-          text-decoration: none;
-          display: inline-flex;
+        .practice-col-head {
+          display: flex;
           align-items: baseline;
-          gap: 0.3em;
-          transition: color 0.3s ease;
+          justify-content: space-between;
+          gap: 1rem;
+          margin-bottom: 0.6rem;
         }
 
-        .about-cta-link:hover {
+        .practice-col-title {
+          font-family: 'Bricolage Grotesque', Georgia, serif;
+          font-size: 1.5rem;
+          font-weight: 700;
+          letter-spacing: -0.02em;
+          color: var(--accent);
+          margin: 0;
+        }
+
+        .practice-col-num {
+          font-family: 'JetBrains Mono', monospace;
+          font-size: 0.7rem;
+          color: var(--text-muted);
+          letter-spacing: 0.04em;
+        }
+
+        .practice-col-desc {
+          font-family: 'Space Grotesk', sans-serif;
+          font-size: 0.95rem;
+          line-height: 1.55;
+          color: var(--text-secondary);
+          margin: 0 0 1.25rem;
+          max-width: 32ch;
+        }
+
+        .practice-col-list {
+          list-style: none;
+          padding: 0;
+          margin: 0;
+          border-top: 1px dashed var(--border);
+        }
+
+        .practice-col-row {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 1rem;
+          padding: 0.85rem 0;
+          border-bottom: 1px dashed var(--border);
+          transition: padding 0.2s ease;
+        }
+
+        .practice-col-row:hover .practice-row-label {
           color: var(--accent);
         }
 
-        .about-cta-dot {
+        .practice-col-row:hover .practice-row-meta {
           color: var(--accent);
         }
 
-        .about-cta-arrow {
-          display: inline-block;
-          vertical-align: middle;
-          color: var(--accent);
-          opacity: 0.6;
-          transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s ease;
+        .practice-row-label {
+          font-family: 'Space Grotesk', sans-serif;
+          font-size: 0.95rem;
+          font-weight: 500;
+          color: var(--text);
+          transition: color 0.2s ease;
         }
 
-        .about-cta-link:hover .about-cta-arrow {
-          transform: translate(4px, -4px);
-          opacity: 1;
-        }
-
-        @media (prefers-reduced-motion: reduce) {
-          .about-cta-shape { animation: none; }
-          .about-cta-arrow { transition-duration: 0.01ms !important; }
+        .practice-row-meta {
+          font-family: 'JetBrains Mono', monospace;
+          font-size: 0.72rem;
+          color: var(--text-muted);
+          letter-spacing: 0.04em;
+          text-transform: lowercase;
+          transition: color 0.2s ease;
         }
       </style>
-    </div>
+
+
+      <section class="about-cta my-24 md:my-36 lg:my-44">
+        <CtaCard
+          spotlight="glow"
+          lines={["Let's make", "something", "good together"]}
+          sub="Designing thoughtful interfaces, shipping production code, and obsessing over the details in between."
+        />
+      </section>
+
   </Container>
 </PageLayout>
