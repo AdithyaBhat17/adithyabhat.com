@@ -1,0 +1,173 @@
+---
+import Socials from './Socials.astro';
+
+const initialTime = new Intl.DateTimeFormat('en-GB', {
+  hour: '2-digit',
+  minute: '2-digit',
+  hour12: false,
+  timeZone: 'Asia/Dubai',
+}).format(new Date());
+---
+
+<aside class="hero-aside" aria-label="At a glance">
+  <div class="aside-row">
+    <span class="aside-label">Local time</span>
+    <span class="aside-value">
+      <span data-aside-time>{initialTime}</span> GST
+    </span>
+  </div>
+
+  <div class="aside-row">
+    <span class="aside-label">Latitude</span>
+    <span class="aside-value">24.4539° N</span>
+  </div>
+
+  <div class="aside-row" data-aside-reading hidden>
+    <span class="aside-label">Reading</span>
+    <span class="aside-value">
+      <a class="aside-reading-link" href="#" target="_blank" rel="noopener" data-aside-reading-link>
+        <svg class="aside-reading-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+          <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+        </svg>
+        <span class="aside-reading-text" data-aside-reading-text>—</span>
+      </a>
+    </span>
+  </div>
+
+  <div class="aside-row">
+    <span class="aside-label">Find me</span>
+    <span class="aside-value">
+      <Socials compact />
+    </span>
+  </div>
+</aside>
+
+<style>
+  .hero-aside {
+    display: none;
+  }
+
+  @media (min-width: 1024px) {
+    .hero-aside {
+      display: flex;
+      flex-direction: column;
+      gap: 1.1rem;
+      padding-bottom: 0.5rem;
+      width: 100%;
+      max-width: 360px;
+    }
+  }
+
+  .aside-row {
+    display: grid;
+    grid-template-columns: 110px 1fr;
+    align-items: center;
+    gap: 1.25rem;
+    border-top: 1px dashed var(--border);
+    padding-top: 1rem;
+  }
+
+  .aside-row:first-child {
+    border-top: none;
+    padding-top: 0;
+  }
+
+  .aside-label {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  .aside-value {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--text);
+    line-height: 1.4;
+    display: flex;
+    align-items: center;
+    min-width: 0;
+  }
+
+  .aside-reading-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--text);
+    transition: color 0.2s ease;
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .aside-reading-link:hover {
+    color: var(--accent);
+  }
+
+  .aside-reading-icon {
+    color: var(--accent);
+    flex-shrink: 0;
+  }
+
+  .aside-reading-text {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+</style>
+
+<script>
+  function initHeroAside() {
+    const root = document.querySelector<HTMLElement>('.hero-aside');
+    if (!root) return;
+
+    // ----- Local time tick -----
+    const timeEl = root.querySelector<HTMLElement>('[data-aside-time]');
+    if (timeEl) {
+      const fmt = new Intl.DateTimeFormat('en-GB', {
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: false,
+        timeZone: 'Asia/Dubai',
+      });
+      const tick = () => {
+        timeEl.textContent = fmt.format(new Date());
+      };
+      tick();
+      const intervalId = window.setInterval(tick, 60_000);
+      document.addEventListener(
+        'astro:before-swap',
+        () => window.clearInterval(intervalId),
+        { once: true }
+      );
+    }
+
+    // ----- Goodreads currently-reading -----
+    const row = root.querySelector<HTMLElement>('[data-aside-reading]');
+    const link = root.querySelector<HTMLAnchorElement>('[data-aside-reading-link]');
+    const textEl = root.querySelector<HTMLElement>('[data-aside-reading-text]');
+    if (!row || !link || !textEl) return;
+
+    fetch('/api/reading.json', { headers: { Accept: 'application/json' } })
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data) => {
+        if (!data || !data.ok || !data.title) return;
+        const author = data.author ? ` — ${data.author}` : '';
+        textEl.textContent = `${data.title}${author}`;
+        if (data.url) link.href = data.url;
+        else link.removeAttribute('target');
+        row.removeAttribute('hidden');
+      })
+      .catch(() => {
+        /* silent — row stays hidden */
+      });
+  }
+
+  initHeroAside();
+  document.addEventListener('astro:after-swap', initHeroAside);
+</script>

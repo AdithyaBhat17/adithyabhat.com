@@ -6,6 +6,7 @@ import FeaturedArticles from '@/components/astro/FeaturedArticles.astro';
 import ProjectShowcase from '@/components/astro/ProjectShowcase.astro';
 import ArrowLink from '@/components/astro/ArrowLink.astro';
 import Testimonials from '@/components/astro/Testimonials.astro';
+import CtaCard from '@/components/astro/CtaCard.astro';
 import { fetchAPI } from '@/lib/datocms';
 import { HOME_PAGE_QUERY } from '@/graphql/index';
 
@@ -18,7 +19,7 @@ const articles = data.allArticles?.slice(0, 3) ?? [];
   <Hero />
 
   <!-- Recent Work -->
-  <section style="content-visibility:auto;contain-intrinsic-size:auto 800px;">
+  <section id="work" style="content-visibility:auto;contain-intrinsic-size:auto 800px;">
     <Container>
       <div class="section-head mt-16 md:mt-24 xl:mt-32 mb-6 md:mb-8" data-animate>
         <h2 class="sh-text">
@@ -37,7 +38,7 @@ const articles = data.allArticles?.slice(0, 3) ?? [];
   </section>
 
   <!-- Featured Articles -->
-  <section style="content-visibility:auto;contain-intrinsic-size:auto 600px;">
+  <section id="writing" style="content-visibility:auto;contain-intrinsic-size:auto 600px;">
     <Container>
       <div class="section-head mt-16 md:mt-28 xl:mt-36 mb-6 md:mb-8" data-animate>
         <h2 class="sh-text">
@@ -53,7 +54,7 @@ const articles = data.allArticles?.slice(0, 3) ?? [];
   </section>
 
   <!-- Testimonials -->
-  <section style="content-visibility:auto;contain-intrinsic-size:auto 500px;">
+  <section id="testimonials" style="content-visibility:auto;contain-intrinsic-size:auto 500px;">
     <Container>
       <div class="testimonial-heading mt-16 md:mt-28 xl:mt-36 mb-6 md:mb-8" data-animate>
         <h2 class="testimonial-heading-text">
@@ -74,7 +75,7 @@ const articles = data.allArticles?.slice(0, 3) ?? [];
   </section>
 
   <!-- CTA -->
-  <section class="cta-section mt-16 md:mt-28 xl:mt-36 mb-12 md:mb-20 overflow-hidden" style="content-visibility:auto;contain-intrinsic-size:auto 500px;">
+  <section id="contact" class="cta-section mt-16 md:mt-28 xl:mt-36 mb-12 md:mb-20 overflow-hidden" style="content-visibility:auto;contain-intrinsic-size:auto 500px;">
     <!-- Scrolling marquee (two identical tracks for seamless loop) -->
     <div class="cta-marquee-wrap" aria-hidden="true">
       <div class="cta-marquee">
@@ -102,22 +103,11 @@ const articles = data.allArticles?.slice(0, 3) ?? [];
     </div>
 
     <Container>
-      <div class="cta-card relative py-14 md:py-28 px-6 md:px-16 rounded-2xl bg-[var(--bg-elevated)] border border-[var(--border)] overflow-hidden" data-animate style="--cta-x:50%;--cta-y:50%;">
-        <!-- Cursor glow -->
-        <div class="cta-spotlight" aria-hidden="true"></div>
-
-        <!-- Decorative shapes -->
-        <div class="cta-shape cta-shape-1" aria-hidden="true"></div>
-        <div class="cta-shape cta-shape-2" aria-hidden="true"></div>
-
-        <h2 class="cta-heading font-display tracking-tight leading-[1.05] relative z-10">
-          Got something<br/>in mind?
-        </h2>
-        <p class="font-body text-xl text-[var(--text-secondary)] mt-6 relative z-10 max-w-md">
-          Whether it's a project, a question, or just to say hello —
-        </p>
-        <a href="/contact" class="btn-primary mt-10 relative z-10" data-magnetic>Let's talk</a>
-      </div>
+      <CtaCard
+        spotlight="cursor"
+        lines={["Got something", "in mind?", "Let's build it"]}
+        sub="Whether it's a project, a question, or just to say hello — I'd love to hear about it."
+      />
     </Container>
   </section>
 
@@ -156,70 +146,8 @@ const articles = data.allArticles?.slice(0, 3) ?? [];
       to   { transform: translateX(-50%); }
     }
 
-    /* ===== CTA CARD ===== */
-    .cta-heading {
-      font-size: clamp(2.5rem, 7vw, 5rem);
-    }
-
-    /* Cursor spotlight */
-    .cta-spotlight {
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(
-        500px circle at var(--cta-x) var(--cta-y),
-        var(--accent-glow) 0%,
-        transparent 50%
-      );
-      pointer-events: none;
-      z-index: 1;
-      opacity: 0;
-      transition: opacity 0.4s ease;
-    }
-
-    .cta-card:hover .cta-spotlight {
-      opacity: 1;
-    }
-
-    /* Decorative shapes */
-    .cta-shape {
-      position: absolute;
-      border: 1.5px solid var(--accent);
-      opacity: 0.08;
-      pointer-events: none;
-    }
-
-    .cta-shape-1 {
-      width: 80px;
-      height: 80px;
-      border-radius: 50%;
-      top: -20px;
-      right: 10%;
-      animation: ctaFloat1 10s ease-in-out infinite;
-    }
-
-    .cta-shape-2 {
-      width: 40px;
-      height: 40px;
-      border-radius: 8px;
-      bottom: 15%;
-      right: 5%;
-      animation: ctaFloat2 13s ease-in-out infinite;
-    }
-
-    @keyframes ctaFloat1 {
-      0%, 100% { transform: translate(0, 0) rotate(0deg); }
-      50%      { transform: translate(-15px, 12px) rotate(180deg); }
-    }
-
-    @keyframes ctaFloat2 {
-      0%, 100% { transform: rotate(0deg) translate(0, 0); }
-      33%      { transform: rotate(120deg) translate(10px, -8px); }
-      66%      { transform: rotate(240deg) translate(-8px, 10px); }
-    }
-
     @media (prefers-reduced-motion: reduce) {
       .cta-marquee { animation: none; }
-      .cta-shape { animation: none; }
     }
 
     /* ===== SECTION HEADINGS ===== */
@@ -389,35 +317,4 @@ const articles = data.allArticles?.slice(0, 3) ?? [];
     }
   </style>
 
-  <script>
-    function initCTA() {
-      if (!window.matchMedia('(hover: hover)').matches) return;
-
-      // Magnetic button
-      document.querySelectorAll<HTMLElement>('[data-magnetic]').forEach((btn) => {
-        const strength = 0.3;
-        btn.addEventListener('mousemove', (e) => {
-          const rect = btn.getBoundingClientRect();
-          const x = e.clientX - rect.left - rect.width / 2;
-          const y = e.clientY - rect.top - rect.height / 2;
-          btn.style.transform = `translate(${x * strength}px, ${y * strength}px)`;
-        });
-        btn.addEventListener('mouseleave', () => {
-          btn.style.transform = '';
-        });
-      });
-
-      // CTA spotlight
-      const ctaCard = document.querySelector<HTMLElement>('.cta-card');
-      if (ctaCard) {
-        ctaCard.addEventListener('mousemove', (e) => {
-          const rect = ctaCard.getBoundingClientRect();
-          ctaCard.style.setProperty('--cta-x', `${e.clientX - rect.left}px`);
-          ctaCard.style.setProperty('--cta-y', `${e.clientY - rect.top}px`);
-        });
-      }
-    }
-    initCTA();
-    document.addEventListener('astro:after-swap', initCTA);
-  </script>
 </PageLayout>

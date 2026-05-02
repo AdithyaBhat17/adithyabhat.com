@@ -1,0 +1,393 @@
+---
+import Socials from './Socials.astro';
+
+interface Props {
+  /** Three-line headline. The third line is rendered in the accent color with a trailing period. */
+  lines: [string, string, string];
+  /** One-paragraph sub-headline rendered below. */
+  sub: string;
+  /** Eyebrow text (next to a pulsing accent dot). */
+  eyebrow?: string;
+  /** Primary button URL. */
+  buttonHref?: string;
+  /** Primary button label. */
+  buttonText?: string;
+  /**
+   * `cursor` follows the pointer with a radial glow (used on home).
+   * `glow` is a static gradient drifting in from the right (used on about).
+   */
+  spotlight?: 'cursor' | 'glow';
+}
+
+const {
+  lines,
+  sub,
+  eyebrow = "Open for work · Q3 '26",
+  buttonHref = '/contact',
+  buttonText = 'Start a conversation',
+  spotlight = 'glow',
+} = Astro.props;
+---
+
+<div
+  class:list={['cta-card', spotlight === 'cursor' && 'cta-card--cursor', spotlight === 'glow' && 'cta-card--glow']}
+  data-animate
+  data-cta-card={spotlight}
+  style="--cta-x:50%;--cta-y:50%;"
+>
+  <div class="cta-card-spotlight" aria-hidden="true"></div>
+  <div class="cta-card-grid" aria-hidden="true"></div>
+  <div class="cta-card-shape cta-card-shape-1" aria-hidden="true"></div>
+  <div class="cta-card-shape cta-card-shape-2" aria-hidden="true"></div>
+  <div class="cta-card-shape cta-card-shape-3" aria-hidden="true"></div>
+
+  <div class="cta-card-content">
+    <span class="cta-card-eyebrow">
+      <span class="cta-card-status-dot" aria-hidden="true"></span>
+      {eyebrow}
+    </span>
+
+    <h2 class="cta-card-headline">
+      <span class="cta-card-line">{lines[0]}</span>
+      <span class="cta-card-line">{lines[1]}</span>
+      <span class="cta-card-line cta-card-em">{lines[2]}<span class="cta-card-dot">.</span></span>
+    </h2>
+
+    <p class="cta-card-sub">{sub}</p>
+
+    <div class="cta-card-actions">
+      <a href={buttonHref} class="btn-primary cta-card-btn" data-cta-magnetic>
+        {buttonText}
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+          <polyline points="12 5 19 12 12 19"></polyline>
+        </svg>
+      </a>
+      <div class="cta-card-socials">
+        <span class="cta-card-or">or find me on</span>
+        <Socials />
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .cta-card {
+    position: relative;
+    padding: 3.5rem 1.75rem;
+    border-radius: var(--radius-xl);
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    overflow: hidden;
+    transition: border-color 0.4s ease;
+  }
+
+  @media (min-width: 768px) {
+    .cta-card {
+      padding: 5.5rem 4rem;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .cta-card {
+      padding: 7rem 5.5rem;
+    }
+  }
+
+  .cta-card:hover {
+    border-color: color-mix(in srgb, var(--accent) 25%, transparent);
+  }
+
+  /* Cursor-following variant: orange glow tracks the pointer */
+  .cta-card--cursor .cta-card-spotlight {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+      600px circle at var(--cta-x) var(--cta-y),
+      var(--accent-glow-strong) 0%,
+      var(--accent-glow) 30%,
+      transparent 60%
+    );
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.5;
+    transition: opacity 0.4s ease;
+  }
+
+  .cta-card--cursor:hover .cta-card-spotlight {
+    opacity: 1;
+  }
+
+  /* Static-glow variant: soft radial drifting in from the right */
+  .cta-card--glow .cta-card-spotlight {
+    position: absolute;
+    top: -20%;
+    right: -15%;
+    width: 80%;
+    height: 140%;
+    background: radial-gradient(
+      ellipse at center,
+      var(--accent-glow-strong) 0%,
+      var(--accent-glow) 32%,
+      transparent 65%
+    );
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.85;
+  }
+
+  /* Faint dot grid, masked so edges fade out */
+  .cta-card-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      radial-gradient(circle, rgba(255, 255, 255, 0.06) 1px, transparent 1.2px);
+    background-size: 24px 24px;
+    mask-image: radial-gradient(ellipse 80% 90% at 25% 50%, #000 25%, transparent 75%);
+    -webkit-mask-image: radial-gradient(ellipse 80% 90% at 25% 50%, #000 25%, transparent 75%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  [data-theme='light'] .cta-card-grid {
+    background-image:
+      radial-gradient(circle, rgba(0, 0, 0, 0.06) 1px, transparent 1.2px);
+  }
+
+  /* Decorative floating shapes */
+  .cta-card-shape {
+    position: absolute;
+    border: 1.5px solid var(--accent);
+    opacity: 0.18;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .cta-card-shape-1 {
+    width: 96px;
+    height: 96px;
+    border-radius: 50%;
+    top: -36px;
+    right: 12%;
+    animation: ctaCardFloat1 12s ease-in-out infinite;
+  }
+
+  .cta-card-shape-2 {
+    width: 42px;
+    height: 42px;
+    border-radius: 9px;
+    bottom: 16%;
+    right: 6%;
+    animation: ctaCardFloat2 14s ease-in-out infinite;
+  }
+
+  .cta-card-shape-3 {
+    width: 14px;
+    height: 14px;
+    background: var(--accent);
+    border: none;
+    border-radius: 50%;
+    bottom: 24%;
+    left: 8%;
+    opacity: 0.25;
+    animation: ctaCardFloat3 9s ease-in-out infinite;
+  }
+
+  @keyframes ctaCardFloat1 {
+    0%, 100% { transform: translate(0, 0) rotate(0deg); }
+    50%      { transform: translate(-14px, 12px) rotate(180deg); }
+  }
+
+  @keyframes ctaCardFloat2 {
+    0%, 100% { transform: rotate(0deg) translate(0, 0); }
+    33%      { transform: rotate(120deg) translate(8px, -6px); }
+    66%      { transform: rotate(240deg) translate(-6px, 8px); }
+  }
+
+  @keyframes ctaCardFloat3 {
+    0%, 100% { transform: translate(0, 0); opacity: 0.25; }
+    50%      { transform: translate(-10px, -14px); opacity: 0.5; }
+  }
+
+  /* Content */
+  .cta-card-content {
+    position: relative;
+    z-index: 1;
+    max-width: 900px;
+  }
+
+  .cta-card-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+
+  .cta-card-status-dot {
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 0 4px var(--accent-glow);
+    flex-shrink: 0;
+    animation: ctaCardStatusPulse 2.4s ease-in-out infinite;
+  }
+
+  @keyframes ctaCardStatusPulse {
+    0%, 100% { box-shadow: 0 0 0 4px var(--accent-glow); }
+    50%      { box-shadow: 0 0 0 9px var(--accent-glow); }
+  }
+
+  /* Headline */
+  .cta-card-headline {
+    font-family: 'Bricolage Grotesque', Georgia, serif;
+    font-size: clamp(2.75rem, 8.5vw, 6.5rem);
+    font-weight: 800;
+    line-height: 0.97;
+    letter-spacing: -0.04em;
+    color: var(--text);
+    margin: 1.75rem 0 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.05em;
+  }
+
+  .cta-card-line {
+    display: block;
+  }
+
+  .cta-card-em,
+  .cta-card-dot {
+    color: var(--accent);
+  }
+
+  /* Subhead */
+  .cta-card-sub {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: clamp(1rem, 1.4vw, 1.125rem);
+    line-height: 1.6;
+    color: var(--text-secondary);
+    margin: 2rem 0 0;
+    max-width: 50ch;
+  }
+
+  /* Actions */
+  .cta-card-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1.25rem 2rem;
+    margin-top: 2.5rem;
+  }
+
+  @media (min-width: 768px) {
+    .cta-card-actions {
+      margin-top: 3rem;
+    }
+  }
+
+  .cta-card-btn {
+    padding: 0.95rem 1.85rem;
+    /* Magnetic offset (set by JS) composes with btn-primary's hover lift. */
+    transform: translate(var(--mx, 0), var(--my, 0));
+  }
+
+  .cta-card-btn svg {
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  .cta-card-btn:hover svg {
+    transform: translateX(4px);
+  }
+
+  .cta-card-socials {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.85rem;
+    flex-wrap: wrap;
+  }
+
+  .cta-card-or {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    color: var(--text-muted);
+    text-transform: lowercase;
+  }
+
+  @media (max-width: 600px) {
+    .cta-card-or {
+      display: none;
+    }
+
+    /* Shrink button padding around each icon (SVGs stay native size).
+       :global() escapes scoped CSS to reach the Socials component. */
+    .cta-card-socials :global(.social-link) {
+      width: 28px;
+      height: 28px;
+      border-radius: 6px;
+    }
+    .cta-card-socials :global(.social-links) {
+      gap: 0.25rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .cta-card-shape,
+    .cta-card-status-dot,
+    .cta-card-btn svg {
+      animation: none;
+      transition-duration: 0.01ms !important;
+    }
+  }
+</style>
+
+<script>
+  const initialized = new WeakSet<HTMLElement>();
+
+  function initCtaCards() {
+    if (!window.matchMedia('(hover: hover)').matches) return;
+
+    document.querySelectorAll<HTMLElement>('[data-cta-card]').forEach((card) => {
+      if (initialized.has(card)) return;
+      initialized.add(card);
+
+      // Cursor-following spotlight
+      if (card.dataset.ctaCard === 'cursor') {
+        card.addEventListener('mousemove', (e) => {
+          const rect = card.getBoundingClientRect();
+          card.style.setProperty('--cta-x', `${e.clientX - rect.left}px`);
+          card.style.setProperty('--cta-y', `${e.clientY - rect.top}px`);
+        });
+      }
+
+      // Magnetic button — cursor pulls the button slightly toward it.
+      // Writes to CSS custom properties so the existing `.btn-primary:hover`
+      // translateY composes with the magnetic offset instead of fighting it.
+      card.querySelectorAll<HTMLElement>('[data-cta-magnetic]').forEach((btn) => {
+        const strength = 0.3;
+        btn.addEventListener('mousemove', (e) => {
+          const rect = btn.getBoundingClientRect();
+          const x = (e.clientX - rect.left - rect.width / 2) * strength;
+          const y = (e.clientY - rect.top - rect.height / 2) * strength;
+          btn.style.setProperty('--mx', `${x}px`);
+          btn.style.setProperty('--my', `${y}px`);
+        });
+        btn.addEventListener('mouseleave', () => {
+          btn.style.removeProperty('--mx');
+          btn.style.removeProperty('--my');
+        });
+      });
+    });
+  }
+
+  initCtaCards();
+  document.addEventListener('astro:after-swap', initCtaCards);
+</script>

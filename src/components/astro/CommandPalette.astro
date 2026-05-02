@@ -1,0 +1,540 @@
+---
+import { socialLinks } from '@/utils/socials';
+
+type Item = {
+  label: string;
+  href: string;
+  keywords?: string;
+  group: 'Sections' | 'Pages' | 'Elsewhere';
+  external?: boolean;
+};
+
+// Aliases for fuzzier matching ("x" → Twitter, "code" → GitHub, etc.)
+const SOCIAL_KEYWORDS: Record<string, string> = {
+  Twitter: 'x',
+  GitHub: 'code',
+  YouTube: 'videos',
+};
+
+const items: Item[] = [
+  { label: 'Top of page', href: '#top', group: 'Sections', keywords: 'home hero start' },
+  { label: 'Selected work', href: '#work', group: 'Sections', keywords: 'projects portfolio case studies' },
+  { label: 'Writing', href: '#writing', group: 'Sections', keywords: 'articles blog posts' },
+  { label: 'Testimonials', href: '#testimonials', group: 'Sections', keywords: 'reviews kind words' },
+  { label: 'Get in touch', href: '#contact', group: 'Sections', keywords: 'contact email message reach out' },
+
+  { label: 'All projects', href: '/work', group: 'Pages', keywords: 'work portfolio case studies' },
+  { label: 'Blog', href: '/blog', group: 'Pages', keywords: 'articles writing posts' },
+  { label: 'Photos', href: '/photos', group: 'Pages', keywords: 'pictures photography gallery' },
+  { label: 'About', href: '/about', group: 'Pages', keywords: 'bio me story' },
+  { label: 'Uses', href: '/uses', group: 'Pages', keywords: 'gear setup tools desk' },
+  { label: 'Contact', href: '/contact', group: 'Pages', keywords: 'email message reach out form' },
+  { label: 'Legal', href: '/legal', group: 'Pages', keywords: 'privacy terms' },
+
+  ...socialLinks.map(({ name, href }): Item => ({
+    label: name,
+    href,
+    group: 'Elsewhere',
+    external: true,
+    keywords: SOCIAL_KEYWORDS[name],
+  })),
+];
+
+const itemsJson = JSON.stringify(items);
+---
+
+<div class="cmdk-root" data-cmdk data-no-click-sound hidden aria-hidden="true">
+  <div class="cmdk-backdrop" data-cmdk-close></div>
+  <div
+    class="cmdk-panel"
+    role="dialog"
+    aria-modal="true"
+    aria-label="Search the site"
+  >
+    <label class="cmdk-search">
+      <svg class="cmdk-search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <circle cx="11" cy="11" r="8"></circle>
+        <path d="m21 21-4.3-4.3"></path>
+      </svg>
+      <input
+        type="text"
+        class="cmdk-input"
+        placeholder="Search pages, sections, links…"
+        autocomplete="off"
+        autocapitalize="off"
+        spellcheck="false"
+        data-cmdk-input
+        aria-label="Search"
+      />
+      <kbd class="cmdk-esc">ESC</kbd>
+    </label>
+    <ul class="cmdk-list" role="listbox" data-cmdk-list></ul>
+    <div class="cmdk-empty" data-cmdk-empty hidden>No matches.</div>
+    <div class="cmdk-foot">
+      <span><kbd>↑</kbd><kbd>↓</kbd> navigate</span>
+      <span><kbd>↵</kbd> open</span>
+      <span><kbd>esc</kbd> close</span>
+    </div>
+  </div>
+</div>
+
+<script type="application/json" data-cmdk-items set:html={itemsJson}></script>
+
+<style is:global>
+  .cmdk-root {
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: clamp(4rem, 14vh, 8rem) 1rem 1rem;
+  }
+
+  .cmdk-root[hidden] {
+    display: none;
+  }
+
+  .cmdk-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    animation: cmdkFade 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .cmdk-panel {
+    position: relative;
+    width: 100%;
+    max-width: 32rem;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5), 0 0 0 1px var(--accent-glow);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    max-height: min(70vh, 36rem);
+    animation: cmdkLift 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  @keyframes cmdkFade {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+
+  @keyframes cmdkLift {
+    from { opacity: 0; transform: translateY(-8px) scale(0.98); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  .cmdk-search {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.9rem 1rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .cmdk-search-icon {
+    color: var(--text-muted);
+    flex-shrink: 0;
+  }
+
+  .cmdk-input {
+    flex: 1;
+    appearance: none;
+    background: transparent;
+    border: none;
+    outline: none;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1rem;
+    color: var(--text);
+    padding: 0;
+    min-width: 0;
+  }
+
+  .cmdk-input::placeholder {
+    color: var(--text-muted);
+  }
+
+  .cmdk-esc {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 0.15rem 0.4rem;
+    background: var(--bg-surface);
+  }
+
+  .cmdk-list {
+    list-style: none;
+    margin: 0;
+    padding: 0.5rem;
+    overflow-y: auto;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+  }
+
+  .cmdk-group-label {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    padding: 0.85rem 0.85rem 0.45rem;
+  }
+
+  .cmdk-list > li:first-child .cmdk-group-label,
+  .cmdk-group-label:first-child {
+    padding-top: 0.35rem;
+  }
+
+  .cmdk-item {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.7rem 0.85rem;
+    border-radius: var(--radius);
+    cursor: pointer;
+    color: var(--text-secondary);
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.9375rem;
+    background: transparent;
+    border: 1px solid transparent;
+    width: 100%;
+    text-align: left;
+    transition: background 0.12s ease, color 0.12s ease, border-color 0.12s ease;
+  }
+
+  .cmdk-item:hover {
+    color: var(--text);
+    background: rgba(255, 255, 255, 0.03);
+  }
+
+  .cmdk-item[data-active='true'] {
+    background: var(--accent-glow);
+    border-color: var(--accent-glow-strong);
+    color: var(--text);
+  }
+
+  .cmdk-item-label {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .cmdk-item-meta {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    flex-shrink: 0;
+    padding: 0.15rem 0.5rem;
+    border-radius: 6px;
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    transition: color 0.12s ease, border-color 0.12s ease, background 0.12s ease;
+  }
+
+  .cmdk-item[data-active='true'] .cmdk-item-meta {
+    color: var(--accent);
+    border-color: var(--accent-glow-strong);
+    background: transparent;
+  }
+
+  .cmdk-empty {
+    padding: 2rem 1rem;
+    text-align: center;
+    color: var(--text-muted);
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.9rem;
+  }
+
+  .cmdk-foot {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    padding: 0.6rem 1rem;
+    border-top: 1px solid var(--border);
+    background: var(--bg-surface);
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+  }
+
+  .cmdk-foot kbd {
+    display: inline-block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--text-secondary);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 0.1rem 0.35rem;
+    margin-right: 0.25rem;
+    background: var(--bg-elevated);
+  }
+
+  @media (max-width: 767px) {
+    .cmdk-root {
+      padding-top: clamp(2rem, 8vh, 4rem);
+    }
+    .cmdk-foot {
+      display: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .cmdk-backdrop, .cmdk-panel {
+      animation: none;
+    }
+  }
+</style>
+
+<script>
+  import { playClickFeedback } from '../../scripts/click-feedback';
+
+  type Item = {
+    label: string;
+    href: string;
+    keywords?: string;
+    group: 'Sections' | 'Pages' | 'Elsewhere';
+    external?: boolean;
+  };
+
+  const initialized = new WeakSet<HTMLElement>();
+
+  function initCommandPalette() {
+    const root = document.querySelector<HTMLElement>('[data-cmdk]');
+    if (!root || initialized.has(root)) return;
+    initialized.add(root);
+
+    const dataNode = document.querySelector<HTMLScriptElement>('[data-cmdk-items]');
+    if (!dataNode) return;
+    let items: Item[] = [];
+    try {
+      items = JSON.parse(dataNode.textContent || '[]');
+    } catch {
+      return;
+    }
+
+    const input = root.querySelector<HTMLInputElement>('[data-cmdk-input]');
+    const list = root.querySelector<HTMLUListElement>('[data-cmdk-list]');
+    const empty = root.querySelector<HTMLElement>('[data-cmdk-empty]');
+    if (!input || !list || !empty) return;
+
+    let filtered: Item[] = [];
+    let activeIndex = 0;
+
+    function isHome(): boolean {
+      return window.location.pathname === '/' || window.location.pathname === '';
+    }
+
+    function visibleItems(): Item[] {
+      // Hide on-page section anchors when not on the home page
+      if (isHome()) return items;
+      return items.filter((i) => i.group !== 'Sections');
+    }
+
+    function render() {
+      const q = input!.value.trim().toLowerCase();
+      const pool = visibleItems();
+      filtered = !q
+        ? pool
+        : pool.filter((i) => {
+            const hay = `${i.label} ${i.keywords ?? ''}`.toLowerCase();
+            return hay.includes(q);
+          });
+
+      list!.innerHTML = '';
+      if (filtered.length === 0) {
+        empty!.hidden = false;
+        return;
+      }
+      empty!.hidden = true;
+
+      let lastGroup = '';
+      filtered.forEach((item, idx) => {
+        if (item.group !== lastGroup) {
+          const li = document.createElement('li');
+          li.className = 'cmdk-group-label';
+          li.textContent = item.group;
+          list!.appendChild(li);
+          lastGroup = item.group;
+        }
+
+        const li = document.createElement('li');
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'cmdk-item';
+        btn.dataset.index = String(idx);
+        btn.dataset.active = idx === activeIndex ? 'true' : 'false';
+
+        const label = document.createElement('span');
+        label.className = 'cmdk-item-label';
+        label.textContent = item.label;
+
+        const meta = document.createElement('span');
+        meta.className = 'cmdk-item-meta';
+        meta.textContent = item.external ? 'open ↗' : item.href.startsWith('#') ? 'jump' : 'go';
+
+        btn.append(label, meta);
+        btn.addEventListener('click', () => activate(item));
+        btn.addEventListener('mousemove', () => {
+          if (activeIndex === idx) return;
+          activeIndex = idx;
+          updateActive();
+        });
+
+        li.appendChild(btn);
+        list!.appendChild(li);
+      });
+    }
+
+    function updateActive() {
+      list!.querySelectorAll<HTMLElement>('.cmdk-item').forEach((el) => {
+        const idx = Number(el.dataset.index);
+        const isActive = idx === activeIndex;
+        el.dataset.active = isActive ? 'true' : 'false';
+        if (isActive) el.scrollIntoView({ block: 'nearest' });
+      });
+    }
+
+    function move(delta: number) {
+      if (filtered.length === 0) return;
+      activeIndex = (activeIndex + delta + filtered.length) % filtered.length;
+      updateActive();
+      playClickFeedback();
+    }
+
+    function activate(item: Item) {
+      close();
+      if (item.external) {
+        window.open(item.href, '_blank', 'noopener,noreferrer');
+        return;
+      }
+      if (item.href.startsWith('#')) {
+        if (!isHome()) {
+          window.location.href = `/${item.href}`;
+          return;
+        }
+        if (item.href === '#top') {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        } else {
+          const el = document.querySelector(item.href);
+          if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+        history.replaceState(null, '', item.href === '#top' ? '/' : item.href);
+        return;
+      }
+      window.location.href = item.href;
+    }
+
+    function open() {
+      if (!root!.hasAttribute('hidden')) return;
+      root!.removeAttribute('hidden');
+      root!.setAttribute('aria-hidden', 'false');
+      input!.value = '';
+      activeIndex = 0;
+      render();
+      requestAnimationFrame(() => input!.focus());
+      document.body.style.overflow = 'hidden';
+      playClickFeedback();
+    }
+
+    function close() {
+      if (root!.hasAttribute('hidden')) return;
+      root!.setAttribute('hidden', '');
+      root!.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+      playClickFeedback();
+    }
+
+    input.addEventListener('input', () => {
+      activeIndex = 0;
+      render();
+    });
+
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        move(1);
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        move(-1);
+      } else if (e.key === 'Enter') {
+        e.preventDefault();
+        const item = filtered[activeIndex];
+        if (item) activate(item);
+      } else if (e.key === 'Escape') {
+        e.preventDefault();
+        close();
+      }
+    });
+
+    root.addEventListener('click', (e) => {
+      const target = e.target as HTMLElement;
+      if (target.matches('[data-cmdk-close]')) close();
+    });
+
+    const onDocClick = (e: MouseEvent) => {
+      const trigger = (e.target as HTMLElement | null)?.closest<HTMLElement>('[data-cmd-open]');
+      if (!trigger) return;
+      e.preventDefault();
+      open();
+    };
+
+    const onDocKey = (e: KeyboardEvent) => {
+      if (e.key === 'k' || e.key === 'K') {
+        if (e.metaKey || e.ctrlKey || e.altKey) return;
+        const ae = document.activeElement as HTMLElement | null;
+        if (
+          ae &&
+          (ae.tagName === 'INPUT' ||
+            ae.tagName === 'TEXTAREA' ||
+            ae.isContentEditable)
+        ) {
+          return;
+        }
+        if (root!.hasAttribute('hidden')) {
+          e.preventDefault();
+          open();
+        }
+        return;
+      }
+
+      // Escape inside the input is handled by the input's own listener; this
+      // closes when focus is anywhere else on the page.
+      if (e.key === 'Escape' && !root!.hasAttribute('hidden')) {
+        e.preventDefault();
+        close();
+      }
+    };
+
+    document.addEventListener('click', onDocClick);
+    document.addEventListener('keydown', onDocKey);
+
+    document.addEventListener(
+      'astro:before-swap',
+      () => {
+        document.removeEventListener('click', onDocClick);
+        document.removeEventListener('keydown', onDocKey);
+      },
+      { once: true }
+    );
+  }
+
+  initCommandPalette();
+  document.addEventListener('astro:after-swap', initCommandPalette);
+</script>

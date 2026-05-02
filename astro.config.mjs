@@ -20,5 +20,10 @@ export default defineConfig({
     resolve: {
       dedupe: ['react', 'react-dom'],
     },
+    optimizeDeps: {
+      esbuildOptions: {
+        tsconfigRaw: { compilerOptions: { jsx: 'preserve' } },
+      },
+    },
   },
 });

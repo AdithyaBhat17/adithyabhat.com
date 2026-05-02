@@ -488,7 +488,15 @@ a {
   transition: all 0.4s ease;
 }
 
-.company-logo:hover {
+.company-logo:hover,
+.trusted-mark:hover:not(.is-stay-mono) .trusted-logo-default {
+  filter: none;
+  opacity: 1;
+}
+
+/* Stay-mono marks (e.g. Yellow.ai, Softway, Betsol) keep the white treatment, but go to full opacity on hover */
+.trusted-mark.is-stay-mono:hover .company-logo,
+.trusted-mark.is-stay-mono .company-logo:hover {
   filter: brightness(0) invert(calc(1 - var(--logo-invert)));
   opacity: 1;
 }
