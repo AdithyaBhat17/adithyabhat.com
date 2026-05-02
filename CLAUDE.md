@@ -2,15 +2,15 @@
 
 ## Package Manager
 
-This project uses **yarn** as the package manager. Do not use npm.
+This project uses **pnpm** as the package manager. Do not use npm or yarn.
 
 ```bash
 # Install dependencies
-yarn
+pnpm install
 
 # Add a package
-yarn add <package>
+pnpm add <package>
 
 # Add a dev dependency
-yarn add -D <package>
+pnpm add -D <package>
 ```

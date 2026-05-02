@@ -16,16 +16,16 @@ Source code for my personal portfolio and blog.
 
 ```bash
 # Install dependencies
-yarn
+pnpm install
 
 # Start dev server
-yarn dev
+pnpm dev
 
 # Run tests
-yarn test
+pnpm test
 
 # Type-check and build
-yarn build
+pnpm build
 ```
 
 ### Project structure
