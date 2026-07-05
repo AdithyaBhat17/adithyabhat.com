@@ -11,14 +11,12 @@ interface Props {
   type: 'article' | 'project';
   external?: boolean;
   transitionName?: string;
-  index?: number;
 }
 
-const { title, href, thumbnail, date, tags, type, external = false, transitionName, index = 0 } = Astro.props;
+const { title, href, thumbnail, date, tags, type, external = false, transitionName } = Astro.props;
 
 const formattedDate = (type === 'article' && date) ? dayjs(date as string).format('MMM YYYY') : '';
 const tagList = tags ? tags.split(/[,·]/).map(t => t.trim()).filter(Boolean) : [];
-const indexLabel = String(index + 1).padStart(2, '0');
 ---
 
 <a
@@ -40,7 +38,6 @@ const indexLabel = String(index + 1).padStart(2, '0');
         class="card-img"
         style={thumbnail.responsiveImage.base64 ? `background-image: url(${thumbnail.responsiveImage.base64}); background-size: cover;` : ''}
       />
-      <span class="card-index" aria-hidden="true">{indexLabel}</span>
     </div>
   )}
 
@@ -136,31 +133,6 @@ const indexLabel = String(index + 1).padStart(2, '0');
 
   .card:hover .card-img {
     transform: scale(1.07);
-  }
-
-  /* Decorative index number on image */
-  .card-index {
-    position: absolute;
-    bottom: 0.625rem;
-    right: 0.875rem;
-    font-family: 'Bricolage Grotesque', Georgia, serif;
-    font-size: 3.5rem;
-    font-weight: 800;
-    line-height: 1;
-    color: white;
-    opacity: 0;
-    transform: translateY(8px);
-    transition:
-      opacity 0.4s ease,
-      transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-    pointer-events: none;
-    text-shadow: 0 2px 16px rgba(0, 0, 0, 0.5);
-    z-index: 2;
-  }
-
-  .card:hover .card-index {
-    opacity: 0.3;
-    transform: translateY(0);
   }
 
   /* ===== Content ===== */
@@ -293,10 +265,6 @@ const indexLabel = String(index + 1).padStart(2, '0');
       transform: none;
     }
 
-    .card:hover .card-index {
-      opacity: 0;
-    }
-
     .card:active {
       transform: scale(0.98);
       transition-duration: 0.1s;
@@ -319,7 +287,6 @@ const indexLabel = String(index + 1).padStart(2, '0');
   @media (prefers-reduced-motion: reduce) {
     .card,
     .card-img,
-    .card-index,
     .card-arrow,
     .card-tag,
     .card-accent-bar,

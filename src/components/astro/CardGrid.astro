@@ -18,7 +18,7 @@ const pathname = type === 'article' ? 'blog' : 'work';
 ---
 
 <div class:list={['grid gap-9 mt-8', gridCols]} data-animate-stagger>
-  {items.map((item, i) => {
+  {items.map((item) => {
     const href = (item as Article).externalLink
       ? (item as Article).externalLink!
       : `/${pathname}/${item.slug}`;
@@ -35,7 +35,6 @@ const pathname = type === 'article' ? 'blog' : 'work';
           type={type}
           external={external}
           transitionName={`card-${item.slug}`}
-          index={i}
         />
       </div>
     );

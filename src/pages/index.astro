@@ -28,7 +28,7 @@ const articles = data.allArticles?.slice(0, 3) ?? [];
             <span class="sh-highlight">selected</span> work<span class="sh-dot">.</span>
           </span>
         </h2>
-        <span class="sh-count">{String(projects.length).padStart(2, '0')} projects</span>
+        <span class="sh-count">{projects.length} projects</span>
       </div>
     </Container>
     <ProjectShowcase projects={projects} />

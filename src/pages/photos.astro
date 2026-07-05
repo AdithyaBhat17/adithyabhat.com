@@ -23,8 +23,7 @@ const cameras = [...new Set(places.map((p: any) => p.camera).filter(Boolean))];
     <!-- Hero header -->
     <div class="photos-header" data-animate>
       <div class="photos-header-inner">
-        <span class="inline-flex items-center gap-2 text-sm font-body font-medium text-[var(--accent)] tracking-wide uppercase mb-5">
-          <span class="inline-block w-6 h-[2px] bg-[var(--accent)]"></span>
+        <span class="inline-flex items-center text-sm font-body font-medium text-[var(--accent)] tracking-wide uppercase mb-5">
           Gallery
         </span>
 
@@ -80,7 +79,7 @@ const cameras = [...new Set(places.map((p: any) => p.camera).filter(Boolean))];
   .photos-header {
     position: relative;
     z-index: 1;
-    padding: 1rem 0 2.5rem;
+    padding: 2rem 0 2.5rem;
   }
 
   .photos-header-inner {

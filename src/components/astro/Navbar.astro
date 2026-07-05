@@ -146,9 +146,29 @@ function isActive(link: string): boolean {
 
 <style>
   .navbar {
+    transition: box-shadow 0.4s ease;
+  }
+
+  /* Blurred background lives on its own layer that is invisible at the top of
+     the page — so the hero's ambient light flows through with nothing to seam
+     against — and fades in only once scrolled, where a defined sticky header
+     is expected. (A blurred bar can't fade at an edge without showing a line,
+     so we toggle the whole layer instead of masking it.) */
+  .navbar::after {
+    content: '';
+    position: absolute;
+    inset: 0;
     background: var(--nav-bg);
-    border-bottom: 1px solid var(--nav-border);
-    transition: border-color 0.4s ease, box-shadow 0.4s ease;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* Blur is gated on the scrolled state too, so no backdrop surface is
+     composited while the layer is invisible at the top of the page. */
+  .navbar.is-scrolled::after {
+    opacity: 1;
     -webkit-backdrop-filter: saturate(180%) blur(20px);
     backdrop-filter: saturate(180%) blur(20px);
   }
@@ -164,7 +184,7 @@ function isActive(link: string): boolean {
       transparent 40%
     );
     pointer-events: none;
-    z-index: 0;
+    z-index: 1;
     opacity: 0;
     transition: opacity 0.5s ease;
   }
@@ -179,13 +199,12 @@ function isActive(link: string): boolean {
 
   .navbar-inner {
     position: relative;
-    z-index: 1;
+    z-index: 2;
   }
 
   /* Scrolled state */
   .navbar.is-scrolled {
     box-shadow: 0 4px 24px -8px rgba(0, 0, 0, 0.2);
-    border-bottom-color: color-mix(in srgb, var(--accent) 12%, var(--nav-border));
   }
 
   /* Logo hover */
@@ -320,7 +339,7 @@ function isActive(link: string): boolean {
     width: 300px;
     height: 300px;
     border-radius: 50%;
-    background: radial-gradient(circle, rgba(249, 115, 22, 0.15) 0%, rgba(249, 115, 22, 0.04) 50%, transparent 70%);
+    background: radial-gradient(circle, rgba(var(--accent-glow-rgb), 0.15) 0%, rgba(var(--accent-glow-rgb), 0.04) 50%, transparent 70%);
     top: -60px;
     right: -80px;
     pointer-events: none;
@@ -354,7 +373,7 @@ function isActive(link: string): boolean {
   }
 
   :global([data-theme="light"]) .menu-orb {
-    background: radial-gradient(circle, rgba(249, 115, 22, 0.12) 0%, rgba(249, 115, 22, 0.03) 50%, transparent 70%);
+    background: radial-gradient(circle, rgba(var(--accent-glow-rgb), 0.12) 0%, rgba(var(--accent-glow-rgb), 0.03) 50%, transparent 70%);
   }
 
   /* ===== DECORATIVE RING ===== */
