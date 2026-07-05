@@ -95,7 +95,7 @@ function showToast(message: string) {
 function printConsoleMessage() {
   console.log(
     '%c👋 Hey there, curious developer!',
-    'font-size: 18px; font-weight: bold; color: #f97316; padding: 8px 0;',
+    'font-size: 18px; font-weight: bold; color: #ff6600; padding: 8px 0;',
   )
   console.log(
     '%cPeeking under the hood? Nice. Try the Konami Code... ↑↑↓↓←→←→BA',

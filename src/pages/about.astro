@@ -62,7 +62,7 @@ const practiceColumns = [
   },
   {
     title: 'Tools',
-    desc: 'Day-one installs on every new laptop — the kind that save me an hour every day.',
+    desc: 'The first things I install on a new laptop. Each one saves me an hour a day.',
     skills: [
       { label: 'Figma', meta: 'daily' },
       { label: 'VS Code, Cursor', meta: 'daily' },
@@ -115,8 +115,8 @@ const practiceColumns = [
           <div class="about-aside-block">
             <Eyebrow>Outside the screen</Eyebrow>
             <p class="about-aside-text">
-              When I'm not near a keyboard, you'll usually find me on a motorcycle —
-              long road days, weekend offroad trails, or out chasing a good coffee
+              When I'm not near a keyboard, you'll usually find me on a motorcycle.
+              Long road days, weekend offroad trails, or out chasing a good coffee
               spot. Riding is my reset button between hard problems.
             </p>
           </div>
@@ -564,7 +564,6 @@ const practiceColumns = [
             <article class="practice-col" data-animate style={`--stagger-index: ${i}`}>
               <div class="practice-col-head">
                 <h3 class="practice-col-title">{col.title}</h3>
-                <span class="practice-col-num">{String(i + 1).padStart(2, '0')}</span>
               </div>
               <p class="practice-col-desc">{col.desc}</p>
               <ul class="practice-col-list">
@@ -625,10 +624,6 @@ const practiceColumns = [
         }
 
         .practice-col-head {
-          display: flex;
-          align-items: baseline;
-          justify-content: space-between;
-          gap: 1rem;
           margin-bottom: 0.6rem;
         }
 
@@ -639,13 +634,6 @@ const practiceColumns = [
           letter-spacing: -0.02em;
           color: var(--accent);
           margin: 0;
-        }
-
-        .practice-col-num {
-          font-family: 'JetBrains Mono', monospace;
-          font-size: 0.7rem;
-          color: var(--text-muted);
-          letter-spacing: 0.04em;
         }
 
         .practice-col-desc {

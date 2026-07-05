@@ -15,7 +15,6 @@ const { projects } = Astro.props;
     const img = project.thumbnail?.responsiveImage;
     const tagList = project.tags ? project.tags.split(/[,·]/).map(t => t.trim()).filter(Boolean) : [];
     const href = `/work/${project.slug}`;
-    const indexLabel = String(i + 1).padStart(2, '0');
     const isEven = i % 2 === 1;
     const year = project.date ? dayjs(project.date as string).format('YYYY') : '';
 
@@ -49,7 +48,6 @@ const { projects } = Astro.props;
 
             {/* Info side */}
             <div class="pw-project-info">
-              <span class="pw-project-num" aria-hidden="true">{indexLabel}</span>
               <h3 class="pw-project-title">{project.title}</h3>
               {tagList.length > 0 && (
                 <div class="pw-project-tags">
@@ -160,25 +158,6 @@ const { projects } = Astro.props;
     gap: 0;
   }
 
-  .pw-project-num {
-    font-family: 'Bricolage Grotesque', Georgia, serif;
-    font-size: clamp(4rem, 8vw, 6.5rem);
-    font-weight: 800;
-    line-height: 1;
-    letter-spacing: -0.04em;
-    color: var(--border);
-    transition: color 0.4s ease;
-    margin-bottom: 0.75rem;
-  }
-
-  .pw-project:hover .pw-project-num {
-    color: var(--accent-glow-strong);
-  }
-
-  [data-theme="light"] .pw-project:hover .pw-project-num {
-    color: color-mix(in srgb, var(--accent) 20%, transparent);
-  }
-
   .pw-project-title {
     font-family: 'Bricolage Grotesque', Georgia, serif;
     font-size: clamp(1.5rem, 3vw, 2.25rem);
@@ -280,10 +259,6 @@ const { projects } = Astro.props;
       gap: 1.25rem;
     }
 
-    .pw-project-num {
-      font-size: 3rem;
-      margin-bottom: 0.25rem;
-    }
   }
 
   /* ===== TOUCH ===== */
@@ -298,10 +273,6 @@ const { projects } = Astro.props;
 
     .pw-project:hover .pw-project-title {
       color: var(--text);
-    }
-
-    .pw-project:hover .pw-project-num {
-      color: var(--border);
     }
 
     .pw-project:active {
@@ -324,7 +295,6 @@ const { projects } = Astro.props;
     .pw-project-img,
     .pw-project-accent,
     .pw-project-cta-arrow,
-    .pw-project-num,
     .pw-project-title,
     .pw-project-tag,
     .pw-project-cta,

@@ -21,8 +21,7 @@ const allTags = [...new Set(
     <Container>
       <div class="work-hero" data-animate>
         <div class="work-hero-inner">
-          <span class="inline-flex items-center gap-2 text-sm font-body font-medium text-[var(--accent)] tracking-wide uppercase mb-5">
-            <span class="inline-block w-6 h-[2px] bg-[var(--accent)]"></span>
+          <span class="inline-flex items-center text-sm font-body font-medium text-[var(--accent)] tracking-wide uppercase mb-5">
             Portfolio
           </span>
 
@@ -61,7 +60,6 @@ const allTags = [...new Set(
       const img = project.thumbnail?.responsiveImage;
       const tagList = project.tags ? project.tags.split(/[,·]/).map((t: string) => t.trim()).filter(Boolean) : [];
       const href = `/work/${project.slug}`;
-      const indexLabel = String(i + 1).padStart(2, '0');
       const isEven = i % 2 === 1;
       const year = project.date ? new Date(project.date as string).getFullYear().toString() : '';
 
@@ -95,7 +93,6 @@ const allTags = [...new Set(
 
               {/* Info side */}
               <div class="work-project-info">
-                <span class="work-project-num" aria-hidden="true">{indexLabel}</span>
                 <h2 class="work-project-title">{project.title}</h2>
                 {tagList.length > 0 && (
                   <div class="work-project-tags">
@@ -314,25 +311,6 @@ const allTags = [...new Set(
     gap: 0;
   }
 
-  .work-project-num {
-    font-family: 'Bricolage Grotesque', Georgia, serif;
-    font-size: clamp(4rem, 8vw, 6.5rem);
-    font-weight: 800;
-    line-height: 1;
-    letter-spacing: -0.04em;
-    color: var(--border);
-    transition: color 0.4s ease;
-    margin-bottom: 0.75rem;
-  }
-
-  .work-project:hover .work-project-num {
-    color: var(--accent-glow-strong);
-  }
-
-  [data-theme="light"] .work-project:hover .work-project-num {
-    color: color-mix(in srgb, var(--accent) 20%, transparent);
-  }
-
   .work-project-title {
     font-family: 'Bricolage Grotesque', Georgia, serif;
     font-size: clamp(1.5rem, 3vw, 2.25rem);
@@ -439,10 +417,6 @@ const allTags = [...new Set(
       gap: 1.25rem;
     }
 
-    .work-project-num {
-      font-size: 3rem;
-      margin-bottom: 0.25rem;
-    }
   }
 
   /* ===== TOUCH ===== */
@@ -457,10 +431,6 @@ const allTags = [...new Set(
 
     .work-project:hover .work-project-title {
       color: var(--text);
-    }
-
-    .work-project:hover .work-project-num {
-      color: var(--border);
     }
 
     .work-project:active {
@@ -489,7 +459,6 @@ const allTags = [...new Set(
     .work-project-img,
     .work-project-accent,
     .work-project-cta-arrow,
-    .work-project-num,
     .work-project-title,
     .work-project-tag,
     .work-project-cta,
