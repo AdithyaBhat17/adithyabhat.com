@@ -238,7 +238,7 @@ export default function ContactForm() {
           gap: 0.5rem;
           margin-bottom: 0.625rem;
           color: var(--text-secondary);
-          font-family: 'Space Grotesk', sans-serif;
+          font-family: 'DM Sans', sans-serif;
           font-size: 0.8125rem;
           font-weight: 500;
           transition: color 0.2s ease;
@@ -271,7 +271,7 @@ export default function ContactForm() {
           background: var(--bg-surface);
           border: 1.5px solid var(--border);
           border-radius: var(--radius);
-          font-family: 'Space Grotesk', sans-serif;
+          font-family: 'DM Sans', sans-serif;
           font-size: 0.9375rem;
           color: var(--text);
           transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
@@ -307,7 +307,7 @@ export default function ContactForm() {
           display: block;
           color: var(--destructive);
           font-size: 0.8125rem;
-          font-family: 'Space Grotesk', sans-serif;
+          font-family: 'DM Sans', sans-serif;
           margin-top: 0.375rem;
           animation: shake 0.4s ease;
         }
@@ -331,7 +331,7 @@ export default function ContactForm() {
           color: #fff;
           border: none;
           border-radius: var(--radius);
-          font-family: 'Space Grotesk', sans-serif;
+          font-family: 'DM Sans', sans-serif;
           font-weight: 600;
           font-size: 0.9375rem;
           cursor: pointer;
