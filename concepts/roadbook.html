@@ -1,0 +1,845 @@
+<title>Adithya's Roadbook</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Saira:ital,wdth,wght@0,50..125,400..900;1,50..125,400..900&family=DM+Sans:ital,opsz,wght@0,9..40,400..700;1,9..40,400..700&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+  /* ---------- Tokens: roadbook paper by day, gunmetal by night ---------- */
+  :root {
+    --paper: #e9ece7;
+    --sheet: #f7f8f5;
+    --ink: #15181b;
+    --ink-2: #474e54;
+    --ink-3: #737b81;
+    --rule: #cdd2ca;
+    --rule-strong: #15181b;
+    --accent: #ff6600;          /* KTM orange, used as a highlighter */
+    --accent-ink: #b84600;      /* orange that passes contrast as text on paper */
+    --hl: rgba(255, 102, 0, 0.32);
+    --side-road: #9aa19b;
+    --tower: #15181b;
+    --tower-ink: #f2f3ef;
+    --tower-dim: #8d959a;
+
+    --f-display: 'Saira', 'Arial Narrow', 'Roboto Condensed', sans-serif;
+    --f-body: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --f-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #0b0d0f;
+      --sheet: #14171a;
+      --ink: #eceee9;
+      --ink-2: #b1b8bc;
+      --ink-3: #7f878d;
+      --rule: #2a2f34;
+      --rule-strong: #d9ddd6;
+      --accent: #ff6a10;
+      --accent-ink: #ff8a3d;
+      --hl: rgba(255, 102, 0, 0.42);
+      --side-road: #545c62;
+      --tower: #050607;
+      --tower-ink: #eceee9;
+      --tower-dim: #7f878d;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper: #0b0d0f;
+    --sheet: #14171a;
+    --ink: #eceee9;
+    --ink-2: #b1b8bc;
+    --ink-3: #7f878d;
+    --rule: #2a2f34;
+    --rule-strong: #d9ddd6;
+    --accent: #ff6a10;
+    --accent-ink: #ff8a3d;
+    --hl: rgba(255, 102, 0, 0.42);
+    --side-road: #545c62;
+    --tower: #050607;
+    --tower-ink: #eceee9;
+    --tower-dim: #7f878d;
+    color-scheme: dark;
+  }
+
+  /* ---------- Base ---------- */
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--f-body);
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: inherit; }
+  a:focus-visible, button:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+  .wrap {
+    max-width: 880px;
+    margin: 0 auto;
+    padding-inline: 20px;
+  }
+  mark {
+    color: inherit;
+    background: linear-gradient(100deg, transparent 0.2em, var(--hl) 0.25em, var(--hl) calc(100% - 0.2em), transparent calc(100% - 0.1em));
+    background-size: 100% 0.62em;
+    background-position: 0 88%;
+    background-repeat: no-repeat;
+    padding-inline: 0.12em;
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
+  }
+  .mono { font-family: var(--f-mono); font-variant-numeric: tabular-nums; }
+
+  /* ---------- Instrument tower (sticky) ---------- */
+  .tower {
+    position: sticky;
+    top: env(safe-area-inset-top, 0px);
+    z-index: 10;
+    background: var(--tower);
+    color: var(--tower-ink);
+    border-bottom: 3px solid var(--accent);
+  }
+  .tower-inner {
+    max-width: 880px;
+    margin: 0 auto;
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    gap: 22px;
+  }
+  .brand {
+    font-family: var(--f-display);
+    font-stretch: 62%;
+    font-weight: 900;
+    font-style: italic;
+    font-size: 22px;
+    letter-spacing: 0.02em;
+    text-decoration: none;
+    line-height: 1;
+  }
+  .brand span { color: var(--accent); }
+  .gauge { display: flex; flex-direction: column; line-height: 1.05; }
+  .gauge-label {
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--tower-dim);
+  }
+  .gauge-value {
+    font-family: var(--f-mono);
+    font-variant-numeric: tabular-nums;
+    font-weight: 600;
+    font-size: 19px;
+  }
+  .gauge-value small { font-size: 11px; font-weight: 400; color: var(--tower-dim); margin-left: 3px; }
+  .gauge--trip .gauge-value { color: var(--accent); }
+  .tower nav { margin-left: auto; display: flex; gap: 18px; font-size: 14px; }
+  .tower nav a { text-decoration: none; color: var(--tower-dim); }
+  .tower nav a:hover { color: var(--tower-ink); }
+  @media (max-width: 720px) {
+    .tower nav { display: none; }
+    .tower-inner { gap: 16px; justify-content: space-between; }
+    .gauge--reading { display: none; }
+  }
+
+  /* ---------- Hero ---------- */
+  .hero { padding-block: 56px 40px; }
+  .eyebrow {
+    font-family: var(--f-mono);
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 16px;
+  }
+  .eyebrow b { color: var(--ink); font-weight: 600; }
+  h1 {
+    font-family: var(--f-display);
+    font-stretch: 58%;
+    font-weight: 900;
+    font-style: italic;
+    text-transform: uppercase;
+    font-size: clamp(64px, 17vw, 168px);
+    line-height: 0.84;
+    letter-spacing: -0.01em;
+    margin: 18px 0 0;
+  }
+  h1 .nr { color: var(--accent); }
+  .dek {
+    font-size: clamp(19px, 2.6vw, 24px);
+    line-height: 1.45;
+    max-width: 30em;
+    margin: 26px 0 0;
+    text-wrap: pretty;
+    color: var(--ink-2);
+  }
+  .dek strong { color: var(--ink); font-weight: 600; }
+  .hero-actions {
+    margin-top: 30px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 14px 22px;
+  }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--f-display);
+    font-stretch: 75%;
+    font-weight: 800;
+    font-size: 17px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    text-decoration: none;
+    padding: 12px 20px;
+    border: 2px solid var(--ink);
+    background: var(--ink);
+    color: var(--sheet);
+    cursor: pointer;
+  }
+  .btn:hover { background: var(--accent); border-color: var(--accent); color: #111; }
+  .email {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--f-mono);
+    font-size: 14px;
+  }
+  .copy {
+    font: inherit;
+    font-size: 12px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    background: none;
+    color: var(--ink-2);
+    border: 1px solid var(--rule);
+    padding: 4px 9px;
+    cursor: pointer;
+  }
+  .copy:hover { border-color: var(--ink); color: var(--ink); }
+
+  /* ---------- Roadbook legend ---------- */
+  .legend {
+    display: grid;
+    grid-template-columns: var(--c1) var(--c2) 1fr;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    border: 2px solid var(--rule-strong);
+    border-bottom: none;
+    background: var(--sheet);
+  }
+  .legend > div { padding: 8px 12px; border-left: 1px solid var(--rule); }
+  .legend > div:first-child { border-left: none; }
+
+  /* ---------- Roadbook ---------- */
+  .roadbook {
+    --c1: 112px;
+    --c2: 150px;
+    margin-bottom: 72px;
+  }
+  .rows {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    background: var(--sheet);
+    border: 2px solid var(--rule-strong);
+  }
+  .row {
+    display: grid;
+    grid-template-columns: var(--c1) var(--c2) 1fr;
+    border-top: 2px solid var(--rule-strong);
+    min-height: 170px;
+  }
+  .row:first-child { border-top: none; }
+  .row > * { padding: 14px 12px; }
+  .col-dist {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    position: relative;
+  }
+  .row-no {
+    font-family: var(--f-mono);
+    font-size: 11px;
+    color: var(--ink-3);
+    border: 1px solid var(--rule);
+    align-self: flex-start;
+    padding: 0 5px;
+    margin-bottom: 6px;
+  }
+  .total {
+    font-family: var(--f-display);
+    font-stretch: 62%;
+    font-weight: 900;
+    font-size: 44px;
+    line-height: 0.95;
+    font-variant-numeric: tabular-nums;
+  }
+  .partial {
+    font-family: var(--f-mono);
+    font-size: 13px;
+    color: var(--ink-2);
+    font-variant-numeric: tabular-nums;
+  }
+  .year {
+    margin-top: auto;
+    font-family: var(--f-mono);
+    font-size: 12px;
+    letter-spacing: 0.06em;
+    color: var(--ink-3);
+  }
+  .col-tulip {
+    border-left: 1px solid var(--rule);
+    border-right: 1px solid var(--rule);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+  }
+  .tulip { width: 100%; max-width: 116px; height: auto; display: block; }
+  .tulip .road { stroke: var(--ink); stroke-width: 7; stroke-linecap: round; fill: none; }
+  .tulip .track { stroke-dasharray: 9 7; stroke-linecap: butt; }
+  .tulip .side { stroke: var(--side-road); stroke-width: 4; stroke-linecap: round; fill: none; }
+  .tulip .head { fill: var(--ink); }
+  .tulip .origin { fill: var(--ink); }
+  .tulip .ring { stroke: var(--ink); stroke-width: 5; fill: var(--sheet); }
+  .tulip .chk-a { fill: var(--ink); }
+  .tulip .chk-b { fill: var(--sheet); }
+  .tulip .pole { stroke: var(--ink); stroke-width: 4; }
+  .cap {
+    font-family: var(--f-mono);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    color: var(--ink-3);
+    font-variant-numeric: tabular-nums;
+  }
+  .danger {
+    font-family: var(--f-display);
+    font-weight: 900;
+    font-style: italic;
+    color: var(--accent-ink);
+    font-size: 18px;
+    line-height: 1;
+    letter-spacing: 0.05em;
+  }
+  .col-notes { min-width: 0; }
+  .col-notes h3 {
+    font-family: var(--f-display);
+    font-stretch: 75%;
+    font-weight: 800;
+    font-size: 25px;
+    line-height: 1.1;
+    margin: 0 0 6px;
+    text-wrap: balance;
+  }
+  .col-notes .at { color: var(--accent-ink); }
+  .col-notes p { margin: 0 0 10px; color: var(--ink-2); max-width: 36em; }
+  .tags { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 10px; padding: 0; list-style: none; }
+  .tags li {
+    font-family: var(--f-mono);
+    font-size: 11.5px;
+    padding: 2px 7px;
+    border: 1px solid var(--rule);
+    color: var(--ink-2);
+  }
+  .links { display: flex; flex-direction: column; gap: 4px; margin: 0 0 10px; }
+  .links a {
+    font-weight: 600;
+    text-decoration: none;
+    border-bottom: 1px solid var(--rule);
+    align-self: flex-start;
+  }
+  .links a:hover { border-color: var(--accent); color: var(--accent-ink); }
+  .links .kind {
+    font-family: var(--f-mono);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    margin-right: 8px;
+    font-weight: 400;
+  }
+  .stops { font-family: var(--f-mono); font-size: 13px; color: var(--ink-2); }
+  .stops b { color: var(--ink); font-weight: 600; }
+  .scribble {
+    margin: 12px 0 4px;
+    padding-left: 14px;
+    border-left: 3px solid var(--accent);
+    font-style: italic;
+    color: var(--ink);
+    max-width: 34em;
+  }
+  .scribble cite {
+    display: block;
+    font-style: normal;
+    font-size: 13px;
+    color: var(--ink-3);
+    margin-top: 4px;
+  }
+  .row.is-now { background: color-mix(in srgb, var(--accent) 7%, var(--sheet)); }
+  .row.is-now .total { color: var(--accent-ink); }
+
+  /* Phone: distance + tulip share the top strip, notes run full width beneath */
+  @media (max-width: 640px) {
+    .legend { display: none; }
+    .row { grid-template-columns: 1fr 1fr; min-height: 0; }
+    .row > * { padding: 12px 14px; }
+    .col-tulip { border-right: none; }
+    .tulip { max-width: 96px; }
+    .col-notes { grid-column: 1 / -1; border-top: 1px solid var(--rule); }
+    .col-notes h3 { font-size: 22px; }
+  }
+
+  /* ---------- Other riders' notes ---------- */
+  .section-title {
+    font-family: var(--f-display);
+    font-stretch: 62%;
+    font-weight: 900;
+    font-style: italic;
+    text-transform: uppercase;
+    font-size: clamp(38px, 7vw, 64px);
+    line-height: 0.95;
+    margin: 0 0 8px;
+  }
+  .section-sub { color: var(--ink-3); margin: 0 0 28px; max-width: 34em; }
+  .notes {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 28px;
+    margin-bottom: 80px;
+  }
+  .notes blockquote { margin: 0; border-top: 2px solid var(--rule-strong); padding-top: 14px; }
+  .notes p { margin: 0 0 12px; font-size: 16.5px; color: var(--ink); }
+  .notes footer { font-size: 13px; color: var(--ink-3); line-height: 1.4; }
+  .notes footer b { color: var(--ink); font-weight: 600; display: block; }
+  @media (max-width: 760px) { .notes { grid-template-columns: 1fr; gap: 22px; } }
+
+  /* ---------- Footer ---------- */
+  .foot { border-top: 2px solid var(--rule-strong); padding-block: 26px 48px; }
+  .foot-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 20px 40px;
+    font-size: 14px;
+  }
+  .foot-links { display: flex; flex-wrap: wrap; gap: 8px 18px; }
+  .foot-links a { text-decoration: none; color: var(--ink-2); }
+  .foot-links a:hover { color: var(--accent-ink); }
+  .foot small { color: var(--ink-3); font-family: var(--f-mono); font-size: 12px; }
+
+  .toast {
+    position: fixed;
+    left: 50%;
+    bottom: calc(20px + env(safe-area-inset-bottom, 0px));
+    transform: translateX(-50%);
+    background: var(--tower);
+    color: var(--tower-ink);
+    font-family: var(--f-mono);
+    font-size: 13px;
+    padding: 8px 14px;
+    border-left: 3px solid var(--accent);
+  }
+
+  /* Subtle entrance for the tulip arrows only; the page is fully readable at rest */
+  @media (prefers-reduced-motion: no-preference) {
+    .tulip .exit { stroke-dasharray: var(--len) var(--len); animation: draw 0.9s ease-out both; }
+    .tulip .track.exit { animation: none; }
+    @keyframes draw { from { stroke-dashoffset: var(--len); } to { stroke-dashoffset: 0; } }
+  }
+</style>
+
+<header class="tower" aria-label="Instruments">
+  <div class="tower-inner">
+    <a class="brand" href="https://adithyabhat.com/">ADITHYA<span>/</span>NR</a>
+    <div class="gauge gauge--trip" title="Years on the road since 2019, read at the row you are looking at">
+      <span class="gauge-label">Trip</span>
+      <span class="gauge-value"><span id="trip">0.0</span><small>yrs</small></span>
+    </div>
+    <div class="gauge" title="Heading after the current turn">
+      <span class="gauge-label">Cap</span>
+      <span class="gauge-value"><span id="cap">000</span><small>°</small></span>
+    </div>
+    <div class="gauge">
+      <span class="gauge-label">Abu Dhabi</span>
+      <span class="gauge-value"><span id="clock">--:--</span><small>GST</small></span>
+    </div>
+    <div class="gauge gauge--reading">
+      <span class="gauge-label">Reading</span>
+      <span class="gauge-value" style="font-family: var(--f-body); font-size: 15px; font-weight: 500;">
+        <a href="https://www.goodreads.com/review/show/8566608108" style="text-decoration: none;">Martyr! <small>Kaveh Akbar</small></a>
+      </span>
+    </div>
+    <nav aria-label="Site">
+      <a href="https://adithyabhat.com/about">About</a>
+      <a href="https://adithyabhat.com/work">Work</a>
+      <a href="https://adithyabhat.com/blog">Blog</a>
+      <a href="https://adithyabhat.com/photos">Gallery</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="hero wrap">
+    <div class="eyebrow">
+      <span><b>Roadbook</b></span>
+      <span>9 waypoints · 2019 → now</span>
+      <span>24.4539° N · 54.3773° E</span>
+    </div>
+    <h1>Adithya<br><span class="nr">NR.</span></h1>
+    <p class="dek">
+      <strong>UX engineer in Abu Dhabi.</strong> Seven years riding the line
+      <mark>between design and code</mark>. Right now I'm building agentic AI
+      at yellow.ai. Most weekends I'm on a motorcycle.
+    </p>
+    <div class="hero-actions">
+      <a class="btn" href="#stage">Start the stage ↓</a>
+      <span class="email">
+        <span id="email-text">hello@adithyabhat.com</span>
+        <button class="copy" id="copy-email" type="button">Copy</button>
+      </span>
+    </div>
+  </section>
+
+  <section class="roadbook wrap" id="stage" aria-label="Career roadbook">
+    <div class="legend" aria-hidden="true">
+      <div>Distance</div>
+      <div>Turn</div>
+      <div>What happened</div>
+    </div>
+    <ol class="rows">
+
+      <li class="row" data-total="0" data-exit="0" data-kind="start">
+        <div class="col-dist">
+          <span class="row-no">01</span>
+          <span class="total">0.0</span>
+          <span class="partial">+0.0</span>
+          <span class="year">2019</span>
+        </div>
+        <div class="col-tulip"><svg class="tulip" viewBox="0 0 100 100" role="img" aria-label="Start"></svg><span class="cap"></span></div>
+        <div class="col-notes">
+          <h3>Départ: Software Engineer <span class="at">@ Betsol</span></h3>
+          <p>First job out of the gate. Leto DevOps tooling and SlingTV dashboards: learning what happens when real people use what you ship.</p>
+        </div>
+      </li>
+
+      <li class="row" data-total="1" data-exit="45" data-sides="-45">
+        <div class="col-dist">
+          <span class="row-no">02</span>
+          <span class="total">1.0</span>
+          <span class="partial">+1.0</span>
+          <span class="year">2020</span>
+        </div>
+        <div class="col-tulip"><svg class="tulip" viewBox="0 0 100 100" role="img" aria-label="Fork, keep right"></svg><span class="cap"></span></div>
+        <div class="col-notes">
+          <h3>Keep right at the fork: freelance and writing</h3>
+          <div class="links">
+            <a href="https://adithyabhat.com/work/hey-homero-live-more-clean-less"><span class="kind">Work</span>Hey Homero · Live more, clean less</a>
+            <a href="https://adithyabhat.com/blog/intro-to-javascript"><span class="kind">Mar</span>Intro to JavaScript</a>
+            <a href="https://adithyabhat.com/blog/generate-code-coverage-reports-for-your-unit-tests-using-jest"><span class="kind">Aug</span>Code coverage reports with Jest</a>
+          </div>
+          <blockquote class="scribble">“It was amazing to work with him. The work was remote and there was no setback.”<cite>José Mosso, Co-founder, Homero</cite></blockquote>
+        </div>
+      </li>
+
+      <li class="row" data-total="2" data-exit="-90" data-sides="90">
+        <div class="col-dist">
+          <span class="row-no">03</span>
+          <span class="total">2.0</span>
+          <span class="partial">+1.0</span>
+          <span class="year">2021</span>
+        </div>
+        <div class="col-tulip"><svg class="tulip" viewBox="0 0 100 100" role="img" aria-label="T-junction, turn left"></svg><span class="cap"></span></div>
+        <div class="col-notes">
+          <h3>Hard left into UX: UX Engineer <span class="at">@ Softway</span></h3>
+          <p>Culture+, a measurement platform for workplace culture. This is where the design half and the engineering half stopped being two jobs.</p>
+        </div>
+      </li>
+
+      <li class="row" data-total="3" data-exit="0" data-sides="-90,90">
+        <div class="col-dist">
+          <span class="row-no">04</span>
+          <span class="total">3.0</span>
+          <span class="partial">+1.0</span>
+          <span class="year">2022</span>
+        </div>
+        <div class="col-tulip"><svg class="tulip" viewBox="0 0 100 100" role="img" aria-label="Crossroads, straight on"></svg><span class="cap"></span></div>
+        <div class="col-notes">
+          <h3>Straight over: SDE-2 <span class="at">@ yellow.ai</span></h3>
+          <p>Owned the chat widget at <mark>300k daily active users</mark>, taking it to WCAG AA and shipping it in many languages.</p>
+          <ul class="tags"><li>WCAG AA</li><li>i18n</li><li>React</li></ul>
+        </div>
+      </li>
+
+      <li class="row" data-total="4" data-exit="60" data-sides="0" data-kind="track">
+        <div class="col-dist">
+          <span class="row-no">05</span>
+          <span class="total">4.0</span>
+          <span class="partial">+1.0</span>
+          <span class="year">2023</span>
+        </div>
+        <div class="col-tulip"><svg class="tulip" viewBox="0 0 100 100" role="img" aria-label="Off-road track, bear right"></svg><span class="cap"></span></div>
+        <div class="col-notes">
+          <h3>Off the tarmac</h3>
+          <p>The camera comes along on long weekends.</p>
+          <p class="stops"><b>Chitradurga</b> Sep · <b>Belur &amp; Halebeedu</b> Oct · <b>Shettihalli</b> Oct</p>
+        </div>
+      </li>
+
+      <li class="row" data-total="5" data-exit="90" data-sides="0,-90" data-kind="roundabout">
+        <div class="col-dist">
+          <span class="row-no">06</span>
+          <span class="total">5.0</span>
+          <span class="partial">+1.0</span>
+          <span class="year">2024</span>
+        </div>
+        <div class="col-tulip"><svg class="tulip" viewBox="0 0 100 100" role="img" aria-label="Roundabout, third exit right"></svg><span class="danger" title="Steep climb">!!</span><span class="cap"></span></div>
+        <div class="col-notes">
+          <h3>Steep climb: SDE-3, <mark>agentic AI</mark> <span class="at">@ yellow.ai</span></h3>
+          <p>Nexus, Forge, Analyze and the Search SDK, which make up the tooling behind yellow.ai's AI agents.</p>
+          <div class="links">
+            <a href="https://tech.yellow.ai/p/building-accessible-chatbots-at-yellow"><span class="kind">Jan</span>Building accessible chatbots at yellow.ai</a>
+          </div>
+          <p class="stops"><b>Hampi</b> Oct</p>
+          <blockquote class="scribble">“What sets him apart is his ability to swiftly make decisions, never compromising on quality or efficiency.”<cite>Akshay Bhat, Product Manager, yellow.ai</cite></blockquote>
+        </div>
+      </li>
+
+      <li class="row" data-total="6" data-exit="-30" data-kind="track">
+        <div class="col-dist">
+          <span class="row-no">07</span>
+          <span class="total">6.0</span>
+          <span class="partial">+1.0</span>
+          <span class="year">2025</span>
+        </div>
+        <div class="col-tulip"><svg class="tulip" viewBox="0 0 100 100" role="img" aria-label="Track, bear left"></svg><span class="cap"></span></div>
+        <div class="col-notes">
+          <h3>Long road days</h3>
+          <p class="stops"><b>Virajpet</b> Jan · <b>Sakleshpura</b> Aug · <b>Munnar</b> Oct · <b>Rameshwaram</b> Oct · <b>Dubai</b> Nov</p>
+          <div class="links">
+            <a href="https://adithyabhat.com/photos"><span class="kind">28 photos</span>See the gallery</a>
+          </div>
+        </div>
+      </li>
+
+      <li class="row" data-total="7" data-exit="0" data-sides="60">
+        <div class="col-dist">
+          <span class="row-no">08</span>
+          <span class="total">7.0</span>
+          <span class="partial">+1.0</span>
+          <span class="year">2026</span>
+        </div>
+        <div class="col-tulip"><svg class="tulip" viewBox="0 0 100 100" role="img" aria-label="Straight on, side road right"></svg><span class="cap"></span></div>
+        <div class="col-notes">
+          <h3>Building for myself</h3>
+          <div class="links">
+            <a href="https://adithyabhat.com/work/cortex"><span class="kind">Work</span>Cortex: health dashboard</a>
+            <a href="https://adithyabhat.com/work/daily-planner"><span class="kind">Work</span>Daily Planner: design + development</a>
+          </div>
+        </div>
+      </li>
+
+      <li class="row is-now" data-total="7.7" data-exit="0" data-kind="finish" id="now">
+        <div class="col-dist">
+          <span class="row-no">09</span>
+          <span class="total">7.7</span>
+          <span class="partial">+0.7</span>
+          <span class="year">Sep 2026</span>
+        </div>
+        <div class="col-tulip"><svg class="tulip" viewBox="0 0 100 100" role="img" aria-label="Finish"></svg><span class="cap"></span></div>
+        <div class="col-notes">
+          <h3>You are here. Next leg's open.</h3>
+          <p>Open for work from Q3 '26. Got a product that needs someone who can design it <em>and</em> ship it? Let's plot the route.</p>
+          <div class="links">
+            <a href="https://adithyabhat.com/contact"><span class="kind">Contact</span>Start a conversation</a>
+          </div>
+        </div>
+      </li>
+    </ol>
+  </section>
+
+  <section class="wrap" aria-labelledby="notes-title">
+    <h2 class="section-title" id="notes-title">Notes from other riders</h2>
+    <p class="section-sub">What people who've shared the road say, in their words.</p>
+    <div class="notes">
+      <blockquote>
+        <p>“His passion for UX and UI design combined with his passion for web development is a deadly combination.”</p>
+        <footer><b>Bapusaheb Patil</b>Head of AI &amp; Design Engineering, Fluence</footer>
+      </blockquote>
+      <blockquote>
+        <p>“One of the finest and most creative UI developers I've interacted with. He can recreate your designs flawlessly and suggest improvements.”</p>
+        <footer><b>Nikhil Suresh</b>Senior Software Engineer, Morningstar</footer>
+      </blockquote>
+      <blockquote>
+        <p>“His skills in React and UI design are amazing and rare to find in one.”</p>
+        <footer><b>Gautam Krishnan</b>SWE (IC-3), ServiceNow</footer>
+      </blockquote>
+    </div>
+  </section>
+</main>
+
+<footer class="foot wrap">
+  <div class="foot-grid">
+    <div class="foot-links">
+      <a href="https://adithyabhat.com/about">About</a>
+      <a href="https://adithyabhat.com/work">Work</a>
+      <a href="https://adithyabhat.com/blog">Blog</a>
+      <a href="https://adithyabhat.com/photos">Gallery</a>
+      <a href="https://adithyabhat.com/uses">Uses</a>
+    </div>
+    <div class="foot-links">
+      <a href="https://github.com/adithyabhat17">GitHub</a>
+      <a href="https://linkedin.com/in/adithya-nr">LinkedIn</a>
+      <a href="https://dribbble.com/adithyanr">Dribbble</a>
+      <a href="https://behance.net/adithyabhat">Behance</a>
+      <a href="https://twitter.com/adithya__nr">Twitter</a>
+      <a href="https://www.youtube.com/@adithya-bhat">YouTube</a>
+    </div>
+  </div>
+  <p><small>Distance is years since 2019. Headings add up turn by turn. Concept for adithyabhat.com.</small></p>
+</footer>
+
+<div class="toast" id="toast" role="status" hidden></div>
+
+<script>
+(function () {
+  var NS = 'http://www.w3.org/2000/svg';
+  var C = [50, 52], R = 38;
+  function pt(a, r) {
+    var t = a * Math.PI / 180;
+    return [C[0] + (r || R) * Math.sin(t), C[1] - (r || R) * Math.cos(t)];
+  }
+  function el(name, attrs) {
+    var n = document.createElementNS(NS, name);
+    for (var k in attrs) n.setAttribute(k, attrs[k]);
+    return n;
+  }
+  function arrowHead(a, tip) {
+    var t = a * Math.PI / 180, dx = Math.sin(t), dy = -Math.cos(t);
+    var bx = tip[0] - dx * 13, by = tip[1] - dy * 13;
+    return el('polygon', {
+      class: 'head',
+      points: [tip[0] + dx * 2, tip[1] + dy * 2, bx - dy * 8, by + dx * 8, bx + dy * 8, by - dx * 8].join(' ')
+    });
+  }
+
+  function drawTulip(svg, row) {
+    var exit = +(row.dataset.exit || 0);
+    var kind = row.dataset.kind || 'road';
+    var sides = (row.dataset.sides || '').split(',').filter(Boolean).map(Number);
+    var track = kind === 'track' ? ' track' : '';
+
+    sides.forEach(function (a) {
+      var p = pt(a, 34);
+      svg.appendChild(el('line', { class: 'side', x1: C[0], y1: C[1], x2: p[0], y2: p[1] }));
+    });
+
+    // Entry leg from the bottom, with the origin dot navigators draw
+    svg.appendChild(el('line', { class: 'road' + track, x1: 50, y1: 92, x2: C[0], y2: C[1] }));
+    svg.appendChild(el('circle', { class: 'origin', cx: 50, cy: 92, r: 6 }));
+
+    if (kind === 'finish') {
+      svg.appendChild(el('line', { class: 'pole', x1: 50, y1: C[1], x2: 50, y2: 10 }));
+      for (var i = 0; i < 4; i++) for (var j = 0; j < 3; j++) {
+        svg.appendChild(el('rect', {
+          class: (i + j) % 2 ? 'chk-b' : 'chk-a', x: 52 + i * 8, y: 10 + j * 8, width: 8, height: 8
+        }));
+      }
+      return;
+    }
+
+    var start = C;
+    if (kind === 'roundabout') {
+      svg.appendChild(el('circle', { class: 'ring', cx: C[0], cy: C[1], r: 12 }));
+      start = pt(exit, 12);
+    }
+    var tip = pt(exit, 36);
+    var t = exit * Math.PI / 180;
+    var end = [tip[0] - Math.sin(t) * 11, tip[1] + Math.cos(t) * 11];
+    var len = Math.hypot(end[0] - start[0], end[1] - start[1]);
+    var line = el('line', { class: 'road exit' + track, x1: start[0], y1: start[1], x2: end[0], y2: end[1] });
+    line.style.setProperty('--len', len.toFixed(1));
+    svg.appendChild(line);
+    svg.appendChild(arrowHead(exit, tip));
+  }
+
+  var rows = Array.prototype.slice.call(document.querySelectorAll('.row'));
+  var heading = 0;
+  rows.forEach(function (row) {
+    drawTulip(row.querySelector('.tulip'), row);
+    heading = ((heading + +(row.dataset.exit || 0)) % 360 + 360) % 360;
+    row.dataset.cap = heading;
+    row.querySelector('.cap').textContent = 'CAP ' + String(heading).padStart(3, '0') + '°';
+  });
+
+  // Trip meter: interpolate between rows at a reading line 40% down the viewport
+  var tripEl = document.getElementById('trip');
+  var capEl = document.getElementById('cap');
+  var ticking = false;
+  function readInstruments() {
+    ticking = false;
+    var line = window.innerHeight * 0.4;
+    var trip = 0, cap = 0;
+    for (var i = 0; i < rows.length; i++) {
+      var r = rows[i].getBoundingClientRect();
+      if (r.top > line) break;
+      var here = +rows[i].dataset.total;
+      var next = rows[i + 1] ? +rows[i + 1].dataset.total : here;
+      var f = Math.min(1, Math.max(0, (line - r.top) / r.height));
+      trip = here + (next - here) * f;
+      cap = +rows[i].dataset.cap;
+    }
+    tripEl.textContent = trip.toFixed(1);
+    capEl.textContent = String(cap).padStart(3, '0');
+  }
+  window.addEventListener('scroll', function () {
+    if (!ticking) { ticking = true; requestAnimationFrame(readInstruments); }
+  }, { passive: true });
+  window.addEventListener('resize', readInstruments);
+  readInstruments();
+
+  // Abu Dhabi clock
+  var clockEl = document.getElementById('clock');
+  var fmt = new Intl.DateTimeFormat('en-GB', { hour: '2-digit', minute: '2-digit', hour12: false, timeZone: 'Asia/Dubai' });
+  function tick() { clockEl.textContent = fmt.format(new Date()); }
+  tick();
+  setInterval(tick, 15000);
+
+  // Copy email
+  var toast = document.getElementById('toast');
+  var toastTimer;
+  function say(msg) {
+    toast.textContent = msg;
+    toast.hidden = false;
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () { toast.hidden = true; }, 1800);
+  }
+  document.getElementById('copy-email').addEventListener('click', function () {
+    var text = document.getElementById('email-text');
+    var addr = text.textContent;
+    function fallback() {
+      var range = document.createRange();
+      range.selectNodeContents(text);
+      var sel = window.getSelection();
+      sel.removeAllRanges();
+      sel.addRange(range);
+      say('Selected. Press ⌘C / Ctrl+C');
+    }
+    try {
+      navigator.clipboard.writeText(addr).then(function () { say('Copied ' + addr); }, fallback);
+    } catch (e) { fallback(); }
+  });
+})();
+</script>
