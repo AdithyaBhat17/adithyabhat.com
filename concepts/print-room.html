@@ -1,0 +1,794 @@
+<title>Adithya's Print Room</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,500&display=swap">
+<style>
+  :root {
+    --wall: #ffffff;
+    --ink: #121212;
+    --muted: #5e5e5e;
+    --rule: #e6e6e6;
+    --paper: #f6f4ef;
+    --serif: 'Source Serif 4', 'Iowan Old Style', 'Palatino Linotype', Georgia, serif;
+    --sans: 'Helvetica Neue', Helvetica, Arial, system-ui, sans-serif;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --wall: #141414; --ink: #ececec; --muted: #9b9b9b; --rule: #2a2a2a;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --wall: #141414; --ink: #ececec; --muted: #9b9b9b; --rule: #2a2a2a;
+    color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--wall);
+    color: var(--ink);
+    font: 13px/1.45 var(--sans);
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: inherit; }
+  a:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+
+  .mast {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    padding: 14px 56px;
+    border-bottom: 1px solid var(--rule);
+  }
+  .brand { display: inline-flex; align-items: center; gap: 8px; text-decoration: none; font-size: 14px; }
+  .brand svg { width: 20px; height: 20px; flex: none; }
+  .brand .who { color: var(--muted); }
+  .mast nav { display: flex; flex-wrap: wrap; gap: 6px 18px; font-size: 12.5px; }
+  .mast nav a { text-decoration: none; display: inline-flex; align-items: center; gap: 4px; }
+  .mast nav a:hover { text-decoration: underline; text-underline-offset: 3px; }
+  .mast nav svg { width: 11px; height: 11px; }
+
+  h1.lede {
+    font: 400 24px/1.3 var(--serif);
+    letter-spacing: -0.005em;
+    margin: 0;
+    padding: 44px 56px 40px;
+    text-wrap: balance;
+  }
+
+  .shelf {
+    display: grid;
+    grid-template-columns: 180px minmax(0, 1fr);
+    gap: 20px;
+    padding: 48px 56px 60px;
+    border-top: 1px solid var(--rule);
+  }
+  .shelf:first-of-type { border-top: none; padding-top: 4px; }
+  .shelf h2 { font: 400 14px/1.3 var(--sans); margin: 0; padding-top: 72px; }
+  .cards {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 20px;
+    max-width: 1140px;
+  }
+  .card { display: block; text-decoration: none; }
+  .card canvas {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    aspect-ratio: 4 / 5;
+    background: var(--paper);
+  }
+  .card .t { display: block; margin-top: 10px; font-size: 13px; }
+  .card .d { display: block; margin-top: 4px; color: var(--muted); font-size: 12.5px; line-height: 1.5; max-width: 34ch; }
+  .card:hover .t { text-decoration: underline; text-underline-offset: 3px; }
+
+  .colophon {
+    border-top: 1px solid var(--rule);
+    padding: 40px 20px 0;
+    text-align: center;
+    color: var(--muted);
+  }
+  .colophon p { max-width: 56ch; margin: 0 auto 8px; text-wrap: balance; }
+  footer { text-align: center; padding: 20px 20px 56px; color: var(--muted); display: grid; gap: 4px; }
+  footer a { text-decoration: none; border-bottom: 1px solid var(--rule); }
+  footer a:hover { color: var(--ink); border-color: var(--ink); }
+
+  @media (max-width: 900px) {
+    .mast, h1.lede, .shelf { padding-inline: 20px; }
+    .shelf { grid-template-columns: 1fr; gap: 16px; padding-block: 32px 40px; }
+    .shelf h2 { padding-top: 0; }
+    .cards { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px 14px; }
+    h1.lede { font-size: 21px; padding-block: 28px 24px; }
+  }
+  @media (max-width: 520px) {
+    .mast { flex-direction: column; align-items: flex-start; gap: 8px; }
+  }
+</style>
+
+<header class="mast">
+  <a class="brand" href="https://adithyabhat.com/">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M3.5 17.5a8.5 8.5 0 0 1 16.7-2.4l.3 1.4V18h-8.2l-1.6 2H5a1.5 1.5 0 0 1-1.5-1.5z"/>
+      <path d="M13.2 13.2h7.1"/>
+    </svg>
+    <span>Adithya NR <span class="who">— UX engineer, Abu Dhabi</span></span>
+  </a>
+  <nav aria-label="Site">
+    <a href="https://adithyabhat.com/about">About <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.3" aria-hidden="true"><path d="M4 2h6v6M10 2 3 9"/></svg></a>
+    <a href="https://adithyabhat.com/blog">Writing <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.3" aria-hidden="true"><path d="M4 2h6v6M10 2 3 9"/></svg></a>
+    <a href="https://adithyabhat.com/photos">Photos <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.3" aria-hidden="true"><path d="M4 2h6v6M10 2 3 9"/></svg></a>
+    <a href="https://adithyabhat.com/contact">Say hello <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.3" aria-hidden="true"><path d="M4 2h6v6M10 2 3 9"/></svg></a>
+  </nav>
+</header>
+
+<main>
+  <h1 class="lede">Interfaces, agents, writing, and long rides.</h1>
+
+  <section class="shelf" aria-labelledby="s-work">
+    <h2 id="s-work">Work</h2>
+    <ul class="cards">
+      <li><a class="card" href="https://adithyabhat.com/work/cortex">
+        <canvas data-art="cortex" role="img" aria-label="Stacked heartbeat lines over a blue halftone disc, one line printed in orange"></canvas>
+        <span class="t">Cortex</span>
+        <span class="d">A health dashboard, 2026. Drawn as a pulse that never quite repeats.</span>
+      </a></li>
+      <li><a class="card" href="https://adithyabhat.com/work/daily-planner">
+        <canvas data-art="planner" role="img" aria-label="A week grid of hours with yellow, pink and blue blocks and an orange line marking now"></canvas>
+        <span class="t">Daily Planner</span>
+        <span class="d">Design and development, 2026. Seven days, sixteen hours, one orange now.</span>
+      </a></li>
+      <li><a class="card" href="https://adithyabhat.com/work/hey-homero-live-more-clean-less">
+        <canvas data-art="heyHomero" role="img" aria-label="Soap bubbles in blue and pink rising over the outline of a small house"></canvas>
+        <span class="t">Hey Homero</span>
+        <span class="d">Live more, clean less. Development and analytics, 2020.</span>
+      </a></li>
+      <li><a class="card" href="https://adithyabhat.com/work/homero-book-house-cleaning-online">
+        <canvas data-art="homero" role="img" aria-label="A floor plan with one room swept in yellow zigzags and an orange booking pin"></canvas>
+        <span class="t">Homero</span>
+        <span class="d">Book house cleaning online. Design, development and analytics, all remote.</span>
+      </a></li>
+    </ul>
+  </section>
+
+  <section class="shelf" aria-labelledby="s-job">
+    <h2 id="s-job">Day job</h2>
+    <ul class="cards">
+      <li><a class="card" href="https://adithyabhat.com/about">
+        <canvas data-art="agentic" role="img" aria-label="Four orange hubs on yellow halos, wired to a centre node, each orbited by small black agents"></canvas>
+        <span class="t">Agentic AI at yellow.ai</span>
+        <span class="d">SDE-3, 2024 to now. Nexus, Forge, Analyze and the Search SDK.</span>
+      </a></li>
+      <li><a class="card" href="https://adithyabhat.com/about">
+        <canvas data-art="chat" role="img" aria-label="A field of tiny blue chat bubbles around one large orange bubble with a dashed focus ring"></canvas>
+        <span class="t">The yellow.ai chat widget</span>
+        <span class="d">SDE-2, 2022. 300k people a day, built to WCAG AA, with i18n.</span>
+      </a></li>
+      <li><a class="card" href="https://adithyabhat.com/about">
+        <canvas data-art="culture" role="img" aria-label="Concentric rings of pink and green arcs like a radial survey, with an orange plus at the centre"></canvas>
+        <span class="t">Culture+ at Softway</span>
+        <span class="d">UX engineer, 2021. A platform for measuring workplace culture.</span>
+      </a></li>
+      <li><a class="card" href="https://adithyabhat.com/about">
+        <canvas data-art="betsol" role="img" aria-label="A TV screen with a pink bar chart above four teal pipeline lanes"></canvas>
+        <span class="t">Dashboards at Betsol</span>
+        <span class="d">Software engineer, 2019. Leto DevOps tooling and SlingTV dashboards.</span>
+      </a></li>
+    </ul>
+  </section>
+
+  <section class="shelf" aria-labelledby="s-writing">
+    <h2 id="s-writing">Writing</h2>
+    <ul class="cards">
+      <li><a class="card" href="https://tech.yellow.ai/p/building-accessible-chatbots-at-yellow">
+        <canvas data-art="a11y" role="img" aria-label="Braille cells in black, some backed in orange, inside a blue speech bubble"></canvas>
+        <span class="t">Building accessible chatbots at yellow.ai</span>
+        <span class="d">Jan 2024, on the yellow.ai tech blog. Chatbots everyone can use.</span>
+      </a></li>
+      <li><a class="card" href="https://adithyabhat.com/blog/introduction-to-javascript-iterators-and-generators">
+        <canvas data-art="iterators" role="img" aria-label="A spiral of blue dots growing outward, one large orange dot next, open rings still to come"></canvas>
+        <span class="t">JavaScript iterators and generators</span>
+        <span class="d">Jan 2021. Values that arrive one at a time, only when asked.</span>
+      </a></li>
+      <li><a class="card" href="https://adithyabhat.com/blog/generate-code-coverage-reports-for-your-unit-tests-using-jest">
+        <canvas data-art="coverage" role="img" aria-label="Lines of code as green, pink and yellow bars beside a gutter, with a coverage bar below"></canvas>
+        <span class="t">Code coverage reports with Jest</span>
+        <span class="d">Aug 2020. Find the lines your tests never touch.</span>
+      </a></li>
+      <li><a class="card" href="https://adithyabhat.com/blog/the-most-underrated-skill-for-a-developer-communication">
+        <canvas data-art="talk" role="img" aria-label="A pink and a blue circle overlapping into purple, sound waves passing between them"></canvas>
+        <span class="t">The most underrated skill for a developer</span>
+        <span class="d">Aug 2018. Communication: the skill that isn't in the stack.</span>
+      </a></li>
+    </ul>
+  </section>
+
+  <section class="shelf" aria-labelledby="s-rides">
+    <h2 id="s-rides">Rides</h2>
+    <ul class="cards">
+      <li><a class="card" href="https://adithyabhat.com/photos">
+        <canvas data-art="hampi" role="img" aria-label="Orange boulders and a stepped black temple tower under a yellow sun"></canvas>
+        <span class="t">Hampi</span>
+        <span class="d">Vijayanagara, Karnataka · Oct 2024. Boulders, temples, and the Tungabhadra.</span>
+      </a></li>
+      <li><a class="card" href="https://adithyabhat.com/photos">
+        <canvas data-art="coorg" role="img" aria-label="Layered blue and green ridgelines under an orange sunset, a single stone on the nearest hilltop"></canvas>
+        <span class="t">Virajpet</span>
+        <span class="d">Coorg, Karnataka · Jan 2025. Sunset over the Tadiandamol hills.</span>
+      </a></li>
+      <li><a class="card" href="https://adithyabhat.com/photos">
+        <canvas data-art="munnar" role="img" aria-label="Green hills combed with rows of tea, a black road winding up between them"></canvas>
+        <span class="t">Munnar</span>
+        <span class="d">Idukki, Kerala · Oct 2025. Tea country, ridge after ridge.</span>
+      </a></li>
+      <li><a class="card" href="https://adithyabhat.com/photos">
+        <canvas data-art="rameshwaram" role="img" aria-label="A long black bridge on piers across a blue sea, a yellow sun and its orange reflection"></canvas>
+        <span class="t">Rameshwaram</span>
+        <span class="d">Tamil Nadu · Oct 2025. Where the road runs out into the sea.</span>
+      </a></li>
+    </ul>
+  </section>
+</main>
+
+<section class="colophon" aria-label="About these prints">
+  <p>Every cover on this page is drawn in code as it loads, the way a risograph prints: two to four inks laid over each other, real grain, a little off-register. Reload and the inks shift.</p>
+</section>
+<footer>
+  <span>Open for work · Q3 ’26 · <a href="https://adithyabhat.com/contact">hello@adithyabhat.com</a></span>
+  <span>© 2026 Adithya NR</span>
+</footer>
+
+<script>
+(function () {
+  var TAU = Math.PI * 2, AW = 400, AH = 500;
+  var PAPER = '#f6f4ef';
+  var INKS = {
+    black: '#232221', blue: '#0078bf', orange: '#ff6c2f', yellow: '#ffd400',
+    pink: '#ff48b0', green: '#00a95c', teal: '#00838a'
+  };
+
+  function mulberry(a) {
+    return function () {
+      a |= 0; a = a + 0x6D2B79F5 | 0;
+      var t = Math.imul(a ^ a >>> 15, 1 | a);
+      t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+      return ((t ^ t >>> 14) >>> 0) / 4294967296;
+    };
+  }
+
+  // Speckle texture: knocked out of each ink layer so the paper shows through like riso grain
+  var GRAIN = (function () {
+    var g = document.createElement('canvas'), n = 192;
+    g.width = g.height = n;
+    var gc = g.getContext('2d'), id = gc.createImageData(n, n), rnd = mulberry(7);
+    for (var i = 0; i < n * n; i++) {
+      var v = rnd();
+      id.data[i * 4 + 3] = v < 0.2 ? Math.floor(255 * (0.3 + 0.7 * rnd())) : 0;
+    }
+    gc.putImageData(id, 0, 0);
+    return g;
+  })();
+
+  // ---------- drawing helpers (art space is 400 × 500) ----------
+  var H = {
+    dots: function (c, x0, y0, x1, y1, step, rf) {
+      for (var j = 0, y = y0; y <= y1; y += step, j++) {
+        for (var x = x0 + (j % 2 ? step / 2 : 0); x <= x1; x += step) {
+          var rr = rf(x, y);
+          if (rr > 0.25) { c.beginPath(); c.arc(x, y, rr, 0, TAU); c.fill(); }
+        }
+      }
+    },
+    blob: function (c, cx, cy, rx, ry, r, w) {
+      w = w == null ? 0.12 : w;
+      var n = 56, a1 = r() * TAU, a2 = r() * TAU;
+      c.beginPath();
+      for (var i = 0; i <= n; i++) {
+        var a = i / n * TAU, k = 1 + w * (0.6 * Math.sin(2 * a + a1) + 0.4 * Math.sin(3 * a + a2));
+        var x = cx + Math.cos(a) * rx * k, y = cy + Math.sin(a) * ry * k;
+        if (i) c.lineTo(x, y); else c.moveTo(x, y);
+      }
+      c.closePath();
+    },
+    ridge: function (r, base, amp) {
+      var f = [r() * 0.012 + 0.008, r() * 0.02 + 0.02, r() * 0.04 + 0.045];
+      var ph = [r() * TAU, r() * TAU, r() * TAU], w = [1, 0.42, 0.16];
+      return function (x) {
+        return base - amp * (w[0] * Math.sin(x * f[0] + ph[0]) + w[1] * Math.sin(x * f[1] + ph[1]) + w[2] * Math.sin(x * f[2] + ph[2]));
+      };
+    },
+    ridgePath: function (c, f) {
+      c.beginPath();
+      c.moveTo(-5, AH + 5);
+      for (var x = -5; x <= AW + 5; x += 4) c.lineTo(x, f(x));
+      c.lineTo(AW + 5, AH + 5);
+      c.closePath();
+    },
+    rrect: function (c, x, y, w, h, rad) {
+      c.beginPath();
+      if (c.roundRect) c.roundRect(x, y, w, h, rad); else c.rect(x, y, w, h);
+    },
+    bubble: function (c, x, y, w, h, rad, tail) {
+      H.rrect(c, x, y, w, h, rad);
+      c.moveTo(x + w * 0.22, y + h - 1);
+      c.lineTo(x + w * 0.14, y + h + tail);
+      c.lineTo(x + w * 0.42, y + h - 1);
+      c.closePath();
+    },
+    line: function (c, pts) {
+      c.beginPath();
+      for (var i = 0; i < pts.length; i++) { if (i) c.lineTo(pts[i][0], pts[i][1]); else c.moveTo(pts[i][0], pts[i][1]); }
+      c.stroke();
+    }
+  };
+
+  // ---------- the pieces ----------
+  var ECG = [[0, 0], [.1, 0], [.15, 5], [.2, 0], [.3, 0], [.32, -7], [.34, 46], [.36, -15], [.39, 0], [.5, 0], [.58, 9], [.66, 0], [1, 0]];
+  function ecg(u) {
+    for (var i = 1; i < ECG.length; i++) {
+      if (u <= ECG[i][0]) {
+        var a = ECG[i - 1], b = ECG[i], t = (u - a[0]) / (b[0] - a[0]);
+        return a[1] + (b[1] - a[1]) * t;
+      }
+    }
+    return 0;
+  }
+
+  var PIECES = {
+    cortex: { seed: 11, draw: function (p) {
+      p.ink('blue', function (c) {
+        c.save(); c.beginPath(); c.arc(200, 215, 135, 0, TAU); c.clip();
+        H.dots(c, 60, 75, 340, 355, 8, function (x, y) { return 3.4 * (1 - Math.hypot(x - 200, y - 215) / 135 * 0.75); });
+        c.restore();
+      });
+      var lines = [];
+      for (var i = 0; i < 24; i++) {
+        var y = 95 + i * 15, amp = 0.35 + p.r() * 0.75, off = p.r() * 90, period = 78 + p.r() * 20, pts = [];
+        for (var x = 36; x <= 364; x += 2) {
+          var env = Math.exp(-Math.pow((x - 200) / 105, 2));
+          pts.push([x, y - ecg(((x + off) % period) / period) * amp * env]);
+        }
+        lines.push(pts);
+      }
+      p.ink('black', function (c) { c.lineWidth = 1.5; lines.forEach(function (pts, k) { if (k !== 12) H.line(c, pts); }); });
+      p.ink('orange', function (c) { c.lineWidth = 3.4; H.line(c, lines[12]); });
+    }},
+
+    planner: { seed: 23, draw: function (p) {
+      var x0 = 52, y0 = 80, cols = 7, rows = 16, cw = (348 - 52) / 7, rh = (452 - 80) / 16;
+      p.ink('black', function (c) {
+        c.lineWidth = 0.8;
+        for (var i = 0; i <= cols; i++) { c.beginPath(); c.moveTo(x0 + i * cw, y0); c.lineTo(x0 + i * cw, y0 + rows * rh); c.stroke(); }
+        for (var j = 0; j <= rows; j++) { c.beginPath(); c.moveTo(x0, y0 + j * rh); c.lineTo(x0 + cols * cw, y0 + j * rh); c.stroke(); }
+        c.lineWidth = 2.4; c.strokeRect(x0, y0, cols * cw, rows * rh);
+        for (var d = 0; d < cols; d++) { c.beginPath(); c.arc(x0 + (d + 0.5) * cw, y0 - 16, 3, 0, TAU); c.fill(); }
+      });
+      var inks = ['yellow', 'pink', 'blue'];
+      for (var i = 0; i < cols; i++) {
+        var j = Math.floor(p.r() * 2);
+        while (j < rows - 1) {
+          var len = 1 + Math.floor(p.r() * 3);
+          if (p.r() < 0.62) {
+            (function (ink, ii, jj, L) {
+              p.ink(ink, function (c) { H.rrect(c, x0 + ii * cw + 3, y0 + jj * rh + 2.5, cw - 6, L * rh - 5, 4); c.fill(); });
+            })(inks[Math.floor(p.r() * 3)], i, j, Math.min(len, rows - j));
+          }
+          j += len + Math.floor(p.r() * 2);
+        }
+      }
+      var now = y0 + rh * (4 + Math.floor(p.r() * 8)) + rh * 0.4;
+      p.ink('orange', function (c) {
+        c.lineWidth = 2.6; c.beginPath(); c.moveTo(x0 - 6, now); c.lineTo(x0 + cols * cw + 4, now); c.stroke();
+        c.beginPath(); c.arc(x0 - 6, now, 5, 0, TAU); c.fill();
+      });
+    }},
+
+    heyHomero: { seed: 31, draw: function (p) {
+      p.ink('yellow', function (c) {
+        c.save(); c.beginPath(); c.arc(200, 190, 150, 0, TAU); c.clip();
+        H.dots(c, 40, 30, 360, 350, 9, function (x, y) { return 2.8 * (1 - Math.hypot(x - 200, y - 190) / 150); });
+        c.restore();
+      });
+      p.ink('blue', function (c) {
+        for (var i = 0; i < 34; i++) {
+          var x = p.rand(30, 370), y = p.rand(40, 320), rr = p.rand(6, 46);
+          c.lineWidth = rr > 25 ? 3 : 2;
+          c.beginPath(); c.arc(x, y, rr, 0, TAU); c.stroke();
+          c.lineWidth = 2; c.beginPath(); c.arc(x, y, rr * 0.68, Math.PI * 1.08, Math.PI * 1.45); c.stroke();
+        }
+      });
+      p.ink('pink', function (c) {
+        for (var i = 0; i < 16; i++) { c.beginPath(); c.arc(p.rand(40, 360), p.rand(60, 320), p.rand(4, 22), 0, TAU); c.fill(); }
+      });
+      p.ink('black', function (c) {
+        c.lineWidth = 4;
+        c.beginPath(); c.moveTo(130, 458); c.lineTo(130, 388); c.lineTo(200, 332); c.lineTo(270, 388); c.lineTo(270, 458); c.closePath(); c.stroke();
+        c.lineWidth = 3; c.strokeRect(186, 410, 28, 48);
+        c.beginPath(); c.moveTo(80, 460); c.lineTo(320, 460); c.stroke();
+      });
+    }},
+
+    homero: { seed: 47, draw: function (p) {
+      var rooms = [];
+      (function split(x, y, w, h, d) {
+        if (d === 0) { rooms.push([x, y, w, h]); return; }
+        if (w >= h) { var k = w * p.rand(0.38, 0.62); split(x, y, k, h, d - 1); split(x + k, y, w - k, h, d - 1); }
+        else { var k2 = h * p.rand(0.38, 0.62); split(x, y, w, k2, d - 1); split(x, y + k2, w, h - k2, d - 1); }
+      })(56, 70, 288, 370, 3);
+      var by = rooms.slice().sort(function (a, b) { return b[2] * b[3] - a[2] * a[3]; });
+      var A = by[0], B = by[1], P = by[2];
+      p.ink('blue', function (c) {
+        c.save(); c.beginPath(); c.rect(B[0], B[1], B[2], B[3]); c.clip();
+        H.dots(c, B[0], B[1], B[0] + B[2], B[1] + B[3], 7, function () { return 1.7; });
+        c.restore();
+      });
+      p.ink('yellow', function (c) {
+        c.lineWidth = 11; c.beginPath();
+        var pad = 18, k = 0;
+        for (var y = A[1] + pad; y <= A[1] + A[3] - pad; y += 18, k++) {
+          var x = k % 2 ? A[0] + A[2] - pad : A[0] + pad;
+          if (k) c.lineTo(x, y); else c.moveTo(x, y);
+        }
+        c.stroke();
+      });
+      p.ink('black', function (c) {
+        c.lineWidth = 2.6; rooms.forEach(function (rm) { c.strokeRect(rm[0], rm[1], rm[2], rm[3]); });
+        c.lineWidth = 5; c.strokeRect(56, 70, 288, 370);
+        c.lineWidth = 1.2;
+        rooms.forEach(function (rm, i) { if (i % 2) return; c.beginPath(); c.arc(rm[0] + 6, rm[1] + rm[3] - 6, 22, -Math.PI / 2, 0); c.stroke(); });
+      });
+      var px = P[0] + P[2] / 2, py = P[1] + P[3] / 2;
+      p.ink('orange', function (c) { c.beginPath(); c.arc(px, py, 16, 0, TAU); c.fill(); });
+      p.ink('black', function (c) { c.lineWidth = 3; c.beginPath(); c.moveTo(px - 7, py); c.lineTo(px - 2, py + 5); c.lineTo(px + 7, py - 5); c.stroke(); });
+    }},
+
+    agentic: { seed: 53, draw: function (p) {
+      var C = [200, 250];
+      var hubs = [0, 1, 2, 3].map(function (i) {
+        var a = -Math.PI / 2 + i * TAU / 4 + p.rand(-0.2, 0.2), d = 104 + p.rand(-8, 8);
+        return [C[0] + Math.cos(a) * d, C[1] + Math.sin(a) * d];
+      });
+      var small = [];
+      for (var i = 0; i < 46; i++) {
+        var h = hubs[i % 4], a = p.rand(0, TAU), d = p.rand(28, 66);
+        small.push([h[0] + Math.cos(a) * d, h[1] + Math.sin(a) * d, i % 4]);
+      }
+      p.ink('yellow', function (c) { hubs.forEach(function (h) { c.beginPath(); c.arc(h[0], h[1], 44, 0, TAU); c.fill(); }); });
+      p.ink('blue', function (c) {
+        c.lineWidth = 1.3;
+        small.forEach(function (s) { c.beginPath(); c.moveTo(s[0], s[1]); c.lineTo(hubs[s[2]][0], hubs[s[2]][1]); c.stroke(); });
+        hubs.forEach(function (h, k) {
+          c.lineWidth = 3.2; c.beginPath(); c.moveTo(C[0], C[1]); c.lineTo(h[0], h[1]); c.stroke();
+          var n = hubs[(k + 1) % 4];
+          c.setLineDash([4, 7]); c.lineWidth = 1.6; c.beginPath(); c.moveTo(h[0], h[1]); c.lineTo(n[0], n[1]); c.stroke(); c.setLineDash([]);
+        });
+      });
+      p.ink('orange', function (c) {
+        hubs.forEach(function (h) { c.beginPath(); c.arc(h[0], h[1], 17, 0, TAU); c.fill(); });
+        c.beginPath(); c.arc(C[0], C[1], 27, 0, TAU); c.fill();
+      });
+      p.ink('black', function (c) {
+        small.forEach(function (s) { c.beginPath(); c.arc(s[0], s[1], 3.2, 0, TAU); c.fill(); });
+        c.lineWidth = 2; c.beginPath(); c.arc(C[0], C[1], 38, 0, TAU); c.stroke();
+        c.beginPath(); c.arc(C[0], C[1], 7, 0, TAU); c.fill();
+      });
+    }},
+
+    chat: { seed: 61, draw: function (p) {
+      p.ink('blue', function (c) {
+        for (var j = 0; j < 20; j++) for (var i = 0; i < 14; i++) {
+          var x = 32 + i * 24 + (j % 2 ? 12 : 0) + p.rand(-2, 2), y = 48 + j * 20 + p.rand(-2, 2);
+          if (x > 176 && x < 380 && y > 252 && y < 440) continue;
+          if (p.r() < 0.12) continue;
+          H.bubble(c, x, y, 13, 9, 3, 4); c.fill();
+        }
+      });
+      p.ink('orange', function (c) { H.bubble(c, 200, 282, 158, 100, 14, 22); c.fill(); });
+      p.ink('black', function (c) {
+        c.lineWidth = 2.6; c.setLineDash([7, 6]); H.rrect(c, 189, 271, 180, 122, 20); c.stroke(); c.setLineDash([]);
+        [0, 1, 2].forEach(function (k) { c.beginPath(); c.arc(249 + k * 30, 332, 6, 0, TAU); c.fill(); });
+      });
+    }},
+
+    culture: { seed: 71, draw: function (p) {
+      var C = [200, 262];
+      var rings = [[52, 'pink'], [80, 'green'], [108, 'pink'], [136, 'green'], [164, 'pink']];
+      rings.forEach(function (rg, i) {
+        var n = 8 + i * 3;
+        p.ink(rg[1], function (c) {
+          c.lineWidth = 17; c.lineCap = 'butt';
+          for (var k = 0; k < n; k++) {
+            var a0 = -Math.PI / 2 + k * TAU / n + 0.05, span = (TAU / n - 0.1) * p.rand(0.25, 1);
+            c.beginPath(); c.arc(C[0], C[1], rg[0], a0, a0 + span); c.stroke();
+          }
+        });
+      });
+      p.ink('black', function (c) {
+        c.lineWidth = 0.9;
+        rings.forEach(function (rg) { c.beginPath(); c.arc(C[0], C[1], rg[0] + 11, 0, TAU); c.stroke(); });
+        for (var k = 0; k < 12; k++) {
+          var a = k * TAU / 12;
+          c.beginPath(); c.moveTo(C[0] + Math.cos(a) * 40, C[1] + Math.sin(a) * 40); c.lineTo(C[0] + Math.cos(a) * 178, C[1] + Math.sin(a) * 178); c.stroke();
+        }
+      });
+      p.ink('orange', function (c) {
+        c.lineWidth = 9; c.lineCap = 'butt'; c.beginPath();
+        c.moveTo(C[0] - 18, C[1]); c.lineTo(C[0] + 18, C[1]); c.moveTo(C[0], C[1] - 18); c.lineTo(C[0], C[1] + 18); c.stroke();
+      });
+    }},
+
+    betsol: { seed: 83, draw: function (p) {
+      p.ink('pink', function (c) {
+        for (var i = 0; i < 9; i++) { var h = p.rand(30, 128); c.fillRect(84 + i * 27, 220 - h, 17, h); }
+      });
+      p.ink('black', function (c) {
+        c.lineWidth = 4; H.rrect(c, 62, 58, 276, 180, 12); c.stroke();
+        c.lineWidth = 3; c.beginPath(); c.moveTo(166, 252); c.lineTo(234, 252); c.moveTo(200, 240); c.lineTo(200, 252); c.stroke();
+        c.lineWidth = 0.6; for (var y = 70; y < 230; y += 6) { c.beginPath(); c.moveTo(70, y); c.lineTo(330, y); c.stroke(); }
+      });
+      p.ink('teal', function (c) {
+        for (var l = 0; l < 4; l++) {
+          var y = 292 + l * 40, x = 46;
+          while (x < 300) { var w = Math.min(p.rand(34, 70), 350 - x); H.rrect(c, x, y, w, 22, 5); c.fill(); x += w + 20; }
+        }
+      });
+      p.ink('black', function (c) {
+        c.lineWidth = 1.6;
+        for (var l = 0; l < 4; l++) {
+          var y = 303 + l * 40;
+          c.beginPath(); c.moveTo(30, y); c.lineTo(366, y); c.stroke();
+          c.beginPath(); c.moveTo(374, y); c.lineTo(364, y - 5); c.lineTo(364, y + 5); c.closePath(); c.fill();
+        }
+      });
+      p.ink('orange', function (c) { var l = Math.floor(p.rand(0, 4)); c.beginPath(); c.arc(p.rand(80, 320), 303 + l * 40, 9, 0, TAU); c.fill(); });
+    }},
+
+    a11y: { seed: 97, draw: function (p) {
+      p.ink('blue', function (c) {
+        c.save(); H.bubble(c, 38, 52, 324, 330, 26, 56); c.clip();
+        H.dots(c, 38, 52, 362, 440, 7, function () { return 1.5; });
+        c.restore();
+        c.lineWidth = 5; H.bubble(c, 38, 52, 324, 330, 26, 56); c.stroke();
+      });
+      var cells = [];
+      for (var j = 0; j < 5; j++) for (var i = 0; i < 6; i++) {
+        var bits = []; for (var b = 0; b < 6; b++) bits.push(p.r() < 0.5);
+        cells.push({ x: 72 + i * 46, y: 96 + j * 58, bits: bits, hl: p.r() < 0.22 });
+      }
+      p.ink('orange', function (c) { cells.forEach(function (cl) { if (cl.hl) { H.rrect(c, cl.x - 12, cl.y - 12, 38, 52, 6); c.fill(); } }); });
+      p.ink('black', function (c) {
+        cells.forEach(function (cl) {
+          for (var b = 0; b < 6; b++) {
+            var x = cl.x + (b > 2 ? 14 : 0), y = cl.y + (b % 3) * 14;
+            c.beginPath(); c.arc(x, y, cl.bits[b] ? 5 : 4.4, 0, TAU);
+            if (cl.bits[b]) c.fill(); else { c.lineWidth = 0.9; c.stroke(); }
+          }
+        });
+      });
+    }},
+
+    iterators: { seed: 101, draw: function (p) {
+      var C = [200, 240], N = 64, k = 44, pts = [];
+      for (var i = 0; i < N; i++) {
+        var a = i * 0.52 + p.rand(-0.03, 0.03), rad = 12 + i * 2.55;
+        pts.push([C[0] + Math.cos(a) * rad, C[1] + Math.sin(a) * rad, 1.6 + i * 0.11]);
+      }
+      p.ink('black', function (c) {
+        c.lineWidth = 1; H.line(c, pts);
+        pts.forEach(function (pt, i) { if (i > k) { c.lineWidth = 1.4; c.beginPath(); c.arc(pt[0], pt[1], pt[2], 0, TAU); c.stroke(); } });
+      });
+      p.ink('blue', function (c) { pts.forEach(function (pt, i) { if (i < k) { c.beginPath(); c.arc(pt[0], pt[1], pt[2], 0, TAU); c.fill(); } }); });
+      p.ink('orange', function (c) { var pt = pts[k]; c.beginPath(); c.arc(pt[0], pt[1], pt[2] * 2.4, 0, TAU); c.fill(); });
+    }},
+
+    coverage: { seed: 113, draw: function (p) {
+      var rows = 24, y0 = 66, lh = 14.6;
+      p.ink('black', function (c) {
+        c.lineWidth = 1; c.beginPath(); c.moveTo(64, y0 - 8); c.lineTo(64, y0 + rows * lh); c.stroke();
+        for (var j = 0; j < rows; j++) c.fillRect(44, y0 + j * lh + 3, 10, 2);
+        c.lineWidth = 2; c.strokeRect(60, 436, 280, 18);
+      });
+      for (var j = 0; j < rows; j++) {
+        var indent = Math.floor(p.rand(0, 4)) * 18, len = p.rand(50, 230);
+        if (p.r() < 0.08) continue;
+        var v = p.r(), ink = v < 0.72 ? 'green' : v < 0.9 ? 'pink' : 'yellow';
+        (function (ink, x, y, w) { p.ink(ink, function (c) { H.rrect(c, x, y, w, 8, 4); c.fill(); }); })(ink, 76 + indent, y0 + j * lh, Math.min(len, 330 - 76 - indent));
+      }
+      var pct = p.rand(0.7, 0.9);
+      p.ink('green', function (c) { c.fillRect(62, 438, 276 * pct, 14); });
+    }},
+
+    talk: { seed: 127, draw: function (p) {
+      p.ink('pink', function (c) { c.beginPath(); c.arc(150, 232, 112, 0, TAU); c.fill(); });
+      p.ink('blue', function (c) { c.beginPath(); c.arc(252, 282, 112, 0, TAU); c.fill(); });
+      p.ink('black', function (c) {
+        c.lineWidth = 2.2;
+        for (var k = 0; k < 5; k++) {
+          var rad = 30 + k * 16;
+          c.beginPath(); c.arc(150, 232, rad, -0.14, 1.06); c.stroke();
+          c.beginPath(); c.arc(252, 282, rad, Math.PI - 0.14, Math.PI + 1.06); c.stroke();
+        }
+      });
+      p.ink('yellow', function (c) { c.beginPath(); c.arc(201, 257, 9, 0, TAU); c.fill(); });
+    }},
+
+    hampi: { seed: 131, draw: function (p) {
+      p.ink('pink', function (c) { H.dots(c, 0, 40, 400, 330, 8, function (x, y) { return 2.8 * ((y - 40) / 290); }); });
+      p.ink('yellow', function (c) { c.beginPath(); c.arc(130, 150, 62, 0, TAU); c.fill(); });
+      p.ink('black', function (c) {
+        var cx = 290, y = 362, L = [], R = [];
+        for (var t = 0; t < 7; t++) {
+          var tw = 110 - t * 13, th = 26 - t * 1.5;
+          L.push([cx - tw / 2, y], [cx - tw / 2, y - th]);
+          R.push([cx + tw / 2, y], [cx + tw / 2, y - th]);
+          y -= th;
+        }
+        c.beginPath(); c.moveTo(L[0][0], L[0][1]);
+        L.forEach(function (pt) { c.lineTo(pt[0], pt[1]); });
+        c.lineTo(cx, y - 22);
+        R.slice().reverse().forEach(function (pt) { c.lineTo(pt[0], pt[1]); });
+        c.closePath(); c.fill();
+      });
+      var bs = [[84, 330, 54, 36], [140, 352, 40, 28], [112, 282, 34, 24]];
+      for (var i = 0; i < 9; i++) bs.push([20 + i * 45 + p.rand(-10, 10), p.rand(400, 455), p.rand(24, 46), p.rand(18, 32)]);
+      p.ink('orange', function (c) { bs.forEach(function (b) { H.blob(c, b[0], b[1], b[2], b[3], p.r, 0.1); c.fill(); }); });
+      p.ink('blue', function (c) {
+        c.lineWidth = 2;
+        for (var k = 0; k < 5; k++) { var y = 474 + k * 6; c.beginPath(); c.moveTo(p.rand(0, 60), y); c.lineTo(p.rand(300, 400), y); c.stroke(); }
+      });
+    }},
+
+    coorg: { seed: 139, draw: function (p) {
+      p.ink('pink', function (c) { H.dots(c, 0, 20, 400, 300, 8, function (x, y) { return Math.max(0, 3.2 * ((y - 20) / 280)); }); });
+      p.ink('orange', function (c) { c.beginPath(); c.arc(258, 196, 46, 0, TAU); c.fill(); });
+      var ridges = [0, 1, 2, 3, 4].map(function (i) { return H.ridge(p.r, 230 + i * 48, 20 + i * 7); });
+      ridges.slice(0, 4).forEach(function (f, i) {
+        p.ink('blue', function (c) {
+          H.ridgePath(c, f);
+          if (i < 3) { c.save(); c.clip(); H.dots(c, 0, 140, 400, 500, 6, function () { return 0.9 + i * 0.7; }); c.restore(); }
+          else c.fill();
+        });
+      });
+      p.ink('green', function (c) { H.ridgePath(c, ridges[4]); c.fill(); });
+      var f = ridges[3], bx = 0, by = 999;
+      for (var x = 40; x <= 360; x += 4) { if (f(x) < by) { by = f(x); bx = x; } }
+      p.ink('black', function (c) { H.blob(c, bx, by - 9, 15, 11, p.r, 0.12); c.fill(); });
+    }},
+
+    munnar: { seed: 149, draw: function (p) {
+      p.ink('yellow', function (c) { H.dots(c, 0, 20, 400, 240, 8, function (x, y) { return 2.6 * (1 - (y - 20) / 220); }); });
+      p.ink('blue', function (c) {
+        var f = H.ridge(p.r, 210, 18);
+        H.ridgePath(c, f); c.save(); c.clip(); H.dots(c, 0, 150, 400, 500, 6, function () { return 1.3; }); c.restore();
+      });
+      var hills = [[110, 236, 170, 150], [300, 266, 170, 140], [190, 334, 260, 120]];
+      hills.forEach(function (hl) {
+        var hx = hl[0], top = hl[1], hw = hl[2], hgt = hl[3];
+        var g = function (x) { var u = (x - hx) / hw; return top + hgt * u * u; };
+        p.ink('green', function (c) {
+          c.save(); c.beginPath(); c.moveTo(hx - hw, 520);
+          for (var x = hx - hw; x <= hx + hw; x += 3) c.lineTo(x, g(x));
+          c.lineTo(hx + hw, 520); c.closePath(); c.clip();
+          c.fillStyle = PAPER; c.globalCompositeOperation = 'destination-out'; c.fill(); c.globalCompositeOperation = 'source-over';
+          c.lineWidth = 2.4;
+          for (var k = 0; k < 40; k++) {
+            c.beginPath();
+            for (var x2 = hx - hw, first = true; x2 <= hx + hw; x2 += 3) {
+              var y = g(x2) + k * 8 + 2 * Math.sin(x2 * 0.08 + k);
+              if (first) { c.moveTo(x2, y); first = false; } else c.lineTo(x2, y);
+            }
+            c.stroke();
+          }
+          c.restore();
+        });
+      });
+      p.ink('black', function (c) {
+        c.lineWidth = 6; c.beginPath(); c.moveTo(70, 505); c.bezierCurveTo(330, 470, 40, 410, 212, 346); c.stroke();
+      });
+    }},
+
+    rameshwaram: { seed: 157, draw: function (p) {
+      p.ink('pink', function (c) { H.dots(c, 0, 40, 400, 262, 8, function (x, y) { return Math.max(0, 3 * ((y - 40) / 222)); }); });
+      p.ink('yellow', function (c) { c.beginPath(); c.arc(286, 196, 42, 0, TAU); c.fill(); });
+      p.ink('blue', function (c) {
+        for (var k = 0; k < 24; k++) {
+          var y = 292 + k * k * 0.42 + k * 2.2; if (y > 500) break;
+          c.lineWidth = 0.8 + k * 0.18; c.beginPath(); c.moveTo(0, y); c.lineTo(400, y); c.stroke();
+        }
+      });
+      p.ink('orange', function (c) {
+        c.lineWidth = 3;
+        for (var k = 0; k < 9; k++) {
+          var y = 300 + k * k * 1.6 + k * 6, w = 34 - k * 2.4 + p.rand(-6, 6);
+          c.beginPath(); c.moveTo(286 - w, y); c.lineTo(286 + w, y); c.stroke();
+        }
+      });
+      p.ink('black', function (c) {
+        c.fillRect(0, 264, 400, 7);
+        for (var x = 8; x < 400; x += 26) {
+          c.fillRect(x, 271, 5, 21);
+          c.lineWidth = 2; c.beginPath(); c.arc(x + 15.5, 271, 10.5, 0, Math.PI); c.stroke();
+        }
+        c.lineWidth = 1.4; c.beginPath(); c.moveTo(0, 292); c.lineTo(400, 292); c.stroke();
+      });
+    }}
+  };
+
+  // ---------- the press ----------
+  function print(canvas) {
+    var piece = PIECES[canvas.dataset.art];
+    if (!piece) return;
+    var dpr = Math.min(2, window.devicePixelRatio || 1);
+    var W = Math.max(1, Math.round((canvas.clientWidth || 300) * dpr)), Hh = Math.round(W * AH / AW);
+    canvas.width = W; canvas.height = Hh;
+    var ctx = canvas.getContext('2d'), s = W / AW, rnd = mulberry(piece.seed);
+    var layers = [];
+    var byName = {};
+    var p = {
+      r: rnd,
+      rand: function (a, b) { return a + (b - a) * rnd(); },
+      ink: function (name, fn) {
+        var L = byName[name];
+        if (!L) {
+          var cv = document.createElement('canvas'); cv.width = W; cv.height = Hh;
+          L = { cv: cv, c: cv.getContext('2d') };
+          L.c.setTransform(s, 0, 0, s, 0, 0);
+          byName[name] = L; layers.push(L);
+        }
+        var c = L.c;
+        c.save();
+        c.fillStyle = c.strokeStyle = INKS[name];
+        c.lineCap = 'round'; c.lineJoin = 'round';
+        fn(c);
+        c.restore();
+      }
+    };
+    piece.draw(p);
+
+    ctx.globalCompositeOperation = 'source-over';
+    ctx.fillStyle = PAPER; ctx.fillRect(0, 0, W, Hh);
+    layers.forEach(function (L) {
+      var g = L.c;
+      g.save();
+      g.setTransform(1, 0, 0, 1, 0, 0);
+      g.globalCompositeOperation = 'destination-out';
+      g.translate(Math.floor(Math.random() * 192), Math.floor(Math.random() * 192));
+      g.fillStyle = g.createPattern(GRAIN, 'repeat');
+      g.fillRect(-192, -192, W + 384, Hh + 384);
+      g.restore();
+      ctx.globalCompositeOperation = 'multiply';
+      ctx.globalAlpha = 0.94;
+      ctx.drawImage(L.cv, (Math.random() - 0.5) * W * 0.009, (Math.random() - 0.5) * W * 0.009);
+    });
+    ctx.globalCompositeOperation = 'source-over';
+    ctx.globalAlpha = 0.05;
+    ctx.fillStyle = ctx.createPattern(GRAIN, 'repeat');
+    ctx.fillRect(0, 0, W, Hh);
+    ctx.globalAlpha = 1;
+    canvas.dataset.w = String(canvas.clientWidth);
+  }
+
+  var canvases = Array.prototype.slice.call(document.querySelectorAll('canvas[data-art]'));
+  canvases.forEach(print);
+
+  if ('ResizeObserver' in window) {
+    var pending = new Set(), raf = 0;
+    var ro = new ResizeObserver(function (entries) {
+      entries.forEach(function (e) {
+        var cv = e.target;
+        if (Math.abs(cv.clientWidth - (+cv.dataset.w || 0)) > 4) pending.add(cv);
+      });
+      if (!raf && pending.size) raf = requestAnimationFrame(function () {
+        pending.forEach(print); pending.clear(); raf = 0;
+      });
+    });
+    canvases.forEach(function (cv) { ro.observe(cv); });
+  }
+})();
+</script>
