@@ -33,7 +33,7 @@
     -webkit-font-smoothing: antialiased;
   }
   a { color: inherit; }
-  a:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+  a:focus-visible, button:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
 
   .mast {
     display: flex;
@@ -46,10 +46,20 @@
   .brand { display: inline-flex; align-items: center; gap: 8px; text-decoration: none; font-size: 14px; }
   .brand svg { width: 20px; height: 20px; flex: none; }
   .brand .who { color: var(--muted); }
-  .mast nav { display: flex; flex-wrap: wrap; gap: 6px 18px; font-size: 12.5px; }
+  .mast nav { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 18px; font-size: 12.5px; }
   .mast nav a { text-decoration: none; display: inline-flex; align-items: center; gap: 4px; }
   .mast nav a:hover { text-decoration: underline; text-underline-offset: 3px; }
   .mast nav svg { width: 11px; height: 11px; }
+  .motion {
+    font: inherit;
+    color: inherit;
+    background: none;
+    border: 1px solid var(--rule);
+    border-radius: 999px;
+    padding: 2px 10px;
+    cursor: pointer;
+  }
+  .motion:hover { border-color: var(--ink); }
 
   h1.lede {
     font: 400 24px/1.3 var(--serif);
@@ -68,6 +78,21 @@
   }
   .shelf:first-of-type { border-top: none; padding-top: 4px; }
   .shelf h2 { font: 400 14px/1.3 var(--sans); margin: 0; padding-top: 72px; }
+
+  .intro-body { max-width: 1140px; }
+  .hero-art {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    aspect-ratio: 16 / 7;
+    background: var(--paper);
+  }
+  .intro-body .t { margin: 14px 0 0; font: 400 20px/1.3 var(--serif); }
+  .intro-body .d { margin: 6px 0 0; color: var(--muted); font-size: 13.5px; line-height: 1.55; max-width: 66ch; }
+  .intro-body .status { color: var(--ink); }
+  .intro-body .status a { text-decoration: none; border-bottom: 1px solid var(--rule); }
+  .intro-body .status a:hover { border-color: var(--ink); }
+
   .cards {
     list-style: none;
     margin: 0;
@@ -95,7 +120,7 @@
     text-align: center;
     color: var(--muted);
   }
-  .colophon p { max-width: 56ch; margin: 0 auto 8px; text-wrap: balance; }
+  .colophon p { max-width: 60ch; margin: 0 auto 8px; text-wrap: balance; }
   footer { text-align: center; padding: 20px 20px 56px; color: var(--muted); display: grid; gap: 4px; }
   footer a { text-decoration: none; border-bottom: 1px solid var(--rule); }
   footer a:hover { color: var(--ink); border-color: var(--ink); }
@@ -106,6 +131,9 @@
     .shelf h2 { padding-top: 0; }
     .cards { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px 14px; }
     h1.lede { font-size: 21px; padding-block: 28px 24px; }
+  }
+  @media (max-width: 600px) {
+    .hero-art { aspect-ratio: 4 / 3; }
   }
   @media (max-width: 520px) {
     .mast { flex-direction: column; align-items: flex-start; gap: 8px; }
@@ -125,32 +153,43 @@
     <a href="https://adithyabhat.com/blog">Writing <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.3" aria-hidden="true"><path d="M4 2h6v6M10 2 3 9"/></svg></a>
     <a href="https://adithyabhat.com/photos">Photos <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.3" aria-hidden="true"><path d="M4 2h6v6M10 2 3 9"/></svg></a>
     <a href="https://adithyabhat.com/contact">Say hello <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.3" aria-hidden="true"><path d="M4 2h6v6M10 2 3 9"/></svg></a>
+    <button class="motion" id="motion" type="button" aria-pressed="false">Pause motion</button>
   </nav>
 </header>
 
 <main>
   <h1 class="lede">Interfaces, agents, writing, and long rides.</h1>
 
+  <section class="shelf" aria-labelledby="s-hello">
+    <h2 id="s-hello">Hello</h2>
+    <div class="intro-body">
+      <canvas class="hero-art" data-art="hero" role="img" aria-label="A rider on an orange motorcycle crossing hills at sunset, passing palms and roadside milestones named Abu Dhabi, Hampi, Coorg, Munnar and Rameshwaram"></canvas>
+      <p class="t">Hi, I’m Adithya.</p>
+      <p class="d">A UX engineer in Abu Dhabi. For seven years I’ve worked between design and code, from Betsol to Softway to yellow.ai, where I’m an SDE-3 building agentic AI. Most weekends I’m on a motorcycle. The milestones in this print are places from my photo log.</p>
+      <p class="d status">Open for work · Q3 ’26 · <a href="https://adithyabhat.com/contact">hello@adithyabhat.com</a></p>
+    </div>
+  </section>
+
   <section class="shelf" aria-labelledby="s-work">
     <h2 id="s-work">Work</h2>
     <ul class="cards">
       <li><a class="card" href="https://adithyabhat.com/work/cortex">
-        <canvas data-art="cortex" role="img" aria-label="Stacked heartbeat lines over a blue halftone disc, one line printed in orange"></canvas>
+        <canvas data-art="cortex" role="img" aria-label="A heartbeat rippling out in orange through hand-drawn contour lines over a blue wash"></canvas>
         <span class="t">Cortex</span>
-        <span class="d">A health dashboard, 2026. Drawn as a pulse that never quite repeats.</span>
+        <span class="d">A health dashboard, 2026. Drawn as a heartbeat rippling through contour lines.</span>
       </a></li>
       <li><a class="card" href="https://adithyabhat.com/work/daily-planner">
-        <canvas data-art="planner" role="img" aria-label="A week grid of hours with yellow, pink and blue blocks and an orange line marking now"></canvas>
+        <canvas data-art="planner" role="img" aria-label="A loosely painted week of hours, with an orange sun crossing the top and a now line sliding down"></canvas>
         <span class="t">Daily Planner</span>
-        <span class="d">Design and development, 2026. Seven days, sixteen hours, one orange now.</span>
+        <span class="d">Design and development, 2026. A painted week, with the sun crossing it.</span>
       </a></li>
       <li><a class="card" href="https://adithyabhat.com/work/hey-homero-live-more-clean-less">
-        <canvas data-art="heyHomero" role="img" aria-label="Soap bubbles in blue and pink rising over the outline of a small house"></canvas>
+        <canvas data-art="heyHomero" role="img" aria-label="Hand-drawn soap bubbles rising from a small house through a yellow glow"></canvas>
         <span class="t">Hey Homero</span>
         <span class="d">Live more, clean less. Development and analytics, 2020.</span>
       </a></li>
       <li><a class="card" href="https://adithyabhat.com/work/homero-book-house-cleaning-online">
-        <canvas data-art="homero" role="img" aria-label="A floor plan with one room swept in yellow zigzags and an orange booking pin"></canvas>
+        <canvas data-art="homero" role="img" aria-label="A hand-drawn floor plan being swept with yellow brush strokes, an orange booking pin bobbing in one room"></canvas>
         <span class="t">Homero</span>
         <span class="d">Book house cleaning online. Design, development and analytics, all remote.</span>
       </a></li>
@@ -161,22 +200,22 @@
     <h2 id="s-job">Day job</h2>
     <ul class="cards">
       <li><a class="card" href="https://adithyabhat.com/about">
-        <canvas data-art="agentic" role="img" aria-label="Four orange hubs on yellow halos, wired to a centre node, each orbited by small black agents"></canvas>
+        <canvas data-art="agentic" role="img" aria-label="Small ink agents orbiting four orange hubs on yellow blooms, orange beads travelling along threads to the centre"></canvas>
         <span class="t">Agentic AI at yellow.ai</span>
         <span class="d">SDE-3, 2024 to now. Nexus, Forge, Analyze and the Search SDK.</span>
       </a></li>
       <li><a class="card" href="https://adithyabhat.com/about">
-        <canvas data-art="chat" role="img" aria-label="A field of tiny blue chat bubbles around one large orange bubble with a dashed focus ring"></canvas>
+        <canvas data-art="chat" role="img" aria-label="A drifting flock of tiny blue chat bubbles around one large orange bubble with typing dots and a marching focus ring"></canvas>
         <span class="t">The yellow.ai chat widget</span>
         <span class="d">SDE-2, 2022. 300k people a day, built to WCAG AA, with i18n.</span>
       </a></li>
       <li><a class="card" href="https://adithyabhat.com/about">
-        <canvas data-art="culture" role="img" aria-label="Concentric rings of pink and green arcs like a radial survey, with an orange plus at the centre"></canvas>
+        <canvas data-art="culture" role="img" aria-label="A tree-ring cross-section with pink and green brush arcs turning around an orange plus"></canvas>
         <span class="t">Culture+ at Softway</span>
-        <span class="d">UX engineer, 2021. A platform for measuring workplace culture.</span>
+        <span class="d">UX engineer, 2021. A platform for measuring workplace culture, drawn as tree rings.</span>
       </a></li>
       <li><a class="card" href="https://adithyabhat.com/about">
-        <canvas data-art="betsol" role="img" aria-label="A TV screen with a pink bar chart above four teal pipeline lanes"></canvas>
+        <canvas data-art="betsol" role="img" aria-label="A hand-drawn TV with swaying pink bars above four wavy lanes carrying teal boats"></canvas>
         <span class="t">Dashboards at Betsol</span>
         <span class="d">Software engineer, 2019. Leto DevOps tooling and SlingTV dashboards.</span>
       </a></li>
@@ -187,24 +226,24 @@
     <h2 id="s-writing">Writing</h2>
     <ul class="cards">
       <li><a class="card" href="https://tech.yellow.ai/p/building-accessible-chatbots-at-yellow">
-        <canvas data-art="a11y" role="img" aria-label="Braille cells in black, some backed in orange, inside a blue speech bubble"></canvas>
+        <canvas data-art="a11y" role="img" aria-label="Braille cells inside a blue watercolour speech bubble, an orange fingertip reading across them"></canvas>
         <span class="t">Building accessible chatbots at yellow.ai</span>
         <span class="d">Jan 2024, on the yellow.ai tech blog. Chatbots everyone can use.</span>
       </a></li>
       <li><a class="card" href="https://adithyabhat.com/blog/introduction-to-javascript-iterators-and-generators">
-        <canvas data-art="iterators" role="img" aria-label="A spiral of blue dots growing outward, one large orange dot next, open rings still to come"></canvas>
+        <canvas data-art="iterators" role="img" aria-label="A sunflower whose seeds fill in one at a time, the next seed in orange"></canvas>
         <span class="t">JavaScript iterators and generators</span>
-        <span class="d">Jan 2021. Values that arrive one at a time, only when asked.</span>
+        <span class="d">Jan 2021. Values that arrive one at a time, like seeds on a sunflower.</span>
       </a></li>
       <li><a class="card" href="https://adithyabhat.com/blog/generate-code-coverage-reports-for-your-unit-tests-using-jest">
-        <canvas data-art="coverage" role="img" aria-label="Lines of code as green, pink and yellow bars beside a gutter, with a coverage bar below"></canvas>
+        <canvas data-art="coverage" role="img" aria-label="Scribbled lines of code being marked with green, pink and yellow highlighter as an orange cursor moves down"></canvas>
         <span class="t">Code coverage reports with Jest</span>
         <span class="d">Aug 2020. Find the lines your tests never touch.</span>
       </a></li>
       <li><a class="card" href="https://adithyabhat.com/blog/the-most-underrated-skill-for-a-developer-communication">
-        <canvas data-art="talk" role="img" aria-label="A pink and a blue circle overlapping into purple, sound waves passing between them"></canvas>
+        <canvas data-art="talk" role="img" aria-label="A pink and a blue watercolour circle overlapping into purple, ripples passing between them in turn"></canvas>
         <span class="t">The most underrated skill for a developer</span>
-        <span class="d">Aug 2018. Communication: the skill that isn't in the stack.</span>
+        <span class="d">Aug 2018. Communication: the skill that isn’t in the stack.</span>
       </a></li>
     </ul>
   </section>
@@ -213,22 +252,22 @@
     <h2 id="s-rides">Rides</h2>
     <ul class="cards">
       <li><a class="card" href="https://adithyabhat.com/photos">
-        <canvas data-art="hampi" role="img" aria-label="Orange boulders and a stepped black temple tower under a yellow sun"></canvas>
+        <canvas data-art="hampi" role="img" aria-label="Watercolour orange boulders and a hand-drawn temple tower under a yellow sun, the river flowing below"></canvas>
         <span class="t">Hampi</span>
         <span class="d">Vijayanagara, Karnataka · Oct 2024. Boulders, temples, and the Tungabhadra.</span>
       </a></li>
       <li><a class="card" href="https://adithyabhat.com/photos">
-        <canvas data-art="coorg" role="img" aria-label="Layered blue and green ridgelines under an orange sunset, a single stone on the nearest hilltop"></canvas>
+        <canvas data-art="coorg" role="img" aria-label="Layered blue and green hills, an orange sun setting behind them, birds crossing, a stone on the nearest hilltop"></canvas>
         <span class="t">Virajpet</span>
         <span class="d">Coorg, Karnataka · Jan 2025. Sunset over the Tadiandamol hills.</span>
       </a></li>
       <li><a class="card" href="https://adithyabhat.com/photos">
-        <canvas data-art="munnar" role="img" aria-label="Green hills combed with rows of tea, a black road winding up between them"></canvas>
+        <canvas data-art="munnar" role="img" aria-label="Green hills combed with shimmering tea rows, an orange rider climbing the winding road"></canvas>
         <span class="t">Munnar</span>
         <span class="d">Idukki, Kerala · Oct 2025. Tea country, ridge after ridge.</span>
       </a></li>
       <li><a class="card" href="https://adithyabhat.com/photos">
-        <canvas data-art="rameshwaram" role="img" aria-label="A long black bridge on piers across a blue sea, a yellow sun and its orange reflection"></canvas>
+        <canvas data-art="rameshwaram" role="img" aria-label="A hand-drawn bridge across a rippling blue sea, a small train crossing, the sun's orange reflection flickering"></canvas>
         <span class="t">Rameshwaram</span>
         <span class="d">Tamil Nadu · Oct 2025. Where the road runs out into the sea.</span>
       </a></li>
@@ -237,7 +276,7 @@
 </main>
 
 <section class="colophon" aria-label="About these prints">
-  <p>Every cover on this page is drawn in code as it loads, the way a risograph prints: two to four inks laid over each other, real grain, a little off-register. Reload and the inks shift.</p>
+  <p>Every print here is drawn and animated in code, the way a risograph prints: two to four inks laid over each other, real grain, a little off-register. Lines come from a wobbling pen, fills are washed on in layers. Reload and the inks shift.</p>
 </section>
 <footer>
   <span>Open for work · Q3 ’26 · <a href="https://adithyabhat.com/contact">hello@adithyabhat.com</a></span>
@@ -246,9 +285,8 @@
 
 <script>
 (function () {
-  var TAU = Math.PI * 2, AW = 400, AH = 500;
-  var PAPER = '#f6f4ef';
-  var INKS = {
+  const TAU = Math.PI * 2, AW = 400, AH = 500, PAPER = '#f6f4ef';
+  const INKS = {
     black: '#232221', blue: '#0078bf', orange: '#ff6c2f', yellow: '#ffd400',
     pink: '#ff48b0', green: '#00a95c', teal: '#00838a'
   };
@@ -256,539 +294,989 @@
   function mulberry(a) {
     return function () {
       a |= 0; a = a + 0x6D2B79F5 | 0;
-      var t = Math.imul(a ^ a >>> 15, 1 | a);
+      let t = Math.imul(a ^ a >>> 15, 1 | a);
       t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
       return ((t ^ t >>> 14) >>> 0) / 4294967296;
     };
   }
 
-  // Speckle texture: knocked out of each ink layer so the paper shows through like riso grain
-  var GRAIN = (function () {
-    var g = document.createElement('canvas'), n = 192;
+  // ---------- value noise, for every wobble on the page ----------
+  const PERM = (function () {
+    const r = mulberry(1337), p = [];
+    for (let i = 0; i < 256; i++) p[i] = i;
+    for (let i = 255; i > 0; i--) { const j = Math.floor(r() * (i + 1)); const k = p[i]; p[i] = p[j]; p[j] = k; }
+    return p.concat(p);
+  })();
+  function hsh(x, y) { return PERM[(PERM[x & 255] + (y & 255)) & 511] / 127.5 - 1; }
+  function noise(x, y) {
+    const ix = Math.floor(x), iy = Math.floor(y), fx = x - ix, fy = y - iy;
+    const a = hsh(ix, iy), b = hsh(ix + 1, iy), c = hsh(ix, iy + 1), d = hsh(ix + 1, iy + 1);
+    const ux = fx * fx * (3 - 2 * fx), uy = fy * fy * (3 - 2 * fy);
+    return a + (b - a) * ux + (c - a) * uy + (a - b - c + d) * ux * uy;
+  }
+
+  // Paper grain, knocked out of every ink layer
+  const GRAIN = (function () {
+    const g = document.createElement('canvas'), n = 192;
     g.width = g.height = n;
-    var gc = g.getContext('2d'), id = gc.createImageData(n, n), rnd = mulberry(7);
-    for (var i = 0; i < n * n; i++) {
-      var v = rnd();
-      id.data[i * 4 + 3] = v < 0.2 ? Math.floor(255 * (0.3 + 0.7 * rnd())) : 0;
+    const gc = g.getContext('2d'), id = gc.createImageData(n, n), rnd = mulberry(7);
+    for (let i = 0; i < n * n; i++) {
+      id.data[i * 4 + 3] = rnd() < 0.2 ? Math.floor(255 * (0.3 + 0.7 * rnd())) : 0;
     }
     gc.putImageData(id, 0, 0);
     return g;
   })();
 
-  // ---------- drawing helpers (art space is 400 × 500) ----------
-  var H = {
-    dots: function (c, x0, y0, x1, y1, step, rf) {
-      for (var j = 0, y = y0; y <= y1; y += step, j++) {
-        for (var x = x0 + (j % 2 ? step / 2 : 0); x <= x1; x += step) {
-          var rr = rf(x, y);
-          if (rr > 0.25) { c.beginPath(); c.arc(x, y, rr, 0, TAU); c.fill(); }
-        }
+  // ---------- the hand: pens, washes, stipple ----------
+  const H = {
+    resample(pts, step) {
+      const out = [[pts[0][0], pts[0][1]]];
+      let rem = 0;
+      for (let i = 1; i < pts.length; i++) {
+        const a = pts[i - 1], b = pts[i], d = Math.hypot(b[0] - a[0], b[1] - a[1]);
+        if (!d) continue;
+        let pos = step - rem;
+        while (pos <= d) { out.push([a[0] + (b[0] - a[0]) * pos / d, a[1] + (b[1] - a[1]) * pos / d]); pos += step; }
+        rem = d - (pos - step);
       }
+      const last = pts[pts.length - 1];
+      out.push([last[0], last[1]]);
+      return out;
     },
-    blob: function (c, cx, cy, rx, ry, r, w) {
-      w = w == null ? 0.12 : w;
-      var n = 56, a1 = r() * TAU, a2 = r() * TAU;
-      c.beginPath();
-      for (var i = 0; i <= n; i++) {
-        var a = i / n * TAU, k = 1 + w * (0.6 * Math.sin(2 * a + a1) + 0.4 * Math.sin(3 * a + a2));
-        var x = cx + Math.cos(a) * rx * k, y = cy + Math.sin(a) * ry * k;
-        if (i) c.lineTo(x, y); else c.moveTo(x, y);
+    // A brush stroke: wobbles along its normal, swells and tapers like a real pen
+    pen(c, pts, w, o) {
+      o = o || {};
+      const sd = o.seed || 0, wob = o.wob == null ? 1.2 : o.wob, fq = o.freq || 0.035, tt = o.t || 0;
+      const closed = !!o.closed, taper = o.taper !== false && !closed;
+      const q = H.resample(closed ? pts.concat([pts[0]]) : pts, 3), n = q.length;
+      if (n < 2) return;
+      const L = [0];
+      for (let i = 1; i < n; i++) L[i] = L[i - 1] + Math.hypot(q[i][0] - q[i - 1][0], q[i][1] - q[i - 1][1]);
+      const tot = L[n - 1] || 1, left = [], right = [];
+      for (let i = 0; i < n; i++) {
+        const a = q[Math.max(0, i - 1)], b = q[Math.min(n - 1, i + 1)];
+        const tx = b[0] - a[0], ty = b[1] - a[1], tl = Math.hypot(tx, ty) || 1, nx = -ty / tl, ny = tx / tl;
+        const dsp = noise(sd + L[i] * fq, tt) * wob, s = L[i] / tot;
+        let env = taper ? Math.pow(Math.sin(Math.PI * s), 0.45) : 1;
+        if (o.wfn) env = o.wfn(s);
+        const ww = Math.max(w * 0.08, w * 0.5 * env * (0.78 + 0.22 * noise(sd * 1.7 + L[i] * 0.05, 3.3)));
+        const x = q[i][0] + nx * dsp, y = q[i][1] + ny * dsp;
+        left.push([x + nx * ww, y + ny * ww]);
+        right.push([x - nx * ww, y - ny * ww]);
       }
+      c.beginPath();
+      c.moveTo(left[0][0], left[0][1]);
+      for (let i = 1; i < n; i++) c.lineTo(left[i][0], left[i][1]);
+      for (let i = n - 1; i >= 0; i--) c.lineTo(right[i][0], right[i][1]);
+      c.closePath();
+      c.fill();
+    },
+    ring(cx, cy, rx, ry, o) {
+      o = o || {};
+      const sd = o.seed || 0, wob = o.wob == null ? 0.06 : o.wob, fr = o.freq || 1.2, tt = o.t || 0;
+      const n = Math.max(24, Math.round((rx + ry) * 0.55)), pts = [];
+      for (let i = 0; i < n; i++) {
+        const a = i / n * TAU, ca = Math.cos(a), sa = Math.sin(a);
+        const k = 1 + wob * noise(sd + ca * fr + tt, sd * 1.3 + sa * fr);
+        pts.push([cx + ca * rx * k, cy + sa * ry * k]);
+      }
+      return pts;
+    },
+    arcPts(cx, cy, r, a0, a1, step) {
+      const pts = [], n = Math.max(2, Math.ceil(Math.abs(a1 - a0) * r / (step || 4)));
+      for (let i = 0; i <= n; i++) { const a = a0 + (a1 - a0) * i / n; pts.push([cx + Math.cos(a) * r, cy + Math.sin(a) * r]); }
+      return pts;
+    },
+    rectPts(x, y, w, h) { return H.resample([[x, y], [x + w, y], [x + w, y + h], [x, y + h], [x, y]], 4); },
+    roundRectPts(x, y, w, h, r) {
+      return [].concat(
+        H.arcPts(x + w - r, y + r, r, -Math.PI / 2, 0),
+        H.arcPts(x + w - r, y + h - r, r, 0, Math.PI / 2),
+        H.arcPts(x + r, y + h - r, r, Math.PI / 2, Math.PI),
+        H.arcPts(x + r, y + r, r, Math.PI, Math.PI * 1.5)
+      );
+    },
+    bubblePts(x, y, w, h, tail, step) {
+      const r = Math.min(w, h) * 0.3;
+      const pts = [].concat(
+        H.arcPts(x + w - r, y + r, r, -Math.PI / 2, 0, step),
+        H.arcPts(x + w - r, y + h - r, r, 0, Math.PI / 2, step),
+        [[x + w * 0.42, y + h], [x + w * 0.14, y + h + tail], [x + w * 0.24, y + h]],
+        H.arcPts(x + r, y + h - r, r, Math.PI / 2, Math.PI, step),
+        H.arcPts(x + r, y + r, r, Math.PI, Math.PI * 1.5, step)
+      );
+      return H.resample(pts.concat([pts[0]]), step || 4);
+    },
+    quadPts(a, k, b, n) {
+      const pts = [];
+      for (let i = 0; i <= n; i++) {
+        const u = i / n, v = 1 - u;
+        pts.push([v * v * a[0] + 2 * v * u * k[0] + u * u * b[0], v * v * a[1] + 2 * v * u * k[1] + u * u * b[1]]);
+      }
+      return pts;
+    },
+    bezPts(p0, p1, p2, p3, n) {
+      const pts = [];
+      for (let i = 0; i <= n; i++) {
+        const u = i / n, v = 1 - u;
+        pts.push([
+          v * v * v * p0[0] + 3 * v * v * u * p1[0] + 3 * v * u * u * p2[0] + u * u * u * p3[0],
+          v * v * v * p0[1] + 3 * v * v * u * p1[1] + 3 * v * u * u * p2[1] + u * u * u * p3[1]
+        ]);
+      }
+      return pts;
+    },
+    partial(pts, frac) {
+      if (frac >= 1) return pts;
+      const seg = []; let tot = 0;
+      for (let i = 1; i < pts.length; i++) { const d = Math.hypot(pts[i][0] - pts[i - 1][0], pts[i][1] - pts[i - 1][1]); seg.push(d); tot += d; }
+      let left = tot * Math.max(0, frac);
+      const out = [pts[0]];
+      for (let i = 1; i < pts.length && left > 0; i++) {
+        const d = seg[i - 1];
+        if (left >= d) { out.push(pts[i]); left -= d; }
+        else { const k = left / d; out.push([pts[i - 1][0] + (pts[i][0] - pts[i - 1][0]) * k, pts[i - 1][1] + (pts[i][1] - pts[i - 1][1]) * k]); left = 0; }
+      }
+      return out;
+    },
+    path(c, pts) {
+      c.beginPath();
+      c.moveTo(pts[0][0], pts[0][1]);
+      for (let i = 1; i < pts.length; i++) c.lineTo(pts[i][0], pts[i][1]);
       c.closePath();
     },
-    ridge: function (r, base, amp) {
-      var f = [r() * 0.012 + 0.008, r() * 0.02 + 0.02, r() * 0.04 + 0.045];
-      var ph = [r() * TAU, r() * TAU, r() * TAU], w = [1, 0.42, 0.16];
-      return function (x) {
-        return base - amp * (w[0] * Math.sin(x * f[0] + ph[0]) + w[1] * Math.sin(x * f[1] + ph[1]) + w[2] * Math.sin(x * f[2] + ph[2]));
+    fill(c, pts) { H.path(c, pts); c.fill(); },
+    wobble(pts, amt, sd, tt) {
+      return pts.map(q => [q[0] + noise(sd + q[0] * 0.03, q[1] * 0.03 + tt) * amt, q[1] + noise(sd + 7 + q[1] * 0.03, q[0] * 0.03 + tt) * amt]);
+    },
+    // Watercolour: several translucent, slightly shifted passes, so the core is dense and edges bloom
+    wash(c, pts, o) {
+      o = o || {};
+      const passes = o.passes || 4, a = o.alpha || 0.3, bleed = o.bleed == null ? 3 : o.bleed, sd = o.seed || 0, tt = o.t || 0;
+      const ga = c.globalAlpha;
+      for (let k = 0; k < passes; k++) {
+        c.globalAlpha = ga * a;
+        H.fill(c, H.wobble(pts, bleed * (1 + k * 0.5), sd + k * 13.7, tt));
+      }
+      c.globalAlpha = ga;
+    },
+    stipple(c, x0, y0, x1, y1, n, dens, rmin, rmax, sd) {
+      const r = mulberry(sd || 9);
+      for (let i = 0; i < n; i++) {
+        const x = x0 + (x1 - x0) * r(), y = y0 + (y1 - y0) * r(), k = r(), rr = rmin + (rmax - rmin) * r();
+        if (k < dens(x, y)) { c.beginPath(); c.arc(x, y, rr, 0, TAU); c.fill(); }
+      }
+    },
+    dot(c, x, y, r, sd, tt) { H.fill(c, H.ring(x, y, r, r, { seed: sd || 0, wob: 0.18, t: tt || 0 })); },
+    dashes(c, pts, dash, gap, offset, w, o) {
+      const per = dash + gap, L = [0];
+      for (let i = 1; i < pts.length; i++) L[i] = L[i - 1] + Math.hypot(pts[i][0] - pts[i - 1][0], pts[i][1] - pts[i - 1][1]);
+      const tot = L[L.length - 1];
+      const at = d => {
+        d = ((d % tot) + tot) % tot;
+        let i = 1; while (i < L.length - 1 && L[i] < d) i++;
+        const k = (d - L[i - 1]) / ((L[i] - L[i - 1]) || 1);
+        return [pts[i - 1][0] + (pts[i][0] - pts[i - 1][0]) * k, pts[i - 1][1] + (pts[i][1] - pts[i - 1][1]) * k];
       };
+      for (let d = -(offset % per), j = 0; d < tot; d += per, j++) {
+        const seg = [];
+        for (let s = 0; s <= 4; s++) seg.push(at(d + dash * s / 4));
+        H.pen(c, seg, w, Object.assign({ seed: j * 2.3 }, o || {}));
+      }
     },
-    ridgePath: function (c, f) {
-      c.beginPath();
-      c.moveTo(-5, AH + 5);
-      for (var x = -5; x <= AW + 5; x += 4) c.lineTo(x, f(x));
-      c.lineTo(AW + 5, AH + 5);
-      c.closePath();
+    ridge(r, base, amp) {
+      const f = [r() * 0.012 + 0.008, r() * 0.02 + 0.02, r() * 0.04 + 0.045], ph = [r() * TAU, r() * TAU, r() * TAU], w = [1, 0.42, 0.16];
+      return x => base - amp * (w[0] * Math.sin(x * f[0] + ph[0]) + w[1] * Math.sin(x * f[1] + ph[1]) + w[2] * Math.sin(x * f[2] + ph[2]));
     },
-    rrect: function (c, x, y, w, h, rad) {
-      c.beginPath();
-      if (c.roundRect) c.roundRect(x, y, w, h, rad); else c.rect(x, y, w, h);
+    ridgeP(r, base, amp, P) {
+      const k = [2, 3, 7], ph = [r() * TAU, r() * TAU, r() * TAU], w = [1, 0.45, 0.18];
+      return x => base - amp * (w[0] * Math.sin(TAU * k[0] * x / P + ph[0]) + w[1] * Math.sin(TAU * k[1] * x / P + ph[1]) + w[2] * Math.sin(TAU * k[2] * x / P + ph[2]));
     },
-    bubble: function (c, x, y, w, h, rad, tail) {
-      H.rrect(c, x, y, w, h, rad);
-      c.moveTo(x + w * 0.22, y + h - 1);
-      c.lineTo(x + w * 0.14, y + h + tail);
-      c.lineTo(x + w * 0.42, y + h - 1);
-      c.closePath();
-    },
-    line: function (c, pts) {
-      c.beginPath();
-      for (var i = 0; i < pts.length; i++) { if (i) c.lineTo(pts[i][0], pts[i][1]); else c.moveTo(pts[i][0], pts[i][1]); }
-      c.stroke();
+    ridgePts(f, x0, x1, bottom, step) {
+      const pts = [[x0, bottom]];
+      for (let x = x0; x <= x1; x += step || 4) pts.push([x, f(x)]);
+      pts.push([x1, bottom]);
+      return pts;
     }
   };
 
-  // ---------- the pieces ----------
-  var ECG = [[0, 0], [.1, 0], [.15, 5], [.2, 0], [.3, 0], [.32, -7], [.34, 46], [.36, -15], [.39, 0], [.5, 0], [.58, 9], [.66, 0], [1, 0]];
-  function ecg(u) {
-    for (var i = 1; i < ECG.length; i++) {
-      if (u <= ECG[i][0]) {
-        var a = ECG[i - 1], b = ECG[i], t = (u - a[0]) / (b[0] - a[0]);
-        return a[1] + (b[1] - a[1]) * t;
-      }
-    }
-    return 0;
+  // ---------- the pieces (art space 400 × 500; the hero is 1000 wide) ----------
+  function rise(o, t) {
+    const yy = 340 - ((o.y + t * o.sp) % 320);
+    const sc = Math.max(0, Math.min(1, (340 - yy) / 50, (yy - 20) / 30)), rr = o.rr * sc;
+    return rr < 1.5 ? null : [o.x + Math.sin(t * 1.3 + o.ph) * 6, yy, rr];
   }
+  const ease = u => u * u * (3 - 2 * u);
 
-  var PIECES = {
-    cortex: { seed: 11, draw: function (p) {
-      p.ink('blue', function (c) {
-        c.save(); c.beginPath(); c.arc(200, 215, 135, 0, TAU); c.clip();
-        H.dots(c, 60, 75, 340, 355, 8, function (x, y) { return 3.4 * (1 - Math.hypot(x - 200, y - 215) / 135 * 0.75); });
-        c.restore();
-      });
-      var lines = [];
-      for (var i = 0; i < 24; i++) {
-        var y = 95 + i * 15, amp = 0.35 + p.r() * 0.75, off = p.r() * 90, period = 78 + p.r() * 20, pts = [];
-        for (var x = 36; x <= 364; x += 2) {
-          var env = Math.exp(-Math.pow((x - 200) / 105, 2));
-          pts.push([x, y - ecg(((x + off) % period) / period) * amp * env]);
-        }
-        lines.push(pts);
-      }
-      p.ink('black', function (c) { c.lineWidth = 1.5; lines.forEach(function (pts, k) { if (k !== 12) H.line(c, pts); }); });
-      p.ink('orange', function (c) { c.lineWidth = 3.4; H.line(c, lines[12]); });
-    }},
-
-    planner: { seed: 23, draw: function (p) {
-      var x0 = 52, y0 = 80, cols = 7, rows = 16, cw = (348 - 52) / 7, rh = (452 - 80) / 16;
-      p.ink('black', function (c) {
-        c.lineWidth = 0.8;
-        for (var i = 0; i <= cols; i++) { c.beginPath(); c.moveTo(x0 + i * cw, y0); c.lineTo(x0 + i * cw, y0 + rows * rh); c.stroke(); }
-        for (var j = 0; j <= rows; j++) { c.beginPath(); c.moveTo(x0, y0 + j * rh); c.lineTo(x0 + cols * cw, y0 + j * rh); c.stroke(); }
-        c.lineWidth = 2.4; c.strokeRect(x0, y0, cols * cw, rows * rh);
-        for (var d = 0; d < cols; d++) { c.beginPath(); c.arc(x0 + (d + 0.5) * cw, y0 - 16, 3, 0, TAU); c.fill(); }
-      });
-      var inks = ['yellow', 'pink', 'blue'];
-      for (var i = 0; i < cols; i++) {
-        var j = Math.floor(p.r() * 2);
-        while (j < rows - 1) {
-          var len = 1 + Math.floor(p.r() * 3);
-          if (p.r() < 0.62) {
-            (function (ink, ii, jj, L) {
-              p.ink(ink, function (c) { H.rrect(c, x0 + ii * cw + 3, y0 + jj * rh + 2.5, cw - 6, L * rh - 5, 4); c.fill(); });
-            })(inks[Math.floor(p.r() * 3)], i, j, Math.min(len, rows - j));
-          }
-          j += len + Math.floor(p.r() * 2);
-        }
-      }
-      var now = y0 + rh * (4 + Math.floor(p.r() * 8)) + rh * 0.4;
-      p.ink('orange', function (c) {
-        c.lineWidth = 2.6; c.beginPath(); c.moveTo(x0 - 6, now); c.lineTo(x0 + cols * cw + 4, now); c.stroke();
-        c.beginPath(); c.arc(x0 - 6, now, 5, 0, TAU); c.fill();
-      });
-    }},
-
-    heyHomero: { seed: 31, draw: function (p) {
-      p.ink('yellow', function (c) {
-        c.save(); c.beginPath(); c.arc(200, 190, 150, 0, TAU); c.clip();
-        H.dots(c, 40, 30, 360, 350, 9, function (x, y) { return 2.8 * (1 - Math.hypot(x - 200, y - 190) / 150); });
-        c.restore();
-      });
-      p.ink('blue', function (c) {
-        for (var i = 0; i < 34; i++) {
-          var x = p.rand(30, 370), y = p.rand(40, 320), rr = p.rand(6, 46);
-          c.lineWidth = rr > 25 ? 3 : 2;
-          c.beginPath(); c.arc(x, y, rr, 0, TAU); c.stroke();
-          c.lineWidth = 2; c.beginPath(); c.arc(x, y, rr * 0.68, Math.PI * 1.08, Math.PI * 1.45); c.stroke();
-        }
-      });
-      p.ink('pink', function (c) {
-        for (var i = 0; i < 16; i++) { c.beginPath(); c.arc(p.rand(40, 360), p.rand(60, 320), p.rand(4, 22), 0, TAU); c.fill(); }
-      });
-      p.ink('black', function (c) {
-        c.lineWidth = 4;
-        c.beginPath(); c.moveTo(130, 458); c.lineTo(130, 388); c.lineTo(200, 332); c.lineTo(270, 388); c.lineTo(270, 458); c.closePath(); c.stroke();
-        c.lineWidth = 3; c.strokeRect(186, 410, 28, 48);
-        c.beginPath(); c.moveTo(80, 460); c.lineTo(320, 460); c.stroke();
-      });
-    }},
-
-    homero: { seed: 47, draw: function (p) {
-      var rooms = [];
-      (function split(x, y, w, h, d) {
-        if (d === 0) { rooms.push([x, y, w, h]); return; }
-        if (w >= h) { var k = w * p.rand(0.38, 0.62); split(x, y, k, h, d - 1); split(x + k, y, w - k, h, d - 1); }
-        else { var k2 = h * p.rand(0.38, 0.62); split(x, y, w, k2, d - 1); split(x, y + k2, w, h - k2, d - 1); }
-      })(56, 70, 288, 370, 3);
-      var by = rooms.slice().sort(function (a, b) { return b[2] * b[3] - a[2] * a[3]; });
-      var A = by[0], B = by[1], P = by[2];
-      p.ink('blue', function (c) {
-        c.save(); c.beginPath(); c.rect(B[0], B[1], B[2], B[3]); c.clip();
-        H.dots(c, B[0], B[1], B[0] + B[2], B[1] + B[3], 7, function () { return 1.7; });
-        c.restore();
-      });
-      p.ink('yellow', function (c) {
-        c.lineWidth = 11; c.beginPath();
-        var pad = 18, k = 0;
-        for (var y = A[1] + pad; y <= A[1] + A[3] - pad; y += 18, k++) {
-          var x = k % 2 ? A[0] + A[2] - pad : A[0] + pad;
-          if (k) c.lineTo(x, y); else c.moveTo(x, y);
-        }
-        c.stroke();
-      });
-      p.ink('black', function (c) {
-        c.lineWidth = 2.6; rooms.forEach(function (rm) { c.strokeRect(rm[0], rm[1], rm[2], rm[3]); });
-        c.lineWidth = 5; c.strokeRect(56, 70, 288, 370);
-        c.lineWidth = 1.2;
-        rooms.forEach(function (rm, i) { if (i % 2) return; c.beginPath(); c.arc(rm[0] + 6, rm[1] + rm[3] - 6, 22, -Math.PI / 2, 0); c.stroke(); });
-      });
-      var px = P[0] + P[2] / 2, py = P[1] + P[3] / 2;
-      p.ink('orange', function (c) { c.beginPath(); c.arc(px, py, 16, 0, TAU); c.fill(); });
-      p.ink('black', function (c) { c.lineWidth = 3; c.beginPath(); c.moveTo(px - 7, py); c.lineTo(px - 2, py + 5); c.lineTo(px + 7, py - 5); c.stroke(); });
-    }},
-
-    agentic: { seed: 53, draw: function (p) {
-      var C = [200, 250];
-      var hubs = [0, 1, 2, 3].map(function (i) {
-        var a = -Math.PI / 2 + i * TAU / 4 + p.rand(-0.2, 0.2), d = 104 + p.rand(-8, 8);
-        return [C[0] + Math.cos(a) * d, C[1] + Math.sin(a) * d];
-      });
-      var small = [];
-      for (var i = 0; i < 46; i++) {
-        var h = hubs[i % 4], a = p.rand(0, TAU), d = p.rand(28, 66);
-        small.push([h[0] + Math.cos(a) * d, h[1] + Math.sin(a) * d, i % 4]);
-      }
-      p.ink('yellow', function (c) { hubs.forEach(function (h) { c.beginPath(); c.arc(h[0], h[1], 44, 0, TAU); c.fill(); }); });
-      p.ink('blue', function (c) {
-        c.lineWidth = 1.3;
-        small.forEach(function (s) { c.beginPath(); c.moveTo(s[0], s[1]); c.lineTo(hubs[s[2]][0], hubs[s[2]][1]); c.stroke(); });
-        hubs.forEach(function (h, k) {
-          c.lineWidth = 3.2; c.beginPath(); c.moveTo(C[0], C[1]); c.lineTo(h[0], h[1]); c.stroke();
-          var n = hubs[(k + 1) % 4];
-          c.setLineDash([4, 7]); c.lineWidth = 1.6; c.beginPath(); c.moveTo(h[0], h[1]); c.lineTo(n[0], n[1]); c.stroke(); c.setLineDash([]);
+  const PIECES = {
+    cortex: { seed: 11,
+      draw(p, s, t) {
+        const beat = Math.exp(-Math.pow(((t % 1.2) - 0.1) / 0.09, 2)), sc = 1 + 0.04 * beat;
+        p.ink('blue', c => H.wash(c, H.ring(200, 245, 128 * sc, 140 * sc, { seed: 3, wob: 0.1, t: t * 0.1 }), { passes: 4, alpha: 0.26, bleed: 4, seed: 5 }));
+        const ringAt = (rr, k) => H.ring(200, 245, rr * (1 + 0.02 * beat), rr * 1.06, { seed: 20 + k * 0.37, wob: 0.05 + k * 0.012, freq: 1.4, t: t * 0.12 });
+        p.ink('black', c => {
+          for (let k = 0; k < 15; k++) H.pen(c, ringAt(14 + k * 11.5, k), 1.3, { closed: true, seed: k * 3.1, wob: 0.5, t: t * 0.3 });
         });
-      });
-      p.ink('orange', function (c) {
-        hubs.forEach(function (h) { c.beginPath(); c.arc(h[0], h[1], 17, 0, TAU); c.fill(); });
-        c.beginPath(); c.arc(C[0], C[1], 27, 0, TAU); c.fill();
-      });
-      p.ink('black', function (c) {
-        small.forEach(function (s) { c.beginPath(); c.arc(s[0], s[1], 3.2, 0, TAU); c.fill(); });
-        c.lineWidth = 2; c.beginPath(); c.arc(C[0], C[1], 38, 0, TAU); c.stroke();
-        c.beginPath(); c.arc(C[0], C[1], 7, 0, TAU); c.fill();
-      });
-    }},
+        const prog = ((t + 0.4) % 2.4) / 2.4, k = prog * 14;
+        p.ink('orange', c => H.pen(c, ringAt(14 + k * 11.5, k), 3.8 * (1 - prog * 0.7), { closed: true, seed: 9, wob: 0.8, t: t * 0.3 }));
+      }
+    },
 
-    chat: { seed: 61, draw: function (p) {
-      p.ink('blue', function (c) {
-        for (var j = 0; j < 20; j++) for (var i = 0; i < 14; i++) {
-          var x = 32 + i * 24 + (j % 2 ? 12 : 0) + p.rand(-2, 2), y = 48 + j * 20 + p.rand(-2, 2);
-          if (x > 176 && x < 380 && y > 252 && y < 440) continue;
-          if (p.r() < 0.12) continue;
-          H.bubble(c, x, y, 13, 9, 3, 4); c.fill();
+    planner: { seed: 23, still: ['black', 'yellow', 'pink', 'blue'],
+      setup(r) {
+        const g = { x0: 56, y0: 108, cols: 7, rows: 15 };
+        g.cw = (344 - 56) / 7; g.rh = (452 - 108) / 15;
+        const inks = ['yellow', 'pink', 'blue'], blocks = [];
+        for (let i = 0; i < g.cols; i++) {
+          let j = Math.floor(r() * 2);
+          while (j < g.rows - 1) {
+            const len = 1 + Math.floor(r() * 3);
+            if (r() < 0.62) blocks.push({ ink: inks[Math.floor(r() * 3)], i, j, L: Math.min(len, g.rows - j) });
+            j += len + Math.floor(r() * 2);
+          }
         }
-      });
-      p.ink('orange', function (c) { H.bubble(c, 200, 282, 158, 100, 14, 22); c.fill(); });
-      p.ink('black', function (c) {
-        c.lineWidth = 2.6; c.setLineDash([7, 6]); H.rrect(c, 189, 271, 180, 122, 20); c.stroke(); c.setLineDash([]);
-        [0, 1, 2].forEach(function (k) { c.beginPath(); c.arc(249 + k * 30, 332, 6, 0, TAU); c.fill(); });
-      });
-    }},
+        g.blocks = blocks;
+        return g;
+      },
+      draw(p, g, t) {
+        p.ink('black', c => {
+          for (let i = 0; i <= g.cols; i++) H.pen(c, [[g.x0 + i * g.cw, g.y0 - 4], [g.x0 + i * g.cw, g.y0 + g.rows * g.rh + 4]], i % g.cols ? 1.1 : 2.2, { seed: i * 5.3, wob: 1.1 });
+          for (let j = 0; j <= g.rows; j++) H.pen(c, [[g.x0 - 4, g.y0 + j * g.rh], [g.x0 + g.cols * g.cw + 4, g.y0 + j * g.rh]], j % g.rows ? 0.9 : 2.2, { seed: 40 + j * 2.7, wob: 1.1 });
+        });
+        g.blocks.forEach((b, n) => p.ink(b.ink, c => H.wash(c, H.rectPts(g.x0 + b.i * g.cw + 4, g.y0 + b.j * g.rh + 3, g.cw - 8, b.L * g.rh - 6), { passes: 3, alpha: 0.42, bleed: 2.2, seed: n * 3.3 })));
+        const f = (t / 22) % 1, now = g.y0 + f * g.rows * g.rh, a = Math.PI * (1 - f);
+        const sx = 200 + Math.cos(a) * 150, sy = 92 - Math.sin(a) * 50;
+        p.ink('orange', c => {
+          H.wash(c, H.ring(sx, sy, 13, 13, { seed: 2, wob: 0.12, t: t * 0.5 }), { passes: 3, alpha: 0.5, bleed: 1.5, seed: 4 });
+          H.pen(c, [[g.x0 - 12, now], [g.x0 + g.cols * g.cw + 10, now]], 2.8, { seed: 7, wob: 1.4, t: t * 0.4 });
+        });
+      }
+    },
 
-    culture: { seed: 71, draw: function (p) {
-      var C = [200, 262];
-      var rings = [[52, 'pink'], [80, 'green'], [108, 'pink'], [136, 'green'], [164, 'pink']];
-      rings.forEach(function (rg, i) {
-        var n = 8 + i * 3;
-        p.ink(rg[1], function (c) {
-          c.lineWidth = 17; c.lineCap = 'butt';
-          for (var k = 0; k < n; k++) {
-            var a0 = -Math.PI / 2 + k * TAU / n + 0.05, span = (TAU / n - 0.1) * p.rand(0.25, 1);
-            c.beginPath(); c.arc(C[0], C[1], rg[0], a0, a0 + span); c.stroke();
+    heyHomero: { seed: 31, still: ['yellow', 'black'],
+      setup(r) {
+        const b = [], k = [];
+        for (let i = 0; i < 30; i++) b.push({ x: 30 + r() * 340, y: r() * 320, rr: 6 + r() * 38, sp: 8 + r() * 16, ph: r() * TAU });
+        for (let i = 0; i < 14; i++) k.push({ x: 40 + r() * 320, y: r() * 320, rr: 4 + r() * 16, sp: 10 + r() * 18, ph: r() * TAU });
+        return { b, k };
+      },
+      draw(p, s, t) {
+        p.ink('yellow', c => H.wash(c, H.ring(200, 200, 150, 140, { seed: 1, wob: 0.12 }), { passes: 4, alpha: 0.22, bleed: 6, seed: 2 }));
+        p.ink('blue', c => s.b.forEach((o, i) => {
+          const q = rise(o, t); if (!q) return;
+          H.pen(c, H.ring(q[0], q[1], q[2], q[2], { seed: i * 1.7, wob: 0.08, t: t * 0.35 }), q[2] > 25 ? 2.6 : 1.8, { closed: true, seed: i, wob: 0.4 });
+          H.pen(c, H.arcPts(q[0], q[1], q[2] * 0.66, Math.PI * 1.1, Math.PI * 1.45, 3), 2, { seed: i + 50, wob: 0.3 });
+        }));
+        p.ink('pink', c => s.k.forEach((o, i) => {
+          const q = rise(o, t); if (!q) return;
+          H.wash(c, H.ring(q[0], q[1], q[2], q[2], { seed: i * 2.1, wob: 0.15, t: t * 0.4 }), { passes: 2, alpha: 0.6, bleed: 1.2, seed: i });
+        }));
+        p.ink('black', c => {
+          H.pen(c, [[130, 460], [130, 388]], 3.4, { seed: 1 });
+          H.pen(c, [[118, 398], [200, 330], [282, 398]], 3.6, { seed: 2 });
+          H.pen(c, [[270, 388], [270, 460]], 3.4, { seed: 3 });
+          H.pen(c, [[238, 362], [238, 334], [254, 334], [254, 375]], 2.6, { seed: 4 });
+          H.pen(c, H.rectPts(186, 412, 28, 48), 2.4, { seed: 5, taper: false });
+          H.pen(c, [[66, 462], [334, 461]], 2.4, { seed: 6 });
+        });
+      }
+    },
+
+    homero: { seed: 47, still: ['blue', 'black'],
+      setup(r) {
+        const rooms = [];
+        (function split(x, y, w, h, d) {
+          if (d === 0) { rooms.push([x, y, w, h]); return; }
+          if (w >= h) { const k = w * (0.38 + r() * 0.24); split(x, y, k, h, d - 1); split(x + k, y, w - k, h, d - 1); }
+          else { const k = h * (0.38 + r() * 0.24); split(x, y, w, k, d - 1); split(x, y + k, w, h - k, d - 1); }
+        })(56, 70, 288, 370, 3);
+        const by = rooms.slice().sort((a, b) => b[2] * b[3] - a[2] * a[3]);
+        const A = by[0], zig = [];
+        for (let k = 0, y = A[1] + 18; y <= A[1] + A[3] - 18; y += 18, k++) zig.push([k % 2 ? A[0] + A[2] - 18 : A[0] + 18, y]);
+        return { rooms, A, B: by[1], P: by[2], zig };
+      },
+      draw(p, s, t) {
+        const B = s.B;
+        p.ink('blue', c => H.stipple(c, B[0] + 4, B[1] + 4, B[0] + B[2] - 4, B[1] + B[3] - 4, Math.round(B[2] * B[3] / 26), () => 1, 0.9, 1.9, 7));
+        p.ink('black', c => {
+          s.rooms.forEach((rm, i) => H.pen(c, H.rectPts(rm[0], rm[1], rm[2], rm[3]), 2.4, { seed: i * 4.4, taper: false, wob: 1 }));
+          H.pen(c, H.rectPts(56, 70, 288, 370), 4.6, { seed: 99, taper: false, wob: 1.2 });
+          s.rooms.forEach((rm, i) => { if (!(i % 2)) H.pen(c, H.arcPts(rm[0] + 6, rm[1] + rm[3] - 6, 22, -Math.PI / 2, 0, 3), 1.2, { seed: i + 30, wob: 0.4 }); });
+        });
+        const prog = Math.min(1, (t % 9) / 7), n = s.zig.length - 1;
+        p.ink('yellow', c => {
+          for (let i = 0; i < n; i++) {
+            const sp = Math.max(0, Math.min(1, prog * n - i));
+            if (sp <= 0) break;
+            const a = s.zig[i], b = s.zig[i + 1], m = [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2 - 14];
+            H.pen(c, H.partial(H.quadPts(a, m, b, 14), sp), 12, { seed: i * 1.9, wob: 1.5 });
           }
         });
-      });
-      p.ink('black', function (c) {
-        c.lineWidth = 0.9;
-        rings.forEach(function (rg) { c.beginPath(); c.arc(C[0], C[1], rg[0] + 11, 0, TAU); c.stroke(); });
-        for (var k = 0; k < 12; k++) {
-          var a = k * TAU / 12;
-          c.beginPath(); c.moveTo(C[0] + Math.cos(a) * 40, C[1] + Math.sin(a) * 40); c.lineTo(C[0] + Math.cos(a) * 178, C[1] + Math.sin(a) * 178); c.stroke();
-        }
-      });
-      p.ink('orange', function (c) {
-        c.lineWidth = 9; c.lineCap = 'butt'; c.beginPath();
-        c.moveTo(C[0] - 18, C[1]); c.lineTo(C[0] + 18, C[1]); c.moveTo(C[0], C[1] - 18); c.lineTo(C[0], C[1] + 18); c.stroke();
-      });
-    }},
-
-    betsol: { seed: 83, draw: function (p) {
-      p.ink('pink', function (c) {
-        for (var i = 0; i < 9; i++) { var h = p.rand(30, 128); c.fillRect(84 + i * 27, 220 - h, 17, h); }
-      });
-      p.ink('black', function (c) {
-        c.lineWidth = 4; H.rrect(c, 62, 58, 276, 180, 12); c.stroke();
-        c.lineWidth = 3; c.beginPath(); c.moveTo(166, 252); c.lineTo(234, 252); c.moveTo(200, 240); c.lineTo(200, 252); c.stroke();
-        c.lineWidth = 0.6; for (var y = 70; y < 230; y += 6) { c.beginPath(); c.moveTo(70, y); c.lineTo(330, y); c.stroke(); }
-      });
-      p.ink('teal', function (c) {
-        for (var l = 0; l < 4; l++) {
-          var y = 292 + l * 40, x = 46;
-          while (x < 300) { var w = Math.min(p.rand(34, 70), 350 - x); H.rrect(c, x, y, w, 22, 5); c.fill(); x += w + 20; }
-        }
-      });
-      p.ink('black', function (c) {
-        c.lineWidth = 1.6;
-        for (var l = 0; l < 4; l++) {
-          var y = 303 + l * 40;
-          c.beginPath(); c.moveTo(30, y); c.lineTo(366, y); c.stroke();
-          c.beginPath(); c.moveTo(374, y); c.lineTo(364, y - 5); c.lineTo(364, y + 5); c.closePath(); c.fill();
-        }
-      });
-      p.ink('orange', function (c) { var l = Math.floor(p.rand(0, 4)); c.beginPath(); c.arc(p.rand(80, 320), 303 + l * 40, 9, 0, TAU); c.fill(); });
-    }},
-
-    a11y: { seed: 97, draw: function (p) {
-      p.ink('blue', function (c) {
-        c.save(); H.bubble(c, 38, 52, 324, 330, 26, 56); c.clip();
-        H.dots(c, 38, 52, 362, 440, 7, function () { return 1.5; });
-        c.restore();
-        c.lineWidth = 5; H.bubble(c, 38, 52, 324, 330, 26, 56); c.stroke();
-      });
-      var cells = [];
-      for (var j = 0; j < 5; j++) for (var i = 0; i < 6; i++) {
-        var bits = []; for (var b = 0; b < 6; b++) bits.push(p.r() < 0.5);
-        cells.push({ x: 72 + i * 46, y: 96 + j * 58, bits: bits, hl: p.r() < 0.22 });
+        const px = s.P[0] + s.P[2] / 2, py = s.P[1] + s.P[3] / 2 - Math.abs(Math.sin(t * 2.2)) * 7;
+        p.ink('orange', c => {
+          H.wash(c, H.ring(px, py, 16, 16, { seed: 3, wob: 0.12, t: t * 0.4 }), { passes: 3, alpha: 0.55, bleed: 1.2, seed: 1 });
+          c.globalCompositeOperation = 'destination-out';
+          H.pen(c, [[px - 7, py], [px - 2, py + 5], [px + 7, py - 6]], 3.4, { seed: 3, wob: 0.3, taper: false });
+        });
       }
-      p.ink('orange', function (c) { cells.forEach(function (cl) { if (cl.hl) { H.rrect(c, cl.x - 12, cl.y - 12, 38, 52, 6); c.fill(); } }); });
-      p.ink('black', function (c) {
-        cells.forEach(function (cl) {
-          for (var b = 0; b < 6; b++) {
-            var x = cl.x + (b > 2 ? 14 : 0), y = cl.y + (b % 3) * 14;
-            c.beginPath(); c.arc(x, y, cl.bits[b] ? 5 : 4.4, 0, TAU);
-            if (cl.bits[b]) c.fill(); else { c.lineWidth = 0.9; c.stroke(); }
+    },
+
+    agentic: { seed: 53, still: ['yellow'],
+      setup(r) {
+        const C = [200, 250];
+        const hubs = [0, 1, 2, 3].map(i => {
+          const a = -Math.PI / 2 + i * TAU / 4 + (r() - 0.5) * 0.4, d = 104 + (r() - 0.5) * 16;
+          return [C[0] + Math.cos(a) * d, C[1] + Math.sin(a) * d];
+        });
+        const small = [];
+        for (let i = 0; i < 46; i++) small.push({ k: i % 4, a: r() * TAU, d: 28 + r() * 38, w: (r() < 0.5 ? -1 : 1) * (0.12 + r() * 0.3), sd: r() * 50 });
+        const curves = hubs.map((h, k) => {
+          const m = [(h[0] + C[0]) / 2, (h[1] + C[1]) / 2], dx = C[0] - h[0], dy = C[1] - h[1], L = Math.hypot(dx, dy);
+          return H.quadPts(h, [m[0] - dy / L * 22, m[1] + dx / L * 22], C, 24);
+        });
+        return { C, hubs, small, curves, ph: [r(), r(), r(), r()] };
+      },
+      draw(p, s, t) {
+        const C = s.C, hubs = s.hubs;
+        const pos = s.small.map(o => {
+          const h = hubs[o.k], a = o.a + t * o.w, d = o.d * (1 + 0.15 * noise(o.sd, t * 0.3));
+          return [h[0] + Math.cos(a) * d, h[1] + Math.sin(a) * d];
+        });
+        p.ink('yellow', c => hubs.forEach((h, k) => H.wash(c, H.ring(h[0], h[1], 44, 44, { seed: k * 3, wob: 0.14 }), { passes: 4, alpha: 0.3, bleed: 4, seed: k })));
+        p.ink('blue', c => {
+          pos.forEach((q, i) => {
+            const h = hubs[s.small[i].k], m = [(q[0] + h[0]) / 2 + noise(i, t * 0.4) * 10, (q[1] + h[1]) / 2 + noise(i + 9, t * 0.4) * 10];
+            H.pen(c, H.quadPts(q, m, h, 8), 1.1, { seed: i * 1.3, wob: 0.4 });
+          });
+          s.curves.forEach((cv, k) => {
+            H.pen(c, cv, 2.8, { seed: k * 7, wob: 1, t: t * 0.3 });
+            const n = hubs[(k + 1) % 4], h = hubs[k], m = [(h[0] + n[0]) / 2 + (C[0] - (h[0] + n[0]) / 2) * -0.25, (h[1] + n[1]) / 2 + (C[1] - (h[1] + n[1]) / 2) * -0.25];
+            H.dashes(c, H.quadPts(h, m, n, 30), 7, 8, t * 14, 1.6, { wob: 0.4 });
+          });
+        });
+        p.ink('orange', c => {
+          hubs.forEach((h, k) => H.wash(c, H.ring(h[0], h[1], 17, 17, { seed: k + 4, wob: 0.15, t: t * 0.3 }), { passes: 3, alpha: 0.55, bleed: 1.2, seed: k }));
+          H.wash(c, H.ring(C[0], C[1], 25, 25, { seed: 8, wob: 0.12, t: t * 0.3 }), { passes: 3, alpha: 0.55, bleed: 1.5, seed: 8 });
+          s.curves.forEach((cv, k) => { const f = (t * 0.45 + s.ph[k]) % 1, q = cv[Math.floor(f * (cv.length - 1))]; H.dot(c, q[0], q[1], 5, k, t); });
+        });
+        p.ink('black', c => {
+          pos.forEach((q, i) => H.dot(c, q[0], q[1], 3.2, i, t * 0.5));
+          H.pen(c, H.ring(C[0], C[1], 37, 37, { seed: 2, wob: 0.05, t: t * 0.2 }), 2, { closed: true, seed: 3, wob: 0.4 });
+          H.dot(c, C[0], C[1], 7, 1, t);
+        });
+      }
+    },
+
+    chat: { seed: 61,
+      setup(r) {
+        const b = [];
+        for (let j = 0; j < 20; j++) for (let i = 0; i < 14; i++) {
+          const x = 32 + i * 24 + (j % 2 ? 12 : 0) + (r() - 0.5) * 4, y = 48 + j * 20 + (r() - 0.5) * 4, skip = r() < 0.12, ph = r() * TAU;
+          if (skip || (x > 176 && x < 380 && y > 252 && y < 440)) continue;
+          b.push({ x, y, ph });
+        }
+        return { b, ring: H.roundRectPts(189, 271, 180, 122, 20) };
+      },
+      draw(p, s, t) {
+        p.ink('blue', c => s.b.forEach((o, i) => {
+          const x = o.x + noise(o.x * 0.01, o.y * 0.01 + t * 0.15) * 7, y = o.y + noise(o.y * 0.01 + 5, o.x * 0.01 + t * 0.15) * 5;
+          const w = Math.sin(t * 1.4 - (o.x + o.y) * 0.02 + o.ph * 0.3), sc = 0.5 + 0.5 * Math.max(0, w);
+          const bw = 14 * sc, bh = 10 * sc;
+          H.fill(c, H.wobble(H.bubblePts(x - bw / 2, y - bh / 2, bw, bh, 4 * sc, 2), 0.5, i * 0.7, t * 0.2));
+        }));
+        p.ink('orange', c => H.wash(c, H.bubblePts(200, 282, 158, 100, 22, 4), { passes: 3, alpha: 0.48, bleed: 2.5, seed: 2, t: t * 0.15 }));
+        p.ink('black', c => {
+          H.dashes(c, s.ring.concat([s.ring[0]]), 9, 7, t * 16, 2.4, { wob: 0.5, t: t * 0.2 });
+          [0, 1, 2].forEach(k => H.dot(c, 249 + k * 30, 332 - Math.max(0, Math.sin(t * 5 - k * 0.9)) * 7, 6, k, t * 0.3));
+        });
+      }
+    },
+
+    culture: { seed: 71, still: ['black'],
+      setup(r) {
+        const rings = [[50, 'pink'], [78, 'green'], [106, 'pink'], [134, 'green'], [162, 'pink']].map((rg, i) => {
+          const n = 7 + i * 3, segs = [];
+          for (let k = 0; k < n; k++) segs.push({ f: 0.3 + r() * 0.7, ph: r() * TAU });
+          return { rad: rg[0], ink: rg[1], n, segs, dir: i % 2 ? -1 : 1, sp: 0.1 + i * 0.025 };
+        });
+        const cracks = [0, 1, 2, 3].map(() => r() * TAU);
+        return { C: [200, 262], rings, cracks };
+      },
+      draw(p, s, t) {
+        const C = s.C;
+        p.ink('black', c => {
+          for (let k = 0; k < 14; k++) {
+            const rr = 20 + k * 11.5;
+            H.pen(c, H.ring(C[0], C[1], rr, rr * 0.97, { seed: 5 + k * 0.4, wob: 0.03 + k * 0.004, freq: 1.6 }), 0.9, { closed: true, seed: k, wob: 0.4 });
+          }
+          H.pen(c, H.ring(C[0], C[1], 182, 177, { seed: 9, wob: 0.03, freq: 2.2 }), 4.2, { closed: true, seed: 50, wob: 0.8 });
+          s.cracks.forEach((a, k) => H.pen(c, [[C[0] + Math.cos(a) * 34, C[1] + Math.sin(a) * 34], [C[0] + Math.cos(a + 0.05) * 110, C[1] + Math.sin(a + 0.05) * 110], [C[0] + Math.cos(a - 0.03) * 176, C[1] + Math.sin(a - 0.03) * 176]], 1.6, { seed: k * 9, wob: 1.5 }));
+        });
+        s.rings.forEach((rg, i) => p.ink(rg.ink, c => {
+          const rot = t * rg.sp * rg.dir;
+          for (let k = 0; k < rg.n; k++) {
+            const sg = rg.segs[k], a0 = -Math.PI / 2 + k * TAU / rg.n + 0.06 + rot;
+            const span = (TAU / rg.n - 0.12) * Math.min(1, sg.f * (0.8 + 0.2 * Math.sin(t * 1.1 + sg.ph)));
+            H.pen(c, H.arcPts(C[0], C[1], rg.rad, a0, a0 + span, 4), 13, { seed: i * 11 + k * 1.3, wob: 1.6, t: t * 0.2 });
+          }
+        }));
+        p.ink('orange', c => {
+          const a = t * 0.4, d = 20, ca = Math.cos(a) * d, sa = Math.sin(a) * d;
+          H.pen(c, [[C[0] - ca, C[1] - sa], [C[0] + ca, C[1] + sa]], 9, { seed: 1, wob: 0.8 });
+          H.pen(c, [[C[0] + sa, C[1] - ca], [C[0] - sa, C[1] + ca]], 9, { seed: 2, wob: 0.8 });
+        });
+      }
+    },
+
+    betsol: { seed: 83, still: ['black'],
+      setup(r) {
+        const bars = [];
+        for (let i = 0; i < 9; i++) bars.push({ h: 34 + r() * 96, ph: r() * TAU });
+        const lanes = [];
+        for (let l = 0; l < 4; l++) {
+          const ws = []; let P = 0;
+          for (let k = 0; k < 6; k++) { const w = 34 + r() * 36; ws.push(w); P += w + 20; }
+          lanes.push({ ws, P, sp: 18 + r() * 22 });
+        }
+        return { bars, lanes, ol: Math.floor(r() * 4) };
+      },
+      draw(p, s, t) {
+        const laneY = (l, x) => 302 + l * 38 + 4 * Math.sin(x * 0.035 + l * 1.3);
+        p.ink('pink', c => s.bars.forEach((b, i) => {
+          const h = b.h * (0.6 + 0.4 * Math.sin(t * 1.4 + b.ph));
+          H.wash(c, H.rectPts(86 + i * 27, 226 - h, 16, h), { passes: 2, alpha: 0.6, bleed: 1.4, seed: i });
+        }));
+        p.ink('black', c => {
+          H.pen(c, H.roundRectPts(62, 70, 276, 170, 16), 3.6, { closed: true, seed: 1, wob: 1 });
+          H.pen(c, [[176, 72], [148, 30]], 2, { seed: 2 }); H.pen(c, [[224, 72], [258, 34]], 2, { seed: 3 });
+          H.dot(c, 148, 30, 4, 1); H.dot(c, 258, 34, 4, 2);
+          H.pen(c, [[200, 240], [200, 256]], 3, { seed: 4 }); H.pen(c, [[164, 258], [236, 257]], 3, { seed: 5 });
+          for (let l = 0; l < 4; l++) {
+            const pts = []; for (let x = 28; x <= 360; x += 6) pts.push([x, laneY(l, x) + 11]);
+            H.pen(c, pts, 1.5, { seed: 10 + l, wob: 0.6 });
+            const e = pts[pts.length - 1];
+            H.pen(c, [[e[0] - 9, e[1] - 6], [e[0] + 4, e[1]], [e[0] - 9, e[1] + 6]], 1.8, { seed: 20 + l, taper: false });
           }
         });
-      });
-    }},
-
-    iterators: { seed: 101, draw: function (p) {
-      var C = [200, 240], N = 64, k = 44, pts = [];
-      for (var i = 0; i < N; i++) {
-        var a = i * 0.52 + p.rand(-0.03, 0.03), rad = 12 + i * 2.55;
-        pts.push([C[0] + Math.cos(a) * rad, C[1] + Math.sin(a) * rad, 1.6 + i * 0.11]);
-      }
-      p.ink('black', function (c) {
-        c.lineWidth = 1; H.line(c, pts);
-        pts.forEach(function (pt, i) { if (i > k) { c.lineWidth = 1.4; c.beginPath(); c.arc(pt[0], pt[1], pt[2], 0, TAU); c.stroke(); } });
-      });
-      p.ink('blue', function (c) { pts.forEach(function (pt, i) { if (i < k) { c.beginPath(); c.arc(pt[0], pt[1], pt[2], 0, TAU); c.fill(); } }); });
-      p.ink('orange', function (c) { var pt = pts[k]; c.beginPath(); c.arc(pt[0], pt[1], pt[2] * 2.4, 0, TAU); c.fill(); });
-    }},
-
-    coverage: { seed: 113, draw: function (p) {
-      var rows = 24, y0 = 66, lh = 14.6;
-      p.ink('black', function (c) {
-        c.lineWidth = 1; c.beginPath(); c.moveTo(64, y0 - 8); c.lineTo(64, y0 + rows * lh); c.stroke();
-        for (var j = 0; j < rows; j++) c.fillRect(44, y0 + j * lh + 3, 10, 2);
-        c.lineWidth = 2; c.strokeRect(60, 436, 280, 18);
-      });
-      for (var j = 0; j < rows; j++) {
-        var indent = Math.floor(p.rand(0, 4)) * 18, len = p.rand(50, 230);
-        if (p.r() < 0.08) continue;
-        var v = p.r(), ink = v < 0.72 ? 'green' : v < 0.9 ? 'pink' : 'yellow';
-        (function (ink, x, y, w) { p.ink(ink, function (c) { H.rrect(c, x, y, w, 8, 4); c.fill(); }); })(ink, 76 + indent, y0 + j * lh, Math.min(len, 330 - 76 - indent));
-      }
-      var pct = p.rand(0.7, 0.9);
-      p.ink('green', function (c) { c.fillRect(62, 438, 276 * pct, 14); });
-    }},
-
-    talk: { seed: 127, draw: function (p) {
-      p.ink('pink', function (c) { c.beginPath(); c.arc(150, 232, 112, 0, TAU); c.fill(); });
-      p.ink('blue', function (c) { c.beginPath(); c.arc(252, 282, 112, 0, TAU); c.fill(); });
-      p.ink('black', function (c) {
-        c.lineWidth = 2.2;
-        for (var k = 0; k < 5; k++) {
-          var rad = 30 + k * 16;
-          c.beginPath(); c.arc(150, 232, rad, -0.14, 1.06); c.stroke();
-          c.beginPath(); c.arc(252, 282, rad, Math.PI - 0.14, Math.PI + 1.06); c.stroke();
-        }
-      });
-      p.ink('yellow', function (c) { c.beginPath(); c.arc(201, 257, 9, 0, TAU); c.fill(); });
-    }},
-
-    hampi: { seed: 131, draw: function (p) {
-      p.ink('pink', function (c) { H.dots(c, 0, 40, 400, 330, 8, function (x, y) { return 2.8 * ((y - 40) / 290); }); });
-      p.ink('yellow', function (c) { c.beginPath(); c.arc(130, 150, 62, 0, TAU); c.fill(); });
-      p.ink('black', function (c) {
-        var cx = 290, y = 362, L = [], R = [];
-        for (var t = 0; t < 7; t++) {
-          var tw = 110 - t * 13, th = 26 - t * 1.5;
-          L.push([cx - tw / 2, y], [cx - tw / 2, y - th]);
-          R.push([cx + tw / 2, y], [cx + tw / 2, y - th]);
-          y -= th;
-        }
-        c.beginPath(); c.moveTo(L[0][0], L[0][1]);
-        L.forEach(function (pt) { c.lineTo(pt[0], pt[1]); });
-        c.lineTo(cx, y - 22);
-        R.slice().reverse().forEach(function (pt) { c.lineTo(pt[0], pt[1]); });
-        c.closePath(); c.fill();
-      });
-      var bs = [[84, 330, 54, 36], [140, 352, 40, 28], [112, 282, 34, 24]];
-      for (var i = 0; i < 9; i++) bs.push([20 + i * 45 + p.rand(-10, 10), p.rand(400, 455), p.rand(24, 46), p.rand(18, 32)]);
-      p.ink('orange', function (c) { bs.forEach(function (b) { H.blob(c, b[0], b[1], b[2], b[3], p.r, 0.1); c.fill(); }); });
-      p.ink('blue', function (c) {
-        c.lineWidth = 2;
-        for (var k = 0; k < 5; k++) { var y = 474 + k * 6; c.beginPath(); c.moveTo(p.rand(0, 60), y); c.lineTo(p.rand(300, 400), y); c.stroke(); }
-      });
-    }},
-
-    coorg: { seed: 139, draw: function (p) {
-      p.ink('pink', function (c) { H.dots(c, 0, 20, 400, 300, 8, function (x, y) { return Math.max(0, 3.2 * ((y - 20) / 280)); }); });
-      p.ink('orange', function (c) { c.beginPath(); c.arc(258, 196, 46, 0, TAU); c.fill(); });
-      var ridges = [0, 1, 2, 3, 4].map(function (i) { return H.ridge(p.r, 230 + i * 48, 20 + i * 7); });
-      ridges.slice(0, 4).forEach(function (f, i) {
-        p.ink('blue', function (c) {
-          H.ridgePath(c, f);
-          if (i < 3) { c.save(); c.clip(); H.dots(c, 0, 140, 400, 500, 6, function () { return 0.9 + i * 0.7; }); c.restore(); }
-          else c.fill();
-        });
-      });
-      p.ink('green', function (c) { H.ridgePath(c, ridges[4]); c.fill(); });
-      var f = ridges[3], bx = 0, by = 999;
-      for (var x = 40; x <= 360; x += 4) { if (f(x) < by) { by = f(x); bx = x; } }
-      p.ink('black', function (c) { H.blob(c, bx, by - 9, 15, 11, p.r, 0.12); c.fill(); });
-    }},
-
-    munnar: { seed: 149, draw: function (p) {
-      p.ink('yellow', function (c) { H.dots(c, 0, 20, 400, 240, 8, function (x, y) { return 2.6 * (1 - (y - 20) / 220); }); });
-      p.ink('blue', function (c) {
-        var f = H.ridge(p.r, 210, 18);
-        H.ridgePath(c, f); c.save(); c.clip(); H.dots(c, 0, 150, 400, 500, 6, function () { return 1.3; }); c.restore();
-      });
-      var hills = [[110, 236, 170, 150], [300, 266, 170, 140], [190, 334, 260, 120]];
-      hills.forEach(function (hl) {
-        var hx = hl[0], top = hl[1], hw = hl[2], hgt = hl[3];
-        var g = function (x) { var u = (x - hx) / hw; return top + hgt * u * u; };
-        p.ink('green', function (c) {
-          c.save(); c.beginPath(); c.moveTo(hx - hw, 520);
-          for (var x = hx - hw; x <= hx + hw; x += 3) c.lineTo(x, g(x));
-          c.lineTo(hx + hw, 520); c.closePath(); c.clip();
-          c.fillStyle = PAPER; c.globalCompositeOperation = 'destination-out'; c.fill(); c.globalCompositeOperation = 'source-over';
-          c.lineWidth = 2.4;
-          for (var k = 0; k < 40; k++) {
-            c.beginPath();
-            for (var x2 = hx - hw, first = true; x2 <= hx + hw; x2 += 3) {
-              var y = g(x2) + k * 8 + 2 * Math.sin(x2 * 0.08 + k);
-              if (first) { c.moveTo(x2, y); first = false; } else c.lineTo(x2, y);
+        p.ink('teal', c => {
+          c.save(); c.beginPath(); c.rect(36, 280, 326, 170); c.clip();
+          s.lanes.forEach((L, l) => {
+            const off = (t * L.sp) % L.P;
+            for (let rep = -1; rep < 3; rep++) {
+              let x = 36 + rep * L.P + off;
+              L.ws.forEach((w, k) => {
+                if (x < 370 && x + w > 28) H.wash(c, H.ring(x + w / 2, laneY(l, x + w / 2), w / 2, 9, { seed: l * 9 + k, wob: 0.1 }), { passes: 2, alpha: 0.6, bleed: 1.2, seed: k });
+                x += w + 20;
+              });
             }
-            c.stroke();
+          });
+          c.restore();
+        });
+        const ox = 44 + ((t * 60) % 312);
+        p.ink('orange', c => H.wash(c, H.ring(ox, laneY(s.ol, ox), 13, 9, { seed: 5, wob: 0.15, t }), { passes: 3, alpha: 0.6, bleed: 1, seed: 3 }));
+      }
+    },
+
+    a11y: { seed: 97, still: ['blue', 'black'],
+      setup(r) {
+        const cells = [];
+        for (let j = 0; j < 5; j++) for (let i = 0; i < 6; i++) {
+          const bits = []; for (let b = 0; b < 6; b++) bits.push(r() < 0.5);
+          cells.push({ x: 72 + i * 46, y: 96 + j * 58, bits });
+        }
+        return { cells };
+      },
+      draw(p, s, t) {
+        p.ink('blue', c => {
+          const pts = H.bubblePts(38, 52, 324, 330, 56, 5);
+          H.wash(c, pts, { passes: 3, alpha: 0.2, bleed: 4, seed: 1 });
+          H.pen(c, pts, 3.2, { closed: true, seed: 2, wob: 1.1 });
+        });
+        p.ink('black', c => s.cells.forEach((cl, n) => {
+          for (let b = 0; b < 6; b++) {
+            const x = cl.x + (b > 2 ? 14 : 0), y = cl.y + (b % 3) * 14;
+            if (cl.bits[b]) H.dot(c, x, y, 5, n * 6 + b);
+            else H.pen(c, H.ring(x, y, 4.2, 4.2, { seed: n + b }), 0.9, { closed: true, seed: n * 6 + b, wob: 0.2 });
+          }
+        }));
+        const n = s.cells.length, pos = t * 1.6, i0 = Math.floor(pos) % n, i1 = (i0 + 1) % n, f = ease(pos % 1);
+        const a = s.cells[i0], b = i1 ? s.cells[i1] : a;
+        const x = a.x + 7 + (b.x - a.x) * f, y = a.y + 14 + (b.y - a.y) * f;
+        p.ink('orange', c => H.wash(c, H.ring(x, y, 22, 28, { seed: 4, wob: 0.14, t: t * 0.5 }), { passes: 3, alpha: 0.4, bleed: 2, seed: 2 }));
+      }
+    },
+
+    iterators: { seed: 101, still: ['yellow'],
+      setup(r) {
+        const seeds = [];
+        for (let i = 0; i < 150; i++) {
+          const a = i * 2.39996323, rr = 10.8 * Math.sqrt(i + 1);
+          seeds.push([200 + Math.cos(a) * rr, 240 + Math.sin(a) * rr, 2 + i * 0.024]);
+        }
+        const petals = [];
+        for (let k = 0; k < 22; k++) petals.push(k * TAU / 22 + (r() - 0.5) * 0.12);
+        return { seeds, petals };
+      },
+      draw(p, s, t) {
+        p.ink('yellow', c => s.petals.forEach((a, k) => {
+          const cx = 200 + Math.cos(a) * 160, cy = 240 + Math.sin(a) * 160;
+          const pts = H.ring(0, 0, 34, 12, { seed: k, wob: 0.12 }).map(q => [cx + q[0] * Math.cos(a) - q[1] * Math.sin(a), cy + q[0] * Math.sin(a) + q[1] * Math.cos(a)]);
+          H.wash(c, pts, { passes: 3, alpha: 0.42, bleed: 2, seed: k });
+        }));
+        const N = s.seeds.length, k = Math.min(Math.floor(t * 10) % (N + 50), N);
+        p.ink('blue', c => { for (let i = 0; i < k; i++) { const q = s.seeds[i]; H.dot(c, q[0], q[1], q[2], i); } });
+        p.ink('black', c => { for (let i = k + 1; i < N; i++) { const q = s.seeds[i]; H.pen(c, H.ring(q[0], q[1], q[2], q[2], { seed: i }), 0.8, { closed: true, seed: i, wob: 0.2 }); } });
+        if (k < N) { const q = s.seeds[k]; p.ink('orange', c => H.wash(c, H.ring(q[0], q[1], q[2] * (2.3 + 0.3 * Math.sin(t * 8)), q[2] * 2.3, { seed: 2, wob: 0.15 }), { passes: 2, alpha: 0.7, bleed: 0.8, seed: 1 })); }
+      }
+    },
+
+    coverage: { seed: 113, still: ['black'],
+      setup(r) {
+        const rows = [], inks = [];
+        for (let j = 0; j < 22; j++) {
+          const indent = Math.floor(r() * 4) * 18, blank = r() < 0.08, v = r();
+          const words = []; let x = 76 + indent;
+          const end = Math.min(76 + indent + 50 + r() * 190, 330);
+          while (x < end - 10) { const w = Math.min(14 + r() * 46, end - x); words.push([x, w]); x += w + 7; }
+          rows.push({ indent, blank, words, end, ink: v < 0.72 ? 'green' : v < 0.9 ? 'pink' : 'yellow' });
+        }
+        return { rows, y0: 72, lh: 16, pct: 0.7 + r() * 0.2 };
+      },
+      draw(p, s, t) {
+        const y = j => s.y0 + j * s.lh;
+        p.ink('black', c => {
+          H.pen(c, [[64, s.y0 - 10], [64, y(s.rows.length)]], 1.2, { seed: 1, wob: 0.6 });
+          s.rows.forEach((row, j) => {
+            H.pen(c, [[46, y(j)], [55, y(j)]], 1.4, { seed: 100 + j, wob: 0.3 });
+            if (!row.blank) row.words.forEach((wd, k) => H.pen(c, [[wd[0], y(j)], [wd[0] + wd[1], y(j)]], 2.2, { seed: j * 9 + k, wob: 1.6, freq: 0.22 }));
+          });
+          H.pen(c, H.rectPts(60, 438, 280, 18), 2, { seed: 7, taper: false, wob: 0.6 });
+        });
+        const ph = t % 9, prog = Math.min(1, ph / 6) * s.rows.length, bar = Math.max(0, Math.min(1, (ph - 6) / 1.5));
+        s.rows.forEach((row, j) => {
+          const f = Math.max(0, Math.min(1, prog - j));
+          if (f <= 0 || row.blank) return;
+          p.ink(row.ink, c => H.pen(c, [[72 + row.indent, y(j) + 1], [72 + row.indent + (row.end - 68 - row.indent) * f, y(j) - 1]], 12, { seed: j * 3.7, wob: 0.8, taper: false }));
+        });
+        const cy = y(Math.min(prog, s.rows.length - 0.01));
+        p.ink('orange', c => H.pen(c, [[24, cy - 6], [36, cy], [24, cy + 6]], 2.6, { seed: 4, wob: 0.3, taper: false }));
+        if (bar > 0) p.ink('green', c => H.pen(c, [[64, 447], [64 + 272 * s.pct * bar, 447]], 12, { seed: 9, wob: 0.6, taper: false }));
+      }
+    },
+
+    talk: { seed: 127,
+      draw(p, s, t) {
+        const m = [201, 257], u = [0.898, 0.44], d = 56.8 * (1 + 0.08 * Math.sin(t * 0.7));
+        const a = [m[0] - u[0] * d, m[1] - u[1] * d], b = [m[0] + u[0] * d, m[1] + u[1] * d];
+        p.ink('pink', c => H.wash(c, H.ring(a[0], a[1], 110, 110, { seed: 1, wob: 0.07, t: t * 0.2 }), { passes: 4, alpha: 0.3, bleed: 4, seed: 1 }));
+        p.ink('blue', c => H.wash(c, H.ring(b[0], b[1], 110, 110, { seed: 2, wob: 0.07, t: t * 0.2 }), { passes: 4, alpha: 0.3, bleed: 4, seed: 2 }));
+        const who = Math.floor(t / 3.2) % 2, src = who ? b : a, ang = who ? Math.PI + 0.46 : 0.46;
+        p.ink('black', c => {
+          for (let k = 0; k < 5; k++) {
+            const rad = 24 + ((t * 26 + k * 17) % 85);
+            H.pen(c, H.arcPts(src[0], src[1], rad, ang - 0.6, ang + 0.6, 4), Math.max(0.5, 3 * (1 - (rad - 24) / 85)), { seed: k * 5 + who, wob: 0.8, t: t * 0.3 });
+          }
+        });
+        p.ink('yellow', c => H.wash(c, H.ring(m[0], m[1], 9 + 2 * Math.sin(t * 3), 9, { seed: 3, wob: 0.2 }), { passes: 2, alpha: 0.8, bleed: 0.8, seed: 3 }));
+      }
+    },
+
+    hampi: { seed: 131, still: ['pink', 'black', 'orange'],
+      setup(r) {
+        const bs = [[84, 330, 54, 36], [140, 352, 40, 28], [112, 284, 34, 24]];
+        for (let i = 0; i < 9; i++) bs.push([20 + i * 45 + (r() - 0.5) * 20, 400 + r() * 55, 24 + r() * 22, 18 + r() * 14]);
+        const river = [];
+        for (let i = 0; i < 12; i++) river.push({ y: 470 + (i % 5) * 6, x: r() * 480, len: 50 + r() * 90, sp: 14 + r() * 14 });
+        return { bs, river };
+      },
+      draw(p, s, t) {
+        p.ink('pink', c => H.stipple(c, 0, 30, 400, 360, 2800, (x, y) => (y - 30) / 330, 0.8, 1.8, 11));
+        p.ink('yellow', c => H.wash(c, H.ring(130, 150 + 5 * Math.sin(t * 0.5), 60, 60, { seed: 2, wob: 0.06 }), { passes: 4, alpha: 0.32, bleed: 3, seed: 2 }));
+        p.ink('black', c => {
+          const cx = 290; let y = 362; const L = [], R = [];
+          for (let k = 0; k < 7; k++) {
+            const tw = 110 - k * 13, th = 26 - k * 1.5;
+            L.push([cx - tw / 2, y], [cx - tw / 2, y - th]); R.push([cx + tw / 2, y], [cx + tw / 2, y - th]);
+            H.pen(c, [[cx - tw / 2 + 6, y - th / 2], [cx + tw / 2 - 6, y - th / 2]], 1.4, { seed: k * 3, wob: 0.6 });
+            y -= th;
+          }
+          const outline = L.concat([[cx, y - 24]], R.slice().reverse());
+          H.wash(c, outline, { passes: 2, alpha: 0.35, bleed: 1.2, seed: 4 });
+          H.pen(c, outline, 2.2, { closed: true, seed: 5, wob: 0.6 });
+          H.dot(c, cx, y - 28, 4, 2);
+          H.pen(c, [[38, 312], [64, 304], [80, 316]], 1.2, { seed: 8, wob: 0.6 });
+          H.pen(c, [[118, 410], [132, 400], [150, 404]], 1.2, { seed: 9, wob: 0.6 });
+        });
+        p.ink('orange', c => s.bs.forEach((b, i) => H.wash(c, H.ring(b[0], b[1], b[2], b[3], { seed: i * 3.1, wob: 0.14, freq: 1 }), { passes: 4, alpha: 0.32, bleed: 3, seed: i })));
+        p.ink('blue', c => s.river.forEach((st, i) => {
+          const x = ((st.x - t * st.sp) % 480 + 480) % 480 - 60;
+          H.pen(c, [[x, st.y], [x + st.len, st.y + 1]], 2.4, { seed: i * 2.2, wob: 0.8 });
+        }));
+      }
+    },
+
+    coorg: { seed: 139, still: ['pink', 'blue', 'green'],
+      setup(r) {
+        const ridges = [0, 1, 2, 3, 4].map(i => H.ridge(r, 230 + i * 48, 20 + i * 7));
+        let bx = 0, by = 999;
+        for (let x = 40; x <= 360; x += 4) { const y = ridges[3](x); if (y < by) { by = y; bx = x; } }
+        const birds = [0, 1, 2].map(() => ({ x: r() * 440, y: 90 + r() * 80, sp: 10 + r() * 8, ph: r() * TAU }));
+        return { ridges, stone: [bx, by], birds };
+      },
+      draw(p, s, t) {
+        p.ink('pink', c => H.stipple(c, 0, 20, 400, 320, 3000, (x, y) => (y - 20) / 300, 0.8, 1.9, 13));
+        s.ridges.slice(0, 4).forEach((f, i) => p.ink('blue', c => H.wash(c, H.ridgePts(f, -5, 405, 505, 6), { passes: i < 3 ? 2 : 3, alpha: 0.14 + i * 0.12, bleed: 2.5, seed: i })));
+        p.ink('green', c => H.wash(c, H.ridgePts(s.ridges[4], -5, 405, 505, 6), { passes: 3, alpha: 0.5, bleed: 2.5, seed: 9 }));
+        const sy = 200 + 62 * (0.5 - 0.5 * Math.cos(t * 0.3));
+        p.ink('orange', c => {
+          c.save();
+          H.path(c, [[-5, -5], [405, -5]].concat(H.ridgePts(s.ridges[0], -5, 405, 0, 6).slice(1, -1).reverse()));
+          c.clip();
+          H.wash(c, H.ring(258, sy, 46, 46, { seed: 1, wob: 0.06 }), { passes: 3, alpha: 0.5, bleed: 2, seed: 1 });
+          c.restore();
+        });
+        p.ink('black', c => {
+          H.dot(c, s.stone[0], s.stone[1] - 9, 13, 3);
+          s.birds.forEach((b, i) => {
+            const x = ((b.x - t * b.sp) % 460 + 460) % 460 - 30, y = b.y + Math.sin(t * 0.7 + b.ph) * 4, f = Math.sin(t * 5 + b.ph);
+            H.pen(c, [[x - 9, y - 4 * f], [x - 3, y - 1], [x, y], [x + 3, y - 1], [x + 9, y - 4 * f]], 1.6, { seed: i, wob: 0.2 });
+          });
+        });
+      }
+    },
+
+    munnar: { seed: 149, still: ['yellow', 'blue', 'black'],
+      setup(r) {
+        return {
+          mist: H.ridge(r, 210, 18),
+          hills: [[110, 236, 170, 150], [300, 266, 170, 140], [190, 334, 260, 120]],
+          road: H.bezPts([70, 505], [330, 470], [40, 410], [212, 346], 40)
+        };
+      },
+      draw(p, s, t) {
+        p.ink('yellow', c => H.stipple(c, 0, 10, 400, 250, 2200, (x, y) => 1 - (y - 10) / 240, 0.8, 1.8, 17));
+        p.ink('blue', c => H.wash(c, H.ridgePts(s.mist, -5, 405, 505, 6), { passes: 2, alpha: 0.22, bleed: 2.5, seed: 3 }));
+        p.ink('green', c => s.hills.forEach((hl, h) => {
+          const hx = hl[0], top = hl[1], hw = hl[2], hgt = hl[3], g = x => top + hgt * Math.pow((x - hx) / hw, 2);
+          const outline = [[hx - hw, 520]];
+          for (let x = hx - hw; x <= hx + hw; x += 4) outline.push([x, g(x)]);
+          outline.push([hx + hw, 520]);
+          c.save(); H.path(c, outline); c.clip();
+          c.globalCompositeOperation = 'destination-out'; c.fill(); c.globalCompositeOperation = 'source-over';
+          for (let k = 0; k < 26; k++) {
+            const row = [];
+            for (let x = hx - hw; x <= hx + hw; x += 5) row.push([x, g(x) + 3 + k * 9 + 2 * Math.sin(x * 0.08 + k - t * 1.4)]);
+            H.pen(c, row, 2.4, { seed: h * 40 + k, wob: 0.6, taper: false });
+          }
+          c.restore();
+        }));
+        p.ink('black', c => H.pen(c, s.road, 8, { seed: 2, wob: 0.8, wfn: u => 1 - 0.75 * u }));
+        const u = (t * 0.07) % 1, i = Math.min(s.road.length - 1, Math.floor(u * (s.road.length - 1))), q = s.road[i];
+        p.ink('orange', c => H.dot(c, q[0], q[1] - 6 * (1 - 0.5 * u), 7 * (1 - 0.55 * u), 3, t));
+      }
+    },
+
+    rameshwaram: { seed: 157, still: ['pink', 'yellow'],
+      setup(r) {
+        const rows = [];
+        for (let k = 0; k < 22; k++) {
+          const y = 292 + k * k * 0.42 + k * 2.2; if (y > 500) break;
+          const strokes = [];
+          for (let j = 0; j < 3 + Math.floor(k / 3); j++) strokes.push({ x: r() * 460, len: 40 + r() * 80 });
+          rows.push({ y, k, strokes });
+        }
+        const refl = [];
+        for (let k = 0; k < 9; k++) refl.push(34 - k * 2.4 + (r() - 0.5) * 12);
+        return { rows, refl };
+      },
+      draw(p, s, t) {
+        p.ink('pink', c => H.stipple(c, 0, 30, 400, 262, 2400, (x, y) => (y - 30) / 232, 0.8, 1.8, 19));
+        p.ink('yellow', c => H.wash(c, H.ring(286, 196, 42, 42, { seed: 1, wob: 0.06 }), { passes: 4, alpha: 0.34, bleed: 2.5, seed: 1 }));
+        p.ink('blue', c => s.rows.forEach(row => row.strokes.forEach((st, j) => {
+          const x = ((st.x + t * (4 + row.k * 0.6)) % 460) - 30, y = row.y + 1.2 * Math.sin(t * 1.2 + row.k * 0.7 + j);
+          H.pen(c, [[x, y], [x + st.len * (1 + row.k * 0.05), y]], 0.9 + row.k * 0.17, { seed: row.k * 7 + j, wob: 0.6 });
+        })));
+        p.ink('orange', c => s.refl.forEach((w0, k) => {
+          const y = 300 + k * k * 1.6 + k * 6, w = w0 * (0.75 + 0.25 * Math.sin(t * 2 + k));
+          H.pen(c, [[286 - w, y], [286 + w, y]], 3, { seed: k, wob: 0.5 });
+        }));
+        p.ink('black', c => {
+          H.pen(c, [[-5, 264], [405, 263]], 3.2, { seed: 1, taper: false, wob: 0.8 });
+          H.pen(c, [[-5, 271], [405, 271]], 2.2, { seed: 2, taper: false, wob: 0.8 });
+          for (let x = 8, n = 0; x < 400; x += 26, n++) {
+            H.pen(c, [[x + 2, 272], [x + 2.5, 292]], 3.4, { seed: 10 + n, wob: 0.4 });
+            H.pen(c, H.arcPts(x + 15.5, 271, 10.5, 0, Math.PI, 3), 1.6, { seed: 40 + n, wob: 0.3 });
+          }
+          H.pen(c, [[-5, 292], [405, 292]], 1.2, { seed: 3, wob: 0.6 });
+          const x0 = ((t * 38) % 700) - 200;
+          for (let q = 0; q < 5; q++) {
+            const x = x0 + q * 34;
+            if (x < -40 || x > 440) continue;
+            H.fill(c, H.wobble(H.rectPts(x, 251, 30, 11), 0.5, q, 0));
+          }
+        });
+      }
+    },
+
+    // ---------- the intro: a ride past places from the photo log ----------
+    hero: { seed: 7, hero: true, still: ['pink', 'yellow'],
+      setup(r, aw, ah, press) {
+        const u = ah / 440, P = 1000, gy = ah * 0.79, gb = ah * 0.93;
+        const far = H.ridgeP(r, ah * 0.52, ah * 0.07, P), mid = H.ridgeP(r, ah * 0.66, ah * 0.05, P);
+        const farStrip = press.strip('blue', P, ah, c => {
+          const pts = H.ridgePts(far, -10, P + 10, gy + 4, 6);
+          c.globalAlpha = 0.34; H.fill(c, pts); c.globalAlpha = 1;
+          H.stipple(c, 0, ah * 0.3, P, gy, Math.round(5200 * u), (x, y) => (y > far(x) ? Math.min(1, (y - far(x)) / (ah * 0.22)) * 0.85 : 0), 0.8, 1.8, 21);
+        });
+        const midStrip = press.strip('green', P, ah, c => {
+          const pts = H.ridgePts(mid, -10, P + 10, gy + 4, 6);
+          c.globalAlpha = 0.28; H.fill(c, pts); c.globalAlpha = 1;
+          c.save(); H.path(c, pts); c.clip();
+          for (let k = 0; k < 16; k++) {
+            const row = [];
+            for (let x = -10; x <= P + 10; x += 8) row.push([x, mid(x) + 5 + k * 6.5 * u]);
+            H.pen(c, row, 1.9 * u, { seed: k * 4.1, wob: 0.7, taper: false });
           }
           c.restore();
         });
-      });
-      p.ink('black', function (c) {
-        c.lineWidth = 6; c.beginPath(); c.moveTo(70, 505); c.bezierCurveTo(330, 470, 40, 410, 212, 346); c.stroke();
-      });
-    }},
+        const birds = [0, 1, 2, 3].map(() => ({ x: r() * 1100, y: 0.12 + r() * 0.16, sp: 14 + r() * 10, ph: r() * TAU }));
+        const labels = ['ABU DHABI', 'HAMPI', 'COORG', 'MUNNAR', 'RAMESHWARAM', 'DUBAI', 'CHITRADURGA', 'BELUR'];
+        return { u, P, gy, gb, farStrip, midStrip, birds, labels };
+      },
+      draw(p, s, t) {
+        const aw = p.aw, ah = p.ah, u = s.u, dist = t * 90, gy = s.gy, gb = s.gb;
+        p.ink('pink', c => H.stipple(c, 0, 0, aw, gy, Math.round(9000 * u), (x, y) => 0.03 + 0.85 * Math.pow(y / (ah * 0.72), 1.8), 0.6, 1.4, 5));
+        p.ink('yellow', c => H.wash(c, H.ring(aw * 0.73, ah * 0.3, ah * 0.15, ah * 0.15, { seed: 4, wob: 0.05 }), { passes: 4, alpha: 0.34, bleed: 4 * u, seed: 2 }));
+        p.ink('blue', c => {
+          const o = (dist * 0.12) % s.P;
+          c.drawImage(s.farStrip.cv, -o, 0, s.P, ah); c.drawImage(s.farStrip.cv, s.P - o, 0, s.P, ah);
+        });
 
-    rameshwaram: { seed: 157, draw: function (p) {
-      p.ink('pink', function (c) { H.dots(c, 0, 40, 400, 262, 8, function (x, y) { return Math.max(0, 3 * ((y - 40) / 222)); }); });
-      p.ink('yellow', function (c) { c.beginPath(); c.arc(286, 196, 42, 0, TAU); c.fill(); });
-      p.ink('blue', function (c) {
-        for (var k = 0; k < 24; k++) {
-          var y = 292 + k * k * 0.42 + k * 2.2; if (y > 500) break;
-          c.lineWidth = 0.8 + k * 0.18; c.beginPath(); c.moveTo(0, y); c.lineTo(400, y); c.stroke();
-        }
-      });
-      p.ink('orange', function (c) {
-        c.lineWidth = 3;
-        for (var k = 0; k < 9; k++) {
-          var y = 300 + k * k * 1.6 + k * 6, w = 34 - k * 2.4 + p.rand(-6, 6);
-          c.beginPath(); c.moveTo(286 - w, y); c.lineTo(286 + w, y); c.stroke();
-        }
-      });
-      p.ink('black', function (c) {
-        c.fillRect(0, 264, 400, 7);
-        for (var x = 8; x < 400; x += 26) {
-          c.fillRect(x, 271, 5, 21);
-          c.lineWidth = 2; c.beginPath(); c.arc(x + 15.5, 271, 10.5, 0, Math.PI); c.stroke();
-        }
-        c.lineWidth = 1.4; c.beginPath(); c.moveTo(0, 292); c.lineTo(400, 292); c.stroke();
-      });
-    }}
+        const palms = [], ps = dist * 0.55, pb = Math.floor(ps / 420);
+        for (let i = -1; i <= 3; i++) { const sx = (pb + i) * 420 + 160 - ps; if (sx > -140 && sx < aw + 140) palms.push([sx, pb + i]); }
+        const palmTop = sx => [sx + 16 * u, gy - 118 * u];
+        p.ink('green', c => {
+          const o = (dist * 0.3) % s.P;
+          c.drawImage(s.midStrip.cv, -o, 0, s.P, ah); c.drawImage(s.midStrip.cv, s.P - o, 0, s.P, ah);
+          palms.forEach(pm => {
+            const T = palmTop(pm[0]);
+            for (let f = 0; f < 7; f++) {
+              const a = -Math.PI + 0.25 + f * (Math.PI - 0.5) / 6 + Math.sin(t * 1.4 + f + pm[1]) * 0.07, L = 48 * u;
+              const tip = [T[0] + Math.cos(a) * L, T[1] + Math.sin(a) * L + 24 * u], k = [T[0] + Math.cos(a) * L * 0.55, T[1] + Math.sin(a) * L * 0.55 - 10 * u];
+              H.pen(c, H.quadPts(T, k, tip, 10), 4 * u, { seed: pm[1] * 13 + f, wob: 0.6 * u });
+            }
+          });
+        });
+
+        // Rider geometry
+        const ru = u * 1.25, rx = aw * 0.28, R = 17 * ru, wy = gb - 4 * u - R, bob = Math.sin(t * 9) * 0.8 * u, rcy = wy + bob, fx = rx + 74 * ru, rot = dist / R;
+        const P = (x, y) => [rx + x * ru, rcy - y * ru];
+
+        p.ink('black', c => {
+          H.pen(c, [[-10, gy], [aw + 10, gy]], 2.6 * u, { seed: 1, wob: 1, taper: false, t: t * 0.2 });
+          H.pen(c, [[-10, gb], [aw + 10, gb]], 1.8 * u, { seed: 2, wob: 1, taper: false, t: t * 0.2 });
+          const dl = 46 * u, per = 80 * u, my = (gy + gb) / 2 + 6 * u, off = dist % per;
+          for (let x = -off - per; x < aw + per; x += per) H.pen(c, [[x, my], [x + dl, my]], 3.2 * u, { seed: Math.round((x + dist) / per) * 1.7, wob: 0.6 });
+
+          palms.forEach(pm => {
+            const T = palmTop(pm[0]);
+            H.pen(c, H.quadPts([pm[0], gy], [pm[0] - 12 * u, gy - 60 * u], T, 16), 5 * u, { seed: pm[1] * 3, wob: 0.8, wfn: s2 => 1 - 0.55 * s2 });
+          });
+
+          const mb = Math.floor(dist / 560);
+          for (let i = -1; i <= 2; i++) {
+            const sx = (mb + i) * 560 + 420 - dist, rr = 30 * u, top = gy - 30 * u;
+            if (sx < -80 || sx > aw + 80) continue;
+            const label = s.labels[((mb + i) % s.labels.length + s.labels.length) % s.labels.length];
+            H.pen(c, [[sx - rr, gy + 2]].concat(H.arcPts(sx, top, rr, Math.PI, TAU, 4), [[sx + rr, gy + 2]]), 2.4 * u, { seed: mb + i, wob: 0.6, taper: false });
+            H.pen(c, [[sx - rr, top], [sx + rr, top]], 1.6 * u, { seed: mb + i + 7, wob: 0.4 });
+            let fs = 9.5 * u;
+            c.font = `700 ${fs}px "Helvetica Neue", Helvetica, Arial, sans-serif`;
+            const mw = c.measureText(label).width;
+            if (mw > 52 * u) { fs *= 52 * u / mw; c.font = `700 ${fs}px "Helvetica Neue", Helvetica, Arial, sans-serif`; }
+            c.textAlign = 'center'; c.textBaseline = 'middle';
+            c.fillText(label, sx, gy - 14 * u);
+          }
+
+          [rx, fx].forEach((wx, k) => {
+            H.pen(c, H.ring(wx, rcy, R, R, { seed: k + 1, wob: 0.04, t: t * 0.4 }), 7 * ru, { closed: true, seed: k * 2, wob: 0.4 });
+            H.pen(c, H.ring(wx, rcy, R * 0.5, R * 0.5, { seed: k + 5, wob: 0.05 }), 1.4 * ru, { closed: true, seed: k * 2 + 1, wob: 0.2 });
+            H.dot(c, wx, rcy, 2.6 * ru, k);
+            for (let j = 0; j < 2; j++) {
+              const a = rot + j * Math.PI;
+              H.dot(c, wx + Math.cos(a) * R * 0.5, rcy + Math.sin(a) * R * 0.5, 1.8 * ru, j + k * 2);
+            }
+          });
+          H.wash(c, [P(22, 6), P(48, 4), P(54, 22), P(30, 26)], { passes: 2, alpha: 0.7, bleed: 0.8 * ru, seed: 21 });
+          H.pen(c, [P(24, 8), P(2, 10), P(-14, 16)], 3.2 * ru, { seed: 22, wob: 0.3, taper: false });
+          H.pen(c, [[rx, rcy], P(26, 18), P(52, 22), [fx, rcy]], 3.4 * ru, { seed: 11, wob: 0.5, taper: false });
+          H.pen(c, [[fx, rcy], P(64, 48)], 3.6 * ru, { seed: 12, wob: 0.4, taper: false });
+          H.pen(c, [P(54, 52), P(68, 50)], 3 * ru, { seed: 13, wob: 0.3, taper: false });
+          H.pen(c, [P(0, 32), P(30, 36)], 5.5 * ru, { seed: 14, wob: 0.4 });
+          const hip = P(24, 38), sh = P(46, 64), hand = P(60, 49);
+          H.pen(c, [hip, sh], 8 * ru, { seed: 15, wob: 0.6, t: t * 0.3 });
+          H.pen(c, [sh, P(57, 56), hand], 4.4 * ru, { seed: 16, wob: 0.4, t: t * 0.3 });
+          H.pen(c, [hip, P(44, 26), P(36, 10)], 6 * ru, { seed: 17, wob: 0.4, t: t * 0.3 });
+          const hd = P(55, 76);
+          H.dot(c, hd[0], hd[1], 10 * ru, 5, t * 0.3);
+
+          for (let k = 0; k < 5; k++) {
+            const age = (t * 1.5 + k / 5) % 1;
+            H.dot(c, rx - 30 * ru - age * 60 * u, rcy + R - 5 * u - age * 10 * u, Math.max(0.4, (2.8 - age * 2.3) * u), k, t);
+          }
+          s.birds.forEach((b, i) => {
+            const x = ((b.x - t * b.sp) % (aw + 120) + aw + 120) % (aw + 120) - 60, y = b.y * ah + Math.sin(t * 0.7 + b.ph) * 4 * u, f = Math.sin(t * 5 + b.ph);
+            H.pen(c, [[x - 9 * u, y - 4 * u * f], [x - 3 * u, y - u], [x, y], [x + 3 * u, y - u], [x + 9 * u, y - 4 * u * f]], 1.7 * u, { seed: i, wob: 0.2 });
+          });
+        });
+
+        p.ink('orange', c => {
+          const mb = Math.floor(dist / 560);
+          for (let i = -1; i <= 2; i++) {
+            const sx = (mb + i) * 560 + 420 - dist, rr = 30 * u, top = gy - 30 * u;
+            if (sx < -80 || sx > aw + 80) continue;
+            H.wash(c, H.arcPts(sx, top, rr - 2 * u, Math.PI, TAU, 4), { passes: 2, alpha: 0.6, bleed: 1, seed: mb + i });
+          }
+          H.wash(c, [P(26, 26), P(40, 42), P(60, 48), P(76, 46), P(88, 30), P(74, 16), P(52, 14), P(32, 16)], { passes: 3, alpha: 0.58, bleed: 1.2 * ru, seed: 3 });
+          H.wash(c, [P(-12, 26), P(8, 36), P(26, 30), P(20, 22), P(-2, 20)], { passes: 2, alpha: 0.58, bleed: 1 * ru, seed: 4 });
+          H.wash(c, H.ring(fx, rcy - R * 0.85, R * 0.75, R * 0.28, { seed: 6, wob: 0.1 }).filter(q => q[1] <= rcy - R * 0.85), { passes: 2, alpha: 0.55, bleed: 0.8 * ru, seed: 5 });
+          const neck = P(50, 69), scarf = [];
+          for (let j = 0; j < 10; j++) scarf.push([neck[0] - j * 7 * ru, neck[1] + Math.sin(t * 7 - j * 0.9) * 3.4 * ru * (j / 9) + j * 0.9 * ru]);
+          H.pen(c, scarf, 4.6 * ru, { seed: 6, wob: 0.3 });
+        });
+      }
+    }
   };
 
   // ---------- the press ----------
-  function print(canvas) {
-    var piece = PIECES[canvas.dataset.art];
-    if (!piece) return;
-    var dpr = Math.min(2, window.devicePixelRatio || 1);
-    var W = Math.max(1, Math.round((canvas.clientWidth || 300) * dpr)), Hh = Math.round(W * AH / AW);
-    canvas.width = W; canvas.height = Hh;
-    var ctx = canvas.getContext('2d'), s = W / AW, rnd = mulberry(piece.seed);
-    var layers = [];
-    var byName = {};
-    var p = {
-      r: rnd,
-      rand: function (a, b) { return a + (b - a) * rnd(); },
-      ink: function (name, fn) {
-        var L = byName[name];
-        if (!L) {
-          var cv = document.createElement('canvas'); cv.width = W; cv.height = Hh;
-          L = { cv: cv, c: cv.getContext('2d') };
-          L.c.setTransform(s, 0, 0, s, 0, 0);
-          byName[name] = L; layers.push(L);
-        }
-        var c = L.c;
+  function Press(cv, piece) { this.cv = cv; this.piece = piece; this.init(); }
+  Press.prototype.init = function () {
+    const cv = this.cv, hero = !!this.piece.hero, dpr = Math.min(hero ? 1.5 : 2, window.devicePixelRatio || 1);
+    const cw = cv.clientWidth || 300, ch = cv.clientHeight || Math.round(cw * 1.25);
+    this.W = Math.max(2, Math.round(cw * dpr)); this.H = Math.max(2, Math.round(ch * dpr));
+    cv.width = this.W; cv.height = this.H;
+    this.aw = hero ? 1000 : AW; this.ah = hero ? 1000 * ch / cw : AH; this.s = this.W / this.aw;
+    this.ctx = cv.getContext('2d'); this.layers = {}; this.order = []; this.cw = cw; this.tooth = null;
+    this.state = this.piece.setup ? this.piece.setup(mulberry(this.piece.seed), this.aw, this.ah, this) : {};
+  };
+  Press.prototype.strip = function (ink, w, h, fn) {
+    const cv = document.createElement('canvas');
+    cv.width = Math.ceil(w * this.s); cv.height = Math.ceil(h * this.s);
+    const c = cv.getContext('2d');
+    c.setTransform(this.s, 0, 0, this.s, 0, 0);
+    c.fillStyle = c.strokeStyle = INKS[ink];
+    fn(c);
+    return { cv, w, h };
+  };
+  Press.prototype.layer = function (name) {
+    let L = this.layers[name];
+    if (!L) {
+      const cv = document.createElement('canvas'); cv.width = this.W; cv.height = this.H;
+      const c = cv.getContext('2d');
+      L = {
+        cv, c, still: (this.piece.still || []).indexOf(name) >= 0, done: false, touched: false,
+        dx: (Math.random() - 0.5) * this.W * 0.008, dy: (Math.random() - 0.5) * this.W * 0.008,
+        gx: Math.floor(Math.random() * 192), gy: Math.floor(Math.random() * 192), pat: c.createPattern(GRAIN, 'repeat')
+      };
+      this.layers[name] = L; this.order.push(L);
+    }
+    return L;
+  };
+  Press.prototype.frame = function (t) {
+    const self = this, W = this.W, Hh = this.H;
+    this.order.forEach(L => { if (!L.still) { L.c.setTransform(1, 0, 0, 1, 0, 0); L.c.clearRect(0, 0, W, Hh); } });
+    const p = {
+      aw: this.aw, ah: this.ah,
+      ink(name, fn) {
+        const L = self.layer(name);
+        if (L.still && L.done) return;
+        const c = L.c;
+        c.setTransform(self.s, 0, 0, self.s, 0, 0);
         c.save();
         c.fillStyle = c.strokeStyle = INKS[name];
         c.lineCap = 'round'; c.lineJoin = 'round';
         fn(c);
         c.restore();
+        L.touched = true;
       }
     };
-    piece.draw(p);
-
-    ctx.globalCompositeOperation = 'source-over';
+    this.piece.draw(p, this.state, t);
+    const ctx = this.ctx;
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.globalCompositeOperation = 'source-over'; ctx.globalAlpha = 1;
     ctx.fillStyle = PAPER; ctx.fillRect(0, 0, W, Hh);
-    layers.forEach(function (L) {
-      var g = L.c;
-      g.save();
-      g.setTransform(1, 0, 0, 1, 0, 0);
-      g.globalCompositeOperation = 'destination-out';
-      g.translate(Math.floor(Math.random() * 192), Math.floor(Math.random() * 192));
-      g.fillStyle = g.createPattern(GRAIN, 'repeat');
-      g.fillRect(-192, -192, W + 384, Hh + 384);
-      g.restore();
-      ctx.globalCompositeOperation = 'multiply';
-      ctx.globalAlpha = 0.94;
-      ctx.drawImage(L.cv, (Math.random() - 0.5) * W * 0.009, (Math.random() - 0.5) * W * 0.009);
+    this.order.forEach(L => {
+      if (L.touched) {
+        const g = L.c;
+        g.save(); g.setTransform(1, 0, 0, 1, 0, 0);
+        g.globalCompositeOperation = 'destination-out';
+        g.translate(L.gx, L.gy); g.fillStyle = L.pat; g.fillRect(-L.gx, -L.gy, W, Hh);
+        g.restore();
+        L.touched = false;
+        if (L.still) L.done = true;
+      }
+      ctx.globalCompositeOperation = 'multiply'; ctx.globalAlpha = 0.94;
+      ctx.drawImage(L.cv, L.dx, L.dy);
     });
     ctx.globalCompositeOperation = 'source-over';
     ctx.globalAlpha = 0.05;
-    ctx.fillStyle = ctx.createPattern(GRAIN, 'repeat');
+    ctx.fillStyle = this.tooth || (this.tooth = ctx.createPattern(GRAIN, 'repeat'));
     ctx.fillRect(0, 0, W, Hh);
     ctx.globalAlpha = 1;
-    canvas.dataset.w = String(canvas.clientWidth);
-  }
+  };
 
-  var canvases = Array.prototype.slice.call(document.querySelectorAll('canvas[data-art]'));
-  canvases.forEach(print);
+  // ---------- playback: only what's on screen, ~30fps, pausable ----------
+  const presses = [];
+  document.querySelectorAll('canvas[data-art]').forEach(cv => { const pc = PIECES[cv.dataset.art]; if (pc) presses.push(new Press(cv, pc)); });
+
+  const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let pref = null;
+  try { pref = localStorage.getItem('print-room-motion'); } catch (e) {}
+  let playing = pref ? pref === 'on' : !reduce;
+  let tBase = 3.2, tStart = performance.now(), raf = 0, last = 0;
+  const clock = () => (playing ? tBase + (performance.now() - tStart) / 1000 : tBase);
+
+  presses.forEach(pr => pr.frame(tBase));
+
+  let visible = new Set(presses);
+  if ('IntersectionObserver' in window) {
+    visible = new Set();
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(e => { const pr = e.target.__press; if (e.isIntersecting) visible.add(pr); else visible.delete(pr); });
+      kick();
+    }, { rootMargin: '80px' });
+    presses.forEach(pr => { pr.cv.__press = pr; io.observe(pr.cv); });
+  }
+  function tick(now) {
+    raf = 0;
+    if (!playing) return;
+    if (now - last >= 33) { last = now; const t = clock(); visible.forEach(pr => pr.frame(t)); }
+    raf = requestAnimationFrame(tick);
+  }
+  function kick() { if (playing && !raf) raf = requestAnimationFrame(tick); }
+
+  const btn = document.getElementById('motion');
+  function render() {
+    btn.textContent = playing ? 'Pause motion' : 'Play motion';
+    btn.setAttribute('aria-pressed', String(!playing));
+  }
+  btn.addEventListener('click', () => {
+    if (playing) { tBase = clock(); playing = false; }
+    else { tStart = performance.now(); playing = true; kick(); }
+    try { localStorage.setItem('print-room-motion', playing ? 'on' : 'off'); } catch (e) {}
+    render();
+  });
+  render();
+  kick();
 
   if ('ResizeObserver' in window) {
-    var pending = new Set(), raf = 0;
-    var ro = new ResizeObserver(function (entries) {
-      entries.forEach(function (e) {
-        var cv = e.target;
-        if (Math.abs(cv.clientWidth - (+cv.dataset.w || 0)) > 4) pending.add(cv);
-      });
-      if (!raf && pending.size) raf = requestAnimationFrame(function () {
-        pending.forEach(print); pending.clear(); raf = 0;
+    const ro = new ResizeObserver(entries => {
+      entries.forEach(e => {
+        const pr = e.target.__press;
+        if (pr && Math.abs(pr.cv.clientWidth - pr.cw) > 4) { pr.init(); pr.frame(clock()); }
       });
     });
-    canvases.forEach(function (cv) { ro.observe(cv); });
+    presses.forEach(pr => { pr.cv.__press = pr; ro.observe(pr.cv); });
   }
 })();
 </script>
