@@ -6,8 +6,6 @@ interface Props {
   lines: [string, string, string];
   /** One-paragraph sub-headline rendered below. */
   sub: string;
-  /** Eyebrow text (next to a pulsing accent dot). */
-  eyebrow?: string;
   /** Primary button URL. */
   buttonHref?: string;
   /** Primary button label. */
@@ -22,7 +20,6 @@ interface Props {
 const {
   lines,
   sub,
-  eyebrow = "Open for work · Q3 '26",
   buttonHref = '/contact',
   buttonText = 'Start a conversation',
   spotlight = 'glow',
@@ -42,11 +39,6 @@ const {
   <div class="cta-card-shape cta-card-shape-3" aria-hidden="true"></div>
 
   <div class="cta-card-content">
-    <span class="cta-card-eyebrow">
-      <span class="cta-card-status-dot" aria-hidden="true"></span>
-      {eyebrow}
-    </span>
-
     <h2 class="cta-card-headline">
       <span class="cta-card-line">{lines[0]}</span>
       <span class="cta-card-line">{lines[1]}</span>
@@ -216,34 +208,6 @@ const {
     max-width: 900px;
   }
 
-  .cta-card-eyebrow {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 0.75rem;
-    font-weight: 600;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--accent);
-  }
-
-  .cta-card-status-dot {
-    display: inline-block;
-    width: 7px;
-    height: 7px;
-    border-radius: 50%;
-    background: var(--accent);
-    box-shadow: 0 0 0 4px var(--accent-glow);
-    flex-shrink: 0;
-    animation: ctaCardStatusPulse 2.4s ease-in-out infinite;
-  }
-
-  @keyframes ctaCardStatusPulse {
-    0%, 100% { box-shadow: 0 0 0 4px var(--accent-glow); }
-    50%      { box-shadow: 0 0 0 9px var(--accent-glow); }
-  }
-
   /* Headline */
   .cta-card-headline {
     font-family: 'Bricolage Grotesque', Georgia, serif;
@@ -252,7 +216,7 @@ const {
     line-height: 0.97;
     letter-spacing: -0.04em;
     color: var(--text);
-    margin: 1.75rem 0 0;
+    margin: 0;
     display: flex;
     flex-direction: column;
     gap: 0.05em;
@@ -341,7 +305,6 @@ const {
 
   @media (prefers-reduced-motion: reduce) {
     .cta-card-shape,
-    .cta-card-status-dot,
     .cta-card-btn svg {
       animation: none;
       transition-duration: 0.01ms !important;
