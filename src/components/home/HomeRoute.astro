@@ -30,8 +30,8 @@ import { ROUTE } from '@/data/career';
             <p class="sign-meta">{s.year} · {s.role}</p>
           </div>
           <p
-            class="at note hand"
-            style={`--x:${s.desktop.note[0]};--y:${s.desktop.note[1]};--w:${s.desktop.note[2]};--mx:${s.mobile.note[0]};--my:${s.mobile.note[1]};--mw:${s.mobile.note[2]};--reveal-delay:${0.5 + i * 0.25}s`}
+            class="at note hand grain"
+            style={`--x:${s.desktop.note[0]};--y:${s.desktop.note[1]};--w:${s.desktop.note[2]};--mx:${s.mobile.note[0]};--my:${s.mobile.note[1]};--mw:${s.mobile.note[2]};--r:${[-2, 1.5, -1, 2][i % 4]};--reveal-delay:${0.5 + i * 0.25}s`}
             data-ink-in
           >
             {s.note}
@@ -92,8 +92,14 @@ import { ROUTE } from '@/data/career';
     letter-spacing: 0.02em;
   }
 
+  /* Hand notes sit on a paper slip so they read on any part of the painting. */
   .note {
-    width: calc(var(--w) * var(--u));
+    width: fit-content;
+    max-width: calc(var(--w) * var(--u));
+    padding: calc(8 * var(--u)) calc(14 * var(--u));
+    border-radius: calc(2 * var(--u));
+    background: rgba(251, 247, 238, 0.95);
+    box-shadow: calc(1 * var(--u)) calc(4 * var(--u)) calc(8 * var(--u)) rgba(30, 20, 8, 0.25);
     font-size: calc(26 * var(--u));
     line-height: 1;
     color: #1c2124;
@@ -111,7 +117,7 @@ import { ROUTE } from '@/data/career';
       opacity: 0;
       transition: transform 2.2s cubic-bezier(0.25, 0.6, 0.2, 1) 0.6s, opacity 0.4s ease 0.6s;
     }
-    :global(.js) .is-in .route-bike {
+    :global(.js .is-in) .route-bike {
       transform: none;
       opacity: 1;
     }
@@ -123,7 +129,7 @@ import { ROUTE } from '@/data/career';
 
   @media (max-width: 767px) {
     .note {
-      width: calc(var(--mw) * var(--u));
+      max-width: calc(var(--mw) * var(--u));
       font-size: calc(24 * var(--u));
     }
     @media (prefers-reduced-motion: no-preference) {
