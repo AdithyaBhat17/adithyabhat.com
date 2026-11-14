@@ -30,11 +30,10 @@ import { ROUTE } from '@/data/career';
             <p class="sign-meta">{s.year} · {s.role}</p>
           </div>
           <p
-            class="at note hand grain"
-            style={`--x:${s.desktop.note[0]};--y:${s.desktop.note[1]};--w:${s.desktop.note[2]};--mx:${s.mobile.note[0]};--my:${s.mobile.note[1]};--mw:${s.mobile.note[2]};--r:${[-2, 1.5, -1, 2][i % 4]};--reveal-delay:${0.5 + i * 0.25}s`}
-            data-ink-in
+            class="at note hand"
+            style={`--x:${s.desktop.note[0]};--y:${s.desktop.note[1]};--w:${s.desktop.note[2]};--mx:${s.mobile.note[0]};--my:${s.mobile.note[1]};--mw:${s.mobile.note[2]};--r:${[-2, 1.5, -1, 2][i % 4]}`}
           >
-            {s.note}
+            <span data-ink-in style={`--reveal-delay:${0.5 + i * 0.25}s`}>{s.note}</span>
           </p>
         </li>
       ))}
@@ -92,17 +91,25 @@ import { ROUTE } from '@/data/career';
     letter-spacing: 0.02em;
   }
 
-  /* Hand notes sit on a paper slip so they read on any part of the painting. */
+  /* Hand notes sit on a paper slip that blends into the painting: warm paper
+     at 80%, a brown inner wash, rough torn edges, heavy grain. */
   .note {
     width: fit-content;
     max-width: calc(var(--w) * var(--u));
     padding: calc(8 * var(--u)) calc(14 * var(--u));
-    border-radius: calc(2 * var(--u));
-    background: rgba(251, 247, 238, 0.95);
-    box-shadow: calc(1 * var(--u)) calc(4 * var(--u)) calc(8 * var(--u)) rgba(30, 20, 8, 0.25);
+    border-radius: calc(1 * var(--u));
+    background:
+      url('/art/grain.png') 0 0 / 120px,
+      rgba(236, 221, 194, 0.8);
+    background-blend-mode: multiply, normal;
+    box-shadow: inset 0 calc(1 * var(--u)) calc(10 * var(--u)) rgba(140, 102, 56, 0.35);
+    clip-path: polygon(0.6% 4%, 11% 0.6%, 27% 3%, 44% 0%, 61% 2.6%, 78% 0.4%, 93% 2.2%, 100% 0.8%, 99.2% 34%, 100% 66%, 99.4% 97%, 87% 100%, 70% 97.6%, 52% 100%, 35% 97.8%, 18% 100%, 4% 98%, 0% 99.4%, 0.8% 66%, 0% 33%);
     font-size: calc(26 * var(--u));
     line-height: 1;
     color: #1c2124;
+  }
+  .note span {
+    display: block;
   }
 
   .route-bike {
