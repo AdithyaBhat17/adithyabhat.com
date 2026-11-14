@@ -27,7 +27,7 @@ export interface StructuredText {
 }
 
 export type Block =
-  | { __typename: 'FigureRecord'; id: string; caption?: string; size?: 'column' | 'wide'; media?: { url?: string; alt?: string | null; responsiveImage?: ResponsiveImage } }
+  | { __typename: 'FigureRecord'; id: string; caption?: string; size?: 'column' | 'wide'; media?: { url?: string; alt?: string | null; mimeType?: string; width?: number; height?: number; responsiveImage?: ResponsiveImage | null } }
   | { __typename: 'MarginNoteRecord'; id: string; text?: string }
   | { __typename: 'TapedNoteRecord'; id: string; quote?: string; attribution?: string }
   | { __typename: 'CodeBlockRecord'; id: string; filename?: string; language?: string; code?: string }
@@ -83,13 +83,21 @@ function figure(b: Extract<Block, { __typename: 'FigureRecord' }>) {
   const img = b.media?.responsiveImage;
   const src = img?.src ?? b.media?.url;
   if (!src) return '';
-  const alt = esc(img?.alt ?? b.media?.alt ?? b.caption ?? '');
+  const rawAlt = img?.alt ?? b.media?.alt ?? '';
+  if (!rawAlt) console.warn(`[build-log] figure ${b.id} has no alt text${b.caption ? ' (caption is used instead)' : ''}`);
+  const cap = b.caption ? `<figcaption>${esc(b.caption)}</figcaption>` : '';
+  const wide = b.size === 'wide' ? ' torn-print--wide' : '';
+  // Screen recordings (e.g. the Homero webm clips): muted, looping, no autoplay
+  // download until visible-ish (preload none), controls for a11y.
+  if (b.media?.mimeType?.startsWith('video/') || /\.(webm|mp4|mov)(\?|$)/i.test(src)) {
+    const dims = b.media?.width && b.media?.height ? ` width="${b.media.width}" height="${b.media.height}"` : '';
+    return `<figure class="torn-print${wide}"><span class="torn-print-frame"><video src="${esc(src)}"${dims} muted loop playsinline controls preload="none" aria-label="${esc(rawAlt || b.caption || 'Screen recording')}"></video></span>${cap}</figure>`;
+  }
+  const alt = esc(rawAlt);
   const set = img?.webpSrcSet || img?.srcSet;
-  return `<figure class="torn-print${b.size === 'wide' ? ' torn-print--wide' : ''}"><span class="torn-print-frame"><img src="${esc(src)}"${
+  return `<figure class="torn-print${wide}"><span class="torn-print-frame"><img src="${esc(src)}"${
     set ? ` srcset="${esc(set)}" sizes="(max-width: 767px) 92vw, 760px"` : ''
-  }${img ? ` width="${img.width}" height="${img.height}"` : ''} alt="${alt}" loading="lazy" decoding="async" /></span>${
-    b.caption ? `<figcaption>${esc(b.caption)}</figcaption>` : ''
-  }</figure>`;
+  }${img ? ` width="${img.width}" height="${img.height}"` : ''} alt="${alt}" loading="lazy" decoding="async" /></span>${cap}</figure>`;
 }
 
 function renderBlock(b: Block | undefined): string {

@@ -75,7 +75,7 @@ const RESPONSIVE = `responsiveImage(imgixParams: { auto: format, w: 1520 }) { sr
 export const ST_BLOCKS = `
   blocks {
     __typename
-    ... on FigureRecord { id caption size media { url alt ${RESPONSIVE} } }
+    ... on FigureRecord { id caption size media { url alt mimeType width height ${RESPONSIVE} } }
     ... on MarginNoteRecord { id text }
     ... on TapedNoteRecord { id quote attribution }
     ... on CodeBlockRecord { id filename language code }

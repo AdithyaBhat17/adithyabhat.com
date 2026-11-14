@@ -835,7 +835,8 @@ html.theme-vt::view-transition-group(hero-bikes) {
   rotate: -0.6deg;
   clip-path: polygon(0 1%, 6% 0, 14% 0.8%, 25% 0, 37% 0.6%, 50% 0, 63% 0.7%, 76% 0, 88% 0.9%, 100% 0, 99.6% 20%, 100% 45%, 99.5% 70%, 100% 100%, 88% 99.2%, 75% 100%, 62% 99.3%, 50% 100%, 37% 99.2%, 24% 100%, 12% 99.4%, 0 100%, 0.5% 75%, 0 50%, 0.4% 25%);
 }
-.torn-print-frame img {
+.torn-print-frame img,
+.torn-print-frame video {
   display: block;
   width: 100%;
 }

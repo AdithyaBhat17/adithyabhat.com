@@ -1,21 +1,115 @@
 ---
+// Privacy. The wording lives in the DatoCMS `legal` singleton; the proposed
+// plain-language rewrite from the Figma design is in
+// src/data/privacy-proposed.md for the owner to review and paste in.
 import PageLayout from '@/layouts/PageLayout.astro';
-import Container from '@/components/astro/Container.astro';
+import Painting from '@/components/journal/Painting.astro';
+import desk from '@/assets/paintings/privacy-desk.png';
 import { fetchAPI } from '@/lib/datocms';
 import { marked } from 'marked';
 import { sanitizeHtml } from '@/lib/sanitize';
+import { enhanceLegacyHtml } from '@/lib/dast';
 
-const result = await fetchAPI(`query Legal {
-  legal {
-    document
-  }
-}`);
-
-const html = sanitizeHtml(await marked(result?.legal?.document ?? ''));
+const result = await fetchAPI(`query Legal { legal { document _updatedAt } }`);
+const doc = enhanceLegacyHtml(sanitizeHtml(await marked(result?.legal?.document ?? '')));
+const updated = result?.legal?._updatedAt
+  ? new Date(result.legal._updatedAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })
+  : '';
 ---
 
-<PageLayout title="Legal | Adithya NR">
-  <Container>
-    <div class="content" set:html={html} />
-  </Container>
+<PageLayout title="Privacy | Adithya NR" description="What this site collects, why it collects it, and what you can do about it.">
+  <section class="wrap page-head">
+    <h1 class="display-xl">Privacy</h1>
+    <p class="body-l lede">What this site collects, why it collects it, and what you can do about it.</p>
+  </section>
+
+  <Painting src={desk} alt="A desk with a rubber stamp and an ink pad." w={1440} h={220} ink={false} focusX={720} tint />
+
+  <section class="wrap legal">
+    <aside class="legal-side">
+      {updated && <p class="updated">Last updated {updated}</p>}
+      {doc.toc.length > 1 && (
+        <nav aria-label="On this page">
+          <ol>
+            {doc.toc.map((t) => <li><a href={`#${t.id}`}><span>{Number(t.n)}</span> <span set:html={t.title} /></a></li>)}
+          </ol>
+        </nav>
+      )}
+    </aside>
+    <div class="log-body legal-body" set:html={doc.html} />
+  </section>
 </PageLayout>
+
+<style>
+  .page-head {
+    display: flex;
+    align-items: flex-end;
+    gap: 60px;
+    padding-top: 80px;
+    padding-bottom: 40px;
+  }
+  .lede {
+    max-width: 520px;
+    margin-bottom: 4px;
+  }
+  .legal {
+    display: grid;
+    grid-template-columns: 240px minmax(0, 680px);
+    gap: 0 80px;
+    padding-top: 80px;
+  }
+  .legal-side {
+    position: sticky;
+    top: 32px;
+    align-self: start;
+  }
+  .updated {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--ink-meta);
+    margin-bottom: 18px;
+  }
+  .legal-side ol {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .legal-side a {
+    display: flex;
+    gap: 10px;
+    padding: 6px 0;
+    font-size: 13px;
+    color: var(--ink-soft);
+  }
+  .legal-side a span:first-child {
+    font-size: 12px;
+    color: var(--orange);
+  }
+  .legal-side a:hover {
+    color: var(--ink);
+  }
+  .legal-body {
+    font-size: 18px;
+  }
+  @media (max-width: 900px) {
+    .legal {
+      grid-template-columns: 1fr;
+      gap: 24px;
+    }
+    .legal-side {
+      position: static;
+    }
+  }
+  @media (max-width: 767px) {
+    .page-head {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 16px;
+      padding-top: 32px;
+      padding-bottom: 24px;
+    }
+    .legal {
+      padding-top: 48px;
+    }
+  }
+</style>
