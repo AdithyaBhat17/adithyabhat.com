@@ -1,0 +1,96 @@
+---
+// Audition page for the synthesized sound kit. Not linked anywhere, noindex,
+// and excluded from the sitemap.
+import PageLayout from '@/layouts/PageLayout.astro';
+
+const groups = [
+  {
+    title: 'Engines',
+    items: [
+      { id: 'engine:ktm:A1', label: 'KTM 390 · A1 (granular, raspy)' },
+      { id: 'engine:ktm:A2', label: 'KTM 390 · A2 (throatier, less rasp)' },
+      { id: 'engine:cb:A1', label: 'CB300R · A1 (lower, rounder)' },
+      { id: 'engine:cb:A2', label: 'CB300R · A2' },
+      { id: 'theme', label: 'Theme toggle (ink bleed + engine)' },
+    ],
+  },
+  {
+    title: 'Paper, pen and garage',
+    items: [
+      { id: 'rustle', label: 'Paper rustle (page transitions)' },
+      { id: 'scratch', label: 'Pen scratch (hand notes ink in)' },
+      { id: 'stamp', label: 'Rubber stamp thunk (build sheets)' },
+      { id: 'flick', label: 'Zine flick (newsstand)' },
+      { id: 'tick', label: 'Watch tick (nav hover)' },
+      { id: 'chalk', label: 'Chalk tap (route signs)' },
+      { id: 'pour', label: 'Espresso hiss and pour (shelf)' },
+    ],
+  },
+];
+---
+
+<PageLayout title="Sound lab | Adithya NR" cta={false}>
+  <meta slot="head" name="robots" content="noindex, nofollow" />
+  <section class="wrap lab">
+    <h1 class="display-xl">Sound lab</h1>
+    <p class="body-l">Every sound on the site, synthesized live with WebAudio. Sound is switched on for this page when you press a button.</p>
+    {groups.map((g) => (
+      <div class="group">
+        <h2 class="display-m">{g.title}</h2>
+        <div class="grid">
+          {g.items.map((it) => (
+            <button type="button" class="btn btn--ghost" data-lab={it.id}>▶ {it.label}</button>
+          ))}
+        </div>
+      </div>
+    ))}
+  </section>
+</PageLayout>
+
+<script>
+  import { engine, play, setSoundOn, type EngineVariant, type EngineVoice } from '@/scripts/sound';
+
+  function initLab() {
+    document.querySelectorAll<HTMLButtonElement>('[data-lab]').forEach((b) => {
+      if (b.dataset.bound) return;
+      b.dataset.bound = '1';
+      b.addEventListener('click', () => {
+        if (document.documentElement.dataset.sound !== 'on') setSoundOn(true);
+        document.querySelectorAll('[data-sound-toggle]').forEach((t) => t.setAttribute('aria-pressed', 'true'));
+        const id = b.dataset.lab!;
+        // Small delay on the very first press while the AudioContext spins up.
+        window.setTimeout(() => {
+          if (id.startsWith('engine:')) {
+            const [, voice, variant] = id.split(':');
+            engine(voice as EngineVoice, variant as EngineVariant);
+          } else if (id === 'theme') {
+            (document.querySelector('[data-theme-toggle]') as HTMLButtonElement | null)?.click();
+          } else {
+            play(id);
+          }
+        }, 60);
+      });
+    });
+  }
+  initLab();
+  document.addEventListener('astro:page-load', initLab);
+</script>
+
+<style>
+  .lab {
+    padding-top: 56px;
+  }
+  .lab .body-l {
+    max-width: 620px;
+    margin-top: 16px;
+  }
+  .group {
+    margin-top: 48px;
+  }
+  .grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 16px;
+  }
+</style>

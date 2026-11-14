@@ -46,7 +46,7 @@ export default defineConfig({
   integrations: [
     react(),
     sitemap({
-      filter: (page) => !page.includes('/404') && !page.includes('/legal'),
+      filter: (page) => !page.includes('/404') && !page.includes('/legal') && !page.includes('/sound-lab'),
       serialize(item) {
         const path = new URL(item.url).pathname.replace(/\/$/, '');
         const lastmod = articleDates.get(path) ?? projectDates.get(path);

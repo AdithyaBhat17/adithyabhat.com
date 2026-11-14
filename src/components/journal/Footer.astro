@@ -1,0 +1,227 @@
+---
+import { getImage } from 'astro:assets';
+import footerArt from '@/assets/paintings/footer.png';
+import { socialLinks } from '@/utils/socials';
+
+interface Props {
+  /** Show the "Got something in mind?" closing CTA above the garage. */
+  cta?: boolean;
+}
+const { cta = true } = Astro.props;
+
+const links = [
+  { name: 'About', href: '/about' },
+  { name: 'Work', href: '/work' },
+  { name: 'Writing', href: '/blog' },
+  { name: 'Photos', href: '/photos' },
+  { name: 'Uses', href: '/uses' },
+  { name: 'Contact', href: '/contact' },
+];
+const elsewhere = ['GitHub', 'LinkedIn', 'Twitter', 'Dribbble']
+  .map((n) => socialLinks.find((s) => s.name === n))
+  .filter((s): s is { name: string; href: string } => Boolean(s));
+
+const widths = [720, 1080, 1440];
+const [avif, webp] = await Promise.all([
+  getImage({ src: footerArt, widths, format: 'avif', quality: 58 }),
+  getImage({ src: footerArt, widths, format: 'webp', quality: 72 }),
+]);
+const year = new Date().getFullYear();
+---
+
+<footer class="footer">
+  {cta && (
+    <section class="cta wrap" aria-labelledby="cta-title" data-observe>
+      <h2 id="cta-title" class="cta-title">
+        Got something in mind?<br />
+        <span class="cta-mark"><span class="accent">Let’s build it</span><svg class="cta-ink ink-stroke" data-draw viewBox="0 0 480 20" preserveAspectRatio="none" aria-hidden="true"><path d="M4 12C90 4 200 18 300 10C400 2 440 6 476 12" pathLength="1" stroke-width="3" /></svg></span>.
+      </h2>
+      <a href="/contact" class="btn btn--ink cta-btn" data-sound-hover="tick">
+        Say hello
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3.3 8H12M8.7 4l4 4-4 4" stroke="currentColor" stroke-width="1.33" stroke-linecap="round" stroke-linejoin="round" /></svg>
+      </a>
+    </section>
+  )}
+
+  <div class="garage">
+    <picture class="garage-art">
+      <source type="image/avif" srcset={avif.srcSet.attribute} sizes="(max-width: 767px) 864px, 100vw" />
+      <source type="image/webp" srcset={webp.srcSet.attribute} sizes="(max-width: 767px) 864px, 100vw" />
+      <img src={webp.src} alt="The garage at night: the KTM on the driveway and the Honda in the lit doorway, under a full moon." width="1440" height="520" loading="lazy" decoding="async" />
+    </picture>
+
+    <div class="footer-bar">
+      <p class="signature hand" aria-hidden="true">Adithya</p>
+      <nav class="footer-links" aria-label="Footer">
+        {links.map((l) => <a href={l.href} data-sound-hover="tick">{l.name}</a>)}
+      </nav>
+      <nav class="footer-elsewhere" aria-label="Elsewhere">
+        {elsewhere.map((l) => <a href={l.href} target="_blank" rel="noopener noreferrer me">{l.name}</a>)}
+      </nav>
+      <p class="copy">© {year}</p>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .cta {
+    padding-top: 140px;
+    padding-bottom: 90px;
+  }
+  .cta-title {
+    font-size: clamp(2.5rem, 1.5rem + 3.6vw, 4.75rem);
+    line-height: 1.06;
+    letter-spacing: -0.015em;
+  }
+  .cta-mark {
+    position: relative;
+    display: inline-block;
+  }
+  .cta-ink {
+    position: absolute;
+    left: 0;
+    top: 92%;
+    width: 100%;
+    height: 0.26em;
+    overflow: visible;
+  }
+  .cta-btn {
+    margin-top: 28px;
+    min-height: 50px;
+    padding: 15px 24px;
+    font-size: 16px;
+    line-height: 1.25;
+  }
+
+  .garage {
+    position: relative;
+    aspect-ratio: 1440 / 520;
+    color: #e9dcc3;
+    /* The night garage reads the same in both themes. */
+  }
+  .garage-art,
+  .garage-art img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .footer-bar {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0.6%;
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    max-width: calc(var(--content) + var(--gutter) * 2);
+    margin-inline: auto;
+    padding: 0 var(--gutter);
+    min-height: 60px;
+  }
+  .signature {
+    margin-right: auto;
+    font-size: 48px;
+    color: #f3ead8;
+  }
+  .footer-links,
+  .footer-elsewhere {
+    display: flex;
+    gap: 22px;
+    font-size: 14px;
+  }
+  .footer-elsewhere {
+    gap: 18px;
+  }
+  .footer-links a {
+    color: #e9dcc3;
+  }
+  .footer-elsewhere a {
+    color: #b9b1a1;
+  }
+  .footer-links a,
+  .footer-elsewhere a {
+    padding-block: 6px;
+    transition: color 0.2s ease;
+  }
+  .footer-links a:hover,
+  .footer-elsewhere a:hover {
+    color: #ff7a2e;
+  }
+  .copy {
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    color: #958e80;
+  }
+
+  @media (max-width: 1100px) {
+    .footer-bar {
+      gap: 24px;
+    }
+    .footer-elsewhere {
+      display: none;
+    }
+  }
+
+  @media (max-width: 767px) {
+    .cta {
+      padding-top: 80px;
+      padding-bottom: 56px;
+    }
+    .cta-btn {
+      margin-top: 24px;
+    }
+    .garage {
+      aspect-ratio: auto;
+      background: #111a23;
+      padding-top: 312px;
+      overflow: hidden;
+    }
+    .garage-art {
+      inset: 0 auto auto calc(50% - 522px);
+      width: 864px;
+      height: 312px;
+    }
+    .footer-bar {
+      position: relative;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-areas:
+        'links else'
+        'sig copy';
+      align-items: end;
+      gap: 24px 16px;
+      padding-top: 16px;
+      padding-bottom: calc(28px + env(safe-area-inset-bottom));
+    }
+    .footer-links,
+    .footer-elsewhere {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      font-size: 15px;
+    }
+    .footer-links a,
+    .footer-elsewhere a {
+      padding-block: 10px;
+    }
+    .footer-links {
+      grid-area: links;
+    }
+    .footer-elsewhere {
+      grid-area: else;
+      align-self: start;
+    }
+    .signature {
+      grid-area: sig;
+      font-size: 40px;
+    }
+    .copy {
+      grid-area: copy;
+      justify-self: end;
+      padding-bottom: 10px;
+    }
+  }
+</style>

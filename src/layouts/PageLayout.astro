@@ -1,25 +1,24 @@
 ---
-import { fade } from 'astro:transitions';
 import BaseLayout from './BaseLayout.astro';
-import Navbar from '@/components/astro/Navbar.astro';
-import Footer from '@/components/astro/Footer.astro';
+import Nav from '@/components/journal/Nav.astro';
+import Footer from '@/components/journal/Footer.astro';
 
 interface Props {
   title: string;
   description?: string;
+  image?: string;
+  /** Show the closing "Got something in mind?" CTA above the footer. */
+  cta?: boolean;
 }
 
-const { title, description } = Astro.props;
+const { title, description, image, cta = true } = Astro.props;
 ---
 
-<BaseLayout title={title} description={description}>
-  <div class="flex flex-col justify-around min-h-screen">
-    <Navbar transition:persist />
-    <main class="flex-1" transition:animate={fade({ duration: '0.3s' })}>
-      <slot />
-    </main>
-    <div class="mt-20 lg:mt-28">
-      <Footer />
-    </div>
-  </div>
+<BaseLayout title={title} description={description} image={image}>
+  <Nav />
+  <main id="main" tabindex="-1">
+    <slot />
+  </main>
+  <Footer cta={cta} />
+  <slot name="head" slot="head" />
 </BaseLayout>

@@ -7,162 +7,141 @@ import '@/styles/global.css';
 interface Props {
   title: string;
   description?: string;
+  /** Absolute or root-relative OG image. Defaults to the fennec card. */
+  image?: string;
+  /** Optional class on <body>. */
+  bodyClass?: string;
 }
 
-const { title, description = 'A UX engineer in Abu Dhabi, helping companies of all sizes get ahead online.' } = Astro.props;
+const {
+  title,
+  description = 'Adithya NR is a product engineer in Abu Dhabi, designing and building thoughtful digital products.',
+  image = '/brand/og.png',
+  bodyClass,
+} = Astro.props;
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const ogImage = new URL(image, Astro.site).toString();
 ---
 
 <!doctype html>
-<html lang="en" data-theme="dark">
+<html lang="en" data-theme="light">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 
-    <!-- Theme: apply saved preference before first paint to prevent FOUC -->
+    <!-- Theme + sound: applied before first paint so nothing flashes. -->
     <script is:inline>
-      (function() {
-        var saved = localStorage.getItem('theme');
-        var theme = saved || (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
-        document.documentElement.setAttribute('data-theme', theme);
-        // Update logos immediately
-        document.addEventListener('DOMContentLoaded', function() {
-          document.querySelectorAll('.nav-logo, .footer-logo').forEach(function(img) {
-            var src = theme === 'light' ? img.dataset.lightSrc : img.dataset.darkSrc;
-            if (src) img.src = src;
-          });
-        });
+      (function () {
+        var d = document.documentElement;
+        var t;
+        try { t = localStorage.getItem('theme'); } catch (e) {}
+        if (t !== 'light' && t !== 'dark') {
+          t = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        }
+        d.setAttribute('data-theme', t);
+        var s = 'off';
+        try { s = localStorage.getItem('journal-sound') === 'on' ? 'on' : 'off'; } catch (e) {}
+        d.setAttribute('data-sound', s);
+        d.classList.add('js');
       })();
     </script>
+    <meta name="theme-color" content="#f3ead8" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#16181b" media="(prefers-color-scheme: dark)" />
 
-    <!-- Preconnect -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!-- Fonts: self-hosted; preload the two used above the fold. -->
+    <link rel="preload" href="/fonts/young-serif-latin.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/onest-latin.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preconnect" href="https://www.datocms-assets.com" crossorigin />
 
-    <!-- Fonts -->
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=DM+Sans:opsz,wght@9..40,400..700&family=JetBrains+Mono:wght@400;500&display=swap"
-    />
+    <slot name="head" />
 
     <!-- SEO -->
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonicalURL} />
-    <link rel="icon" type="image/svg+xml" href="/static/logo_white.svg" />
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <meta name="author" content="Adithya NR" />
 
     <!-- Open Graph -->
+    <meta property="og:type" content="website" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonicalURL} />
     <meta property="og:site_name" content="Adithya NR" />
-    <meta property="og:image" content="https://adithyabhat.com/static/og.png" />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:site" content="@adithya__nr" />
     <meta name="twitter:creator" content="@adithya__nr" />
+    <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
-    <meta property="twitter:image" content="https://adithyabhat.com/static/og.png" />
-
-    <meta name="keywords" content="front-end developer, front-end development, web designer, adithya, adithya nr, adithya bhat, web developer" />
+    <meta name="twitter:image" content={ogImage} />
 
     <!-- Structured Data -->
     <script is:inline type="application/ld+json" set:html={JSON.stringify({
-      "name": "Adithya NR",
-      "description": "I am a UX Engineer based in Abu Dhabi, UAE.",
-      "author": { "@type": "Person", "name": "Adithya NR" },
-      "disambiguatingDescription": "Web Designer & Developer",
-      "jobTitle": "UX Engineer, Freelancer",
-      "@type": "WebSite",
-      "url": "https://adithyabhat.com/",
-      "publisher": {
-        "@type": "Organization",
-        "logo": { "@type": "ImageObject", "url": "https://raw.githubusercontent.com/AdithyaBhat17/adithyabhat17.github.io/version-3/public/adithya1.png" },
-        "name": "Adithya NR"
+      '@context': 'https://schema.org',
+      '@type': 'WebSite',
+      name: 'Adithya NR',
+      alternateName: 'Adithya Bhat',
+      url: 'https://adithyabhat.com/',
+      description,
+      image: 'https://adithyabhat.com/brand/fennec-avatar.png',
+      author: {
+        '@type': 'Person',
+        name: 'Adithya NR',
+        jobTitle: 'Product Engineer',
+        address: { '@type': 'PostalAddress', addressLocality: 'Abu Dhabi', addressCountry: 'AE' },
+        sameAs: [
+          'https://twitter.com/adithya__nr',
+          'https://linkedin.com/in/adithya-nr/',
+          'https://github.com/AdithyaBhat17',
+          'https://instagram.com/adithyabhat__/',
+          'https://medium.com/adithya-nr',
+        ],
       },
-      "image": "https://raw.githubusercontent.com/AdithyaBhat17/adithyabhat17.github.io/version-3/public/adithya1.png",
-      "headline": "Adithya NR",
-      "sameAs": [
-        "https://twitter.com/adithya__nr",
-        "https://linkedin.com/in/adithya-nr/",
-        "https://github.com/AdithyaBhat17",
-        "https://instagram.com/adithyabhat__/",
-        "https://medium.com/adithya-nr"
-      ],
-      "alternateName": "Adithya Bhat",
-      "@context": "http://schema.org"
     })} />
 
-    <!-- Google Analytics -->
-    <script is:inline async src={`https://www.googletagmanager.com/gtag/js?id=${GA_TRACKING_ID}`}></script>
-    <script define:vars={{ GA_TRACKING_ID }} is:inline>
+    <!-- Analytics: deferred so they never compete with first paint. -->
+    <script is:inline define:vars={{ GA_TRACKING_ID }}>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
       gtag('config', GA_TRACKING_ID, { page_path: window.location.pathname });
+      function loadAnalytics() {
+        if (window.__analyticsLoaded || /^(localhost|127\.|0\.0\.0\.0)/.test(location.hostname)) return;
+        window.__analyticsLoaded = true;
+        var g = document.createElement('script');
+        g.async = true;
+        g.src = 'https://www.googletagmanager.com/gtag/js?id=' + GA_TRACKING_ID;
+        document.head.appendChild(g);
+        var c = document.createElement('script');
+        c.defer = true;
+        c.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+        c.setAttribute('data-cf-beacon', '{"token": "6821738704c04aac971dbeae66fca2d6", "spa": true}');
+        document.head.appendChild(c);
+      }
+      if ('requestIdleCallback' in window) {
+        addEventListener('load', function () { requestIdleCallback(loadAnalytics, { timeout: 4000 }); });
+      } else {
+        addEventListener('load', function () { setTimeout(loadAnalytics, 2500); });
+      }
     </script>
 
-    <!-- Cloudflare Analytics -->
-    <script is:inline defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "6821738704c04aac971dbeae66fca2d6", "spa": true}'></script>
-
-    <ClientRouter />
+    <ClientRouter fallback="none" />
   </head>
-  <body>
+  <body class={bodyClass}>
+    <a class="skip-link" href="#main">Skip to content</a>
     <slot />
     <CommandPalette />
 
-    <!-- Initialize scroll animations after page load + on view transition -->
     <script>
-      import { initScrollAnimations } from '@/scripts/animations';
-      import { initEasterEggs } from '@/scripts/easter-eggs';
-      import { initClickFeedback } from '@/scripts/click-feedback';
-
-      function init() {
-        initScrollAnimations();
-      }
-
-      function applyTheme() {
-        const saved = localStorage.getItem('theme');
-        const theme = saved || (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
-        document.documentElement.setAttribute('data-theme', theme);
-        document.querySelectorAll<HTMLImageElement>('.nav-logo, .footer-logo').forEach((img) => {
-          const src = theme === 'light' ? img.dataset.lightSrc : img.dataset.darkSrc;
-          if (src) img.src = src;
-        });
-      }
-
-      // Cursor spotlight tracking
-      function initCursor() {
-        let rafId: number | null = null;
-        document.addEventListener('mousemove', (e) => {
-          if (rafId) return;
-          rafId = requestAnimationFrame(() => {
-            document.body.style.setProperty('--cursor-x', e.clientX + 'px');
-            document.body.style.setProperty('--cursor-y', e.clientY + 'px');
-            if (!document.body.classList.contains('cursor-active')) {
-              document.body.classList.add('cursor-active');
-            }
-            rafId = null;
-          });
-        });
-      }
-
-      // Initial load
-      init();
-      if (window.matchMedia('(hover: hover)').matches) {
-        initCursor();
-      }
-      initEasterEggs();
-      initClickFeedback();
-
-      // Re-init after view transitions
-      document.addEventListener('astro:after-swap', () => {
-        applyTheme();
-        init();
-      });
+      import { initSite } from '@/scripts/site';
+      initSite();
     </script>
   </body>
 </html>
