@@ -124,6 +124,14 @@ export function renderStructuredText(st: StructuredText | null | undefined, { st
   const toc: TocEntry[] = [];
   let outcomeId: string | undefined;
   let notes = 0;
+  // Stage the top heading level actually used (h2 normally; older posts use h3/h4).
+  const levels: number[] = [];
+  const scan = (n: DastNode) => {
+    if (n.type === 'heading' && n.level && n.level >= 2) levels.push(n.level);
+    n.children?.forEach(scan);
+  };
+  scan(doc);
+  const stageLevel = levels.length ? Math.min(...levels) : 2;
 
   const span = (n: DastNode) => {
     let out = esc(n.value).replace(/\n/g, '<br />');
@@ -147,12 +155,12 @@ export function renderStructuredText(st: StructuredText | null | undefined, { st
         return `<p>${kids()}</p>`;
       case 'heading': {
         const title = kids();
-        if (stages && n.level === 2) {
+        if (stages && n.level === stageLevel) {
           const text = plain(n);
           const id = slugify(text);
           toc.push({ id, n: pad(toc.length + 1), title: esc(text) });
           if (/outcome|result/i.test(text)) outcomeId = id;
-          return stageHeading(toc.length, title, id);
+          return stageHeading(toc.length, title, id, n.level);
         }
         return `<h${n.level}>${title}</h${n.level}>`;
       }
