@@ -41,6 +41,8 @@ const groups = SECTIONS.map((s) => ({ ...s, items: items.filter((i) => (i.sectio
 
 const BIKES: Record<string, ImageMetadata> = { 'bike-ktm': ktm, 'bike-cb300r': cb300r };
 const idx = sprite.index as Record<string, number>;
+// Art that has its own file instead of a sprite tile.
+const ART_FILES: Record<string, string> = { helmet: '/art/uses/helmet-ls2.svg', 'helmet-ls2': '/art/uses/helmet-ls2.svg' };
 const tile = (art?: string) => {
   const i = idx[art ?? ''] ?? idx['notes'];
   return `--sx:${(i % sprite.cols) * -64}px;--sy:${Math.floor(i / sprite.cols) * -64}px`;
@@ -82,7 +84,7 @@ const garageCount = (list: Item[]) => {
               ))}
             </div>
             <ul class="items items--3">
-              {g.items.filter((i) => !BIKES[i.art ?? '']).map((i) => <li><div class="item"><span class="art" style={tile(i.art)} aria-hidden="true"></span><span class="item-text"><span class="name">{i.product}</span>{i.why && <span class="why">{i.why}</span>}{i.detail && <span class="meta-line">{i.detail}</span>}</span></div></li>)}
+              {g.items.filter((i) => !BIKES[i.art ?? '']).map((i) => <li><div class="item">{ART_FILES[i.art ?? ''] ? <span class="art art--file" aria-hidden="true"><img src={ART_FILES[i.art!]} alt="" width="40" height="35" loading="lazy" /></span> : <span class="art" style={tile(i.art)} aria-hidden="true"></span>}<span class="item-text"><span class="name">{i.product}</span>{i.why && <span class="why">{i.why}</span>}{i.detail && <span class="meta-line">{i.detail}</span>}</span></div></li>)}
             </ul>
           </div>
         ) : (
@@ -203,6 +205,15 @@ const garageCount = (list: Item[]) => {
     background-position: calc(var(--sx) * 0.625) calc(var(--sy) * 0.625);
     background-size: calc(512px * 0.625) calc(320px * 0.625);
     transition: transform 0.2s ease-out;
+  }
+  .art--file {
+    display: grid;
+    place-items: center;
+    background-image: none;
+  }
+  .art--file img {
+    width: 34px;
+    height: auto;
   }
   a.item:hover .art,
   a.item:focus-visible .art {

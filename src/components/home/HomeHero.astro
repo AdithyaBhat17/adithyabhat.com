@@ -46,10 +46,10 @@ import cb300r from '@/assets/bikes/honda-cb300r.png';
   >
     <div class="hero-bikes">
       <button type="button" class="bike bike--ktm" data-bike data-sound-click="engine-ktm" aria-label="Rev the KTM 390 Adventure">
-        <Image src={ktm} alt="" widths={[402, 804]} sizes="(max-width: 767px) 282px, 28vw" loading="eager" />
+        <Image src={ktm} alt="" widths={[402]} sizes="(max-width: 767px) 282px, 28vw" loading="eager" fetchpriority="low" />
       </button>
       <button type="button" class="bike bike--cb" data-bike data-sound-click="engine-cb" aria-label="Rev the Honda CB300R">
-        <Image src={cb300r} alt="" widths={[402, 804]} sizes="(max-width: 767px) 282px, 28vw" loading="lazy" />
+        <Image src={cb300r} alt="" widths={[402]} sizes="(max-width: 767px) 282px, 28vw" loading="lazy" />
       </button>
     </div>
     <p class="hero-caption" slot="outer">

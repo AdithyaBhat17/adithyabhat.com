@@ -48,9 +48,10 @@ const ogImage = new URL(image, Astro.site).toString();
     <meta name="theme-color" content="#f3ead8" media="(prefers-color-scheme: light)" />
     <meta name="theme-color" content="#16181b" media="(prefers-color-scheme: dark)" />
 
-    <!-- Fonts: self-hosted; preload the two used above the fold. -->
+    <!-- Fonts: self-hosted; only the headline face is preloaded so the LCP
+         painting isn't starved of bandwidth (Onest swaps in over a
+         metric-matched fallback, so there's no layout shift). -->
     <link rel="preload" href="/fonts/young-serif-latin.woff2" as="font" type="font/woff2" crossorigin />
-    <link rel="preload" href="/fonts/onest-latin.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preconnect" href="https://www.datocms-assets.com" crossorigin />
 
     <slot name="head" />

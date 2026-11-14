@@ -39,6 +39,9 @@ for (const p of projectsData?.allProjects ?? []) {
 export default defineConfig({
   site: 'https://adithyabhat.com',
   output: 'static',
+  // The whole stylesheet is ~12 KB compressed: inlining it removes a
+  // render-blocking request from the LCP path.
+  build: { inlineStylesheets: 'always' },
   adapter: vercel({
     webAnalytics: { enabled: true },
     speedInsights: { enabled: true },

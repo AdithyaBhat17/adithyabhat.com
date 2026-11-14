@@ -66,7 +66,8 @@ const {
   mobileSwipe = false,
 } = Astro.props;
 
-const quality = 58;
+// AVIF holds up well on these grainy watercolours; the LCP hero gets a little less.
+const quality = priority ? 50 : 58;
 
 async function sources(img: ImageMetadata, mImg?: ImageMetadata) {
   const widths = [720, 1080, img.width].filter((x, i, a) => x <= img.width && a.indexOf(x) === i);
