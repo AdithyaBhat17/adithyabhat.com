@@ -2,16 +2,28 @@
 // Audition page for the synthesized sound kit. Not linked anywhere, noindex,
 // and excluded from the sitemap.
 import PageLayout from '@/layouts/PageLayout.astro';
+import { ENGINE_CANDIDATES, ENGINE_SAMPLES } from '@/scripts/sound';
 
 const groups = [
   {
-    title: 'Engines',
+    title: 'Engines in use',
     items: [
-      { id: 'engine:ktm:A1', label: 'KTM 390 · A1 (granular, raspy)' },
-      { id: 'engine:ktm:A2', label: 'KTM 390 · A2 (throatier, less rasp)' },
-      { id: 'engine:cb:A1', label: 'CB300R · A1 (lower, rounder)' },
-      { id: 'engine:cb:A2', label: 'CB300R · A2' },
+      { id: 'bike:ktm', label: `KTM 390 (now: ${ENGINE_SAMPLES.ktm})` },
+      { id: 'bike:cb', label: `CB300R (now: ${ENGINE_SAMPLES.cb})` },
       { id: 'theme', label: 'Theme toggle (ink bleed + engine)' },
+    ],
+  },
+  {
+    title: 'Recorded candidates (CC0, BigSoundBank)',
+    items: ENGINE_CANDIDATES.map((c) => ({ id: `sample:${c}`, label: c })),
+  },
+  {
+    title: 'Synthesized, for comparison',
+    items: [
+      { id: 'synth:ktm:A1', label: 'KTM synth · A1' },
+      { id: 'synth:ktm:A2', label: 'KTM synth · A2' },
+      { id: 'synth:cb:A1', label: 'CB300R synth · A1' },
+      { id: 'synth:cb:A2', label: 'CB300R synth · A2' },
     ],
   },
   {
@@ -33,7 +45,7 @@ const groups = [
   <meta slot="head" name="robots" content="noindex, nofollow" />
   <section class="wrap lab">
     <h1 class="display-xl">Sound lab</h1>
-    <p class="body-l">Every sound on the site, synthesized live with WebAudio. Sound is switched on for this page when you press a button.</p>
+    <p class="body-l">Every sound on the site. Pressing a button switches sound on. The bikes use the recordings; everything else is synthesized live.</p>
     {groups.map((g) => (
       <div class="group">
         <h2 class="display-m">{g.title}</h2>
@@ -48,7 +60,7 @@ const groups = [
 </PageLayout>
 
 <script>
-  import { engine, play, setSoundOn, type EngineVariant, type EngineVoice } from '@/scripts/sound';
+  import { engine, engineSample, engineSynth, play, setSoundOn, type EngineVariant, type EngineVoice } from '@/scripts/sound';
 
   function initLab() {
     document.querySelectorAll<HTMLButtonElement>('[data-lab]').forEach((b) => {
@@ -60,9 +72,13 @@ const groups = [
         const id = b.dataset.lab!;
         // Small delay on the very first press while the AudioContext spins up.
         window.setTimeout(() => {
-          if (id.startsWith('engine:')) {
+          if (id.startsWith('synth:')) {
             const [, voice, variant] = id.split(':');
-            engine(voice as EngineVoice, variant as EngineVariant);
+            engineSynth(voice as EngineVoice, variant as EngineVariant);
+          } else if (id.startsWith('sample:')) {
+            engineSample(id.slice(7), { force: true });
+          } else if (id.startsWith('bike:')) {
+            engine(id.slice(5) as EngineVoice);
           } else if (id === 'theme') {
             (document.querySelector('[data-theme-toggle]') as HTMLButtonElement | null)?.click();
           } else {

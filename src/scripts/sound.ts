@@ -83,6 +83,7 @@ export function unlock(): void {
     bus.connect(tone).connect(limiter).connect(ctx.destination);
   }
   if (ctx.state === 'suspended') void ctx.resume();
+  prefetchEngines();
 }
 
 function getNoise(ac: AudioContext): AudioBuffer {
@@ -136,6 +137,83 @@ function noiseBurst(
   src.start(t, opts.offset ?? Math.random() * 1.5);
   src.stop(t + opts.attack + opts.decay + 0.05);
   return f;
+}
+
+/* ------------------------------------------------------ recorded engines
+ * The synthesized blip never quite convinced, so the bikes use tiny CC0
+ * recordings (BigSoundBank, see CREDITS.md), Opus with an AAC fallback.
+ * They're fetched and decoded only once sound is switched on, cached as
+ * AudioBuffers, and played through the same bus and limiter as everything else.
+ */
+
+/** Which recording each bike uses. Swap names here once the owner picks. */
+export const ENGINE_SAMPLES: Record<EngineVoice, string> = { ktm: 'C-blip', cb: 'D-blip' };
+export const ENGINE_CANDIDATES = ['A-startup', 'B-blip', 'C-blip', 'D-blip', 'E-single-75cc', 'F-short-blip'] as const;
+
+const SAMPLE_BASE = '/sounds/engine/';
+const samples = new Map<string, Promise<AudioBuffer | null>>();
+
+function sampleExts(): string[] {
+  const a = document.createElement('audio');
+  const opus = a.canPlayType('audio/webm; codecs="opus"');
+  return opus ? ['webm', 'm4a'] : ['m4a', 'webm'];
+}
+
+function loadSample(name: string): Promise<AudioBuffer | null> {
+  if (!ctx) return Promise.resolve(null);
+  const cached = samples.get(name);
+  if (cached) return cached;
+  const ac = ctx;
+  const job = (async () => {
+    for (const ext of sampleExts()) {
+      try {
+        const res = await fetch(`${SAMPLE_BASE}${name}.${ext}`);
+        if (!res.ok) continue;
+        return await ac.decodeAudioData(await res.arrayBuffer());
+      } catch {
+        /* try the other container */
+      }
+    }
+    return null;
+  })();
+  samples.set(name, job);
+  return job;
+}
+
+/** Warm the bikes' recordings (called once sound is on and unlocked). */
+function prefetchEngines() {
+  Object.values(ENGINE_SAMPLES).forEach((n) => void loadSample(n));
+}
+
+/** Plays a recorded engine. `force` skips the throttle (sound lab). */
+export function engineSample(name: string, { level = 0.9, force = false } = {}): void {
+  if (!ctx || !bus || ctx.state !== 'running') return;
+  if (document.documentElement.dataset.sound !== 'on') return;
+  if (!force && !ready('engine')) return;
+  const ac = ctx;
+  const out = bus;
+  void loadSample(name).then((buf) => {
+    if (!buf) return;
+    const src = ac.createBufferSource();
+    src.buffer = buf;
+    const g = ac.createGain();
+    g.gain.value = level;
+    src.connect(g).connect(out);
+    src.start(ac.currentTime + 0.01);
+  });
+}
+
+/** A bike's engine: its recording, or the synth if that can't load. */
+export function engine(voice: EngineVoice = 'ktm'): void {
+  if (!ready('engine')) return;
+  const name = ENGINE_SAMPLES[voice];
+  void loadSample(name).then((buf) => {
+    if (buf) engineSample(name, { force: true });
+    else {
+      last.engine = -10;
+      engineSynth(voice);
+    }
+  });
 }
 
 /* --------------------------------------------------------------- engines
@@ -202,7 +280,8 @@ function rpmAt(t: number, v: Voice): number {
 
 const jitter = (amount: number) => 1 + (Math.random() * 2 - 1) * amount;
 
-export function engine(voiceName: EngineVoice = 'ktm', variant: EngineVariant = 'A1'): void {
+/** Synthesized fallback (and the /sound-lab A1/A2 variants). */
+export function engineSynth(voiceName: EngineVoice = 'ktm', variant: EngineVariant = 'A1'): void {
   const ac = ready('engine');
   if (!ac || !bus) return;
   const v = VOICES[voiceName];
