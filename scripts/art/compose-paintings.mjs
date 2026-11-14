@@ -136,6 +136,17 @@ const PAINTINGS = [
     },
   },
   {
+    // About: the workbench under the service book.
+    id: 'service',
+    frame: [1440, 640],
+    mask: { file: 'service.svg', x: -10, y: 12 },
+    unmasked: ['service-fg'],
+    outputs: {
+      service: ['01-47_2062', '02-47_2089', '03-47_2092'],
+      'service-fg': ['fg1-47_2101', 'ink-47_2104'],
+    },
+  },
+  {
     id: 'footer',
     frame: [1440, 520],
     mask: null, // the sky layer carries its own torn shape

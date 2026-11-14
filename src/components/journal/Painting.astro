@@ -40,6 +40,8 @@ interface Props {
   nightSrc?: ImageMetadata;
   nightMobileSrc?: ImageMetadata;
   nightAlt?: string;
+  /** Mobile: let the visitor swipe across the full scaled composition instead of cropping. */
+  mobileSwipe?: boolean;
 }
 
 const {
@@ -61,6 +63,7 @@ const {
   nightSrc,
   nightMobileSrc,
   nightAlt,
+  mobileSwipe = false,
 } = Astro.props;
 
 const quality = 58;
@@ -99,7 +102,7 @@ const style = [
 ---
 
 <div
-  class:list={['painting', tint && 'painting--tint', mobile && 'has-crop', priority && 'painting--static', className]}
+  class:list={['painting', tint && 'painting--tint', mobile && 'has-crop', priority && 'painting--static', mobileSwipe && 'painting--swipe', className]}
   style={style}
   id={id}
   role={label ? 'group' : undefined}
@@ -237,6 +240,17 @@ const style = [
       --u: calc(var(--ms) * 1px);
       inset: 0 auto 0 calc(50% - var(--fx) * var(--u));
       width: calc(var(--pw) * var(--u));
+    }
+    .painting--swipe {
+      overflow-x: auto;
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+    }
+    .painting--swipe::-webkit-scrollbar {
+      display: none;
+    }
+    .painting--swipe .painting-inner {
+      left: 0;
     }
     .has-crop .painting-art {
       left: calc(var(--cx) * var(--u));
