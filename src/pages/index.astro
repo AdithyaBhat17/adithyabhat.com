@@ -1,8 +1,31 @@
 ---
 import PageLayout from '@/layouts/PageLayout.astro';
 import HomeHero from '@/components/home/HomeHero.astro';
+import HomeGarage from '@/components/home/HomeGarage.astro';
+import HomeRoute from '@/components/home/HomeRoute.astro';
+import HomeNewsstand from '@/components/home/HomeNewsstand.astro';
+import HomeShelf from '@/components/home/HomeShelf.astro';
+import HomeKindWords from '@/components/home/HomeKindWords.astro';
+import { fetchAPI } from '@/lib/datocms';
+import { HOME_PAGE_QUERY } from '@/graphql/index';
+import { toIssues, type ArticleLike } from '@/lib/articles';
+
+const data = await fetchAPI(HOME_PAGE_QUERY);
+const projects = data.allProjects ?? [];
+const issues = toIssues<ArticleLike>(data.allArticles ?? [])
+  .filter((i) => i.article.featured)
+  .sort((a, b) => a.no.localeCompare(b.no))
+  .slice(-5);
 ---
 
-<PageLayout title="Adithya NR | Product engineer in Abu Dhabi">
+<PageLayout
+  title="Adithya NR | Product engineer in Abu Dhabi"
+  description="I design and build software that feels hand-made. A product engineer in Abu Dhabi, currently shaping the Agentic AI platform at yellow.ai."
+>
   <HomeHero />
+  <HomeGarage projects={projects} />
+  <HomeRoute />
+  <HomeNewsstand issues={issues} />
+  <HomeShelf />
+  <HomeKindWords />
 </PageLayout>

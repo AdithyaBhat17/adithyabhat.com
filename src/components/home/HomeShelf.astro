@@ -1,0 +1,195 @@
+---
+import { Picture } from 'astro:assets';
+import ledge from '@/assets/stilllife/ledge.png';
+import { SHELF } from '@/data/shelf';
+---
+
+<section class="section shelf-section" id="lately" aria-labelledby="lately-title">
+  <div class="wrap">
+    <h2 id="lately-title" class="display-l section-head">Lately</h2>
+    <div class="shelf-scroll">
+      <div class="shelf" data-shelf>
+        <Picture src={ledge} formats={['avif', 'webp']} alt="" widths={[1120]} sizes="1120px" class="ledge" loading="lazy" />
+        <ul class="items">
+          {SHELF.map((it) => (
+            <li class="item" style={`--x:${it.x};--y:${it.y};--w:${it.img.width};--h:${it.img.height}`}>
+              <button
+                type="button"
+                class="obj"
+                data-shelf-item
+                data-sound-hover="scratch"
+                data-sound-click={it.sound}
+                aria-describedby={`note-${it.id}`}
+              >
+                <Picture src={it.img} formats={['avif', 'webp']} alt={it.name} widths={[it.img.width]} sizes={`${it.img.width}px`} loading="lazy" />
+              </button>
+              <span id={`note-${it.id}`} class:list={['tag', it.align === 'right' && 'tag--right']} role="tooltip">
+                <span class="tag-name">{it.name}</span>
+                <span class="tag-note hand">{it.note}</span>
+                <svg class="tag-arrow" viewBox="0 0 60 130" aria-hidden="true"><path d="M30 4c-8 30 6 60-6 108M14 98l10 18 14-16" pathLength="1" /></svg>
+              </span>
+            </li>
+          ))}
+        </ul>
+        <p class="hint hand" aria-hidden="true"><span class="hint-hover">hover the shelf</span><span class="hint-tap">tap an object</span></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .shelf-scroll {
+    margin-top: 20px;
+  }
+  .shelf {
+    --u: calc(100cqw / 1120);
+    position: relative;
+    width: min(100%, 1120px);
+    aspect-ratio: 1120 / 619;
+    container-type: inline-size;
+  }
+  .shelf :global(.ledge),
+  .shelf :global(.ledge img) {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+  [data-theme='dark'] .shelf :global(.ledge) {
+    filter: var(--painting-tint);
+  }
+  .items {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .item {
+    position: absolute;
+    left: calc(var(--x) * var(--u));
+    top: calc(var(--y) * var(--u));
+    width: calc(var(--w) * var(--u));
+    height: calc(var(--h) * var(--u));
+  }
+  .obj {
+    display: block;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    border-radius: 8px;
+    transition: transform 0.45s var(--ease-spring);
+    cursor: pointer;
+  }
+  .obj :global(img) {
+    width: 100%;
+    height: 100%;
+    filter: drop-shadow(0 0 0 transparent);
+  }
+  .item:has(.obj:hover, .obj:focus-visible, .obj.is-active) {
+    z-index: 6;
+  }
+  .obj:hover,
+  .obj:focus-visible,
+  .obj:global(.is-active) {
+    transform: translate3d(0, calc(-10 * var(--u)), 0);
+  }
+
+  /* The note: name + handwriting + an ink arrow down to the object. */
+  .tag {
+    position: absolute;
+    left: calc(6 * var(--u));
+    bottom: calc(100% + 104 * var(--u));
+    display: flex;
+    flex-direction: column;
+    width: max-content;
+    max-width: calc(400 * var(--u));
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+  }
+  .tag--right {
+    left: auto;
+    right: calc(6 * var(--u));
+    align-items: flex-end;
+    text-align: right;
+  }
+  .tag-name {
+    font-family: var(--font-display);
+    font-size: calc(26.5 * var(--u));
+    line-height: 1.25;
+    color: var(--ink);
+  }
+  .tag-note {
+    margin-top: calc(4 * var(--u));
+    font-size: calc(38 * var(--u));
+    color: var(--orange);
+    clip-path: inset(0 100% 0 0);
+    transition: clip-path 0.7s var(--ease-in-out) 0.1s;
+  }
+  .tag-arrow {
+    position: absolute;
+    left: calc(14 * var(--u));
+    top: calc(100% + 8 * var(--u));
+    width: calc(46 * var(--u));
+    height: calc(108 * var(--u));
+    overflow: visible;
+  }
+  .tag--right .tag-arrow {
+    left: auto;
+    right: calc(14 * var(--u));
+  }
+  .tag-arrow path {
+    fill: none;
+    stroke: var(--orange);
+    stroke-width: 2.6;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    transition: stroke-dashoffset 0.6s var(--ease-in-out) 0.35s;
+  }
+  .item:has(.obj:hover, .obj:focus-visible, .obj.is-active) .tag {
+    opacity: 1;
+  }
+  .item:has(.obj:hover, .obj:focus-visible, .obj.is-active) .tag-note {
+    clip-path: inset(0 0 0 0);
+  }
+  .item:has(.obj:hover, .obj:focus-visible, .obj.is-active) .tag-arrow path {
+    stroke-dashoffset: 0;
+  }
+
+  .hint {
+    position: absolute;
+    left: calc(21 * var(--u));
+    top: calc(554 * var(--u));
+    font-size: calc(35 * var(--u));
+    color: var(--ink-meta);
+    rotate: -2deg;
+  }
+
+  @media (max-width: 767px) {
+    .shelf-scroll {
+      margin-inline: calc(var(--gutter) * -1);
+      padding: 0 var(--gutter);
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .shelf-scroll::-webkit-scrollbar {
+      display: none;
+    }
+    .shelf {
+      width: 806px;
+      max-width: none;
+    }
+  }
+  .hint-tap {
+    display: none;
+  }
+  @media (hover: none) {
+    .hint-hover {
+      display: none;
+    }
+    .hint-tap {
+      display: inline;
+    }
+  }
+</style>

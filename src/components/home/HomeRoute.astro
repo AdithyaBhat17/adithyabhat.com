@@ -1,0 +1,135 @@
+---
+import { Image } from 'astro:assets';
+import DualPainting from '@/components/journal/DualPainting.astro';
+import route from '@/assets/paintings/route.png';
+import routeM from '@/assets/paintings/route-m.png';
+import ktm from '@/assets/bikes/ktm-390-adventure.png';
+import { ROUTE } from '@/data/career';
+---
+
+<section class="section route" id="work-history" aria-labelledby="route-title">
+  <div class="wrap section-head">
+    <h2 id="route-title" class="display-l">The route so far</h2>
+  </div>
+
+  <DualPainting
+    desktop={{ src: route, w: 1440, h: 720, edges: 'route' }}
+    mobile={{ src: routeM, w: 390, h: 1330, edges: 'route-m' }}
+    alt="A sunny desert road winding past the Abu Dhabi skyline, with a signpost at each stop of the career so far and the KTM riding toward the last one."
+    tint
+  >
+    <ol class="stops">
+      {ROUTE.map((s, i) => (
+        <li class="stop">
+          <div
+            class:list={['at', 'sign', s.current && 'sign--now', 'grain']}
+            style={`--x:${s.desktop.sign[0]};--y:${s.desktop.sign[1]};--r:${s.desktop.sign[2]};--mx:${s.mobile.sign[0]};--my:${s.mobile.sign[1]};--mr:${s.mobile.sign[2]}`}
+            data-sound-hover="chalk"
+          >
+            <p class="sign-co">{s.company}</p>
+            <p class="sign-meta">{s.year} · {s.role}</p>
+          </div>
+          <p
+            class="at note hand"
+            style={`--x:${s.desktop.note[0]};--y:${s.desktop.note[1]};--w:${s.desktop.note[2]};--mx:${s.mobile.note[0]};--my:${s.mobile.note[1]};--mw:${s.mobile.note[2]};--reveal-delay:${0.5 + i * 0.25}s`}
+            data-ink-in
+          >
+            {s.note}
+          </p>
+        </li>
+      ))}
+    </ol>
+    <div class="at route-bike" style="--x:1060;--y:400;--mx:83;--my:1071" aria-hidden="true">
+      <Image src={ktm} alt="" widths={[402]} sizes="220px" loading="lazy" />
+    </div>
+  </DualPainting>
+
+  <div class="wrap section-foot">
+    <a class="arrow-link" href="/resume.pdf" target="_blank" rel="noopener" data-sound-hover="tick">
+      Download my CV
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3.3 8H12M8.7 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" /></svg>
+    </a>
+  </div>
+</section>
+
+<style>
+  .stops {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .sign {
+    display: flex;
+    flex-direction: column;
+    gap: calc(2 * var(--u));
+    padding: calc(12 * var(--u)) calc(18 * var(--u));
+    border: calc(3 * var(--u)) solid #f3ead8;
+    border-radius: calc(8 * var(--u));
+    background: #2c5a5e;
+    color: #f3ead8;
+    white-space: nowrap;
+    box-shadow: 0 calc(6 * var(--u)) calc(8 * var(--u)) rgba(20, 14, 6, 0.3);
+    transform-origin: 50% 120%;
+    transition: transform 0.5s var(--ease-spring);
+    cursor: default;
+  }
+  .sign:hover,
+  .sign:focus-visible {
+    transform: rotate(-2.5deg) translateY(calc(-3 * var(--u)));
+  }
+  .sign--now {
+    background: #e2560b;
+  }
+  .sign-co {
+    font-family: var(--font-display);
+    font-size: calc(26 * var(--u));
+    line-height: 1.25;
+  }
+  .sign-meta {
+    font-size: calc(12 * var(--u));
+    font-weight: 500;
+    letter-spacing: 0.02em;
+  }
+
+  .note {
+    width: calc(var(--w) * var(--u));
+    font-size: calc(26 * var(--u));
+    line-height: 1;
+    color: #1c2124;
+  }
+
+  .route-bike {
+    width: calc(220 * var(--u));
+  }
+  .route-bike :global(img) {
+    width: 100%;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    :global(.js) .route-bike {
+      transform: translate3d(calc(-460 * var(--u)), calc(30 * var(--u)), 0);
+      opacity: 0;
+      transition: transform 2.2s cubic-bezier(0.25, 0.6, 0.2, 1) 0.6s, opacity 0.4s ease 0.6s;
+    }
+    :global(.js) .is-in .route-bike {
+      transform: none;
+      opacity: 1;
+    }
+  }
+
+  .section-foot {
+    margin-top: 24px;
+  }
+
+  @media (max-width: 767px) {
+    .note {
+      width: calc(var(--mw) * var(--u));
+      font-size: calc(24 * var(--u));
+    }
+    @media (prefers-reduced-motion: no-preference) {
+      :global(.js) .route-bike {
+        transform: translate3d(calc(-260 * var(--u)), 0, 0);
+      }
+    }
+  }
+</style>

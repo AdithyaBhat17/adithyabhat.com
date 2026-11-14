@@ -1,0 +1,142 @@
+---
+/**
+ * A writing entry as a risograph zine. Sized in "zine px" (the 240 × 360
+ * Figma component) times --zs, so it scales with whatever holds it.
+ * Hover: slides up out of the stack and straightens, with a page flick.
+ */
+import type { Issue } from '@/lib/articles';
+
+interface Props {
+  issue: Issue;
+  rot?: number;
+  /** Heading level for the title (a list of zines = h3). */
+  as?: 'h2' | 'h3' | 'p';
+  class?: string;
+  style?: string;
+}
+
+const { issue, rot = 0, as: Title = 'h3', class: className, style } = Astro.props;
+const { article, zine } = issue;
+---
+
+<a
+  href={issue.href}
+  class:list={['zine', className]}
+  style={`--paper:${zine.paper};--rot:${rot}deg;${style ?? ''}`}
+  target={issue.external ? '_blank' : undefined}
+  rel={issue.external ? 'noopener noreferrer' : undefined}
+  data-sound-hover="flick"
+>
+  <span class="zine-mast" aria-hidden="true"><span class="zine-no">No.</span><span class="zine-num">{issue.no}</span></span>
+  <span class="zine-art" aria-hidden="true">
+    <img src={`/art/zines/${zine.art}.svg`} alt="" width="180" height="180" loading="lazy" decoding="async" />
+  </span>
+  <Title class="zine-title">{article.title.trim()}</Title>
+  <span class="zine-meta">{issue.meta}{issue.external && <span class="sr-only"> (opens in a new tab)</span>}</span>
+  <span class="zine-spine" aria-hidden="true"></span>
+</a>
+
+<style>
+  .zine {
+    --zs: 1px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: calc(10 * var(--zs));
+    width: calc(240 * var(--zs));
+    height: calc(360 * var(--zs));
+    padding: calc(20 * var(--zs)) calc(20 * var(--zs)) calc(18 * var(--zs)) calc(26 * var(--zs));
+    background: var(--paper);
+    color: #1c2124;
+    rotate: var(--rot);
+    transform-origin: 50% 100%;
+    box-shadow: calc(1.25 * var(--zs) / 0.625) calc(6.25 * var(--zs) / 0.625) calc(11 * var(--zs) / 0.625) rgba(30, 20, 8, 0.24);
+    transition: transform 0.5s var(--ease-spring), rotate 0.5s var(--ease-spring);
+    isolation: isolate;
+  }
+  .zine::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    box-shadow: 0 calc(27 * var(--zs)) calc(37 * var(--zs)) rgba(30, 20, 8, 0.32);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+  .zine::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: url('/art/grain.png') 0 0 / 160px;
+    mix-blend-mode: multiply;
+    opacity: 0.4;
+    pointer-events: none;
+  }
+  .zine:hover,
+  .zine:focus-visible {
+    rotate: 0deg;
+    transform: translate3d(0, calc(-60 * var(--zs)), 0) scale(1.1);
+    z-index: 5;
+  }
+  .zine:hover::before,
+  .zine:focus-visible::before {
+    opacity: 1;
+  }
+
+  .zine-mast {
+    display: flex;
+    align-items: baseline;
+    gap: calc(6 * var(--zs));
+    font-family: var(--font-display);
+  }
+  .zine-no {
+    font-size: calc(16 * var(--zs));
+    color: #2c5a5e;
+  }
+  .zine-num {
+    font-size: calc(46 * var(--zs));
+    line-height: 1;
+    color: #e2560b;
+  }
+  .zine-art {
+    display: block;
+    width: calc(153 * var(--zs));
+    height: calc(153 * var(--zs));
+  }
+  .zine-art img {
+    width: 100%;
+    height: 100%;
+    rotate: 2deg;
+  }
+  .zine-title {
+    width: calc(190 * var(--zs));
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: calc(18 * var(--zs));
+    font-weight: 400;
+    line-height: 1.18;
+    color: #1c2124;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .zine-meta {
+    margin-top: auto;
+    font-size: calc(11 * var(--zs));
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    color: #6b6659;
+  }
+  .zine-spine {
+    position: absolute;
+    left: calc(8 * var(--zs));
+    top: 0;
+    width: calc(6 * var(--zs));
+    height: 100%;
+    border-right: calc(2 * var(--zs)) solid rgba(0, 0, 0, 0.08);
+    background:
+      linear-gradient(#9aa0a3, #9aa0a3) calc(1 * var(--zs)) calc(76 * var(--zs)) / calc(3 * var(--zs)) calc(28 * var(--zs)) no-repeat,
+      linear-gradient(#9aa0a3, #9aa0a3) calc(1 * var(--zs)) calc(255 * var(--zs)) / calc(3 * var(--zs)) calc(28 * var(--zs)) no-repeat;
+  }
+</style>

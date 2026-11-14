@@ -245,6 +245,7 @@ p {
 
 .section {
   padding-top: 140px;
+  padding-bottom: 40px;
 }
 
 .section-head {
@@ -264,6 +265,7 @@ p {
   }
   .section {
     padding-top: 72px;
+    padding-bottom: 24px;
   }
   .section-head {
     margin-bottom: 20px;

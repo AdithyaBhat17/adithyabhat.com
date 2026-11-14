@@ -1,0 +1,169 @@
+---
+import Painting from '@/components/journal/Painting.astro';
+import Zine from '@/components/writing/Zine.astro';
+import newsstand from '@/assets/paintings/newsstand.png';
+import newsstandM from '@/assets/paintings/newsstand-m.png';
+import type { Issue } from '@/lib/articles';
+
+interface Props {
+  issues: Issue[];
+}
+const { issues } = Astro.props;
+
+const SPOTS = [
+  { x: 406, rot: -3 },
+  { x: 544, rot: 2 },
+  { x: 682, rot: -1.5 },
+  { x: 820, rot: 2.5 },
+  { x: 958, rot: -2 },
+];
+---
+
+<section class="section stand" id="writing" aria-labelledby="stand-title">
+  <div class="wrap section-head">
+    <h2 id="stand-title" class="display-l">Writing</h2>
+  </div>
+
+  <Painting
+    src={newsstand}
+    mobileSrc={newsstandM}
+    mobileCrop={[340, 800]}
+    alt="A newsstand kiosk at golden hour with an orange and cream awning, a potted palm, and a cat asleep on the counter."
+    w={1440}
+    h={760}
+    edges="newsstand"
+    focusX={740}
+    tint
+  >
+    <div class="kiosk-sign grain" style="--x:556;--y:58" aria-hidden="true">
+      <span class="ks-word">Writing</span>
+      <span class="ks-hand hand">fresh off the press</span>
+    </div>
+    <p class="zzz hand" aria-hidden="true">z z z</p>
+
+    <ul class="rack" slot="outer" aria-label="Featured writing">
+      {issues.slice(0, SPOTS.length).map((iss, i) => (
+        <li class="slot" style={`--x:${SPOTS[i].x};--reveal-delay:${0.2 + i * 0.08}s`} data-reveal>
+          <Zine issue={iss} rot={SPOTS[i].rot} />
+        </li>
+      ))}
+    </ul>
+  </Painting>
+
+  <div class="wrap section-foot">
+    <a class="arrow-link" href="/blog" data-sound-hover="tick">
+      All writing
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3.3 8H12M8.7 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" /></svg>
+    </a>
+    <p class="swipe hand" aria-hidden="true">swipe the rack →</p>
+  </div>
+</section>
+
+<style>
+  .kiosk-sign {
+    position: absolute;
+    left: calc(var(--x) * var(--u));
+    top: calc(var(--y) * var(--u));
+    display: flex;
+    align-items: baseline;
+    gap: calc(14 * var(--u));
+    width: calc(418 * var(--u));
+    height: calc(64 * var(--u));
+    padding: 0 calc(22 * var(--u));
+    align-items: center;
+    background: #f6eedd;
+    border-radius: calc(4 * var(--u));
+    rotate: -1.5deg;
+    box-shadow: calc(2 * var(--u)) calc(4 * var(--u)) calc(6 * var(--u)) rgba(30, 20, 8, 0.3);
+  }
+  .ks-word {
+    font-family: var(--font-display);
+    font-size: calc(28 * var(--u));
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #1c2124;
+  }
+  .ks-hand {
+    font-size: calc(30 * var(--u));
+    color: #e2560b;
+  }
+  .zzz {
+    position: absolute;
+    left: calc(960 * var(--u));
+    top: calc(470 * var(--u));
+    font-size: calc(26 * var(--u));
+    color: #f3ead8;
+    rotate: 12deg;
+    animation: zzz 3.6s ease-in-out infinite;
+  }
+  @keyframes zzz {
+    0%, 100% { opacity: 0.55; transform: translate3d(0, 0, 0); }
+    50% { opacity: 1; transform: translate3d(0, -4px, 0); }
+  }
+
+  .rack {
+    --u: calc(100cqw / 1440);
+    position: absolute;
+    inset: 0;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .slot {
+    position: absolute;
+    left: calc(var(--x) * var(--u));
+    top: calc(231 * var(--u));
+  }
+  .slot :global(.zine) {
+    --zs: calc(0.625 * var(--u));
+  }
+  .slot:has(:hover, :focus-visible) {
+    z-index: 4;
+  }
+
+  .section-foot {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-top: 28px;
+  }
+  .swipe {
+    display: none;
+    margin-left: auto;
+    font-size: 28px;
+    color: var(--orange);
+  }
+
+  @media (max-width: 767px) {
+    .rack {
+      --u: 1px;
+      top: 196px;
+      bottom: auto;
+      display: flex;
+      gap: 14px;
+      padding: 40px var(--gutter) 24px;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scroll-padding-inline: var(--gutter);
+      scrollbar-width: none;
+    }
+    .rack::-webkit-scrollbar {
+      display: none;
+    }
+    .slot {
+      position: relative;
+      left: auto;
+      top: auto;
+      flex: 0 0 auto;
+      scroll-snap-align: start;
+    }
+    .swipe {
+      display: block;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .zzz {
+      animation: none;
+    }
+  }
+</style>
