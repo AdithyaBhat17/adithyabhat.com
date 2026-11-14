@@ -1,31 +1,299 @@
 ---
+import { Image } from 'astro:assets';
 import PageLayout from '@/layouts/PageLayout.astro';
-import Container from '@/components/astro/Container.astro';
-import CategoryFilter from '@/components/react/CategoryFilter';
-import { fetchAPI } from '@/lib/datocms';
+import Painting from '@/components/journal/Painting.astro';
+import pegboard from '@/assets/paintings/pegboard.png';
+import ktm from '@/assets/bikes/ktm-390-adventure.png';
+import cb300r from '@/assets/bikes/honda-cb300r.png';
+import sprite from '@/data/uses-sprite.json';
+import { fetchWithFallback } from '@/lib/datocms';
 
-const STACK_QUERY = `
-  query Stack {
-    allStacks (orderBy: product_ASC, first: 50) {
-      id
-      category
-      product
-      link
-      logo { url }
-      description
-    }
-  }
-`;
+interface Item {
+  product: string;
+  category?: string;
+  section?: string;
+  why?: string;
+  detail?: string;
+  art?: string;
+  link?: string;
+  description?: string;
+}
 
-const data = await fetchAPI(STACK_QUERY);
-const stacks = data.allStacks ?? [];
-const categories = [...new Set(stacks.map((s: any) => s.category))] as string[];
+const data = await fetchWithFallback(
+  `query Uses { allStacks(first: 100) { product category section why detail art link description } }`,
+  `query UsesLegacy { allStacks(first: 100) { product category link description } }`,
+);
+// Records come back newest first; the drawer order is the order they were added.
+const items: Item[] = [...(data.allStacks ?? [])].reverse();
+
+const SECTIONS = [
+  { key: 'desk', title: 'Desk', unit: 'things', compact: false },
+  { key: 'software', title: 'Software', unit: 'apps', compact: false },
+  { key: 'garage', title: 'Garage', unit: '', compact: false },
+  { key: 'watches', title: 'Watches', unit: 'on rotation', compact: true },
+  { key: 'fragrances', title: 'Fragrances', unit: 'bottles', compact: true },
+  { key: 'fuel', title: 'Fuel', unit: 'ways to make coffee', compact: false },
+  { key: 'shoes', title: 'Shoes', unit: 'pairs', compact: true },
+];
+// Legacy records (no `section` yet): file them by their old category.
+const legacySection = (c = '') => (/soft|app|tool/i.test(c) ? 'software' : 'desk');
+const groups = SECTIONS.map((s) => ({ ...s, items: items.filter((i) => (i.section ?? legacySection(i.category)) === s.key) })).filter((g) => g.items.length);
+
+const BIKES: Record<string, ImageMetadata> = { 'bike-ktm': ktm, 'bike-cb300r': cb300r };
+const idx = sprite.index as Record<string, number>;
+const tile = (art?: string) => {
+  const i = idx[art ?? ''] ?? idx['notes'];
+  return `--sx:${(i % sprite.cols) * -64}px;--sy:${Math.floor(i / sprite.cols) * -64}px`;
+};
+const garageCount = (list: Item[]) => {
+  const b = list.filter((i) => i.art?.startsWith('bike')).length;
+  const h = list.length - b;
+  return [b && `${b} bike${b > 1 ? 's' : ''}`, h && `${h} helmet${h > 1 ? 's' : ''}`].filter(Boolean).join(', ');
+};
 ---
 
-<PageLayout title="Toolbox | Adithya NR">
-  <Container>
-    <div class="max-w-2xl">
-      <CategoryFilter stacks={stacks} categories={categories} client:visible />
-    </div>
-  </Container>
+<PageLayout title="Uses | Adithya NR" description="Everything I reach for on a normal day: the desk setup, the apps that stay open, the bikes in the garage and the coffee that starts it all.">
+  <section class="wrap page-head">
+    <h1 class="display-xl">The workbench</h1>
+    <p class="body-l lede">Everything I reach for on a normal day: the desk setup, the apps that stay open, the bikes in the garage and the coffee that starts it all.</p>
+  </section>
+
+  <Painting src={pegboard} alt="A painted pegboard with tools, the helmet, a watch and coffee things hanging on it, and an empty chalk outline: “keys are out with the KTM”." w={1440} h={560} ink={false} focusX={720} mobileScale={0.6} priority tint />
+
+  <div class="wrap drawers">
+    {groups.map((g) => (
+      <section class="drawer" aria-labelledby={`d-${g.key}`}>
+        <header class="drawer-front">
+          <span class="label-holder"><h2 id={`d-${g.key}`} class="display-m">{g.title}</h2></span>
+          <span class="count">{g.key === 'garage' ? garageCount(g.items) : `${g.items.length} ${g.unit}`}</span>
+          <span class="handle" aria-hidden="true"></span>
+        </header>
+
+        {g.key === 'garage' ? (
+          <div class="garage">
+            <div class="bikes">
+              {g.items.filter((i) => BIKES[i.art ?? '']).map((b) => (
+                <article class="bike-card">
+                  <div class="bike-art"><Image src={BIKES[b.art!]} alt="" widths={[402]} sizes="402px" loading="lazy" /></div>
+                  <h3 class="display-m">{b.product}</h3>
+                  {b.why && <p class="why">{b.why}</p>}
+                  {b.detail && <p class="meta-line">{b.detail}</p>}
+                </article>
+              ))}
+            </div>
+            <ul class="items items--3">
+              {g.items.filter((i) => !BIKES[i.art ?? '']).map((i) => <li><div class="item"><span class="art" style={tile(i.art)} aria-hidden="true"></span><span class="item-text"><span class="name">{i.product}</span>{i.why && <span class="why">{i.why}</span>}{i.detail && <span class="meta-line">{i.detail}</span>}</span></div></li>)}
+            </ul>
+          </div>
+        ) : (
+          <ul class:list={['items', g.compact ? 'items--4' : 'items--3']}>
+            {g.items.map((i) => {
+              const why = i.why || (i.section ? '' : i.description);
+              const inner = (
+                <>
+                  <span class="art" style={tile(i.art)} aria-hidden="true"></span>
+                  <span class="item-text">
+                    <span class="name">{i.product}</span>
+                    {why && !g.compact && <span class="why">{why}</span>}
+                    {i.detail && <span class="meta-line">{i.detail}</span>}
+                  </span>
+                </>
+              );
+              return (
+                <li>
+                  {i.link ? (
+                    <a class="item" href={i.link} target="_blank" rel="noopener noreferrer" data-sound-hover="tick">{inner}<span class="sr-only"> (opens in a new tab)</span></a>
+                  ) : (
+                    <div class="item">{inner}</div>
+                  )}
+                </li>
+              );
+            })}
+          </ul>
+        )}
+      </section>
+    ))}
+  </div>
 </PageLayout>
+
+<style>
+  .page-head {
+    display: flex;
+    align-items: flex-end;
+    gap: 60px;
+    padding-top: 80px;
+    padding-bottom: 40px;
+  }
+  .lede {
+    max-width: 520px;
+    margin-bottom: 4px;
+  }
+  .drawers {
+    display: flex;
+    flex-direction: column;
+    gap: 64px;
+    padding-top: 100px;
+  }
+  .drawer {
+    border: 1px solid var(--rule-strong);
+    border-radius: 10px;
+    background: var(--paper-card);
+    overflow: hidden;
+  }
+  .drawer-front {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 14px 20px;
+    background: var(--paper-deep);
+    border-bottom: 1px solid var(--rule);
+  }
+  .label-holder {
+    padding: 4px 16px;
+    border: 1.5px solid var(--rule-strong);
+    border-radius: 4px;
+    background: var(--paper-card);
+  }
+  .label-holder h2 {
+    font-size: 24px;
+  }
+  .count {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--ink-meta);
+  }
+  .handle {
+    margin-left: auto;
+    width: 120px;
+    height: 12px;
+    border-radius: 999px;
+    border: 2px solid var(--rule-strong);
+    background: linear-gradient(var(--paper-card), var(--paper-deep));
+  }
+
+  .items {
+    display: grid;
+    gap: 0 28px;
+    margin: 0;
+    padding: 12px 24px 20px;
+    list-style: none;
+  }
+  .items--3 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .items--4 {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  .items li {
+    border-bottom: 1px solid var(--rule);
+  }
+  .item {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    min-height: 64px;
+    padding: 14px 0;
+  }
+  .art {
+    flex: 0 0 auto;
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    background: var(--paper-deep) url('/art/uses-sprite.webp') no-repeat;
+    background-position: calc(var(--sx) * 0.625) calc(var(--sy) * 0.625);
+    background-size: calc(512px * 0.625) calc(320px * 0.625);
+    transition: transform 0.2s ease-out;
+  }
+  a.item:hover .art,
+  a.item:focus-visible .art {
+    transform: translateY(-2px) rotate(-2deg);
+  }
+  .item-text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+  }
+  .name {
+    font-family: var(--font-display);
+    font-size: 17px;
+    line-height: 1.3;
+    color: var(--ink);
+    background: linear-gradient(var(--orange), var(--orange)) 0 100% / 0 2px no-repeat;
+    transition: background-size 0.3s ease;
+  }
+  a.item:hover .name,
+  a.item:focus-visible .name {
+    background-size: 100% 2px;
+  }
+  .why {
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--ink-soft);
+  }
+  .meta-line {
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    color: var(--ink-meta);
+  }
+
+  .garage {
+    padding: 24px;
+  }
+  .bikes {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 28px;
+  }
+  .bike-art {
+    display: grid;
+    place-items: center;
+    aspect-ratio: 16 / 9;
+    margin-bottom: 16px;
+    border-radius: 8px;
+    background: var(--paper-deep);
+  }
+  .bike-art :global(img) {
+    width: min(80%, 402px);
+    height: auto;
+  }
+  .bike-card .why {
+    margin-top: 6px;
+  }
+  .bike-card .meta-line {
+    display: block;
+    margin-top: 4px;
+  }
+  .garage .items {
+    padding: 16px 0 0;
+  }
+
+  @media (max-width: 1100px) {
+    .items--3,
+    .items--4 {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (max-width: 767px) {
+    .page-head {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 16px;
+      padding-top: 32px;
+      padding-bottom: 24px;
+    }
+    .drawers {
+      padding-top: 56px;
+      gap: 40px;
+    }
+    .items--3,
+    .items--4,
+    .bikes {
+      grid-template-columns: 1fr;
+    }
+    .handle {
+      width: 64px;
+    }
+  }
+</style>
