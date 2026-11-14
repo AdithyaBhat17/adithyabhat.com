@@ -33,17 +33,17 @@
 @font-face {
   font-family: 'Young Serif Fallback';
   src: local('Georgia'), local('Times New Roman');
-  size-adjust: 112%;
-  ascent-override: 93%;
+  size-adjust: 110.77%;
+  ascent-override: 94.4%;
   descent-override: 33%;
   line-gap-override: 0%;
 }
 @font-face {
   font-family: 'Onest Fallback';
   src: local('Arial'), local('Helvetica Neue'), local('Helvetica');
-  size-adjust: 104%;
-  ascent-override: 93%;
-  descent-override: 29%;
+  size-adjust: 105.65%;
+  ascent-override: 91.8%;
+  descent-override: 28.9%;
   line-gap-override: 0%;
 }
 @font-face {
