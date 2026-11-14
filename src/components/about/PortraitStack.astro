@@ -1,0 +1,245 @@
+---
+/**
+ * The taped photo on the About page. Cycles through a few photos with a
+ * crossfade (the caption changes with each one). Only the first photo loads
+ * eagerly; the rest load after the page is idle. Pauses when off-screen.
+ */
+import { getImage } from 'astro:assets';
+import fog from '@/assets/about/portraits/fog.jpg';
+import sunrise from '@/assets/about/portraits/sunrise-390.jpg';
+import dirt from '@/assets/about/portraits/dirt-bike.jpg';
+import lift from '@/assets/about/portraits/lift-ls2.jpg';
+
+interface Props {
+  interval?: number;
+}
+const { interval = 5000 } = Astro.props;
+
+const PHOTOS = [
+  { img: fog, caption: 'me, on a foggy morning ride', alt: 'Adithya standing on a foggy hillside in a dark hoodie and a backpack.' },
+  { img: sunrise, caption: 'me and the 390, at sunrise', alt: 'Adithya in a helmet on the KTM 390 Adventure, on a hill road at sunrise.' },
+  { img: dirt, caption: 'me on a dirt bike, in the mountains', alt: 'Adithya on an orange dirt bike on a rocky mountain trail, looking back.' },
+  { img: lift, caption: 'me in the LS2, before a ride', alt: 'A mirror selfie of Adithya in a lift, wearing the carbon LS2 helmet and a grey hoodie.' },
+];
+const WIDTHS = [480, 720, 960];
+const SIZES = '(max-width: 767px) 80vw, 418px';
+
+const slides = await Promise.all(
+  PHOTOS.map(async (p) => {
+    const set = async (format: 'avif' | 'webp') => {
+      const imgs = await Promise.all(WIDTHS.map((w) => getImage({ src: p.img, width: w, format, quality: 78 })));
+      return imgs.map((im, i) => `${im.src} ${WIDTHS[i]}w`).join(', ');
+    };
+    const fallback = await getImage({ src: p.img, width: 720, format: 'webp', quality: 78 });
+    return { ...p, avif: await set('avif'), webp: await set('webp'), src: fallback.src };
+  }),
+);
+---
+
+<figure class="pstack" data-pstack data-interval={interval}>
+  <span class="tape tape--l" aria-hidden="true"></span>
+  <span class="tape tape--r" aria-hidden="true"></span>
+  <div class="photo">
+    {slides.map((s, i) => (
+      <picture class="slide" data-active={i === 0 ? 'true' : 'false'} data-slide>
+        <source type="image/avif" {...{ [i === 0 ? 'srcset' : 'data-srcset']: s.avif }} sizes={SIZES} />
+        <source type="image/webp" {...{ [i === 0 ? 'srcset' : 'data-srcset']: s.webp }} sizes={SIZES} />
+        <img
+          {...(i === 0 ? { src: s.src } : { 'data-src': s.src })}
+          alt={s.alt}
+          width="960"
+          height="1200"
+          loading={i === 0 ? 'eager' : 'lazy'}
+          fetchpriority={i === 0 ? 'high' : 'auto'}
+          decoding="async"
+        />
+      </picture>
+    ))}
+  </div>
+  <figcaption class="caption hand">
+    {slides.map((s, i) => (
+      <span class="cap" data-active={i === 0 ? 'true' : 'false'} data-cap aria-hidden={i === 0 ? undefined : 'true'}>{s.caption} <span aria-hidden="true">→</span></span>
+    ))}
+  </figcaption>
+</figure>
+
+<style>
+  .pstack {
+    position: relative;
+    margin: 0;
+    padding: 24px 24px 56px 30px;
+    max-width: 473px;
+  }
+  .photo {
+    position: relative;
+    aspect-ratio: 4 / 5;
+    rotate: 2deg;
+    background: #e4d6bb;
+    box-shadow:
+      0 2px 4px rgba(var(--shadow-ink), 0.16),
+      6px 18px 30px rgba(var(--shadow-ink), 0.26);
+    overflow: hidden;
+  }
+  .slide {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .slide[data-active='true'] {
+    opacity: 1;
+  }
+  .slide img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /* A light warm grade so the photos sit on the paper. */
+    filter: sepia(0.12) saturate(0.92);
+  }
+  .tape {
+    position: absolute;
+    z-index: 2;
+    width: 100px;
+    height: 30px;
+    background: rgba(237, 217, 173, 0.85);
+    box-shadow: 0 1px 2px rgba(var(--shadow-ink), 0.12);
+  }
+  .tape--l {
+    top: 12px;
+    left: 76px;
+    rotate: 5deg;
+  }
+  .tape--r {
+    top: 6px;
+    right: 26px;
+    rotate: -5deg;
+  }
+  .caption {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 8px;
+    height: 34px;
+    rotate: 2.5deg;
+    color: var(--orange);
+    font-size: 25px;
+  }
+  .cap {
+    position: absolute;
+    left: 0;
+    top: 0;
+    white-space: nowrap;
+    opacity: 0;
+    transition: opacity 0.6s ease;
+  }
+  .cap[data-active='true'] {
+    opacity: 1;
+    transition-delay: 0.3s;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .slide,
+    .cap {
+      transition: none;
+    }
+  }
+  @media (max-width: 767px) {
+    .pstack {
+      padding: 18px 14px 50px 18px;
+    }
+    .tape {
+      width: 80px;
+      height: 24px;
+    }
+    .tape--l {
+      left: 48px;
+    }
+    .caption {
+      font-size: 22px;
+    }
+  }
+</style>
+
+<script>
+  const started = new WeakSet<HTMLElement>();
+
+  function initPortraitStack() {
+    document.querySelectorAll<HTMLElement>('[data-pstack]').forEach((root) => {
+      if (started.has(root)) return;
+      started.add(root);
+
+      const slides = [...root.querySelectorAll<HTMLElement>('[data-slide]')];
+      const caps = [...root.querySelectorAll<HTMLElement>('[data-cap]')];
+      if (slides.length < 2) return;
+      const ms = Number(root.dataset.interval || 5000);
+
+      // Load the other photos once the page is idle, so they don't compete with the first one.
+      const hydrate = (slide: HTMLElement) =>
+        new Promise<boolean>((resolve) => {
+          slide.querySelectorAll<HTMLSourceElement>('source[data-srcset]').forEach((s) => {
+            s.srcset = s.dataset.srcset!;
+            s.removeAttribute('data-srcset');
+          });
+          const img = slide.querySelector('img')!;
+          if (img.dataset.src) {
+            img.loading = 'eager';
+            img.src = img.dataset.src;
+            img.removeAttribute('data-src');
+          }
+          if (img.complete && img.naturalWidth) return resolve(true);
+          img.addEventListener('load', () => resolve(true), { once: true });
+          img.addEventListener('error', () => resolve(false), { once: true });
+        });
+
+      const ready = new Set<number>([0]);
+      const idle = (cb: () => void) => ('requestIdleCallback' in window ? requestIdleCallback(cb, { timeout: 2500 }) : setTimeout(cb, 1200));
+      idle(() => slides.slice(1).forEach((s, i) => hydrate(s).then((ok) => ok && ready.add(i + 1))));
+
+      let active = 0;
+      const show = (next: number) => {
+        slides[active].dataset.active = 'false';
+        caps[active].dataset.active = 'false';
+        caps[active].setAttribute('aria-hidden', 'true');
+        active = next;
+        slides[active].dataset.active = 'true';
+        caps[active].dataset.active = 'true';
+        caps[active].removeAttribute('aria-hidden');
+      };
+      const tick = () => {
+        // Skip photos that haven't loaded yet.
+        for (let step = 1; step < slides.length; step++) {
+          const n = (active + step) % slides.length;
+          if (ready.has(n)) return show(n);
+        }
+      };
+
+      let timer = 0;
+      let onScreen = false;
+      const stop = () => {
+        if (timer) clearInterval(timer);
+        timer = 0;
+      };
+      const io = new IntersectionObserver(([e]) => {
+        onScreen = e.isIntersecting;
+        if (onScreen && !document.hidden) {
+          if (!timer) timer = window.setInterval(tick, ms);
+        } else stop();
+      });
+      io.observe(root);
+      const onVis = () => (document.hidden || !onScreen ? stop() : !timer && (timer = window.setInterval(tick, ms)));
+      document.addEventListener('visibilitychange', onVis);
+      document.addEventListener(
+        'astro:before-swap',
+        () => {
+          stop();
+          io.disconnect();
+          document.removeEventListener('visibilitychange', onVis);
+        },
+        { once: true },
+      );
+    });
+  }
+
+  initPortraitStack();
+  document.addEventListener('astro:page-load', initPortraitStack);
+</script>

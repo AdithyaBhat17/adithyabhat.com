@@ -84,7 +84,7 @@ const garageCount = (list: Item[]) => {
               ))}
             </div>
             <ul class="items items--3">
-              {g.items.filter((i) => !BIKES[i.art ?? '']).map((i) => <li><div class="item">{ART_FILES[i.art ?? ''] ? <span class="art art--file" aria-hidden="true"><img src={ART_FILES[i.art!]} alt="" width="40" height="35" loading="lazy" /></span> : <span class="art" style={tile(i.art)} aria-hidden="true"></span>}<span class="item-text"><span class="name">{i.product}</span>{i.why && <span class="why">{i.why}</span>}{i.detail && <span class="meta-line">{i.detail}</span>}</span></div></li>)}
+              {g.items.filter((i) => !BIKES[i.art ?? '']).map((i) => <li><div class="item">{ART_FILES[i.art ?? ''] ? <span class="art art--file" aria-hidden="true"><img src={ART_FILES[i.art!]} alt="" width="38" height="38" loading="lazy" /></span> : <span class="art" style={tile(i.art)} aria-hidden="true"></span>}<span class="item-text"><span class="name">{i.product}</span>{i.why && <span class="why">{i.why}</span>}{i.detail && <span class="meta-line">{i.detail}</span>}</span></div></li>)}
             </ul>
           </div>
         ) : (
@@ -212,8 +212,8 @@ const garageCount = (list: Item[]) => {
     background-image: none;
   }
   .art--file img {
-    width: 34px;
-    height: auto;
+    width: 38px;
+    height: 38px;
   }
   a.item:hover .art,
   a.item:focus-visible .art {

@@ -2,7 +2,7 @@
 import { Picture } from 'astro:assets';
 import PageLayout from '@/layouts/PageLayout.astro';
 import Painting from '@/components/journal/Painting.astro';
-import portrait from '@/assets/about/portrait.png';
+import PortraitStack from '@/components/about/PortraitStack.astro';
 import hills from '@/assets/about/misty-hills.png';
 import figKtm from '@/assets/about/fig-ktm.png';
 import toolbox from '@/assets/about/toolbox.png';
@@ -41,7 +41,7 @@ const ledger = [...ROUTE].reverse();
       </div>
     </div>
     <div class="portrait" data-reveal>
-      <Picture src={portrait} formats={['avif', 'webp']} widths={[473]} sizes="(max-width: 767px) 88vw, 473px" alt="Adithya standing on a foggy hillside in a dark hoodie; with the caption “me, on a foggy morning ride”." loading="eager" fetchpriority="high" />
+      <PortraitStack />
     </div>
   </section>
 
@@ -95,7 +95,7 @@ const ledger = [...ROUTE].reverse();
     <div class="wrap section-head">
       <h2 id="stickers-title" class="display-l">Stickers on the toolbox</h2>
     </div>
-    <Painting src={toolbox} alt="An orange toolbox lid covered in stickers from yellow.ai, Softway, Daikin, Dish, Betsol and Homero, plus a WCAG AA badge, “ship it”, “390 Adventure”, an Abu Dhabi postmark and “dirt > traffic”." w={1440} h={560} ink={false} mobileScale={0.6} mobileSwipe />
+    <Painting src={toolbox} alt="An orange toolbox lid covered in stickers from yellow.ai, Softway, Daikin, Dish, Betsol and Homero, plus a WCAG AA badge, “ship it”, “390 Adventure” and “dirt > traffic”." w={1440} h={560} ink={false} mobileScale={0.6} mobileSwipe />
   </section>
 
   <section class="section off-duty" aria-labelledby="off-title">
@@ -130,11 +130,7 @@ const ledger = [...ROUTE].reverse();
     gap: 12px;
     margin-top: 26px;
   }
-  .portrait :global(img) {
-    width: 100%;
-    height: auto;
-  }
-
+  
   .specs {
     display: grid;
     grid-template-columns: minmax(0, 680px) minmax(0, 521px);
