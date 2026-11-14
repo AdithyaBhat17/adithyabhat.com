@@ -1,7 +1,8 @@
 import type { FetchParams } from '@/types/fetch'
 
 const API_URL = 'https://graphql.datocms.com'
-const API_TOKEN = import.meta.env.DATOCMS_API_TOKEN
+// DATOCMS_API_TOKEN is set on Vercel; local .env.local only carries the read-only token.
+const API_TOKEN = import.meta.env.DATOCMS_API_TOKEN ?? import.meta.env.DATOCMS_READONLY_TOKEN
 
 export async function fetchAPI(
   query: string,

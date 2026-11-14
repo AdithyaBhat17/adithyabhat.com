@@ -5,7 +5,7 @@ import sitemap from '@astrojs/sitemap';
 import tailwindcss from '@tailwindcss/vite';
 
 async function fetchDato(query) {
-  const token = process.env.DATOCMS_API_TOKEN;
+  const token = process.env.DATOCMS_API_TOKEN ?? process.env.DATOCMS_READONLY_TOKEN;
   if (!token) return null;
   try {
     const res = await fetch('https://graphql.datocms.com', {
