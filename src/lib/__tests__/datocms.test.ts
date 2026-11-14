@@ -35,6 +35,7 @@ describe('fetchAPI', () => {
       headers: {
         'Content-Type': 'application/json',
         Authorization: expect.stringContaining('Bearer'),
+        'X-Environment': expect.any(String),
       },
       body: JSON.stringify({ query: '{ query }', variables: { id: '1' } }),
     });

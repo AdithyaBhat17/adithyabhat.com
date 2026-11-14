@@ -32,6 +32,8 @@ export type Article = {
   }
   seo?: SeoMetaTag[]
   title: string
+  coverArt?: string
+  summary?: string
 }
 
 export type Project = {
@@ -50,6 +52,12 @@ export type Project = {
   slug: string
   link: string
   seo?: SeoMetaTag[]
+  oneLiner?: string
+  role?: string
+  builtWith?: string
+  stamp?: string
+  builtFor?: string
+  parts?: string
 }
 
 export type AllArticles = { allArticles: Article[] }

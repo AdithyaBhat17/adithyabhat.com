@@ -13,7 +13,7 @@ const PRINT_IMAGE = `
   }
 `
 
-export const HOME_PAGE_QUERY = `
+export const HOME_PAGE_QUERY_LEGACY = `
     query HomePageQuery {
         allProjects(orderBy: date_DESC, first: 5) {
             date
@@ -36,3 +36,6 @@ export const HOME_PAGE_QUERY = `
         }
     }
 `
+
+/** Same as the legacy query, plus the garage-journal schema fields. */
+export const HOME_PAGE_QUERY = HOME_PAGE_QUERY_LEGACY.replace('featured\n', 'featured\n            coverArt\n            summary\n')

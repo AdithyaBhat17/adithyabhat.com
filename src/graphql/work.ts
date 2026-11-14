@@ -1,14 +1,15 @@
-export const RECENT_WORK = `
+export const RECENT_WORK_LEGACY = `
     query RecentWork {
-        allProjects {
+        allProjects(orderBy: date_DESC) {
             date
             tags
             slug
+            link
+            title
             thumbnail {
               alt
-              blurhash
               title
-              responsiveImage(imgixParams: { auto: format }) {
+              responsiveImage(imgixParams: { fit: crop, w: 648, h: 432, auto: format }) {
                 srcSet
                 webpSrcSet
                 sizes
@@ -21,11 +22,11 @@ export const RECENT_WORK = `
                 base64
               }
             }
-            title
-            caseStudy
           }
     }
 `
+
+export const RECENT_WORK = RECENT_WORK_LEGACY.replace('link\n', 'link\n            oneLiner\n            role\n            builtWith\n            stamp\n            builtFor\n')
 
 export const CASE_STUDY = `
   query Project ($slug: String!) {

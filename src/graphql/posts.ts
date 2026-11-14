@@ -1,4 +1,4 @@
-export const ALL_ARTICLES_QUERY = `
+export const ALL_ARTICLES_QUERY_LEGACY = `
     query AllArticles {
         allArticles (orderBy:date_DESC) {
             date
@@ -116,3 +116,5 @@ export const FEATURED_ARTICLES = `
         }
     }
 `
+
+export const ALL_ARTICLES_QUERY = ALL_ARTICLES_QUERY_LEGACY.replace('externalLink\n', 'externalLink\n            coverArt\n            summary\n')

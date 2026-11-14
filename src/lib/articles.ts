@@ -8,6 +8,9 @@ export interface ArticleLike {
   tags?: string;
   externalLink?: string;
   featured?: boolean;
+  /** New schema (garage-journal env): zine cover + standfirst. */
+  coverArt?: string;
+  summary?: string;
 }
 
 export interface Issue<T extends ArticleLike = ArticleLike> {
@@ -30,7 +33,9 @@ export function toIssues<T extends ArticleLike>(articles: T[]): Issue<T>[] {
   const chrono = [...articles].sort((a, b) => +new Date(a.date) - +new Date(b.date));
   const numbers = new Map(chrono.map((a, i) => [a, String(i + 1).padStart(2, '0')]));
   return articles.map((article, i) => {
-    const zine = zineFor(article.slug, article.tags, i);
+    const base = zineFor(article.slug, article.tags, i);
+    const art = article.coverArt && article.coverArt !== 'generic' ? (article.coverArt as typeof base.art) : base.art;
+    const zine = { ...base, art, dek: article.summary || base.dek };
     const external = Boolean(article.externalLink);
     return {
       article,

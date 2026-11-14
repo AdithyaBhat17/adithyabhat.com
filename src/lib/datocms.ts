@@ -4,6 +4,11 @@ const API_URL = 'https://graphql.datocms.com'
 // DATOCMS_API_TOKEN is set on Vercel; local .env.local only carries the read-only token.
 const API_TOKEN = import.meta.env.DATOCMS_API_TOKEN ?? import.meta.env.DATOCMS_READONLY_TOKEN
 
+// DatoCMS environment for the main project. This branch builds against the
+// `garage-journal` sandbox (new build-log/zine fields); set
+// DATOCMS_ENVIRONMENT=master (or another env) to point elsewhere.
+export const DATOCMS_ENVIRONMENT: string = import.meta.env.DATOCMS_ENVIRONMENT || 'garage-journal'
+
 export async function fetchAPI(
   query: string,
   { variables, preview }: FetchParams = {}
@@ -15,6 +20,7 @@ export async function fetchAPI(
     headers: {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${API_TOKEN}`,
+      'X-Environment': DATOCMS_ENVIRONMENT,
     },
     body: JSON.stringify({
       query,
@@ -28,6 +34,19 @@ export async function fetchAPI(
     throw new Error('Failed to fetch API')
   }
   return json.data
+}
+
+/**
+ * Runs `query`, and if the environment doesn't have the new schema yet (the
+ * query errors), runs `legacy` instead, so the site keeps building against an
+ * older environment.
+ */
+export async function fetchWithFallback(query: string, legacy: string, params: FetchParams = {}) {
+  try {
+    return await fetchAPI(query, params)
+  } catch {
+    return fetchAPI(legacy, params)
+  }
 }
 
 const GALLERY_API_TOKEN = import.meta.env.DATOCMS_GALLERY_API_TOKEN
