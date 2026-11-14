@@ -1,183 +1,756 @@
 ---
 import PageLayout from '@/layouts/PageLayout.astro';
-import Container from '@/components/astro/Container.astro';
-import ContactForm from '@/components/react/ContactForm';
-import FloatingShapes from '@/components/astro/FloatingShapes.astro';
+import Painting from '@/components/journal/Painting.astro';
+import Fennec from '@/components/journal/Fennec.astro';
+import garage from '@/assets/paintings/contact-garage.png';
+import { socialLinks } from '@/utils/socials';
+
+const TOPICS = ['Project', 'Freelance', 'Full-time', 'Just saying hi'];
+const href = (n: string) => socialLinks.find((s) => s.name === n)?.href ?? '#';
+const TAGS = [
+  { name: 'GitHub', note: 'code and side projects', href: href('GitHub'), body: 'github', rot: 2, dark: false },
+  { name: 'LinkedIn', note: 'the work history', href: href('LinkedIn'), body: 'linkedin', rot: -1.5, dark: false },
+  { name: 'Twitter / X', note: 'occasional thoughts', href: href('Twitter'), body: 'twitter', rot: 1, dark: false },
+  { name: 'Dribbble', note: 'shots and explorations', href: href('Dribbble'), body: 'dribbble', rot: -2.5, dark: true },
+];
+const now = new Date();
+const ROMAN = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII'];
+const postmarkDate = `${now.getDate()} · ${ROMAN[now.getMonth()]} · ${String(now.getFullYear()).slice(2)}`;
 ---
 
-<PageLayout title="Contact - Adithya NR">
-  <Container>
-    <div class="contact-page">
-      <FloatingShapes />
+<PageLayout title="Contact | Adithya NR" description="Leave a note: a project, a question, or just hello. It lands straight in my Slack." cta={false}>
+  <section class="wrap page-head">
+    <h1 class="display-xl">Leave a note</h1>
+    <p class="body-l lede">Whether it’s a project, a question, or just to say hello, I’d love to hear from you. I usually reply within a couple of days.</p>
+  </section>
 
-      <div class="contact-grid">
-        <!-- Left: Header + personality -->
-        <div class="contact-intro" data-animate>
-          <span class="inline-flex items-center text-sm font-body font-medium text-[var(--accent)] tracking-wide uppercase mb-5">
-            Contact
-          </span>
+  <div class="scene">
+    <Painting src={garage} alt="The garage at golden hour, door rolled up, a mailbox by the driveway." w={1440} h={720} ink={false} focusX={720} mobileScale={0.6} priority tint />
 
-          <h1 class="font-display text-4xl md:text-5xl lg:text-6xl tracking-tight leading-[1.1]">
-            Let's make<br />
-            something <span class="gradient-text">cool</span>
-            <span class="waving-hand" aria-hidden="true">&#9996;&#65039;</span>
-          </h1>
+    <div class="wrap card-wrap">
+      <form class="postcard grain" data-postcard novalidate aria-labelledby="note-label">
+        <div class="pc-body">
+          <div class="pc-message">
+            <label id="note-label" class="pc-label" for="pc-note">Your note</label>
+            <div class="pc-lines">
+              <textarea id="pc-note" name="message" rows="8" maxlength="2000" required placeholder="Tell me what you’re building, what’s on your mind, or just say hi…" aria-describedby="pc-note-err pc-count"></textarea>
+            </div>
+            <p class="pc-err" id="pc-note-err" hidden>Write a few words first.</p>
+            <p class="pc-count" id="pc-count" aria-live="polite"><span data-count>0</span> / 2000</p>
+          </div>
 
-          <p class="font-body text-[var(--text-secondary)] mt-5 text-lg leading-relaxed max-w-md">
-            Got a project in mind? Want to collaborate? Or just want to say hi?
-            I'd love to hear from you.
-          </p>
+          <div class="pc-divider" aria-hidden="true"></div>
 
-          <!-- Quick links -->
-          <div class="contact-channels" data-animate>
-            <p class="font-body text-[var(--text-muted)] text-sm uppercase tracking-wider mb-4 mt-10">
-              Or find me on
-            </p>
-            <div class="channel-pills">
-              <a href="https://twitter.com/adithya__nr" target="_blank" rel="noopener noreferrer" class="channel-pill">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-                <span>Twitter</span>
-              </a>
-              <a href="https://github.com/adithyabhat17" target="_blank" rel="noopener noreferrer" class="channel-pill">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
-                <span>GitHub</span>
-              </a>
-              <a href="https://linkedin.com/in/adithya-nr" target="_blank" rel="noopener noreferrer" class="channel-pill">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
-                <span>LinkedIn</span>
-              </a>
-              <a href="mailto:hello@adithyabhat.com" class="channel-pill">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
-                <span>Email</span>
-              </a>
+          <div class="pc-address">
+            <div class="pc-marks" aria-hidden="true">
+              <div class="postmark">
+                <svg viewBox="0 0 200 104"><circle cx="52" cy="52" r="46" /><circle cx="52" cy="52" r="38" /><path d="M104 30c16-6 30 6 46 0s30-6 46 0M104 46c16-6 30 6 46 0s30-6 46 0M104 62c16-6 30 6 46 0s30-6 46 0M104 78c16-6 30 6 46 0s30-6 46 0" /></svg>
+                <span class="pm-city">ABU DHABI</span>
+                <span class="pm-date">{postmarkDate}</span>
+              </div>
+              <div class="stamp">
+                <Fennec size={56} />
+                <span>AED 3</span>
+              </div>
+            </div>
+
+            <div class="pc-field">
+              <label class="pc-label" for="pc-name">Your name</label>
+              <input id="pc-name" name="name" type="text" autocomplete="name" required aria-describedby="pc-name-err" />
+              <p class="pc-err" id="pc-name-err" hidden>Your name, so I know who’s writing.</p>
+            </div>
+            <div class="pc-field">
+              <label class="pc-label" for="pc-email">Your email</label>
+              <input id="pc-email" name="email" type="email" autocomplete="email" required placeholder="So I can write back" aria-describedby="pc-email-err" />
+              <p class="pc-err" id="pc-email-err" hidden>That email doesn’t look quite right.</p>
+            </div>
+            <fieldset class="pc-field pc-topics">
+              <legend class="pc-label">What’s it about?</legend>
+              <div class="chips">
+                {TOPICS.map((t, i) => (
+                  <label class="chip">
+                    <input type="radio" name="topic" value={t} checked={i === 0} />
+                    <span><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M3 7.3l2.6 2.6L11 4.4" /></svg>{t}</span>
+                  </label>
+                ))}
+              </div>
+            </fieldset>
+            <!-- Honeypot: humans never see or fill this. -->
+            <div class="hp" aria-hidden="true">
+              <label for="pc-company">Company</label>
+              <input id="pc-company" name="company" type="text" tabindex="-1" autocomplete="off" />
             </div>
           </div>
         </div>
 
-        <!-- Right: Form -->
-        <div class="contact-form-wrapper" data-animate>
-          <div class="form-card">
-            <div class="form-card-glow" aria-hidden="true"></div>
-            <ContactForm client:load />
+        <div class="pc-send">
+          <p class="pc-status" role="status" aria-live="polite" data-status></p>
+          <p class="hand slack-note" aria-hidden="true">lands straight in my Slack</p>
+          <svg class="hand-arrow" viewBox="0 0 44 28" aria-hidden="true"><path d="M2 8c12-6 24-2 36 10M30 18l9 1-2-9" /></svg>
+          <button type="submit" class="btn btn--ink send" data-sound-click="stamp">
+            Send it
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3.3 8H12M8.7 4l4 4-4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" /></svg>
+          </button>
+        </div>
+      </form>
+
+      <section class="postcard postcard--sent grain" data-sent hidden tabindex="-1" aria-labelledby="sent-title">
+        <h2 id="sent-title" class="sr-only">Note sent</h2>
+        <div class="pc-body">
+          <div class="pc-message">
+            <p class="pc-label">Your note</p>
+            <div class="pc-lines"><p class="sent-note hand" data-sent-note></p></div>
+            <p class="pc-count" data-sent-time></p>
+          </div>
+          <div class="pc-divider" aria-hidden="true"></div>
+          <div class="pc-address">
+            <div class="pc-marks" aria-hidden="true">
+              <div class="postmark">
+                <svg viewBox="0 0 200 104"><circle cx="52" cy="52" r="46" /><circle cx="52" cy="52" r="38" /><path d="M104 30c16-6 30 6 46 0s30-6 46 0M104 46c16-6 30 6 46 0s30-6 46 0M104 62c16-6 30 6 46 0s30-6 46 0M104 78c16-6 30 6 46 0s30-6 46 0" /></svg>
+                <span class="pm-city">ABU DHABI</span>
+                <span class="pm-date">{postmarkDate}</span>
+              </div>
+              <div class="stamp"><Fennec size={56} /><span>AED 3</span></div>
+            </div>
+            <div class="pc-field"><p class="pc-label">From</p><p class="sent-value" data-sent-name></p></div>
+            <div class="pc-field"><p class="pc-label">About</p><p class="chip chip--on"><span><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M3 7.3l2.6 2.6L11 4.4" /></svg><span data-sent-topic></span></span></p></div>
+            <p class="body-m reply">I’ll write back to the address you left, usually within a couple of days.</p>
           </div>
         </div>
-      </div>
+        <div class="pc-send">
+          <p class="hand slack-note">got it, talk soon</p>
+          <button type="button" class="btn btn--ghost" data-again>Write another note</button>
+        </div>
+        <p class="sent-stamp" aria-hidden="true">SENT</p>
+      </section>
     </div>
-  </Container>
+  </div>
+
+  <section class="wrap elsewhere" aria-labelledby="else-title">
+    <div class="else-head">
+      <h2 id="else-title" class="display-l">Or find me elsewhere</h2>
+      <p class="hand" aria-hidden="true">the usual haunts</p>
+    </div>
+    <ul class="tags">
+      {TAGS.map((t) => (
+        <li>
+          <a class:list={['tag', t.dark && 'tag--light']} href={t.href} target="_blank" rel="noopener noreferrer me" style={`--rot:${t.rot}deg`} data-sound-hover="tick">
+            <img class="tag-body" src={`/art/tags/body-${t.body}.svg`} alt="" width="277" height="129" loading="lazy" />
+            <img class="tag-string" src="/art/tags/string.svg" alt="" width="47" height="55" loading="lazy" />
+            <span class="tag-eyelet" aria-hidden="true"></span>
+            <span class="tag-text">
+              <span class="tag-name">{t.name} <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M5 11 11 5M6 5h5v5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /></svg></span>
+              <span class="tag-note">{t.note}</span>
+            </span>
+            <span class="sr-only">(opens in a new tab)</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </section>
 </PageLayout>
 
+<script>
+  import { play } from '@/scripts/sound';
+
+  function initPostcard() {
+    const form = document.querySelector<HTMLFormElement>('[data-postcard]');
+    const sent = document.querySelector<HTMLElement>('[data-sent]');
+    if (!form || !sent || form.dataset.bound) return;
+    form.dataset.bound = '1';
+    const note = form.querySelector<HTMLTextAreaElement>('#pc-note')!;
+    const name = form.querySelector<HTMLInputElement>('#pc-name')!;
+    const email = form.querySelector<HTMLInputElement>('#pc-email')!;
+    const count = form.querySelector<HTMLElement>('[data-count]')!;
+    const status = form.querySelector<HTMLElement>('[data-status]')!;
+    const button = form.querySelector<HTMLButtonElement>('button[type=submit]')!;
+
+    note.addEventListener('input', () => (count.textContent = String(note.value.length)));
+
+    const setError = (input: HTMLInputElement | HTMLTextAreaElement, bad: boolean) => {
+      const err = document.getElementById(`${input.id}-err`);
+      input.closest('.pc-field, .pc-message')?.classList.toggle('has-error', bad);
+      input.setAttribute('aria-invalid', String(bad));
+      if (err) err.hidden = !bad;
+      return bad;
+    };
+    [note, name, email].forEach((el) => el.addEventListener('input', () => el.getAttribute('aria-invalid') === 'true' && setError(el, false)));
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      status.textContent = '';
+      const bad = [
+        setError(note, !note.value.trim()),
+        setError(name, !name.value.trim()),
+        setError(email, !email.value.trim() || !email.checkValidity()),
+      ];
+      const first = [note, name, email][bad.indexOf(true)];
+      if (first) {
+        first.focus();
+        return;
+      }
+      const topic = (form.querySelector<HTMLInputElement>('input[name=topic]:checked')?.value) ?? 'Project';
+      button.disabled = true;
+      button.setAttribute('aria-busy', 'true');
+      try {
+        const res = await fetch('/api/contact', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            name: name.value.trim(),
+            email: email.value.trim(),
+            message: note.value.trim(),
+            topic,
+            website: form.querySelector<HTMLInputElement>('#pc-company')!.value, // honeypot
+          }),
+        });
+        const json = await res.json().catch(() => ({ success: false }));
+        if (!res.ok || !json.success) throw new Error(json.message || 'failed');
+        // Sent state: echo the note, name and topic back. Never the email.
+        sent.querySelector('[data-sent-note]')!.textContent = note.value.trim();
+        sent.querySelector('[data-sent-name]')!.textContent = name.value.trim();
+        sent.querySelector('[data-sent-topic]')!.textContent = topic;
+        const t = new Date();
+        sent.querySelector('[data-sent-time]')!.textContent = `Sent · ${t.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}, ${t.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })}`;
+        form.hidden = true;
+        sent.hidden = false;
+        sent.focus();
+        play('stamp');
+      } catch {
+        status.textContent = 'That didn’t go through. Please try again in a moment.';
+      } finally {
+        button.disabled = false;
+        button.removeAttribute('aria-busy');
+      }
+    });
+
+    sent.querySelector('[data-again]')?.addEventListener('click', () => {
+      form.reset();
+      count.textContent = '0';
+      sent.hidden = true;
+      form.hidden = false;
+      note.focus();
+    });
+  }
+  initPostcard();
+  document.addEventListener('astro:page-load', initPostcard);
+</script>
+
 <style>
-  .contact-page {
+  .page-head {
+    display: flex;
+    align-items: flex-end;
+    gap: 60px;
+    padding-top: 80px;
+    padding-bottom: 40px;
+  }
+  .lede {
+    max-width: 520px;
+    margin-bottom: 4px;
+  }
+
+  .scene {
     position: relative;
-    padding: 2rem 0 6rem;
-    min-height: calc(100vh - 200px);
   }
-
-  /* ===== GRID LAYOUT ===== */
-  .contact-grid {
+  .card-wrap {
     position: relative;
-    z-index: 1;
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 3rem;
-    align-items: start;
+    z-index: 2;
+    margin-top: calc(-80 * min(100vw, 2400px) / 1440);
+    display: flex;
+    justify-content: center;
   }
 
-  @media (min-width: 900px) {
-    .contact-grid {
-      grid-template-columns: 1fr 1.1fr;
-      gap: 4rem;
-    }
-
-    .contact-intro {
-      position: sticky;
-      top: 120px;
-    }
+  .postcard {
+    position: relative;
+    width: min(1040px, 100%);
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+    padding: 44px 48px;
+    border: 1px solid #e9dcc3;
+    border-radius: 6px;
+    background: #fbf7ee;
+    color: #1c2124;
+    rotate: -1.5deg;
+    box-shadow: 4px 22px 40px rgba(40, 24, 8, 0.28);
+  }
+  .postcard[hidden] {
+    display: none;
+  }
+  .pc-body {
+    display: flex;
+    gap: 40px;
+  }
+  .pc-message {
+    flex: 0 0 500px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .pc-label {
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 1.4;
+    letter-spacing: 0.02em;
+    color: #464b4d;
+    padding: 0;
+  }
+  .pc-lines {
+    height: 320px;
+    background: repeating-linear-gradient(to bottom, transparent 0 39px, rgba(133, 127, 112, 0.45) 39px 40px);
+  }
+  .pc-lines textarea,
+  .sent-note {
+    width: 100%;
+    height: 100%;
+    padding: 4px 2px 0;
+    border: 0;
+    background: transparent;
+    resize: none;
+    font-family: var(--font-hand);
+    font-size: 34px;
+    line-height: 40px;
+    color: #1c2124;
+    caret-color: #e2560b;
+    overflow: auto;
+  }
+  .pc-lines textarea::placeholder {
+    color: #857f70;
+    opacity: 1;
+  }
+  .pc-lines textarea:focus {
+    outline: none;
+  }
+  .pc-message:focus-within > .pc-label {
+    color: #e2560b;
+  }
+  .pc-count {
+    font-size: 13px;
+    color: #6b6659;
+    text-align: right;
+  }
+  .pc-divider {
+    flex: 0 0 1.5px;
+    background: rgba(133, 127, 112, 0.55);
+  }
+  .pc-address {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+    min-width: 0;
   }
 
-  /* ===== WAVING HAND ===== */
-  .waving-hand {
-    display: inline-block;
-    margin-left: 0.25rem;
-    animation: wave 2.5s ease-in-out infinite;
-    transform-origin: 70% 70%;
+  .pc-marks {
+    position: relative;
+    height: 124px;
+  }
+  .postmark {
+    position: absolute;
+    left: 102px;
+    top: 14px;
+    width: 200px;
+    height: 104px;
+    rotate: 8deg;
+    opacity: 0.75;
+    color: #464b4d;
+  }
+  .postmark svg {
+    position: absolute;
+    inset: 0;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.4;
+  }
+  .postmark span {
+    position: absolute;
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+  }
+  .pm-city {
+    left: 25px;
+    top: 38px;
+  }
+  .pm-date {
+    left: 29px;
+    top: 54px;
+  }
+  .stamp {
+    position: absolute;
+    left: 256px;
+    top: 4px;
+    width: 96px;
+    height: 116px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+    padding-top: 16px;
+    background: #f3e7cf;
+    border: 6px solid #e2560b;
+    rotate: 3deg;
+    color: #e2560b;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    /* perforated edge: paper-coloured dots punched along the border */
+    outline: 4px dotted #fbf7ee;
+    outline-offset: -4px;
+    box-shadow: 1px 2px 3px rgba(40, 24, 8, 0.2);
   }
 
-  @keyframes wave {
-    0% { transform: rotate(0deg); }
-    10% { transform: rotate(14deg); }
-    20% { transform: rotate(-8deg); }
-    30% { transform: rotate(14deg); }
-    40% { transform: rotate(-4deg); }
-    50% { transform: rotate(10deg); }
-    60% { transform: rotate(0deg); }
-    100% { transform: rotate(0deg); }
+  .pc-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    min-width: 0;
+  }
+  .pc-field input[type='text'],
+  .pc-field input[type='email'] {
+    width: 100%;
+    padding: 4px 0 8px;
+    border: 0;
+    border-bottom: 1.2px solid rgba(28, 33, 36, 0.55);
+    background: transparent;
+    font: inherit;
+    font-size: 18px;
+    line-height: 1.65;
+    color: #1c2124;
+    caret-color: #e2560b;
+    border-radius: 0;
+    transition: border-color 0.2s ease;
+  }
+  .pc-field input::placeholder {
+    color: #857f70;
+  }
+  .pc-field input:focus {
+    outline: none;
+    border-bottom: 2px solid #e2560b;
+    padding-bottom: 7.2px;
+  }
+  .pc-field:focus-within > .pc-label {
+    color: #e2560b;
+  }
+  .has-error > .pc-label,
+  .has-error .pc-label {
+    color: #c2410c;
+  }
+  .has-error input {
+    border-bottom-color: #c2410c !important;
+  }
+  .pc-err {
+    font-size: 13px;
+    color: #c2410c;
   }
 
-  /* ===== CHANNEL PILLS ===== */
-  .channel-pills {
+  .pc-topics legend {
+    margin-bottom: 10px;
+  }
+  .chips {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.625rem;
+    gap: 8px;
   }
-
-  .channel-pill {
+  .chip {
+    position: relative;
+    display: inline-flex;
+    cursor: pointer;
+  }
+  .chip input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+  }
+  .chip > span {
     display: inline-flex;
     align-items: center;
-    gap: 0.5rem;
-    padding: 0.5rem 1rem;
-    background: var(--bg-elevated);
-    border: 1px solid var(--border);
-    border-radius: 100px;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 0.8125rem;
-    font-weight: 500;
-    color: var(--text-secondary);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    text-decoration: none;
+    gap: 6px;
+    min-height: 38px;
+    padding: 8px 16px;
+    border: 1.2px solid rgba(133, 127, 112, 0.7);
+    border-radius: 999px;
+    font-size: 13px;
+    line-height: 1.5;
+    color: #464b4d;
+    transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+  }
+  .chip svg {
+    display: none;
+    width: 14px;
+    height: 14px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.6;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .chip input:checked + span,
+  .chip--on > span {
+    padding-left: 12px;
+    background: #2c5a5e;
+    border-color: #2c5a5e;
+    color: #fbf7ee;
+  }
+  .chip input:checked + span svg,
+  .chip--on svg {
+    display: block;
+  }
+  .chip input:focus-visible + span {
+    outline: 2px solid #e2560b;
+    outline-offset: 3px;
   }
 
-  .channel-pill:hover {
-    border-color: var(--accent);
-    color: var(--accent);
-    background: var(--accent-glow);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px var(--accent-glow);
-  }
-
-  .channel-pill svg {
-    flex-shrink: 0;
-  }
-
-  /* ===== FORM CARD ===== */
-  .form-card {
-    position: relative;
-    background: var(--bg-elevated);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-xl);
-    padding: 2rem;
-  }
-
-  .form-card-glow {
+  .hp {
     position: absolute;
-    top: -1px;
-    left: 20%;
-    right: 20%;
+    left: -9999px;
+    width: 1px;
     height: 1px;
-    background: linear-gradient(90deg, transparent, var(--accent), transparent);
-    opacity: 0.6;
+    overflow: hidden;
   }
 
-  @media (min-width: 640px) {
-    .form-card {
-      padding: 2.5rem;
+  .pc-send {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 14px;
+  }
+  .pc-status {
+    margin-right: auto;
+    font-size: 13px;
+    color: #c2410c;
+  }
+  .slack-note {
+    font-size: 34px;
+    color: #e2560b;
+    rotate: -2deg;
+  }
+  .hand-arrow {
+    width: 44px;
+    height: 28px;
+    fill: none;
+    stroke: #e2560b;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .send {
+    padding: 14px 22px 14px 26px;
+    background: #1c2124;
+    color: #fbf7ee;
+  }
+  .send[aria-busy='true'] {
+    opacity: 0.7;
+  }
+
+  /* Sent state */
+  .postcard--sent .btn--ghost {
+    color: #1c2124;
+    border-color: rgba(28, 33, 36, 0.32);
+  }
+  .sent-note {
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+  }
+  .sent-value {
+    font-size: 18px;
+    line-height: 1.65;
+  }
+  .reply {
+    color: #464b4d;
+  }
+  .sent-stamp {
+    position: absolute;
+    right: 120px;
+    top: 220px;
+    padding: 4px 22px;
+    border: 4px solid #e2560b;
+    border-radius: 8px;
+    font-family: var(--font-display);
+    font-size: 88px;
+    line-height: 1;
+    letter-spacing: 0.06em;
+    color: #e2560b;
+    opacity: 0.85;
+    rotate: -12deg;
+    pointer-events: none;
+    animation: stamp-down 0.5s cubic-bezier(0.3, 0, 0.4, 1) both;
+  }
+  @keyframes stamp-down {
+    0% { transform: scale(1.6); opacity: 0; }
+    60% { transform: scale(0.94); opacity: 0.9; }
+    100% { transform: none; opacity: 0.85; }
+  }
+
+  .elsewhere {
+    padding-top: 40px;
+    padding-bottom: 90px;
+  }
+  .card-wrap + * {
+    margin-top: 0;
+  }
+  .scene + .elsewhere {
+    padding-top: 110px;
+  }
+  .else-head {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 8px 20px;
+    margin-bottom: 36px;
+  }
+  .else-head .hand {
+    font-size: 28px;
+    color: var(--orange);
+  }
+  .tags {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 300px));
+    justify-content: space-between;
+    gap: 24px;
+    margin: 0;
+    padding: 8px 0;
+    list-style: none;
+  }
+  .tag {
+    position: relative;
+    display: block;
+    width: 300px;
+    max-width: 100%;
+    aspect-ratio: 300 / 150;
+    rotate: var(--rot);
+    color: #fbf7ee;
+    transition: transform 0.4s var(--ease-spring);
+  }
+  .tag:hover,
+  .tag:focus-visible {
+    transform: translate3d(0, -4px, 0) rotate(-1deg);
+  }
+  .tag--light {
+    color: #1c2124;
+  }
+  .tag-body {
+    position: absolute;
+    left: 8.3%;
+    top: 16%;
+    width: 92.3%;
+    height: 85.9%;
+  }
+  .tag-string {
+    position: absolute;
+    left: -1.6%;
+    top: 4%;
+    width: 16%;
+    height: 37%;
+  }
+  .tag-eyelet {
+    position: absolute;
+    left: 15%;
+    top: 51%;
+    width: 7.3%;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: radial-gradient(circle, #f3ead8 0 36%, #c8b48c 38% 64%, transparent 66%);
+  }
+  .tag-text {
+    position: absolute;
+    left: 28.6%;
+    top: 38.6%;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .tag-name {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 22px;
+    font-weight: 500;
+    line-height: 1.2;
+  }
+  .tag-name svg {
+    transition: transform 0.3s var(--ease-spring);
+  }
+  .tag:hover .tag-name svg {
+    transform: translate(2px, -2px);
+  }
+  .tag-note {
+    font-size: 13px;
+    line-height: 1.5;
+    opacity: 0.85;
+  }
+
+  @media (max-width: 1100px) {
+    .pc-message {
+      flex-basis: 50%;
+    }
+    .tags {
+      grid-template-columns: repeat(2, minmax(0, 300px));
+      justify-content: start;
     }
   }
-
-  /* ===== REDUCED MOTION ===== */
-  @media (prefers-reduced-motion: reduce) {
-    .waving-hand {
-      animation: none;
+  @media (max-width: 767px) {
+    .page-head {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 16px;
+      padding-top: 32px;
+      padding-bottom: 24px;
+    }
+    .card-wrap {
+      margin-top: -60px;
+    }
+    .postcard {
+      rotate: 0deg;
+      padding: 28px 20px;
+    }
+    .pc-body {
+      flex-direction: column;
+      gap: 28px;
+    }
+    .pc-message {
+      flex-basis: auto;
+    }
+    .pc-lines {
+      height: 240px;
+    }
+    .pc-divider {
+      flex-basis: 1.5px;
+      height: 1.5px;
+    }
+    .pc-marks {
+      height: 110px;
+    }
+    .postmark {
+      left: 0;
+    }
+    .stamp {
+      left: auto;
+      right: 0;
+    }
+    .pc-send {
+      flex-wrap: wrap;
+    }
+    .slack-note {
+      font-size: 28px;
+    }
+    .hand-arrow {
+      display: none;
+    }
+    .sent-stamp {
+      right: 20px;
+      top: 120px;
+      font-size: 60px;
+    }
+    .scene + .elsewhere {
+      padding-top: 72px;
+    }
+    .tags {
+      grid-template-columns: 1fr;
+      justify-items: center;
     }
   }
 </style>
