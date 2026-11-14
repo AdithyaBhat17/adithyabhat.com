@@ -148,7 +148,6 @@ function noiseBurst(
 
 /** Which recording each bike uses. Swap names here once the owner picks. */
 export const ENGINE_SAMPLES: Record<EngineVoice, string> = { ktm: 'C-blip', cb: 'C-blip' };
-export const ENGINE_CANDIDATES = ['A-startup', 'B-blip', 'C-blip', 'D-blip', 'E-single-75cc', 'F-short-blip'] as const;
 
 const SAMPLE_BASE = '/sounds/engine/';
 const samples = new Map<string, Promise<AudioBuffer | null>>();

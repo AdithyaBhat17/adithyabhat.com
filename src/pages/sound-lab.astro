@@ -2,7 +2,7 @@
 // Audition page for the synthesized sound kit. Not linked anywhere, noindex,
 // and excluded from the sitemap.
 import PageLayout from '@/layouts/PageLayout.astro';
-import { ENGINE_CANDIDATES, ENGINE_SAMPLES } from '@/scripts/sound';
+import { ENGINE_SAMPLES } from '@/scripts/sound';
 
 const groups = [
   {
@@ -12,10 +12,6 @@ const groups = [
       { id: 'bike:cb', label: `CB300R (now: ${ENGINE_SAMPLES.cb})` },
       { id: 'theme', label: 'Theme toggle (ink bleed + engine)' },
     ],
-  },
-  {
-    title: 'Recorded candidates (CC0, BigSoundBank)',
-    items: ENGINE_CANDIDATES.map((c) => ({ id: `sample:${c}`, label: c })),
   },
   {
     title: 'Synthesized, for comparison',
