@@ -16,12 +16,10 @@ interface Props {
   image?: ResponsiveImage;
   meta?: BuildMeta;
   rot?: number;
-  /** Morph target for the project page (shared view-transition name). */
-  morph?: boolean;
   as?: 'h2' | 'h3';
 }
 
-const { slug, title, date, tags, link, image, meta, rot = 0, morph = true, as: H = 'h3' } = Astro.props;
+const { slug, title, date, tags, link, image, meta, rot = 0, as: H = 'h3' } = Astro.props;
 const name = shortTitle(title);
 const year = date ? new Date(date).getFullYear() : undefined;
 const host = link ? new URL(link).host.replace(/^www\./, '') : '';
@@ -37,7 +35,7 @@ const visit = meta?.visit && link;
     <circle cx="70" cy="33" r="5" fill="#5E6468" />
   </svg>
   <div class="sheet grain">
-    <div class="shot" transition:name={morph ? `build-${slug}` : undefined}>
+    <div class="shot" transition:name={`build-${slug}`}>
       {image && (
         <img
           src={image.src}

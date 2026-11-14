@@ -146,7 +146,7 @@ function noiseBurst(
  * AudioBuffers, and played through the same bus and limiter as everything else.
  */
 
-/** Which recording each bike uses. Swap names here once the owner picks. */
+/** Which recording each bike uses (both share clip C, BigSoundBank #281). */
 export const ENGINE_SAMPLES: Record<EngineVoice, string> = { ktm: 'C-blip', cb: 'C-blip' };
 
 const SAMPLE_BASE = '/sounds/engine/';
@@ -493,7 +493,6 @@ export function pour(): void {
 }
 
 const SOUNDS: Record<string, () => void> = {
-  engine: () => engine('ktm'),
   'engine-ktm': () => engine('ktm'),
   'engine-cb': () => engine('cb'),
   rustle,

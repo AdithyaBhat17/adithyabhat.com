@@ -4,8 +4,8 @@ import Painting from '@/components/journal/Painting.astro';
 import Fennec from '@/components/journal/Fennec.astro';
 import garage from '@/assets/paintings/contact-garage.png';
 import { socialLinks } from '@/utils/socials';
+import { CONTACT_TOPICS as TOPICS } from '@/data/contact';
 
-const TOPICS = ['Project', 'Freelance', 'Full-time', 'Just saying hi'];
 const href = (n: string) => socialLinks.find((s) => s.name === n)?.href ?? '#';
 const TAGS = [
   { name: 'GitHub', note: 'code and side projects', href: href('GitHub'), body: 'github', rot: 2, dark: false },
@@ -87,7 +87,7 @@ const postmarkDate = `${now.getDate()} · ${ROMAN[now.getMonth()]} · ${String(n
           <p class="pc-status" role="status" aria-live="polite" data-status></p>
           <p class="hand slack-note" aria-hidden="true">lands straight in my Slack</p>
           <svg class="hand-arrow" viewBox="0 0 44 28" aria-hidden="true"><path d="M2 8c12-6 24-2 36 10M30 18l9 1-2-9" /></svg>
-          <button type="submit" class="btn btn--ink send" data-sound-click="stamp">
+          <button type="submit" class="btn btn--ink send">
             Send it
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3.3 8H12M8.7 4l4 4-4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" /></svg>
           </button>

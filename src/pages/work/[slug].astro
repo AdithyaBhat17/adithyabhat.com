@@ -5,7 +5,7 @@ import Painting from '@/components/journal/Painting.astro';
 import BuildSheet from '@/components/work/BuildSheet.astro';
 import workbench from '@/assets/paintings/workbench.png';
 import workbenchFg from '@/assets/paintings/workbench-fg.png';
-import { fetchAPI, fetchWithFallback } from '@/lib/datocms';
+import { fetchWithFallback } from '@/lib/datocms';
 import { sanitizeHtml } from '@/lib/sanitize';
 import { BUILD_LOG, BUILD_LOG_LEGACY, RECENT_WORK, RECENT_WORK_LEGACY } from '@/graphql/work';
 import { buildMeta, shortTitle, tagLine } from '@/lib/projects';
@@ -18,12 +18,7 @@ export async function getStaticPaths() {
 }
 
 const { slug } = Astro.params;
-let data;
-try {
-  data = await fetchAPI(BUILD_LOG, { variables: { slug } });
-} catch {
-  data = await fetchAPI(BUILD_LOG_LEGACY, { variables: { slug } });
-}
+const data = await fetchWithFallback(BUILD_LOG, BUILD_LOG_LEGACY, { variables: { slug } });
 const project = data?.project;
 if (!project?.slug) return Astro.redirect('/404');
 
@@ -31,7 +26,8 @@ const meta = buildMeta(project);
 const name = shortTitle(project.title);
 const lede: string = project.metadata?.description ?? '';
 const fromLog = renderStructuredText(project.buildLog);
-const legacy = project.caseStudy ? sanitizeHtml(project.caseStudy) : '';
+const needsLegacy = !fromLog || !project.parts;
+const legacy = needsLegacy && project.caseStudy ? sanitizeHtml(project.caseStudy) : '';
 const body: Rendered = fromLog ?? enhanceLegacyHtml(withoutTechStack(legacy));
 const parts: string[] = project.parts
   ? String(project.parts).split('\n').map((s: string) => s.trim()).filter(Boolean)
@@ -131,44 +127,12 @@ const screen = project.thumbnail?.responsiveImage;
 </PageLayout>
 
 <script>
-  function initLog() {
-    // Copy buttons on code blocks.
-    document.querySelectorAll<HTMLButtonElement>('[data-copy]').forEach((b) => {
-      if (b.dataset.bound) return;
-      b.dataset.bound = '1';
-      b.addEventListener('click', async () => {
-        const code = b.closest('.code-block')?.querySelector('pre')?.textContent ?? '';
-        try {
-          await navigator.clipboard.writeText(code);
-          b.textContent = 'Copied';
-          window.setTimeout(() => (b.textContent = 'Copy'), 1600);
-        } catch {
-          b.textContent = 'Copy failed';
-        }
-      });
-    });
-    // Highlight the current stage in the sticky index.
-    const links = [...document.querySelectorAll<HTMLAnchorElement>('[data-stage-link]')];
-    if (!links.length || !('IntersectionObserver' in window)) return;
-    const byId = new Map(links.map((a) => [a.hash.slice(1), a]));
-    const io = new IntersectionObserver(
-      (entries) => {
-        for (const e of entries) {
-          if (!e.isIntersecting) continue;
-          links.forEach((a) => a.removeAttribute('aria-current'));
-          byId.get(e.target.id)?.setAttribute('aria-current', 'true');
-        }
-      },
-      { rootMargin: '-20% 0px -70% 0px' },
-    );
-    byId.forEach((_a, id) => {
-      const h = document.getElementById(id);
-      if (h) io.observe(h);
-    });
+  // On narrow screens the stage index starts collapsed.
+  function collapseIndex() {
     if (window.matchMedia('(max-width: 1100px)').matches) document.querySelector('.stage-index details')?.removeAttribute('open');
   }
-  initLog();
-  document.addEventListener('astro:page-load', initLog);
+  collapseIndex();
+  document.addEventListener('astro:page-load', collapseIndex);
 </script>
 
 <style>

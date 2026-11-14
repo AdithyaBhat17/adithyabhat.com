@@ -67,16 +67,35 @@ const plain = (node: DastNode): string =>
   node.type === 'span' ? node.value ?? '' : (node.children ?? []).map(plain).join('');
 
 /** A numbered stage heading ("01 Why I built this"). */
-export function stageHeading(n: number, title: string, id: string, level = 2) {
-  return `<h${level} class="stage" id="${id}"><span class="stage-n" aria-hidden="true">${pad(n)}</span><span class="stage-t">${title}</span></h${level}>`;
+export function stageHeading(n: number, title: string, id: string) {
+  return `<h2 class="stage" id="${id}"><span class="stage-n" aria-hidden="true">${pad(n)}</span><span class="stage-t">${title}</span></h2>`;
 }
 
-/** Code block with a filename bar and Copy button (the only monospace). */
+/** Code block chrome: a filename bar and Copy button around a <pre> (the only monospace). */
+const codeChrome = (label: string, pre: string) =>
+  `<figure class="code-block"><figcaption><span class="code-file">${esc(label)}</span><button type="button" class="code-copy" data-copy>Copy</button></figcaption>${pre}</figure>`;
+
 export function codeBlock(code: string, opts: { filename?: string; language?: string } = {}) {
-  const label = opts.filename || (opts.language ? opts.language : '');
-  return `<figure class="code-block">${
-    `<figcaption><span class="code-file">${esc(label)}</span><button type="button" class="code-copy" data-copy>Copy</button></figcaption>`
-  }<pre${opts.language ? ` data-lang="${esc(opts.language)}"` : ''}><code>${esc(code.replace(/\n$/, ''))}</code></pre></figure>`;
+  const lang = opts.language ? ` data-lang="${esc(opts.language)}"` : '';
+  return codeChrome(opts.filename || opts.language || '', `<pre${lang}><code>${esc(code.replace(/\n$/, ''))}</code></pre>`);
+}
+
+/** Collects stage headings into a table of contents and spots the outcome stage. */
+function stageCollector() {
+  const toc: TocEntry[] = [];
+  let outcomeId: string | undefined;
+  return {
+    toc,
+    get outcomeId() {
+      return outcomeId;
+    },
+    add(text: string, inner: string) {
+      const id = slugify(text);
+      toc.push({ id, n: pad(toc.length + 1), title: esc(text) });
+      if (/outcome|result/i.test(text)) outcomeId = id;
+      return stageHeading(toc.length, inner, id);
+    },
+  };
 }
 
 function figure(b: Extract<Block, { __typename: 'FigureRecord' }>) {
@@ -124,13 +143,12 @@ function renderBlock(b: Block | undefined): string {
 
 /* ------------------------------------------------------------- DAST */
 
-export function renderStructuredText(st: StructuredText | null | undefined, { stages = true } = {}): Rendered | null {
+export function renderStructuredText(st: StructuredText | null | undefined): Rendered | null {
   const doc = st?.value?.document;
   if (!doc?.children?.length) return null;
   const blocks = new Map((st!.blocks ?? []).map((b) => [b.id, b]));
   const inline = new Map((st!.inlineBlocks ?? []).map((b) => [b.id, b]));
-  const toc: TocEntry[] = [];
-  let outcomeId: string | undefined;
+  const stages = stageCollector();
   let notes = 0;
   // Stage the top heading level actually used (h2 normally; older posts use h3/h4).
   const levels: number[] = [];
@@ -165,13 +183,7 @@ export function renderStructuredText(st: StructuredText | null | undefined, { st
         return `<p>${kids()}</p>`;
       case 'heading': {
         const title = kids();
-        if (stages && n.level === stageLevel) {
-          const text = plain(n);
-          const id = slugify(text);
-          toc.push({ id, n: pad(toc.length + 1), title: esc(text) });
-          if (/outcome|result/i.test(text)) outcomeId = id;
-          return stageHeading(toc.length, title, id, shift(n.level));
-        }
+        if (n.level === stageLevel) return stages.add(plain(n), title);
         const h = shift(n.level ?? 2);
         return `<h${h}>${title}</h${h}>`;
       }
@@ -202,7 +214,8 @@ export function renderStructuredText(st: StructuredText | null | undefined, { st
     }
   };
 
-  return { html: walk(doc), toc, outcomeId };
+  const html = walk(doc);
+  return { html, toc: stages.toc, outcomeId: stages.outcomeId };
 }
 
 /* ------------------------------------------------------- legacy paths */
@@ -211,34 +224,22 @@ export function renderStructuredText(st: StructuredText | null | undefined, { st
  * Legacy HTML (already sanitized): number every h2 as a stage, wrap <pre>
  * in the code block chrome, and frame lone images as torn prints.
  */
-export function enhanceLegacyHtml(html: string, { stages = true } = {}): Rendered {
-  const toc: TocEntry[] = [];
-  let outcomeId: string | undefined;
+export function enhanceLegacyHtml(html: string): Rendered {
+  const stages = stageCollector();
   let out = html;
-  if (stages) {
-    // Older articles use h3/h4 for their steps; index the top level present.
-    const top = [2, 3, 4].find((l) => new RegExp(`<h${l}[\\s>]`, 'i').test(out)) ?? 2;
-    // Shift headings so the top level renders as h2 (the page title is the h1).
-    if (top > 2) out = out.replace(/<(\/?)h([2-6])(?=[\s>])/gi, (_m, close: string, d: string) => `<${close}h${Math.max(2, Number(d) - (top - 2))}`);
-    const lvl = 2;
-    const re = new RegExp(`<h${lvl}[^>]*>([\\s\\S]*?)<\\/h${lvl}>`, 'gi');
-    out = out.replace(re, (_m, inner: string) => {
-      const text = inner.replace(/<[^>]+>/g, '').trim();
-      const id = slugify(text);
-      toc.push({ id, n: pad(toc.length + 1), title: esc(text) });
-      if (/outcome|result/i.test(text)) outcomeId = id;
-      return stageHeading(toc.length, inner, id, lvl);
-    });
-  }
-  out = out.replace(/<pre[^>]*>([\s\S]*?)<\/pre>/gi, (_m, inner: string) => {
-    const lang = /class="[^"]*language-([\w-]+)/.exec(inner)?.[1] ?? '';
-    return `<figure class="code-block"><figcaption><span class="code-file">${esc(lang)}</span><button type="button" class="code-copy" data-copy>Copy</button></figcaption><pre>${inner}</pre></figure>`;
-  });
+  // Older articles use h3/h4 for their steps; shift headings so the top level
+  // present renders as h2 (the page title is the h1), then stage the h2s.
+  const top = [2, 3, 4].find((l) => new RegExp(`<h${l}[\\s>]`, 'i').test(out)) ?? 2;
+  if (top > 2) out = out.replace(/<(\/?)h([2-6])(?=[\s>])/gi, (_m, close: string, d: string) => `<${close}h${Math.max(2, Number(d) - (top - 2))}`);
+  out = out.replace(/<h2[^>]*>([\s\S]*?)<\/h2>/gi, (_m, inner: string) => stages.add(inner.replace(/<[^>]+>/g, '').trim(), inner));
+  out = out.replace(/<pre[^>]*>([\s\S]*?)<\/pre>/gi, (_m, inner: string) =>
+    codeChrome(/class="[^"]*language-([\w-]+)/.exec(inner)?.[1] ?? '', `<pre>${inner}</pre>`),
+  );
   out = out.replace(/<p>\s*(<img[^>]+>)\s*<\/p>/gi, (_m, img: string) => {
     const lazy = /loading=/.test(img) ? img : img.replace('<img', '<img loading="lazy" decoding="async"');
     return `<figure class="torn-print"><span class="torn-print-frame">${lazy}</span></figure>`;
   });
-  return { html: out, toc, outcomeId };
+  return { html: out, toc: stages.toc, outcomeId: stages.outcomeId };
 }
 
 /** "Tech Stack: Next.js, Swift, …" line in a legacy case study → parts. */

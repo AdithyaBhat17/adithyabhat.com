@@ -1,6 +1,6 @@
 // Site-wide behaviour for the Garage Journal. One small module, no framework.
-// Global listeners are bound once (event delegation); per-page work re-runs on
-// every `astro:page-load` (initial load and each client-side navigation).
+// Global listeners are bound once (event delegation); per-page work runs once
+// on start and again after every client-side navigation (`astro:after-swap`).
 
 import { isSoundOn, play, setSoundOn, unlock } from './sound';
 
@@ -55,7 +55,6 @@ export async function setTheme(next: Theme, origin?: { x: number; y: number }) {
       /* private mode */
     }
     syncThemeControls();
-    document.dispatchEvent(new CustomEvent('journal:theme', { detail: next }));
   };
 
   const doc = document as Document & {
@@ -131,6 +130,45 @@ function initReveals() {
   targets.forEach((el) => observer!.observe(el));
 }
 
+/* ------------------------------------------------------- articles / logs */
+
+let stageObserver: IntersectionObserver | null = null;
+
+/** Highlight the current stage in an article's or build log's index. */
+function initStageIndex() {
+  stageObserver?.disconnect();
+  stageObserver = null;
+  const links = [...document.querySelectorAll<HTMLAnchorElement>('[data-stage-link]')];
+  if (!links.length || !('IntersectionObserver' in window)) return;
+  const byId = new Map(links.map((a) => [a.hash.slice(1), a]));
+  stageObserver = new IntersectionObserver(
+    (entries) => {
+      for (const e of entries) {
+        if (!e.isIntersecting) continue;
+        links.forEach((a) => a.removeAttribute('aria-current'));
+        byId.get(e.target.id)?.setAttribute('aria-current', 'true');
+      }
+    },
+    { rootMargin: '-20% 0px -70% 0px' },
+  );
+  byId.forEach((_a, id) => {
+    const h = document.getElementById(id);
+    if (h) stageObserver!.observe(h);
+  });
+}
+
+/** Copy button on code blocks (markup from src/lib/dast.ts). */
+async function copyCode(b: HTMLElement) {
+  const code = b.closest('.code-block')?.querySelector('pre')?.textContent ?? '';
+  try {
+    await navigator.clipboard.writeText(code);
+    b.textContent = 'Copied';
+    window.setTimeout(() => (b.textContent = 'Copy'), 1600);
+  } catch {
+    b.textContent = 'Copy failed';
+  }
+}
+
 /* --------------------------------------------------------------- per page */
 
 function initShelf() {
@@ -165,6 +203,7 @@ function onPageLoad() {
   syncSoundControls();
   initReveals();
   initShelf();
+  initStageIndex();
 }
 
 /* ------------------------------------------------------------- one-time */
@@ -183,7 +222,11 @@ export function initSite() {
     next.classList.add('js');
   });
   document.addEventListener('astro:before-preparation', () => play('rustle'));
-  document.addEventListener('astro:page-load', onPageLoad);
+  // Run per-page setup now (the DOM is parsed; on a hard load astro:page-load
+  // waits for window load, which would keep reveals hidden until every image
+  // arrives), then again after each client-side navigation swaps the page in.
+  onPageLoad();
+  document.addEventListener('astro:after-swap', onPageLoad);
 
   // A returning visitor with sound on: unlock audio on their first gesture.
   if (isSoundOn()) {
@@ -218,6 +261,9 @@ export function initSite() {
       return;
     }
 
+    const copy = target.closest<HTMLElement>('[data-copy]');
+    if (copy) void copyCode(copy);
+
     const clicky = target.closest<HTMLElement>('[data-sound-click]');
     if (clicky) play(clicky.dataset.soundClick);
 
@@ -231,7 +277,7 @@ export function initSite() {
 
   // Hover sounds, delegated. pointerover bubbles; ignore moves within the same element.
   document.addEventListener('pointerover', (e) => {
-    if ((e as PointerEvent).pointerType === 'touch') return;
+    if (html.dataset.sound !== 'on' || (e as PointerEvent).pointerType === 'touch') return;
     const el = (e.target as HTMLElement).closest<HTMLElement>('[data-sound-hover]');
     if (!el) return;
     const from = e.relatedTarget as Node | null;
@@ -239,6 +285,7 @@ export function initSite() {
     play(el.dataset.soundHover);
   });
   document.addEventListener('focusin', (e) => {
+    if (html.dataset.sound !== 'on') return;
     const el = (e.target as HTMLElement).closest?.<HTMLElement>('[data-sound-hover]');
     if (el && el.matches(':focus-visible')) play(el.dataset.soundHover);
   });

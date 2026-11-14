@@ -1,4 +1,4 @@
-import { useMemo, useState, useRef, useEffect, useCallback } from 'react';
+import { useMemo, useState, useCallback } from 'react';
 import PhotoDialog from './PhotoDialog';
 
 interface Photo {
@@ -101,27 +101,12 @@ export default function PhotoGallery({ places }: { places: Place[] }) {
 }
 
 function ImageCard({ item, index, onOpen }: { item: FlatPhoto; index: number; onOpen: () => void }) {
-  const ref = useRef<HTMLDivElement>(null);
-  const [animated, setAnimated] = useState(index < 12);
-
-  useEffect(() => {
-    if (animated) return;
-    const el = ref.current;
-    if (!el) return;
-    const obs = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) { setAnimated(true); obs.disconnect(); } },
-      { threshold: 0.1 }
-    );
-    obs.observe(el);
-    return () => obs.disconnect();
-  }, [animated]);
-
   const formattedDate = dateFormatter.format(new Date(item.date));
 
   // A contact print: real aspect ratio, frame number, city and month.
   // The whole print is a button so it works from the keyboard too.
   return (
-    <div ref={ref} className="photo-print-wrap" style={animated ? undefined : { opacity: 1 }}>
+    <div className="photo-print-wrap">
       <button
         type="button"
         className="photo-print"

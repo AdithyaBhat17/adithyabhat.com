@@ -9,10 +9,21 @@ const API_TOKEN = import.meta.env.DATOCMS_API_TOKEN ?? import.meta.env.DATOCMS_R
 // DATOCMS_ENVIRONMENT=master (or another env) to point elsewhere.
 export const DATOCMS_ENVIRONMENT: string = import.meta.env.DATOCMS_ENVIRONMENT || 'garage-journal'
 
-export async function fetchAPI(
-  query: string,
-  { variables, preview }: FetchParams = {}
-) {
+// Several pages run the same query during one build; share the request.
+const cache = new Map<string, Promise<any>>()
+
+export function fetchAPI(query: string, params: FetchParams = {}) {
+  const key = JSON.stringify([query, params.variables ?? null, !!params.preview])
+  let hit = cache.get(key)
+  if (!hit) {
+    hit = request(query, params)
+    hit.catch(() => cache.delete(key))
+    cache.set(key, hit)
+  }
+  return hit
+}
+
+async function request(query: string, { variables, preview }: FetchParams) {
   const endpoint = preview ? API_URL + '/preview' : API_URL
 
   const response = await fetch(endpoint, {

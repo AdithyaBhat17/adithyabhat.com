@@ -1,6 +1,7 @@
 import type { APIRoute } from 'astro';
 import dayjs from 'dayjs';
 import { checkForSpam, type SpamCheckResult } from '@/lib/spam-filter';
+import { CONTACT_TOPICS } from '@/data/contact';
 
 export const prerender = false;
 
@@ -60,9 +61,7 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
   }
 
   const { name, message, email, website, topic: rawTopic } = await request.json();
-  // Topic chips on the contact postcard; anything unexpected is ignored.
-  const TOPICS = ['Project', 'Freelance', 'Full-time', 'Just saying hi'];
-  const topic = typeof rawTopic === 'string' && TOPICS.includes(rawTopic) ? rawTopic : undefined;
+  const topic = typeof rawTopic === 'string' && CONTACT_TOPICS.includes(rawTopic) ? rawTopic : undefined;
 
   if (!name?.trim() || !message?.trim() || !email?.trim()) {
     return new Response(

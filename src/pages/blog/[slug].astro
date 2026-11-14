@@ -4,7 +4,7 @@ import DualPainting from '@/components/journal/DualPainting.astro';
 import Zine from '@/components/writing/Zine.astro';
 import rack from '@/assets/paintings/rack.png';
 import rackFg from '@/assets/paintings/rack-fg.png';
-import { fetchAPI, fetchWithFallback } from '@/lib/datocms';
+import { fetchWithFallback } from '@/lib/datocms';
 import { sanitizeHtml } from '@/lib/sanitize';
 import { ALL_ARTICLES_QUERY, ALL_ARTICLES_QUERY_LEGACY, ARTICLE_PAGE, ARTICLE_PAGE_LEGACY } from '@/graphql/posts';
 import { toIssues, type ArticleLike } from '@/lib/articles';
@@ -21,12 +21,7 @@ export async function getStaticPaths() {
 }
 
 const { slug } = Astro.params;
-let data;
-try {
-  data = await fetchAPI(ARTICLE_PAGE, { variables: { slug } });
-} catch {
-  data = await fetchAPI(ARTICLE_PAGE_LEGACY, { variables: { slug } });
-}
+const data = await fetchWithFallback(ARTICLE_PAGE, ARTICLE_PAGE_LEGACY, { variables: { slug } });
 const article = data?.article;
 if (!article?.slug) return Astro.redirect('/404');
 
@@ -35,7 +30,7 @@ const issue = issues.find((i) => i.article.slug === article.slug)!;
 const more = issues.filter((i) => i.article.slug !== article.slug).sort((a, b) => b.no.localeCompare(a.no)).slice(0, 5);
 
 const fromBody = renderStructuredText(article.body);
-const legacyHtml = article.content ? sanitizeHtml(await marked(article.content)) : '';
+const legacyHtml = !fromBody && article.content ? sanitizeHtml(await marked(article.content)) : '';
 const body: Rendered = fromBody ?? enhanceLegacyHtml(legacyHtml);
 const minutes = readingMinutes(fromBody ? dastText(article.body) : legacyHtml);
 const thumb = article.thumbnail?.responsiveImage;
@@ -122,21 +117,6 @@ const ROTS = [-2, 1.5, -1, 2, -1.5];
 
 <script>
   function initPost() {
-    document.querySelectorAll<HTMLButtonElement>('[data-copy]').forEach((b) => {
-      if (b.dataset.bound) return;
-      b.dataset.bound = '1';
-      b.addEventListener('click', async () => {
-        const code = b.closest('.code-block')?.querySelector('pre')?.textContent ?? '';
-        try {
-          await navigator.clipboard.writeText(code);
-          b.textContent = 'Copied';
-          window.setTimeout(() => (b.textContent = 'Copy'), 1600);
-        } catch {
-          b.textContent = 'Copy failed';
-        }
-      });
-    });
-
     // Reading progress: a scaleX on the ink line (compositor only), bike at the tip.
     const bar = document.querySelector<HTMLElement>('[data-progress]');
     const post = document.querySelector<HTMLElement>('.post');
@@ -157,24 +137,6 @@ const ROTS = [-2, 1.5, -1, 2, -1.5];
       document.addEventListener('astro:before-swap', () => removeEventListener('scroll', onScroll), { once: true });
       update();
     }
-
-    const links = [...document.querySelectorAll<HTMLAnchorElement>('[data-stage-link]')];
-    if (!links.length || !('IntersectionObserver' in window)) return;
-    const byId = new Map(links.map((a) => [a.hash.slice(1), a]));
-    const io = new IntersectionObserver(
-      (entries) => {
-        for (const e of entries) {
-          if (!e.isIntersecting) continue;
-          links.forEach((a) => a.removeAttribute('aria-current'));
-          byId.get(e.target.id)?.setAttribute('aria-current', 'true');
-        }
-      },
-      { rootMargin: '-20% 0px -70% 0px' },
-    );
-    byId.forEach((_a, id) => {
-      const h = document.getElementById(id);
-      if (h) io.observe(h);
-    });
   }
   initPost();
   document.addEventListener('astro:page-load', initPost);
