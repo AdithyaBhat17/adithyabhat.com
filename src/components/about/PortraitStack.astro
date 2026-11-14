@@ -171,7 +171,7 @@ const slides = await Promise.all(
 
       const slides = [...root.querySelectorAll<HTMLElement>('[data-slide]')];
       const caps = [...root.querySelectorAll<HTMLElement>('[data-cap]')];
-      if (slides.length < 2) return;
+      if (slides.length < 2 || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
       const ms = Number(root.dataset.interval || 5000);
 
       // Load each photo one cycle ahead of showing it, so they never compete with the first.

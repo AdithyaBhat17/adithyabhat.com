@@ -57,6 +57,7 @@ const groups = [
 
 <script>
   import { engine, engineSynth, play, setSoundOn, type EngineVariant, type EngineVoice } from '@/scripts/sound';
+  import { syncSoundControls } from '@/scripts/site';
 
   function initLab() {
     document.querySelectorAll<HTMLButtonElement>('[data-lab]').forEach((b) => {
@@ -64,7 +65,7 @@ const groups = [
       b.dataset.bound = '1';
       b.addEventListener('click', () => {
         if (document.documentElement.dataset.sound !== 'on') setSoundOn(true);
-        document.querySelectorAll('[data-sound-toggle]').forEach((t) => t.setAttribute('aria-pressed', 'true'));
+        syncSoundControls();
         const id = b.dataset.lab!;
         // Small delay on the very first press while the AudioContext spins up.
         window.setTimeout(() => {

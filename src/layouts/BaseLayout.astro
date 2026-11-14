@@ -16,7 +16,7 @@ interface Props {
 const {
   title,
   description = 'Adithya NR is a product engineer in Abu Dhabi, designing and building thoughtful digital products.',
-  image = '/brand/og.png',
+  image = '/brand/og.png', // scripts/art/make-og.mjs
   bodyClass,
 } = Astro.props;
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);

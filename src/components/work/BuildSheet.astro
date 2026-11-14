@@ -53,7 +53,7 @@ const visit = meta?.visit && link;
     <p class="one-liner hand">{meta?.oneLiner ?? tagLine(tags)}</p>
     <dl class="specs">
       {year && (<div><dt>Year</dt><dd>{year}</dd></div>)}
-      <div><dt>Role</dt><dd>{meta?.role ?? tagLine(tags)}</dd></div>
+      <div><dt>Role</dt><dd>{meta?.role || tagLine(tags)}</dd></div>
       {meta?.builtWith && (<div><dt>Built with</dt><dd>{meta.builtWith}</dd></div>)}
     </dl>
     <p class="foot">

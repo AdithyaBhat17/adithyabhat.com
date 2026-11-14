@@ -13,6 +13,7 @@ async function fetchDato(query) {
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`,
+        ...(process.env.DATOCMS_ENVIRONMENT ? { 'X-Environment': process.env.DATOCMS_ENVIRONMENT } : {}),
       },
       body: JSON.stringify({ query }),
     });

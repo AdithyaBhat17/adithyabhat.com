@@ -40,19 +40,28 @@ function warmArt(theme: Theme): Promise<void> {
 }
 
 let switchTimer = 0;
+let pending: Theme | null = null;
 
-export async function setTheme(next: Theme, origin?: { x: number; y: number }) {
-  if (next === currentTheme()) return;
+/**
+ * Switch theme with the ink-blot reveal. `persist` stores the choice; the OS
+ * listener passes false so following the OS never pins a theme.
+ */
+export async function setTheme(next: Theme, origin?: { x: number; y: number }, { persist = true } = {}) {
+  if (next === (pending ?? currentTheme())) return;
+  pending = next;
   await warmArt(next);
+  pending = null;
   html.classList.add('theme-switching');
   window.clearTimeout(switchTimer);
   switchTimer = window.setTimeout(() => html.classList.remove('theme-switching'), 1800);
   const apply = () => {
     html.dataset.theme = next;
-    try {
-      localStorage.setItem('theme', next);
-    } catch {
-      /* private mode */
+    if (persist) {
+      try {
+        localStorage.setItem('theme', next);
+      } catch {
+        /* private mode */
+      }
     }
     syncThemeControls();
   };
@@ -93,7 +102,7 @@ export async function setTheme(next: Theme, origin?: { x: number; y: number }) {
 
 /* ------------------------------------------------------------------ sound */
 
-function syncSoundControls() {
+export function syncSoundControls() {
   const on = html.dataset.sound === 'on';
   document.querySelectorAll<HTMLButtonElement>('[data-sound-toggle]').forEach((b) => {
     b.setAttribute('aria-pressed', String(on));
@@ -185,12 +194,17 @@ function initShelf() {
   });
 }
 
-/** After load, quietly fetch the other theme's art so toggling is instant. */
+/**
+ * After load, quietly fetch the other theme's art that's on screen, so the
+ * first toggle is instant without downloading every night painting up front.
+ * Hovering or focusing the toggle warms the rest (see initSite).
+ */
 function prefetchOtherArt() {
   const other = currentTheme() === 'dark' ? 'day' : 'night';
   const run = () =>
     document.querySelectorAll<HTMLImageElement>(`img[data-art="${other}"]`).forEach((img) => {
-      img.loading = 'eager';
+      const r = img.getBoundingClientRect();
+      if (r.bottom > -window.innerHeight * 0.5 && r.top < window.innerHeight * 1.5) img.loading = 'eager';
     });
   const idle = (window as Window & { requestIdleCallback?: (cb: () => void, o?: { timeout: number }) => void }).requestIdleCallback;
   if (document.readyState === 'complete') (idle ? idle(run, { timeout: 5000 }) : window.setTimeout(run, 3000));
@@ -245,7 +259,7 @@ export function initSite() {
     const themeBtn = target.closest<HTMLElement>('[data-theme-toggle]');
     if (themeBtn) {
       const rect = themeBtn.getBoundingClientRect();
-      const next: Theme = currentTheme() === 'dark' ? 'light' : 'dark';
+      const next: Theme = (pending ?? currentTheme()) === 'dark' ? 'light' : 'dark';
       // Each bike has its own voice: the CB300R rides in at night, the KTM at dawn.
       play(next === 'dark' ? 'engine-cb' : 'engine-ktm');
       void setTheme(next, { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 });
@@ -275,6 +289,15 @@ export function initSite() {
     }
   });
 
+  // Reaching for the theme toggle: fetch the other theme's art.
+  const warmOther = (e: Event) => {
+    if (!(e.target as HTMLElement).closest?.('[data-theme-toggle]')) return;
+    const other = currentTheme() === 'dark' ? 'day' : 'night';
+    document.querySelectorAll<HTMLImageElement>(`img[data-art="${other}"]`).forEach((img) => (img.loading = 'eager'));
+  };
+  document.addEventListener('pointerover', warmOther);
+  document.addEventListener('focusin', warmOther);
+
   // Hover sounds, delegated. pointerover bubbles; ignore moves within the same element.
   document.addEventListener('pointerover', (e) => {
     if (html.dataset.sound !== 'on' || (e as PointerEvent).pointerType === 'touch') return;
@@ -298,6 +321,6 @@ export function initSite() {
     } catch {
       /* ignore */
     }
-    if (!saved) void setTheme(e.matches ? 'dark' : 'light');
+    if (!saved) void setTheme(e.matches ? 'dark' : 'light', undefined, { persist: false });
   });
 }

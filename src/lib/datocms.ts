@@ -4,10 +4,12 @@ const API_URL = 'https://graphql.datocms.com'
 // DATOCMS_API_TOKEN is set on Vercel; local .env.local only carries the read-only token.
 const API_TOKEN = import.meta.env.DATOCMS_API_TOKEN ?? import.meta.env.DATOCMS_READONLY_TOKEN
 
-// DatoCMS environment for the main project. This branch builds against the
-// `garage-journal` sandbox (new build-log/zine fields); set
-// DATOCMS_ENVIRONMENT=master (or another env) to point elsewhere.
-export const DATOCMS_ENVIRONMENT: string = import.meta.env.DATOCMS_ENVIRONMENT || 'garage-journal'
+// DatoCMS environment. Unset means the project's primary environment;
+// previews can point at a sandbox with DATOCMS_ENVIRONMENT=<name>.
+export const DATOCMS_ENVIRONMENT: string | undefined = import.meta.env.DATOCMS_ENVIRONMENT || undefined
+
+/** The query was rejected by the schema (as opposed to a network or auth failure). */
+export class GraphQLSchemaError extends Error {}
 
 // Several pages run the same query during one build; share the request.
 const cache = new Map<string, Promise<any>>()
@@ -31,7 +33,7 @@ async function request(query: string, { variables, preview }: FetchParams) {
     headers: {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${API_TOKEN}`,
-      'X-Environment': DATOCMS_ENVIRONMENT,
+      ...(DATOCMS_ENVIRONMENT ? { 'X-Environment': DATOCMS_ENVIRONMENT } : {}),
     },
     body: JSON.stringify({
       query,
@@ -39,23 +41,30 @@ async function request(query: string, { variables, preview }: FetchParams) {
     }),
   })
 
-  const json = await response.json()
+  const { status } = response
+  const json = await response.json().catch(() => null)
+  // Auth, rate-limit and server failures are not schema problems.
+  if (!json || status === 401 || status === 403 || status === 429 || status >= 500) {
+    throw new Error(`DatoCMS request failed: ${status}`)
+  }
   if (json.errors) {
     console.error(json.errors)
-    throw new Error('Failed to fetch API')
+    throw new GraphQLSchemaError('Failed to fetch API')
   }
   return json.data
 }
 
 /**
  * Runs `query`, and if the environment doesn't have the new schema yet (the
- * query errors), runs `legacy` instead, so the site keeps building against an
- * older environment.
+ * schema rejects the query), runs `legacy` instead, so the site keeps building
+ * against an older environment. Network and auth failures still throw.
  */
 export async function fetchWithFallback(query: string, legacy: string, params: FetchParams = {}) {
   try {
     return await fetchAPI(query, params)
-  } catch {
+  } catch (err) {
+    if (!(err instanceof GraphQLSchemaError)) throw err
+    console.warn('DatoCMS: new-schema query rejected, using the legacy query')
     return fetchAPI(legacy, params)
   }
 }

@@ -80,23 +80,38 @@ export function codeBlock(code: string, opts: { filename?: string; language?: st
   return codeChrome(opts.filename || opts.language || '', `<pre${lang}><code>${esc(code.replace(/\n$/, ''))}</code></pre>`);
 }
 
+/** Ids the layout already uses; a stage heading must not take them. */
+const RESERVED_IDS = new Set(['main', 'top', 'content']);
+
 /** Collects stage headings into a table of contents and spots the outcome stage. */
 function stageCollector() {
   const toc: TocEntry[] = [];
+  const used = new Set(RESERVED_IDS);
   let outcomeId: string | undefined;
   return {
     toc,
     get outcomeId() {
       return outcomeId;
     },
+    /** `text` is plain text (it gets escaped here); `inner` is the heading's HTML. */
     add(text: string, inner: string) {
-      const id = slugify(text);
+      const base = slugify(text);
+      let id = base;
+      for (let i = 2; used.has(id); i++) id = `${base}-${i}`;
+      used.add(id);
       toc.push({ id, n: pad(toc.length + 1), title: esc(text) });
-      if (/outcome|result/i.test(text)) outcomeId = id;
+      if (!outcomeId && /outcome|result/i.test(text)) outcomeId = id;
       return stageHeading(toc.length, inner, id);
     },
   };
 }
+
+/** Only web, mail, phone, in-page and site-relative links make it into an href. */
+const safeUrl = (url = '') => (/^(https?:|mailto:|tel:|#|\/(?!\/))/i.test(url.trim()) ? url.trim() : '#');
+
+/** Plain text from already-escaped HTML (legacy headings). */
+const unescapeHtml = (s: string) =>
+  s.replace(/&(amp|lt|gt|quot|#39|#x27|nbsp);/g, (_m, e: string) => ({ amp: '&', lt: '<', gt: '>', quot: '"', '#39': "'", '#x27': "'", nbsp: ' ' })[e] ?? _m);
 
 function figure(b: Extract<Block, { __typename: 'FigureRecord' }>) {
   const img = b.media?.responsiveImage;
@@ -200,7 +215,7 @@ export function renderStructuredText(st: StructuredText | null | undefined): Ren
       case 'span':
         return span(n);
       case 'link':
-        return `<a href="${esc(n.url)}"${/^https?:/.test(n.url ?? '') ? ' target="_blank" rel="noopener noreferrer"' : ''}>${kids()}</a>`;
+        return `<a href="${esc(safeUrl(n.url))}"${/^https?:/.test(n.url ?? '') ? ' target="_blank" rel="noopener noreferrer"' : ''}>${kids()}</a>`;
       case 'block':
         return renderBlock(blocks.get(n.item!));
       case 'inlineBlock': {
@@ -231,7 +246,7 @@ export function enhanceLegacyHtml(html: string): Rendered {
   // present renders as h2 (the page title is the h1), then stage the h2s.
   const top = [2, 3, 4].find((l) => new RegExp(`<h${l}[\\s>]`, 'i').test(out)) ?? 2;
   if (top > 2) out = out.replace(/<(\/?)h([2-6])(?=[\s>])/gi, (_m, close: string, d: string) => `<${close}h${Math.max(2, Number(d) - (top - 2))}`);
-  out = out.replace(/<h2[^>]*>([\s\S]*?)<\/h2>/gi, (_m, inner: string) => stages.add(inner.replace(/<[^>]+>/g, '').trim(), inner));
+  out = out.replace(/<h2[^>]*>([\s\S]*?)<\/h2>/gi, (_m, inner: string) => stages.add(unescapeHtml(inner.replace(/<[^>]+>/g, '')).trim(), inner));
   out = out.replace(/<pre[^>]*>([\s\S]*?)<\/pre>/gi, (_m, inner: string) =>
     codeChrome(/class="[^"]*language-([\w-]+)/.exec(inner)?.[1] ?? '', `<pre>${inner}</pre>`),
   );
