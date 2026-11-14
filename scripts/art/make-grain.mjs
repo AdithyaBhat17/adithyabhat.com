@@ -9,4 +9,4 @@ for (let i = 0; i < S * S; i++) {
   px[i * 4] = px[i * 4 + 1] = px[i * 4 + 2] = v;
   px[i * 4 + 3] = Math.round(rnd() * 70);
 }
-await sharp(px, { raw: { width: S, height: S, channels: 4 } }).png({ palette: true, colours: 32 }).toFile('public/art/grain.png');
+await sharp(px, { raw: { width: S, height: S, channels: 4 } }).png({ palette: true, colours: 32 }).toFile('src/assets/art/grain.png');

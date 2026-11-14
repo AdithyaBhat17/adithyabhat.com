@@ -74,7 +74,7 @@ const screen = project.thumbnail?.responsiveImage;
     </div>
   </section>
 
-  <Painting src={workbench} alt={`A workbench in the evening light: pegboard tools, a kettlebell, a mug, and a laptop open on ${name}.`} w={1440} h={700} ink={false} focusX={720} mobileScale={0.6} tint>
+  <Painting src={workbench} alt={`A workbench in the evening light: pegboard tools, a kettlebell, a mug, and a laptop open on ${name}.`} w={1440} h={700} ink={false} focusX={720} mobileScale={0.6} tint priority>
     {screen && (
       <img class="laptop-screen" src={screen.src} srcset={screen.webpSrcSet || screen.srcSet} sizes="(max-width: 767px) 280px, 32vw" alt="" width={screen.width} height={screen.height} loading="lazy" decoding="async" />
     )}

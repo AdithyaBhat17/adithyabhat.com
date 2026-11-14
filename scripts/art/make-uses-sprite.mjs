@@ -1,6 +1,6 @@
 // Slices the 64px Uses/Art/* tiles off a 2x render of the Uses components board
 // (Figma 83:2013, exported as PNG at scale 2) into one sprite of 128px tiles:
-// public/art/uses-sprite.webp, plus an index. The page shows each tile at 40px.
+// src/assets/art/uses-sprite.webp, plus an index. The page shows each tile at 40px.
 // The painted tiles' SVG sources live in scripts/art/uses-art/.
 import sharp from 'sharp';
 import fs from 'node:fs/promises';
@@ -40,7 +40,7 @@ const rows = Math.ceil(TILES.length / COLS);
 await sharp({ create: { width: COLS * T, height: rows * T, channels: 4, background: { r: 0, g: 0, b: 0, alpha: 0 } } })
   .composite(comps)
   .webp({ quality: 88, alphaQuality: 100 })
-  .toFile('public/art/uses-sprite.webp');
+  .toFile('src/assets/art/uses-sprite.webp');
 const index = Object.fromEntries(TILES.map(([k], i) => [k, i]));
 await fs.writeFile('src/data/uses-sprite.json', JSON.stringify({ cols: COLS, rows, index }, null, 2) + '\n');
 console.log('sprite', COLS * T, 'x', rows * T);

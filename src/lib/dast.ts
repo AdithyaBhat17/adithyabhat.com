@@ -140,6 +140,8 @@ export function renderStructuredText(st: StructuredText | null | undefined, { st
   };
   scan(doc);
   const stageLevel = levels.length ? Math.min(...levels) : 2;
+  // Render the top level as h2 (the page title is the h1), shifting the rest with it.
+  const shift = (level: number) => Math.max(2, level - (stageLevel - 2));
 
   const span = (n: DastNode) => {
     let out = esc(n.value).replace(/\n/g, '<br />');
@@ -168,9 +170,10 @@ export function renderStructuredText(st: StructuredText | null | undefined, { st
           const id = slugify(text);
           toc.push({ id, n: pad(toc.length + 1), title: esc(text) });
           if (/outcome|result/i.test(text)) outcomeId = id;
-          return stageHeading(toc.length, title, id, n.level);
+          return stageHeading(toc.length, title, id, shift(n.level));
         }
-        return `<h${n.level}>${title}</h${n.level}>`;
+        const h = shift(n.level ?? 2);
+        return `<h${h}>${title}</h${h}>`;
       }
       case 'list':
         return n.style === 'numbered' ? `<ol>${kids()}</ol>` : `<ul>${kids()}</ul>`;
@@ -214,7 +217,10 @@ export function enhanceLegacyHtml(html: string, { stages = true } = {}): Rendere
   let out = html;
   if (stages) {
     // Older articles use h3/h4 for their steps; index the top level present.
-    const lvl = [2, 3, 4].find((l) => new RegExp(`<h${l}[\\s>]`, 'i').test(out)) ?? 2;
+    const top = [2, 3, 4].find((l) => new RegExp(`<h${l}[\\s>]`, 'i').test(out)) ?? 2;
+    // Shift headings so the top level renders as h2 (the page title is the h1).
+    if (top > 2) out = out.replace(/<(\/?)h([2-6])(?=[\s>])/gi, (_m, close: string, d: string) => `<${close}h${Math.max(2, Number(d) - (top - 2))}`);
+    const lvl = 2;
     const re = new RegExp(`<h${lvl}[^>]*>([\\s\\S]*?)<\\/h${lvl}>`, 'gi');
     out = out.replace(re, (_m, inner: string) => {
       const text = inner.replace(/<[^>]+>/g, '').trim();

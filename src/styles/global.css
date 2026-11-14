@@ -436,7 +436,7 @@ p {
   inset: 0;
   z-index: 1;
   pointer-events: none;
-  background: url('/art/grain.png') 0 0 / 160px 160px;
+  background: url('../assets/art/grain.png') 0 0 / 160px 160px;
   mix-blend-mode: multiply;
   opacity: 0.55;
   border-radius: inherit;

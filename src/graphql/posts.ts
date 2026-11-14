@@ -122,7 +122,7 @@ export const ALL_ARTICLES_QUERY = ALL_ARTICLES_QUERY_LEGACY.replace('externalLin
 import { ST_BLOCKS } from './work'
 
 const ARTICLE_FIELDS = `id title content date slug tags externalLink
-  thumbnail { alt responsiveImage(imgixParams: { fit: crop, ar: "16:9", w: 1520, auto: format }) { srcSet webpSrcSet sizes src width height aspectRatio alt title base64 } }
+  thumbnail { alt responsiveImage(imgixParams: { fit: crop, ar: "16:9", w: 1280, auto: format }) { srcSet webpSrcSet sizes src width height aspectRatio alt title base64 } }
   seo: _seoMetaTags { attributes tag content }`
 
 /** Article page on the garage-journal schema (falls back to the legacy query). */

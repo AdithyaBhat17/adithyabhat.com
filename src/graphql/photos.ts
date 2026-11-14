@@ -12,7 +12,7 @@ export const GALLERY_PHOTOS = `
                 alt
                 blurhash
                 title
-                responsiveImage(imgixParams: {fit: clip, ar: "9:16", auto: format}) {
+                responsiveImage(imgixParams: {fit: clip, ar: "9:16", w: 800, auto: format}) {
                     srcSet
                     webpSrcSet
                     sizes

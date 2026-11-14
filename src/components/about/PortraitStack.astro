@@ -2,7 +2,8 @@
 /**
  * The taped photo on the About page. Cycles through a few photos with a
  * crossfade (the caption changes with each one). Only the first photo loads
- * eagerly; the rest load after the page is idle. Pauses when off-screen.
+ * up front; each next one loads a cycle ahead of being shown. Pauses when
+ * off-screen.
  */
 import { getImage } from 'astro:assets';
 import fog from '@/assets/about/portraits/fog.jpg';
@@ -27,10 +28,10 @@ const SIZES = '(max-width: 767px) 80vw, 418px';
 const slides = await Promise.all(
   PHOTOS.map(async (p) => {
     const set = async (format: 'avif' | 'webp') => {
-      const imgs = await Promise.all(WIDTHS.map((w) => getImage({ src: p.img, width: w, format, quality: 78 })));
+      const imgs = await Promise.all(WIDTHS.map((w) => getImage({ src: p.img, width: w, format, quality: format === 'avif' ? 60 : 72 })));
       return imgs.map((im, i) => `${im.src} ${WIDTHS[i]}w`).join(', ');
     };
-    const fallback = await getImage({ src: p.img, width: 720, format: 'webp', quality: 78 });
+    const fallback = await getImage({ src: p.img, width: 720, format: 'webp', quality: 72 });
     return { ...p, avif: await set('avif'), webp: await set('webp'), src: fallback.src };
   }),
 );
@@ -173,7 +174,7 @@ const slides = await Promise.all(
       if (slides.length < 2) return;
       const ms = Number(root.dataset.interval || 5000);
 
-      // Load the other photos once the page is idle, so they don't compete with the first one.
+      // Load each photo one cycle ahead of showing it, so they never compete with the first.
       const hydrate = (slide: HTMLElement) =>
         new Promise<boolean>((resolve) => {
           slide.querySelectorAll<HTMLSourceElement>('source[data-srcset]').forEach((s) => {
@@ -192,8 +193,12 @@ const slides = await Promise.all(
         });
 
       const ready = new Set<number>([0]);
-      const idle = (cb: () => void) => ('requestIdleCallback' in window ? requestIdleCallback(cb, { timeout: 2500 }) : setTimeout(cb, 1200));
-      idle(() => slides.slice(1).forEach((s, i) => hydrate(s).then((ok) => ok && ready.add(i + 1))));
+      const requested = new Set<number>([0]);
+      const prefetch = (i: number) => {
+        if (requested.has(i)) return;
+        requested.add(i);
+        hydrate(slides[i]).then((ok) => ok && ready.add(i));
+      };
 
       let active = 0;
       const show = (next: number) => {
@@ -204,6 +209,7 @@ const slides = await Promise.all(
         slides[active].dataset.active = 'true';
         caps[active].dataset.active = 'true';
         caps[active].removeAttribute('aria-hidden');
+        prefetch((active + 1) % slides.length);
       };
       const tick = () => {
         // Skip photos that haven't loaded yet.
@@ -222,7 +228,12 @@ const slides = await Promise.all(
       const io = new IntersectionObserver(([e]) => {
         onScreen = e.isIntersecting;
         if (onScreen && !document.hidden) {
-          if (!timer) timer = window.setInterval(tick, ms);
+          if (!timer) {
+            // The second photo loads once the page is idle, ahead of the first swap.
+            if ('requestIdleCallback' in window) requestIdleCallback(() => prefetch(1), { timeout: 2000 });
+            else setTimeout(() => prefetch(1), 1000);
+            timer = window.setInterval(tick, ms);
+          }
         } else stop();
       });
       io.observe(root);
