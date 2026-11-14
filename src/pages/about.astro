@@ -95,9 +95,7 @@ const ledger = [...ROUTE].reverse();
     <div class="wrap section-head">
       <h2 id="stickers-title" class="display-l">Stickers on the toolbox</h2>
     </div>
-    <Painting src={toolbox} alt="An orange toolbox lid covered in stickers from yellow.ai, Softway, Daikin, Dish, Betsol and Homero, plus a WCAG AA badge, “ship it”, “390 Adventure”, an Abu Dhabi postmark and “dirt > traffic”." w={1440} h={560} ink={false} mobileScale={0.6} mobileSwipe>
-      <p class="sticker-390" aria-hidden="true"><span>390</span> ADVENTURE</p>
-    </Painting>
+    <Painting src={toolbox} alt="An orange toolbox lid covered in stickers from yellow.ai, Softway, Daikin, Dish, Betsol and Homero, plus a WCAG AA badge, “ship it”, “390 Adventure”, an Abu Dhabi postmark and “dirt > traffic”." w={1440} h={560} ink={false} mobileScale={0.6} mobileSwipe />
   </section>
 
   <section class="section off-duty" aria-labelledby="off-title">
@@ -258,31 +256,6 @@ const ledger = [...ROUTE].reverse();
     vertical-align: middle;
   }
 
-  /* Live-text sticker laid over the painted one (owner's copy change). */
-  .sticker-390 {
-    position: absolute;
-    left: calc(463 * var(--u));
-    top: calc(397 * var(--u));
-    width: calc(392 * var(--u));
-    height: calc(78 * var(--u));
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.45em;
-    white-space: nowrap;
-    margin: 0;
-    background: #1f2326;
-    border-radius: calc(4 * var(--u));
-    box-shadow: calc(2 * var(--u)) calc(4 * var(--u)) calc(6 * var(--u)) rgba(30, 12, 4, 0.35);
-    color: #f3ead8;
-    font-size: calc(26 * var(--u));
-    font-weight: 500;
-    letter-spacing: 0.18em;
-    rotate: 2.6deg;
-  }
-  .sticker-390 span {
-    color: #e2560b;
-  }
   .off-copy {
     max-width: 640px;
     margin-bottom: 32px;
