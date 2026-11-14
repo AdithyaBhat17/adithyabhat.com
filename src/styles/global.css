@@ -99,6 +99,9 @@
   --muted-foreground: var(--ink-meta);
   --destructive: #b42318;
   --radius: 0.75rem;
+  --radius-lg: 1rem;
+  --accent-glow: var(--orange-wash);
+  --accent-glow-strong: rgba(226, 86, 11, 0.3);
 
   color-scheme: light;
 }

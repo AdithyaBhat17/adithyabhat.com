@@ -134,7 +134,7 @@ const ogImage = new URL(image, Astro.site).toString();
 
     <ClientRouter fallback="none" />
   </head>
-  <body class={bodyClass}>
+  <body class={bodyClass} id="top">
     <a class="skip-link" href="#main">Skip to content</a>
     <slot />
     <CommandPalette />
