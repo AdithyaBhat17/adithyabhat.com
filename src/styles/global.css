@@ -944,3 +944,11 @@ html.theme-vt::view-transition-group(hero-bikes) {
   font-size: 13px;
   color: var(--ink-meta);
 }
+
+/* Utility aliases still used by the React islands. */
+.font-display {
+  font-family: var(--font-display);
+}
+.font-body {
+  font-family: var(--font-body);
+}
