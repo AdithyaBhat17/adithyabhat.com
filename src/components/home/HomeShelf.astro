@@ -17,17 +17,17 @@ import { SHELF } from '@/data/shelf';
                 type="button"
                 class="obj"
                 data-shelf-item
-                data-sound-hover="scratch"
+                data-sound-hover={it.note ? 'scratch' : undefined}
                 data-sound-click={it.sound}
-                aria-describedby={`note-${it.id}`}
+                aria-describedby={it.note ? `note-${it.id}` : undefined}
               >
                 <Picture src={it.img} formats={['avif', 'webp']} alt={it.name} widths={[it.img.width]} sizes={`${it.img.width}px`} loading="lazy" />
               </button>
-              <span id={`note-${it.id}`} class:list={['tag', it.align === 'right' && 'tag--right']} role="tooltip">
+              {it.note && <span id={`note-${it.id}`} class:list={['tag', it.align === 'right' && 'tag--right']} role="tooltip">
                 <span class="tag-name">{it.name}</span>
                 <span class="tag-note hand">{it.note}</span>
                 <svg class="tag-arrow" viewBox="0 0 60 130" aria-hidden="true"><path d="M30 4c-8 30 6 60-6 108M14 98l10 18 14-16" pathLength="1" /></svg>
-              </span>
+              </span>}
             </li>
           ))}
         </ul>

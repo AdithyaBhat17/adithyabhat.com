@@ -2,7 +2,7 @@
 // about when he reaches for it. Positions are in the 1120 × 619 stage's
 // Figma coordinates (top-left of each object's render).
 //
-// TODO(adithya): the perfume, dumbbell notes were guesses in the Figma spec
+// TODO(adithya): the perfume notes were guesses in the Figma spec
 // ("[Brackets] are guesses, swap in yours"). Edit them here.
 
 import type { ImageMetadata } from 'astro';
@@ -18,7 +18,8 @@ import watch from '@/assets/stilllife/watch.png';
 export interface ShelfItem {
   id: string;
   name: string;
-  note: string;
+  /** Hover note. Leave out for objects that shouldn't get one. */
+  note?: string;
   img: ImageMetadata;
   x: number;
   y: number;
@@ -36,6 +37,6 @@ export const SHELF: ShelfItem[] = [
   { id: 'ombre', name: 'Louis Vuitton Ombre Nomade', note: 'saved for cooler evenings out', img: ombre, x: 435, y: 264 },
   { id: 'espresso', name: 'Espresso machine', note: 'weekend shots, still dialling it in', img: espresso, x: 629, y: 207, sound: 'pour' },
   { id: 'moka', name: 'Moka pot', note: 'weekday mornings', img: moka, x: 540, y: 277, sound: 'pour' },
-  { id: 'dumbbell', name: 'Dumbbell', note: 'pull day, 5×5', img: dumbbell, x: 871, y: 346, align: 'right' },
+  { id: 'dumbbell', name: 'Dumbbell', img: dumbbell, x: 871, y: 346, align: 'right' },
   { id: 'watch', name: 'Seiko Alpinist', note: 'the green one, compass and all', img: watch, x: 775, y: 294, align: 'right' },
 ];
