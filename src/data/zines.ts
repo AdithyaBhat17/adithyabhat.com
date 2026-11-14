@@ -19,7 +19,7 @@ export const ZINES: Record<string, ZineStyle> = {
     art: 'chat',
     paper: '#f6eedd',
     topic: 'Accessibility',
-    dek: 'How we took a chat widget used by 300k people a day to WCAG AA: focus order, screen-reader announcements for streamed messages, and keyboard flows that don’t trap you.',
+    dek: 'How we made the yellow.ai chat widget, used by 300k people a day, meet WCAG AA.',
   },
   'introduction-to-javascript-iterators-and-generators': { art: 'iterators', paper: '#dce7e1', topic: 'JavaScript' },
   'generate-code-coverage-reports-for-your-unit-tests-using-jest': { art: 'coverage', paper: '#efe3c4', topic: 'Testing' },

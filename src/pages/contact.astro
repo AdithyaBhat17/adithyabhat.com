@@ -18,10 +18,10 @@ const ROMAN = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI'
 const postmarkDate = `${now.getDate()} · ${ROMAN[now.getMonth()]} · ${String(now.getFullYear()).slice(2)}`;
 ---
 
-<PageLayout title="Contact | Adithya NR" description="Leave a note: a project, a question, or just hello. It lands straight in my Slack." cta={false}>
+<PageLayout title="Contact | Adithya NR" description="Got a project or a question? Send me a note. I usually reply within a couple of days." cta={false}>
   <section class="wrap page-head">
     <h1 class="display-xl">Leave a note</h1>
-    <p class="body-l lede">Whether it’s a project, a question, or just to say hello, I’d love to hear from you. I usually reply within a couple of days.</p>
+    <p class="body-l lede">Got a project or a question? Send me a note. I usually reply within a couple of days.</p>
   </section>
 
   <div class="scene">
@@ -33,7 +33,7 @@ const postmarkDate = `${now.getDate()} · ${ROMAN[now.getMonth()]} · ${String(n
           <div class="pc-message">
             <label id="note-label" class="pc-label" for="pc-note">Your note</label>
             <div class="pc-lines">
-              <textarea id="pc-note" name="message" rows="8" maxlength="2000" required placeholder="Tell me what you’re building, what’s on your mind, or just say hi…" aria-describedby="pc-note-err pc-count"></textarea>
+              <textarea id="pc-note" name="message" rows="8" maxlength="2000" required placeholder="What are you working on?" aria-describedby="pc-note-err pc-count"></textarea>
             </div>
             <p class="pc-err" id="pc-note-err" hidden>Write a few words first.</p>
             <p class="pc-count" id="pc-count" aria-live="polite"><span data-count>0</span> / 2000</p>

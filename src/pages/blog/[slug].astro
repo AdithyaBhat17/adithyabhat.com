@@ -39,7 +39,7 @@ const legacyHtml = article.content ? sanitizeHtml(await marked(article.content))
 const body: Rendered = fromBody ?? enhanceLegacyHtml(legacyHtml);
 const minutes = readingMinutes(fromBody ? dastText(article.body) : legacyHtml);
 const thumb = article.thumbnail?.responsiveImage;
-const description = article.summary || issue?.zine.dek || `${article.title} — writing by Adithya NR.`;
+const description = article.summary || issue?.zine.dek || `${article.title}, by Adithya NR.`;
 const ROTS = [-2, 1.5, -1, 2, -1.5];
 ---
 

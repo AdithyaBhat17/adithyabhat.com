@@ -1,7 +1,6 @@
 ---
-// Privacy. The wording lives in the DatoCMS `legal` singleton; the proposed
-// plain-language rewrite from the Figma design is in
-// src/data/privacy-proposed.md for the owner to review and paste in.
+// Privacy. The policy text is the DatoCMS `legal` singleton's document,
+// unchanged; this page only lays it out (reading column + contents index).
 import PageLayout from '@/layouts/PageLayout.astro';
 import Painting from '@/components/journal/Painting.astro';
 import desk from '@/assets/paintings/privacy-desk.png';
@@ -17,10 +16,10 @@ const updated = result?.legal?._updatedAt
   : '';
 ---
 
-<PageLayout title="Privacy | Adithya NR" description="What this site collects, why it collects it, and what you can do about it.">
+<PageLayout title="Privacy | Adithya NR" description="What this site collects and why.">
   <section class="wrap page-head">
     <h1 class="display-xl">Privacy</h1>
-    <p class="body-l lede">What this site collects, why it collects it, and what you can do about it.</p>
+    <p class="body-l lede">What this site collects and why.</p>
   </section>
 
   <Painting src={desk} alt="A desk with a rubber stamp and an ink pad." w={1440} h={220} ink={false} focusX={720} tint />

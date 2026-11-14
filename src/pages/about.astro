@@ -12,27 +12,26 @@ import serviceFg from '@/assets/paintings/service-fg.png';
 import { ROUTE } from '@/data/career';
 
 const SPECS: [string, string][] = [
-  ['Model', 'Adithya NR, 2026 edition'],
+  ['Model', 'Adithya NR'],
   ['Based in', 'Abu Dhabi, UAE'],
-  ['Engine', 'Design and code, in one block'],
-  ['Mileage', '7 years and counting'],
+  ['Engine', 'Design and engineering'],
+  ['Mileage', '7 years'],
   ['Current tune', 'SDE-3 at yellow.ai, on the Agentic AI platform'],
   ['Languages', 'English, Hindi, Kannada'],
   ['Design kit', 'UX, UI, wireframing, prototyping, design systems'],
   ['Code kit', 'TypeScript, React, Next.js, Node.js, GraphQL, PostgreSQL, Playwright'],
   ['Daily tools', 'Figma, Cursor, Claude Code, Git'],
   ['Fuel', 'Moka pot on weekdays, espresso on weekends'],
-  ['Service interval', 'A clear brief and a long road, regularly'],
 ];
 const ledger = [...ROUTE].reverse();
 ---
 
-<PageLayout title="About | Adithya NR" description="The owner’s manual: a product engineer in Abu Dhabi who designs the interface and then builds it.">
+<PageLayout title="About | Adithya NR" description="Adithya NR is a product engineer in Abu Dhabi who designs interfaces and then builds them.">
   <section class="wrap about-hero">
     <div class="intro">
       <h1 class="display-xl">The owner’s manual</h1>
       <p class="body-l">I’m Adithya, a product engineer in Abu Dhabi. For more than seven years, design has been the centre of my work. I started as a graphic designer, moved into UX, and these days I design the interface and then build it.</p>
-      <p class="body-l">I’ve worked with startups and teams around the world, always chasing the same thing: products that feel obvious to use and are a pleasure to come back to. Right now I’m shaping the Agentic AI platform at <a class="text-link" href="https://yellow.ai/" target="_blank" rel="noopener noreferrer">yellow.ai</a>.</p>
+      <p class="body-l">I’ve worked with startups and teams around the world. Right now I’m shaping the Agentic AI platform at <a class="text-link" href="https://yellow.ai/" target="_blank" rel="noopener noreferrer">yellow.ai</a>.</p>
       <div class="actions">
         <a class="btn btn--ink" href="/resume.pdf" target="_blank" rel="noopener" data-sound-hover="tick">
           Download my CV
@@ -42,7 +41,7 @@ const ledger = [...ROUTE].reverse();
       </div>
     </div>
     <div class="portrait" data-reveal>
-      <Picture src={portrait} formats={['avif', 'webp']} widths={[473]} sizes="(max-width: 767px) 88vw, 473px" alt="Adithya standing on a foggy hillside in a dark hoodie; a hand-written caption reads “me, on a foggy morning ride”." loading="eager" fetchpriority="high" />
+      <Picture src={portrait} formats={['avif', 'webp']} widths={[473]} sizes="(max-width: 767px) 88vw, 473px" alt="Adithya standing on a foggy hillside in a dark hoodie; with the caption “me, on a foggy morning ride”." loading="eager" fetchpriority="high" />
     </div>
   </section>
 
@@ -58,7 +57,7 @@ const ledger = [...ROUTE].reverse();
       </dl>
     </div>
     <figure class="fig" data-reveal>
-      <Picture src={figKtm} formats={['avif', 'webp']} widths={[521]} sizes="(max-width: 767px) 88vw, 521px" alt="Fig. 1, a pencil-style drawing of the KTM 390 Adventure (2025), annotated: tall screen for long days; Acerbis handguards, always; single, 399cc, happy revs." loading="lazy" />
+      <Picture src={figKtm} formats={['avif', 'webp']} widths={[521]} sizes="(max-width: 767px) 88vw, 521px" alt="Fig. 1, a pencil-style drawing of the KTM 390 Adventure (2025), with notes on the tall screen, the Acerbis handguards and the 399cc single." loading="lazy" />
     </figure>
   </section>
 
@@ -96,15 +95,17 @@ const ledger = [...ROUTE].reverse();
     <div class="wrap section-head">
       <h2 id="stickers-title" class="display-l">Stickers on the toolbox</h2>
     </div>
-    <Painting src={toolbox} alt="An orange toolbox lid covered in stickers from places I’ve worked and things I believe in: yellow.ai, Softway, Daikin, Dish, Betsol, Homero, a WCAG AA badge, “ship it”, “Ride. Code. Repeat.”, an Abu Dhabi postmark and “dirt > traffic”. A note reads “every one of these earned its spot”." w={1440} h={560} ink={false} mobileScale={0.6} mobileSwipe />
+    <Painting src={toolbox} alt="An orange toolbox lid covered in stickers from yellow.ai, Softway, Daikin, Dish, Betsol and Homero, plus a WCAG AA badge, “ship it”, “390 Adventure”, an Abu Dhabi postmark and “dirt > traffic”." w={1440} h={560} ink={false} mobileScale={0.6} mobileSwipe>
+      <p class="sticker-390" aria-hidden="true"><span>390</span> ADVENTURE</p>
+    </Painting>
   </section>
 
   <section class="section off-duty" aria-labelledby="off-title">
     <div class="wrap">
       <h2 id="off-title" class="display-l section-head">Off duty</h2>
-      <p class="body-l off-copy">When I’m not near a keyboard, I’m usually on a motorcycle. Long road days, weekend off-road trails, or out chasing a good coffee spot. Riding is my reset button between hard problems.</p>
+      <p class="body-l off-copy">When I’m not at a keyboard, I’m usually riding. Long road days, weekend off-road trails, or a ride out for good coffee.</p>
     </div>
-    <Painting src={offDuty} alt="Three ride photos taped over a dusk mountain painting: “blue hour on the 390”, “dirt days in the hills”, and “helmet on, lift going down”." w={1440} h={660} ink={false} mobileScale={0.55} mobileSwipe tint />
+    <Painting src={offDuty} alt="Three ride photos taped over a dusk mountain painting, captioned “blue hour on the 390”, “dirt days in the hills” and “helmet on, lift going down”." w={1440} h={660} ink={false} mobileScale={0.55} mobileSwipe tint />
   </section>
 </PageLayout>
 
@@ -257,6 +258,31 @@ const ledger = [...ROUTE].reverse();
     vertical-align: middle;
   }
 
+  /* Live-text sticker laid over the painted one (owner's copy change). */
+  .sticker-390 {
+    position: absolute;
+    left: calc(463 * var(--u));
+    top: calc(397 * var(--u));
+    width: calc(392 * var(--u));
+    height: calc(78 * var(--u));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.45em;
+    white-space: nowrap;
+    margin: 0;
+    background: #1f2326;
+    border-radius: calc(4 * var(--u));
+    box-shadow: calc(2 * var(--u)) calc(4 * var(--u)) calc(6 * var(--u)) rgba(30, 12, 4, 0.35);
+    color: #f3ead8;
+    font-size: calc(26 * var(--u));
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    rotate: 2.6deg;
+  }
+  .sticker-390 span {
+    color: #e2560b;
+  }
   .off-copy {
     max-width: 640px;
     margin-bottom: 32px;

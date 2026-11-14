@@ -19,11 +19,11 @@ const stats = [
 ] as const;
 ---
 
-<PageLayout title="Photos | Adithya NR" description="Snapshots from my travels and everyday life. Landscapes, cityscapes, and everything in between.">
+<PageLayout title="Photos | Adithya NR" description="Photos from trips and everyday life.">
   <section class="wrap page-head">
     <div>
       <h1 class="display-xl">Photos</h1>
-      <p class="body-l lede">Snapshots from my travels and everyday life. Landscapes, cityscapes, and everything in between.</p>
+      <p class="body-l lede">Photos from trips and everyday life.</p>
     </div>
     <dl class="stats">
       {stats.map(([n, l]) => <div><dt class="sr-only">{l}</dt><dd><span class="n">{n}</span> <span class="l">{l}</span></dd></div>)}
