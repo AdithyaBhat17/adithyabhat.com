@@ -4,7 +4,7 @@
 // still renders, from CMS data alone, in "Built for clients".
 
 export interface BuildMeta {
-  group: 'me' | 'clients';
+  group: 'me' | 'work' | 'clients';
   oneLiner: string;
   role: string;
   builtWith: string;

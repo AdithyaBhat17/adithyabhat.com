@@ -11,7 +11,8 @@ import type { Project } from '@/types/content';
 const data = await fetchWithFallback(RECENT_WORK, RECENT_WORK_LEGACY);
 const projects = ((data.allProjects ?? []) as Project[]).map((p) => ({ ...p, meta: buildMeta(p) }));
 const mine = projects.filter((p) => p.meta?.group === 'me');
-const clients = projects.filter((p) => p.meta?.group !== 'me');
+const work = projects.filter((p) => p.meta?.group === 'work');
+const clients = projects.filter((p) => p.meta?.group !== 'me' && p.meta?.group !== 'work');
 const ROT_A = [-1.5, 1, -2];
 const ROT_B = [2, -1.2, 1.5];
 ---
@@ -45,6 +46,22 @@ const ROT_B = [2, -1.2, 1.5];
       </div>
     </div>
   </section>
+
+  {work.length > 0 && (
+    <section class="section group" aria-labelledby="work-title">
+      <div class="wrap">
+        <div class="group-head">
+          <h2 id="work-title" class="display-l">Built at work</h2>
+          <p class="hand aside" data-ink-in data-observe>at yellow.ai</p>
+        </div>
+        <div class="boards">
+          {work.map((p, i) => (
+            <BuildSheet slug={p.slug} title={p.title} date={String(p.date)} tags={p.tags} link={p.link} image={p.thumbnail?.responsiveImage} meta={p.meta} rot={ROT_B[(i + 1) % 3]} />
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
 
   <section class="section group" aria-labelledby="clients-title">
     <div class="wrap">

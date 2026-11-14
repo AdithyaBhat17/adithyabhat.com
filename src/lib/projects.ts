@@ -35,7 +35,7 @@ export interface ProjectCmsFields {
 export function buildMeta(p: ProjectCmsFields): BuildMeta | undefined {
   const local = BUILDS[p.slug];
   if (!p.oneLiner) return local;
-  const group = p.builtFor === 'me' ? 'me' : 'clients';
+  const group = p.builtFor === 'me' || p.builtFor === 'work' ? p.builtFor : 'clients';
   return {
     group,
     oneLiner: p.oneLiner,
