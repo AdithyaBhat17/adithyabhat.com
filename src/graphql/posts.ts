@@ -118,3 +118,28 @@ export const FEATURED_ARTICLES = `
 `
 
 export const ALL_ARTICLES_QUERY = ALL_ARTICLES_QUERY_LEGACY.replace('externalLink\n', 'externalLink\n            coverArt\n            summary\n')
+
+import { ST_BLOCKS } from './work'
+
+const ARTICLE_FIELDS = `id title content date slug tags externalLink
+  thumbnail { alt responsiveImage(imgixParams: { fit: crop, ar: "16:9", w: 1520, auto: format }) { srcSet webpSrcSet sizes src width height aspectRatio alt title base64 } }
+  seo: _seoMetaTags { attributes tag content }`
+
+/** Article page on the garage-journal schema (falls back to the legacy query). */
+export const ARTICLE_PAGE = `
+  query ArticlePage($slug: String!) {
+    article(filter: { slug: { eq: $slug } }) {
+      ${ARTICLE_FIELDS}
+      summary coverArt
+      body { value ${ST_BLOCKS.replace(/\.\.\. on OutcomeRecord[^\n]*\n/, '')} }
+    }
+    allArticles(orderBy: date_DESC) { slug title date tags externalLink coverArt summary }
+  }
+`
+
+export const ARTICLE_PAGE_LEGACY = `
+  query ArticlePageLegacy($slug: String!) {
+    article(filter: { slug: { eq: $slug } }) { ${ARTICLE_FIELDS} }
+    allArticles(orderBy: date_DESC) { slug title date tags externalLink }
+  }
+`

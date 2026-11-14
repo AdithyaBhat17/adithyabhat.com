@@ -1,88 +1,433 @@
 ---
+import { Picture } from 'astro:assets';
 import PageLayout from '@/layouts/PageLayout.astro';
-import Container from '@/components/astro/Container.astro';
-import RelatedProjects from '@/components/astro/RelatedProjects.astro';
-import { fetchAPI } from '@/lib/datocms';
+import Painting from '@/components/journal/Painting.astro';
+import BuildSheet from '@/components/work/BuildSheet.astro';
+import workbench from '@/assets/paintings/workbench.png';
+import workbenchFg from '@/assets/paintings/workbench-fg.png';
+import { fetchAPI, fetchWithFallback } from '@/lib/datocms';
 import { sanitizeHtml } from '@/lib/sanitize';
-import { CASE_STUDY, RECENT_WORK } from '@/graphql/work';
+import { BUILD_LOG, BUILD_LOG_LEGACY, RECENT_WORK, RECENT_WORK_LEGACY } from '@/graphql/work';
+import { buildMeta, shortTitle, tagLine } from '@/lib/projects';
+import { enhanceLegacyHtml, partsFromLegacy, renderStructuredText, withoutTechStack, type Rendered } from '@/lib/dast';
+import dayjs from 'dayjs';
 
 export async function getStaticPaths() {
-  const data = await fetchAPI(RECENT_WORK);
-  return (data?.allProjects ?? []).map((project: any) => ({
-    params: { slug: project.slug },
-  }));
+  const data = await fetchWithFallback(RECENT_WORK, RECENT_WORK_LEGACY);
+  return (data?.allProjects ?? []).map((p: { slug: string }) => ({ params: { slug: p.slug } }));
 }
 
 const { slug } = Astro.params;
-const data = await fetchAPI(CASE_STUDY, { variables: { slug } });
-
-if (!data?.project?.slug) {
-  return Astro.redirect('/404');
+let data;
+try {
+  data = await fetchAPI(BUILD_LOG, { variables: { slug } });
+} catch {
+  data = await fetchAPI(BUILD_LOG_LEGACY, { variables: { slug } });
 }
+const project = data?.project;
+if (!project?.slug) return Astro.redirect('/404');
 
-const project = data.project;
-const moreProjects = data.allProjects ?? [];
+const meta = buildMeta(project);
+const name = shortTitle(project.title);
+const lede: string = project.metadata?.description ?? '';
+const fromLog = renderStructuredText(project.buildLog);
+const legacy = project.caseStudy ? sanitizeHtml(project.caseStudy) : '';
+const body: Rendered = fromLog ?? enhanceLegacyHtml(withoutTechStack(legacy));
+const parts: string[] = project.parts
+  ? String(project.parts).split('\n').map((s: string) => s.trim()).filter(Boolean)
+  : partsFromLegacy(legacy);
+
+const all: any[] = data.allProjects ?? [];
+const idx = all.findIndex((p) => p.slug === project.slug);
+const next = all.length > 1 ? all[(idx + 1) % all.length] : null;
+const nextMeta = next ? buildMeta(next) : undefined;
+const screen = project.thumbnail?.responsiveImage;
 ---
 
-<PageLayout title={project.title}>
-  <Container>
-    <div class="w-full max-w-2xl mx-auto">
-      <h1
-        class="font-display text-3xl md:text-4xl lg:text-5xl tracking-tight mt-8 leading-tight"
-        data-animate
-        transition:name={`card-${slug}`}
-      >
-        {project.title}
-      </h1>
-
-      <div class="content" set:html={sanitizeHtml(project.caseStudy ?? '')} />
-
-      <hr class="gradient-line mt-16 mb-12" />
-
-      {project.link && (
-        <a
-          href={project.link}
-          rel="noopener noreferrer"
-          target="_blank"
-          class="inline-flex items-center gap-2 font-body font-semibold text-[var(--accent)] hover:text-[var(--accent-hover)] transition-colors"
-        >
-          <span>Visit Project</span>
-          <svg
-            class="w-4 h-4"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width={2}
-              d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-            />
-          </svg>
-        </a>
-      )}
-
-      {moreProjects.length > 0 && (
-        <div class="mt-20">
-          <div class="flex items-center gap-4 mb-8">
-            <h3 class="text-sm uppercase font-body font-semibold tracking-widest text-[var(--text-muted)]">
-              More projects
-            </h3>
-            <span class="flex-1 h-[1px] bg-[var(--border)]"></span>
-          </div>
-          <RelatedProjects projects={moreProjects} />
-        </div>
-      )}
-
-      <div class="my-24 md:my-32" data-animate>
-        <h2 class="font-display text-2xl md:text-3xl tracking-tight leading-snug">
-          Have a similar project in mind?{' '}
-          <a href={`/contact?ref=${slug}`} class="gradient-text hover:opacity-80 transition-opacity">
-            Let's chat!
+<PageLayout title={`${name} | Builds | Adithya NR`} description={lede || meta?.oneLiner}>
+  <section class="wrap cs-hero">
+    <div class="cs-copy">
+      <a class="back" href="/work" data-sound-hover="tick">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M12.7 8H4M7.3 4l-4 4 4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" /></svg>
+        All builds
+      </a>
+      <h1 class="display-xl">{name}</h1>
+      {lede && <p class="body-l">{lede}</p>}
+      <div class="actions">
+        {project.link && (
+          <a class="btn btn--ink" href={project.link} target="_blank" rel="noopener noreferrer" data-sound-hover="tick">
+            Visit project
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M5 11 11 5M6 5h5v5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" /></svg>
+            <span class="sr-only">(opens in a new tab)</span>
           </a>
-        </h2>
+        )}
+        {body.outcomeId && (
+          <a class="skip" href={`#${body.outcomeId}`}>
+            Skip to the outcome
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 3v9M4 8.5l4 4 4-4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" /></svg>
+          </a>
+        )}
       </div>
     </div>
-  </Container>
+    <div class="cs-sheet">
+      <BuildSheet slug={project.slug} title={project.title} date={project.date} tags={project.tags} link={project.link} image={screen} meta={meta} rot={2} as="h2" />
+    </div>
+  </section>
+
+  <Painting src={workbench} alt={`A workbench in the evening light: pegboard tools, a kettlebell, a mug, and a laptop open on ${name}.`} w={1440} h={700} ink={false} focusX={720} mobileScale={0.6} tint>
+    {screen && (
+      <img class="laptop-screen" src={screen.src} srcset={screen.webpSrcSet || screen.srcSet} sizes="(max-width: 767px) 280px, 32vw" alt="" width={screen.width} height={screen.height} loading="lazy" decoding="async" />
+    )}
+    <Picture src={workbenchFg} formats={['avif', 'webp']} widths={[1440]} sizes="100vw" alt="" class="bench-fg" loading="lazy" />
+  </Painting>
+
+  <section class="wrap log" aria-label="Build log">
+    {body.toc.length > 1 && (
+      <nav class="stage-index" aria-label="Stages">
+        <details open>
+          <summary class="display-s">Stages</summary>
+          <ol>
+            {body.toc.map((t) => (
+              <li><a href={`#${t.id}`} data-stage-link><span>{t.n}</span> <span set:html={t.title} /></a></li>
+            ))}
+          </ol>
+        </details>
+      </nav>
+    )}
+    <article class="log-body" set:html={body.html} />
+  </section>
+
+  {parts.length > 0 && (
+    <section class="wrap parts" aria-labelledby="parts-title">
+      <div class="parts-head">
+        <h2 id="parts-title" class="display-m">Parts list</h2>
+        <p class="hand" aria-hidden="true">{parts.length} parts</p>
+      </div>
+      <ol class="parts-grid">
+        {parts.map((p, i) => <li><span>{String(i + 1).padStart(2, '0')}</span> {p}</li>)}
+      </ol>
+    </section>
+  )}
+
+  {next && (
+    <section class="wrap next" aria-labelledby="next-title">
+      <h2 id="next-title" class="display-l">Next build</h2>
+      <a class="next-card" href={`/work/${next.slug}`} data-sound-hover="flick">
+        <span class="next-print">
+          <span class="next-tape" aria-hidden="true"></span>
+          {next.thumbnail?.responsiveImage && (
+            <img src={next.thumbnail.responsiveImage.src} srcset={next.thumbnail.responsiveImage.webpSrcSet || next.thumbnail.responsiveImage.srcSet} sizes="(max-width: 767px) 88vw, 480px" alt="" width="900" height="640" loading="lazy" decoding="async" />
+          )}
+        </span>
+        <span class="next-copy">
+          <span class="next-title">{shortTitle(next.title)}</span>
+          {nextMeta?.oneLiner && <span class="hand next-line">{nextMeta.oneLiner}</span>}
+          <span class="next-meta">{dayjs(next.date).format('MMM YYYY')} · {tagLine(next.tags)}</span>
+          <span class="next-read">Read the build log <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3.3 8H12M8.7 4l4 4-4 4" stroke="#e2560b" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" /></svg></span>
+        </span>
+      </a>
+    </section>
+  )}
 </PageLayout>
+
+<script>
+  function initLog() {
+    // Copy buttons on code blocks.
+    document.querySelectorAll<HTMLButtonElement>('[data-copy]').forEach((b) => {
+      if (b.dataset.bound) return;
+      b.dataset.bound = '1';
+      b.addEventListener('click', async () => {
+        const code = b.closest('.code-block')?.querySelector('pre')?.textContent ?? '';
+        try {
+          await navigator.clipboard.writeText(code);
+          b.textContent = 'Copied';
+          window.setTimeout(() => (b.textContent = 'Copy'), 1600);
+        } catch {
+          b.textContent = 'Copy failed';
+        }
+      });
+    });
+    // Highlight the current stage in the sticky index.
+    const links = [...document.querySelectorAll<HTMLAnchorElement>('[data-stage-link]')];
+    if (!links.length || !('IntersectionObserver' in window)) return;
+    const byId = new Map(links.map((a) => [a.hash.slice(1), a]));
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          if (!e.isIntersecting) continue;
+          links.forEach((a) => a.removeAttribute('aria-current'));
+          byId.get(e.target.id)?.setAttribute('aria-current', 'true');
+        }
+      },
+      { rootMargin: '-20% 0px -70% 0px' },
+    );
+    byId.forEach((_a, id) => {
+      const h = document.getElementById(id);
+      if (h) io.observe(h);
+    });
+    if (window.matchMedia('(max-width: 1100px)').matches) document.querySelector('.stage-index details')?.removeAttribute('open');
+  }
+  initLog();
+  document.addEventListener('astro:page-load', initLog);
+</script>
+
+<style>
+  .cs-hero {
+    display: grid;
+    grid-template-columns: minmax(0, 640px) 400px;
+    justify-content: space-between;
+    align-items: center;
+    gap: 48px;
+    padding-top: 56px;
+    padding-bottom: 72px;
+  }
+  .back {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    min-height: 32px;
+    margin-bottom: 18px;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--ink-soft);
+  }
+  .back:hover {
+    color: var(--orange);
+  }
+  .cs-copy .body-l {
+    margin-top: 22px;
+    max-width: 600px;
+  }
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 20px;
+    margin-top: 26px;
+  }
+  .skip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    min-height: 44px;
+    font-size: 15px;
+    font-weight: 500;
+  }
+  .skip svg {
+    color: var(--orange);
+  }
+
+  .laptop-screen {
+    position: absolute;
+    left: calc(490 * var(--u));
+    top: calc(316 * var(--u));
+    width: calc(460 * var(--u));
+    height: calc(294 * var(--u));
+    object-fit: cover;
+    z-index: 1;
+  }
+  :global(.bench-fg),
+  :global(.bench-fg img) {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+    pointer-events: none;
+  }
+
+  .log {
+    display: grid;
+    grid-template-columns: 220px minmax(0, 640px) 1fr;
+    gap: 0 60px;
+    padding-top: 100px;
+  }
+  .log-body {
+    grid-column: 2;
+  }
+  .stage-index {
+    grid-column: 1;
+    position: sticky;
+    top: 24px;
+    align-self: start;
+    max-height: calc(100vh - 48px);
+    overflow: auto;
+  }
+  .stage-index summary {
+    list-style: none;
+    cursor: default;
+  }
+  .stage-index summary::-webkit-details-marker {
+    display: none;
+  }
+  .stage-index ol {
+    margin: 14px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  .stage-index a {
+    display: flex;
+    gap: 10px;
+    padding: 5px 0;
+    font-size: 13px;
+    line-height: 1.4;
+    color: var(--ink-meta);
+    transition: color 0.2s ease;
+  }
+  .stage-index a span:first-child {
+    font-variant-numeric: tabular-nums;
+  }
+  .stage-index a:hover,
+  .stage-index a[aria-current] {
+    color: var(--ink);
+  }
+  .stage-index a[aria-current] span:first-child {
+    color: var(--orange);
+  }
+
+  .parts {
+    padding-top: 90px;
+  }
+  .parts-head {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    margin-bottom: 20px;
+  }
+  .parts-head .hand {
+    font-size: 24px;
+    color: var(--orange);
+  }
+  .parts-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0 32px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .parts-grid li {
+    padding: 10px 0;
+    border-top: 1px solid var(--rule);
+    font-size: 14px;
+    color: var(--ink);
+  }
+  .parts-grid li span {
+    margin-right: 8px;
+    font-size: 12px;
+    color: var(--ink-meta);
+  }
+
+  .next {
+    padding-top: 120px;
+  }
+  .next-card {
+    display: grid;
+    grid-template-columns: minmax(0, 480px) 1fr;
+    align-items: center;
+    gap: 60px;
+    margin-top: 36px;
+  }
+  .next-print {
+    position: relative;
+    display: block;
+    padding: 14px 14px 40px;
+    background: #f6efe0;
+    rotate: -3deg;
+    box-shadow: 4px 16px 30px rgba(var(--shadow-ink), 0.32);
+    transition: transform 0.5s var(--ease-spring), rotate 0.5s var(--ease-spring);
+  }
+  .next-print img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 900 / 640;
+    object-fit: cover;
+  }
+  .next-tape {
+    position: absolute;
+    top: -12px;
+    left: calc(50% - 45px);
+    width: 90px;
+    height: 26px;
+    background: rgba(237, 217, 173, 0.85);
+    rotate: 4deg;
+  }
+  .next-card:hover .next-print {
+    rotate: 0deg;
+    transform: translate3d(0, -6px, 0) scale(1.03);
+  }
+  .next-copy {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .next-title {
+    font-family: var(--font-display);
+    font-size: 40px;
+    line-height: 1.1;
+    color: var(--ink);
+  }
+  .next-line {
+    font-size: 26px;
+    color: var(--orange);
+  }
+  .next-meta {
+    font-size: 13px;
+    color: var(--ink-meta);
+  }
+  .next-read {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 15px;
+    font-weight: 500;
+  }
+
+  @media (max-width: 1100px) {
+    .cs-hero {
+      grid-template-columns: 1fr;
+    }
+    .cs-sheet {
+      max-width: 400px;
+    }
+    .log {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .log-body,
+    .stage-index {
+      grid-column: 1;
+    }
+    .stage-index {
+      position: static;
+      max-height: none;
+      margin-bottom: 24px;
+      padding: 14px 16px;
+      border: 1px solid var(--rule);
+      border-radius: 8px;
+    }
+    .stage-index summary {
+      cursor: pointer;
+      list-style: revert;
+    }
+    .parts-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (max-width: 767px) {
+    .cs-hero {
+      padding-top: 28px;
+      padding-bottom: 48px;
+    }
+    .log {
+      padding-top: 56px;
+    }
+    .next-card {
+      grid-template-columns: 1fr;
+      gap: 32px;
+    }
+    .next-title {
+      font-size: 32px;
+    }
+  }
+</style>

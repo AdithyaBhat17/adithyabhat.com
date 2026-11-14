@@ -147,6 +147,29 @@ const PAINTINGS = [
     },
   },
   {
+    // Project page: the workbench at evening; the laptop screen shows the
+    // project's own thumbnail, so it is left out here.
+    id: 'workbench',
+    frame: [1440, 700],
+    mask: { file: 'workbench.svg', x: -10, y: 0 },
+    unmasked: ['workbench-fg'],
+    outputs: {
+      workbench: ['01-89_2811', '02-89_2813', '03-89_3004', '04-89_3012', '05-89_3014', '06-89_3016', '07-89_3026', '08-89_3029', '09-89_3033'],
+      'workbench-fg': ['fg1-89_3038', 'fg2-89_3041', 'ink-89_3049'],
+    },
+  },
+  {
+    // Article page: "More writing" newsstand rack at dusk.
+    id: 'rack',
+    frame: [1440, 540],
+    mask: { file: 'rack.svg', x: -10, y: 0 },
+    unmasked: ['rack-fg'],
+    outputs: {
+      rack: ['01-93_5739', '02-93_5741', '03-93_5754', '04-93_5756'],
+      'rack-fg': ['ink-93_6132'],
+    },
+  },
+  {
     id: 'footer',
     frame: [1440, 520],
     mask: null, // the sky layer carries its own torn shape
