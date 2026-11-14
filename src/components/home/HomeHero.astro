@@ -55,8 +55,7 @@ import cb300r from '@/assets/bikes/honda-cb300r.png';
     <p class="hero-caption" slot="outer">
       <svg class="cap-sun" viewBox="0 0 14 14" width="14" height="14" aria-hidden="true"><circle cx="7" cy="7" r="2.6" /><path d="M7 1v1.4M7 11.6V13M1 7h1.4M11.6 7H13M2.8 2.8l1 1M10.2 10.2l1 1M2.8 11.2l1-1M10.2 3.8l1-1" /></svg>
       <svg class="cap-moon" viewBox="0 0 14 14" width="14" height="14" aria-hidden="true"><path d="M11.6 8.5A4.8 4.8 0 1 1 5.5 2.4a3.8 3.8 0 0 0 6.1 6.1Z" /></svg>
-      <span class="cap-day">6:12 AM in Abu Dhabi: dawn</span>
-      <span class="cap-night">11:20 PM in Abu Dhabi: night</span>
+      <span><time data-ad-clock></time> in Abu Dhabi</span>
     </p>
   </Painting>
 </section>
@@ -203,17 +202,27 @@ import cb300r from '@/assets/bikes/honda-cb300r.png';
     stroke-width: 1.2;
     stroke-linecap: round;
   }
-  .cap-moon,
-  .cap-night {
+  .cap-moon {
     display: none;
   }
-  :global([data-theme='dark']) .cap-sun,
-  :global([data-theme='dark']) .cap-day {
+  /* Sun or moon follows the time in Abu Dhabi, not the theme. Before the
+     script runs, it falls back to the theme. */
+  :global([data-theme='dark']) .hero-caption:not([data-daytime]) .cap-sun,
+  .hero-caption[data-daytime='night'] .cap-sun {
     display: none;
   }
-  :global([data-theme='dark']) .cap-moon,
-  :global([data-theme='dark']) .cap-night {
+  :global([data-theme='dark']) .hero-caption:not([data-daytime]) .cap-moon,
+  .hero-caption[data-daytime='night'] .cap-moon {
     display: inline;
+  }
+  .hero-caption[data-daytime='day'] .cap-moon {
+    display: none;
+  }
+  .hero-caption[data-daytime='day'] .cap-sun {
+    display: inline;
+  }
+  [data-ad-clock] {
+    font-variant-numeric: tabular-nums;
   }
 
   @media (max-width: 767px) {
@@ -234,3 +243,30 @@ import cb300r from '@/assets/bikes/honda-cb300r.png';
     }
   }
 </style>
+
+<script>
+  // Live local time in Abu Dhabi (Gulf Standard Time, no DST).
+  const fmt = new Intl.DateTimeFormat('en-US', { timeZone: 'Asia/Dubai', hour: 'numeric', minute: '2-digit' });
+  const hourFmt = new Intl.DateTimeFormat('en-US', { timeZone: 'Asia/Dubai', hour: 'numeric', hourCycle: 'h23' });
+  let timer = 0;
+
+  function startClock() {
+    const el = document.querySelector<HTMLTimeElement>('[data-ad-clock]');
+    clearTimeout(timer);
+    if (!el) return;
+    const tick = () => {
+      const now = new Date();
+      el.textContent = fmt.format(now);
+      el.dateTime = now.toISOString();
+      const h = Number(hourFmt.format(now));
+      el.closest<HTMLElement>('.hero-caption')!.dataset.daytime = h >= 6 && h < 18 ? 'day' : 'night';
+      // Re-run at the top of the next minute.
+      timer = window.setTimeout(tick, 60_000 - (now.getTime() % 60_000) + 50);
+    };
+    tick();
+  }
+
+  startClock();
+  document.addEventListener('astro:page-load', startClock);
+  document.addEventListener('astro:before-swap', () => clearTimeout(timer));
+</script>
