@@ -1,10 +1,14 @@
-// Slices the 64px Uses/Art/* tiles off a render of the Uses components board
-// (Figma 83:2013) into one sprite: public/art/uses-sprite.webp, plus an index.
+// Slices the 64px Uses/Art/* tiles off a 2x render of the Uses components board
+// (Figma 83:2013, exported as PNG at scale 2) into one sprite of 128px tiles:
+// public/art/uses-sprite.webp, plus an index. The page shows each tile at 40px.
+// The painted tiles' SVG sources live in scripts/art/uses-art/.
 import sharp from 'sharp';
 import fs from 'node:fs/promises';
 
-const [src = '/tmp/gj/uses-comps.png'] = process.argv.slice(2);
-// [key, x, y] on the board, from Figma.
+const [src = '/tmp/gj/uses-comps@2x.png'] = process.argv.slice(2);
+const SCALE = 2; // render scale of `src`
+const T = 64 * SCALE;
+// [key, x, y] on the board, from Figma (1x units).
 const TILES = [
   ['monitor', 120, 115], ['keyboard', 200, 115], ['mouse', 280, 115], ['design-tool', 680, 115], ['code-editor', 760, 115], ['terminal', 840, 115], ['git', 920, 115],
   ['ai-assistant', 40, 195], ['browser', 120, 195], ['launcher', 200, 195], ['screenshot', 280, 195], ['window-manager', 360, 195],
@@ -27,16 +31,16 @@ const TILES = [
 const COLS = 8;
 const comps = await Promise.all(
   TILES.map(async ([, x, y], i) => ({
-    input: await sharp(src).extract({ left: x, top: y, width: 64, height: 64 }).png().toBuffer(),
-    left: (i % COLS) * 64,
-    top: Math.floor(i / COLS) * 64,
+    input: await sharp(src).extract({ left: x * SCALE, top: y * SCALE, width: T, height: T }).png().toBuffer(),
+    left: (i % COLS) * T,
+    top: Math.floor(i / COLS) * T,
   })),
 );
 const rows = Math.ceil(TILES.length / COLS);
-await sharp({ create: { width: COLS * 64, height: rows * 64, channels: 4, background: { r: 0, g: 0, b: 0, alpha: 0 } } })
+await sharp({ create: { width: COLS * T, height: rows * T, channels: 4, background: { r: 0, g: 0, b: 0, alpha: 0 } } })
   .composite(comps)
   .webp({ quality: 88, alphaQuality: 100 })
   .toFile('public/art/uses-sprite.webp');
 const index = Object.fromEntries(TILES.map(([k], i) => [k, i]));
 await fs.writeFile('src/data/uses-sprite.json', JSON.stringify({ cols: COLS, rows, index }, null, 2) + '\n');
-console.log('sprite', COLS * 64, 'x', rows * 64);
+console.log('sprite', COLS * T, 'x', rows * T);

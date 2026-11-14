@@ -43,9 +43,12 @@ const BIKES: Record<string, ImageMetadata> = { 'bike-ktm': ktm, 'bike-cb300r': c
 const idx = sprite.index as Record<string, number>;
 // Art that has its own file instead of a sprite tile.
 const ART_FILES: Record<string, string> = { helmet: '/art/uses/helmet-ls2.svg', 'helmet-ls2': '/art/uses/helmet-ls2.svg' };
+// The sheet holds 128px tiles (2x); each one is shown at 40px.
+const TILE = 40;
+const sheet = `--sheet-w:${sprite.cols * TILE}px;--sheet-h:${sprite.rows * TILE}px`;
 const tile = (art?: string) => {
   const i = idx[art ?? ''] ?? idx['notes'];
-  return `--sx:${(i % sprite.cols) * -64}px;--sy:${Math.floor(i / sprite.cols) * -64}px`;
+  return `--sx:${(i % sprite.cols) * -TILE}px;--sy:${Math.floor(i / sprite.cols) * -TILE}px`;
 };
 const garageCount = (list: Item[]) => {
   const b = list.filter((i) => i.art?.startsWith('bike')).length;
@@ -62,7 +65,7 @@ const garageCount = (list: Item[]) => {
 
   <Painting src={pegboard} alt="A painted pegboard with tools, the helmet, a watch and coffee things hanging on it." w={1440} h={560} ink={false} focusX={720} mobileScale={0.6} priority tint />
 
-  <div class="wrap drawers">
+  <div class="wrap drawers" style={sheet}>
     {groups.map((g) => (
       <section class="drawer" aria-labelledby={`d-${g.key}`}>
         <header class="drawer-front">
@@ -202,8 +205,8 @@ const garageCount = (list: Item[]) => {
     height: 40px;
     border-radius: 8px;
     background: var(--paper-deep) url('/art/uses-sprite.webp') no-repeat;
-    background-position: calc(var(--sx) * 0.625) calc(var(--sy) * 0.625);
-    background-size: calc(512px * 0.625) calc(640px * 0.625);
+    background-position: var(--sx) var(--sy);
+    background-size: var(--sheet-w) var(--sheet-h);
     transition: transform 0.2s ease-out;
   }
   .art--file {
