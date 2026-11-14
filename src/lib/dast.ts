@@ -197,12 +197,15 @@ export function enhanceLegacyHtml(html: string, { stages = true } = {}): Rendere
   let outcomeId: string | undefined;
   let out = html;
   if (stages) {
-    out = out.replace(/<h2[^>]*>([\s\S]*?)<\/h2>/gi, (_m, inner: string) => {
+    // Older articles use h3/h4 for their steps; index the top level present.
+    const lvl = [2, 3, 4].find((l) => new RegExp(`<h${l}[\\s>]`, 'i').test(out)) ?? 2;
+    const re = new RegExp(`<h${lvl}[^>]*>([\\s\\S]*?)<\\/h${lvl}>`, 'gi');
+    out = out.replace(re, (_m, inner: string) => {
       const text = inner.replace(/<[^>]+>/g, '').trim();
       const id = slugify(text);
       toc.push({ id, n: pad(toc.length + 1), title: esc(text) });
       if (/outcome|result/i.test(text)) outcomeId = id;
-      return stageHeading(toc.length, inner, id);
+      return stageHeading(toc.length, inner, id, lvl);
     });
   }
   out = out.replace(/<pre[^>]*>([\s\S]*?)<\/pre>/gi, (_m, inner: string) => {
