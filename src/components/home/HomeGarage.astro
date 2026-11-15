@@ -1,0 +1,119 @@
+---
+import Painting from '@/components/journal/Painting.astro';
+import Print from '@/components/work/Print.astro';
+import garage from '@/assets/paintings/garage.png';
+import garageM from '@/assets/paintings/garage-m.png';
+import type { ResponsiveImage } from '@/types/content';
+
+interface Props {
+  projects: { slug: string; title: string; tags?: string; thumbnail?: { responsiveImage: ResponsiveImage } }[];
+}
+const { projects } = Astro.props;
+
+// Where each print hangs on the wall (Figma px), and how it's taped.
+const SPOTS = [
+  { x: 148, y: 140, rot: -2, tape: { rot: 4.5, color: 'orange' as const } },
+  { x: 382, y: 156, rot: 2.5, tape: { rot: -3.75, color: 'cream' as const } },
+  { x: 624, y: 138, rot: -1.5, tape: { rot: 2.25, color: 'cream' as const } },
+  { x: 866, y: 160, rot: 3, tape: { rot: -4.5, color: 'cream' as const } },
+  { x: 1108, y: 134, rot: -2.5, tape: { rot: 3.75, color: 'cream' as const } },
+];
+---
+
+<section class="section garage-section" id="projects" aria-labelledby="garage-title">
+  <div class="wrap section-head">
+    <h2 id="garage-title" class="display-l">Built in the garage</h2>
+  </div>
+
+  <Painting
+    src={garage}
+    mobileSrc={garageM}
+    mobileCrop={[320, 800]}
+    alt="A warm garage wall with tools, a work lamp and a workbench; project prints are taped to the planks."
+    w={1440}
+    h={660}
+    edges="garage"
+    focusX={720}
+    tint
+  >
+    <ul class="prints" slot="outer" aria-label="Projects">
+      {projects.slice(0, SPOTS.length).map((p, i) => (
+        <li class="spot" style={`--x:${SPOTS[i].x};--y:${SPOTS[i].y};--reveal-delay:${0.25 + i * 0.08}s`} data-reveal>
+          <Print slug={p.slug} title={p.title} tags={p.tags} image={p.thumbnail?.responsiveImage} rot={SPOTS[i].rot} tape={SPOTS[i].tape} />
+        </li>
+      ))}
+    </ul>
+  </Painting>
+
+  <div class="wrap section-foot">
+    <a class="arrow-link" href="/work" data-sound-hover="tick">
+      All projects
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3.3 8H12M8.7 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" /></svg>
+    </a>
+    <p class="swipe hand" aria-hidden="true">swipe the wall →</p>
+  </div>
+</section>
+
+<style>
+  .prints {
+    --u: calc(100cqw / 1440);
+    position: absolute;
+    inset: 0;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .spot {
+    position: absolute;
+    left: calc(var(--x) * var(--u));
+    top: calc(var(--y) * var(--u));
+  }
+  .spot:has(:hover, :focus-visible) {
+    z-index: 4;
+  }
+
+  .section-foot {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-top: 28px;
+  }
+  .swipe {
+    display: none;
+    margin-left: auto;
+    font-size: 28px;
+    color: var(--orange);
+  }
+
+  @media (max-width: 767px) {
+    .prints {
+      --u: 1px;
+      top: 150px;
+      bottom: auto;
+      display: flex;
+      gap: 18px;
+      padding: 18px var(--gutter) 30px;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scroll-padding-inline: var(--gutter);
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+    }
+    .prints::-webkit-scrollbar {
+      display: none;
+    }
+    .spot {
+      position: relative;
+      left: auto;
+      top: auto;
+      flex: 0 0 auto;
+      scroll-snap-align: start;
+    }
+    .section-foot {
+      margin-top: 20px;
+    }
+    .swipe {
+      display: block;
+    }
+  }
+</style>

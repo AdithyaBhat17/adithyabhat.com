@@ -1,51 +1,41 @@
-export const HOME_PAGE_QUERY = `
+const PRINT_IMAGE = `
+  responsiveImage(imgixParams: { fit: crop, w: 392, h: 280, auto: format }) {
+    srcSet
+    webpSrcSet
+    sizes
+    src
+    width
+    height
+    aspectRatio
+    alt
+    title
+    base64
+  }
+`
+
+export const HOME_PAGE_QUERY_LEGACY = `
     query HomePageQuery {
-        allProjects {
+        allProjects(orderBy: date_DESC, first: 5) {
             date
             tags
             slug
+            title
             thumbnail {
               alt
-              blurhash
               title
-              responsiveImage(imgixParams: { auto: format }) {
-                srcSet
-                webpSrcSet
-                sizes
-                src
-                width
-                height
-                aspectRatio
-                alt
-                title
-                base64
-              }
+              ${PRINT_IMAGE}
             }
-            title
         }
-        allArticles (filter: {featured: {eq: true}}, orderBy: date_DESC) {
+        allArticles(orderBy: date_DESC) {
             date
             tags
             slug
             externalLink
-            thumbnail {
-              alt
-              blurhash
-              title
-              responsiveImage(imgixParams: {fit: crop, ar: "4:3", auto: format}) {
-                srcSet
-                webpSrcSet
-                sizes
-                src
-                width
-                height
-                aspectRatio
-                alt
-                title
-                base64
-              }
-            }
+            featured
             title
         }
     }
 `
+
+/** Same as the legacy query, plus the garage-journal schema fields. */
+export const HOME_PAGE_QUERY = HOME_PAGE_QUERY_LEGACY.replace('featured\n', 'featured\n            coverArt\n            summary\n')

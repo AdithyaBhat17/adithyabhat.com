@@ -1,0 +1,272 @@
+---
+import { Image } from 'astro:assets';
+import Painting from '@/components/journal/Painting.astro';
+import dawn from '@/assets/paintings/hero-dawn.png';
+import dawnM from '@/assets/paintings/hero-dawn-m.png';
+import night from '@/assets/paintings/hero-night.png';
+import nightM from '@/assets/paintings/hero-night-m.png';
+import ktm from '@/assets/bikes/ktm-390-adventure.png';
+import cb300r from '@/assets/bikes/honda-cb300r.png';
+---
+
+<section class="hero" aria-labelledby="hero-title">
+  <div class="wrap hero-copy">
+    <h1 id="hero-title" class="display-xl hero-title">
+      I design and build software that feels
+      <span class="hero-mark"><span class="accent">hand-made</span><svg class="hero-circle ink-stroke" data-draw viewBox="0 0 440 104" preserveAspectRatio="none" aria-hidden="true" style="--draw-delay:0.45s;--draw-dur:1.2s"><path d="M392 23.1C300 2.3 80 6.9 28 39.3c-40 27.7 92 55.5 232 50.8 140-4.6 184-32.3 140-57.8-28-13.9-80-18.5-120-16.2" pathLength="1" stroke-width="4" /></svg></span>.
+    </h1>
+    <p class="body-l hero-intro">
+      A product engineer in Abu Dhabi, building thoughtful digital products. Currently shaping the Agentic AI platform at
+      <a class="text-link" href="https://yellow.ai/" target="_blank" rel="noopener noreferrer">yellow.ai</a>.
+    </p>
+    <div class="hero-ctas">
+      <a href="/work" class="btn btn--ink" data-sound-hover="tick">
+        See my work
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3.3 8H12M8.7 4l4 4-4 4" stroke="currentColor" stroke-width="1.33" stroke-linecap="round" stroke-linejoin="round" /></svg>
+      </a>
+      <a href="/contact" class="btn btn--ghost" data-sound-hover="tick">Say hello</a>
+    </div>
+  </div>
+
+  <Painting
+    class="hero-scene"
+    src={dawn}
+    mobileSrc={dawnM}
+    nightSrc={night}
+    nightMobileSrc={nightM}
+    mobileCrop={[357, 1083]}
+    alt="A watercolor of Abu Dhabi at dawn, with pink clouds, the skyline, palms, dunes and a KTM 390 Adventure parked by the road."
+    nightAlt="The same road at night under a crescent moon, with a Honda CB300R under the street lamp."
+    w={1440}
+    h={640}
+    edges="hero-dawn"
+    priority
+    mobileScale={0.7}
+    focusX={928}
+  >
+    <div class="hero-bikes">
+      <button type="button" class="bike bike--ktm" data-bike data-sound-click="engine-ktm" aria-label="Rev the KTM 390 Adventure">
+        <Image src={ktm} alt="" widths={[402]} sizes="(max-width: 767px) 282px, 28vw" loading="eager" fetchpriority="low" />
+      </button>
+      <button type="button" class="bike bike--cb" data-bike data-sound-click="engine-cb" aria-label="Rev the Honda CB300R">
+        <Image src={cb300r} alt="" widths={[402]} sizes="(max-width: 767px) 282px, 28vw" loading="lazy" />
+      </button>
+    </div>
+    <p class="hero-caption" slot="outer">
+      <svg class="cap-sun" viewBox="0 0 14 14" width="14" height="14" aria-hidden="true"><circle cx="7" cy="7" r="2.6" /><path d="M7 1v1.4M7 11.6V13M1 7h1.4M11.6 7H13M2.8 2.8l1 1M10.2 10.2l1 1M2.8 11.2l1-1M10.2 3.8l1-1" /></svg>
+      <svg class="cap-moon" viewBox="0 0 14 14" width="14" height="14" aria-hidden="true"><path d="M11.6 8.5A4.8 4.8 0 1 1 5.5 2.4a3.8 3.8 0 0 0 6.1 6.1Z" /></svg>
+      <span><time data-ad-clock></time> in Abu Dhabi</span>
+    </p>
+  </Painting>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+  }
+
+  .hero-copy {
+    position: relative;
+    z-index: 2;
+    padding-top: 56px;
+  }
+
+  .hero-title {
+    max-width: 980px;
+  }
+
+  .hero-mark {
+    position: relative;
+    display: inline-block;
+    white-space: nowrap;
+  }
+  .hero-circle {
+    position: absolute;
+    left: -5.5%;
+    top: -16%;
+    width: 108.6%;
+    height: 137%;
+    overflow: visible;
+    pointer-events: none;
+  }
+
+  .hero-intro {
+    max-width: 560px;
+    margin-top: 26px;
+  }
+
+  .hero-ctas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 26px;
+  }
+
+  /* The scene tucks up under the copy, as in the painting's frame. */
+  .hero :global(.hero-scene) {
+    margin-top: calc(-76 * min(100vw, 2400px) / 1440);
+    z-index: 1;
+  }
+
+  .hero-bikes {
+    position: absolute;
+    inset: 0;
+    view-transition-name: hero-bikes;
+    pointer-events: none;
+  }
+
+  .bike {
+    position: absolute;
+    top: calc(313 * var(--u));
+    width: calc(402 * var(--u));
+    padding: 0;
+    border-radius: 12px;
+    pointer-events: auto;
+    transform-origin: 60% 90%;
+    transition: transform 1.3s cubic-bezier(0.55, 0, 0.7, 0.2), opacity 0.5s ease 0.8s;
+  }
+  .bike :global(img) {
+    width: 100%;
+    height: auto;
+  }
+  .bike--ktm {
+    left: calc(700 * var(--u));
+  }
+  .bike--cb {
+    left: calc(720 * var(--u));
+  }
+  /* The bike that isn't in this theme's painting has ridden out of frame. */
+  .bike--cb,
+  :global([data-theme='dark']) .bike--ktm {
+    visibility: hidden;
+    opacity: 0;
+    transition: transform 1.3s cubic-bezier(0.55, 0, 0.7, 0.2), opacity 0.4s ease 0.9s, visibility 0s linear 1.4s;
+  }
+  .bike--cb {
+    transform: translate3d(calc(-1100 * var(--u)), 0, 0);
+  }
+  :global([data-theme='dark']) .bike--ktm {
+    transform: translate3d(calc(900 * var(--u)), 0, 0);
+  }
+  /* The arriving bike rides in once the other has pulled away. */
+  :global([data-theme='light']) .bike--ktm,
+  :global([data-theme='dark']) .bike--cb {
+    visibility: visible;
+    opacity: 1;
+    transform: none;
+    transition: transform 1.5s cubic-bezier(0.2, 0.7, 0.25, 1) 0.35s, opacity 0.3s ease 0.35s, visibility 0s;
+  }
+  /* No riding on first paint: transitions only while the theme is switching. */
+  :global(html:not(.theme-switching)) .bike {
+    transition: none;
+  }
+  .bike:focus-visible {
+    outline-offset: -6px;
+  }
+  /* Click a bike: a little rev and rock. */
+  .bike:global(.is-revving) :global(img) {
+    animation: rev 0.7s var(--ease-out);
+  }
+  @keyframes rev {
+    0% { transform: none; }
+    15% { transform: translate3d(-3px, 0, 0) rotate(-1.2deg); }
+    30% { transform: translate3d(2px, -1px, 0) rotate(0.8deg); }
+    45% { transform: translate3d(-2px, 0, 0) rotate(-0.6deg); }
+    60% { transform: translate3d(1px, 0, 0) rotate(0.3deg); }
+    100% { transform: none; }
+  }
+
+  .hero-caption {
+    position: absolute;
+    left: var(--gutter);
+    bottom: clamp(12px, 1.32vw, 32px);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 13px;
+    border-radius: 999px;
+    border: 1px solid rgba(243, 234, 216, 0.18);
+    background: rgba(13, 14, 16, 0.55);
+    color: #f3ead8;
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 1.4;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    -webkit-backdrop-filter: blur(4px);
+    backdrop-filter: blur(4px);
+  }
+  .hero-caption svg {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.2;
+    stroke-linecap: round;
+  }
+  .cap-moon {
+    display: none;
+  }
+  /* Sun or moon follows the time in Abu Dhabi, not the theme. Before the
+     script runs, it falls back to the theme. */
+  :global([data-theme='dark']) .hero-caption:not([data-daytime]) .cap-sun,
+  .hero-caption[data-daytime='night'] .cap-sun {
+    display: none;
+  }
+  :global([data-theme='dark']) .hero-caption:not([data-daytime]) .cap-moon,
+  .hero-caption[data-daytime='night'] .cap-moon {
+    display: inline;
+  }
+  .hero-caption[data-daytime='day'] .cap-moon {
+    display: none;
+  }
+  .hero-caption[data-daytime='day'] .cap-sun {
+    display: inline;
+  }
+  [data-ad-clock] {
+    font-variant-numeric: tabular-nums;
+  }
+
+  @media (max-width: 767px) {
+    .hero-copy {
+      padding-top: 28px;
+    }
+    .hero-intro {
+      margin-top: 20px;
+    }
+    .hero-ctas {
+      margin-top: 20px;
+    }
+    .hero :global(.hero-scene) {
+      margin-top: -5px;
+    }
+    .hero-caption {
+      bottom: 16px;
+    }
+  }
+</style>
+
+<script>
+  // Live local time in Abu Dhabi (Gulf Standard Time, no DST).
+  const fmt = new Intl.DateTimeFormat('en-US', { timeZone: 'Asia/Dubai', hour: 'numeric', minute: '2-digit' });
+  const hourFmt = new Intl.DateTimeFormat('en-US', { timeZone: 'Asia/Dubai', hour: 'numeric', hourCycle: 'h23' });
+  let timer = 0;
+
+  function startClock() {
+    const el = document.querySelector<HTMLTimeElement>('[data-ad-clock]');
+    clearTimeout(timer);
+    if (!el) return;
+    const tick = () => {
+      const now = new Date();
+      el.textContent = fmt.format(now);
+      el.dateTime = now.toISOString();
+      const h = Number(hourFmt.format(now));
+      el.closest<HTMLElement>('.hero-caption')!.dataset.daytime = h >= 6 && h < 18 ? 'day' : 'night';
+      // Re-run at the top of the next minute.
+      timer = window.setTimeout(tick, 60_000 - (now.getTime() % 60_000) + 50);
+    };
+    tick();
+  }
+
+  startClock();
+  document.addEventListener('astro:page-load', startClock);
+  document.addEventListener('astro:before-swap', () => clearTimeout(timer));
+</script>

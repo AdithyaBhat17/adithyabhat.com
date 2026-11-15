@@ -1,302 +1,361 @@
 ---
 import PageLayout from '@/layouts/PageLayout.astro';
-import Container from '@/components/astro/Container.astro';
-import CardGrid from '@/components/astro/CardGrid.astro';
-import { fetchAPI } from '@/lib/datocms';
-import { ALL_ARTICLES_QUERY, ARTICLE_QUERY } from '@/graphql/posts';
-import { marked } from 'marked';
+import DualPainting from '@/components/journal/DualPainting.astro';
+import Zine from '@/components/writing/Zine.astro';
+import rack from '@/assets/paintings/rack.png';
+import rackFg from '@/assets/paintings/rack-fg.png';
+import { fetchWithFallback } from '@/lib/datocms';
 import { sanitizeHtml } from '@/lib/sanitize';
+import { ALL_ARTICLES_QUERY, ALL_ARTICLES_QUERY_LEGACY, ARTICLE_PAGE, ARTICLE_PAGE_LEGACY } from '@/graphql/posts';
+import { toIssues, type ArticleLike } from '@/lib/articles';
+import { dastText, enhanceLegacyHtml, readingMinutes, renderStructuredText, type Rendered } from '@/lib/dast';
+import { marked } from 'marked';
 import dayjs from 'dayjs';
 
 export async function getStaticPaths() {
-  const data = await fetchAPI(ALL_ARTICLES_QUERY);
-  return (data?.allArticles ?? []).map((article: any) => ({
-    params: { slug: article.slug },
-  }));
+  const data = await fetchWithFallback(ALL_ARTICLES_QUERY, ALL_ARTICLES_QUERY_LEGACY);
+  // External articles live elsewhere; only build pages for the ones written here.
+  return (data?.allArticles ?? [])
+    .filter((a: { externalLink?: string }) => !a.externalLink)
+    .map((a: { slug: string }) => ({ params: { slug: a.slug } }));
 }
 
 const { slug } = Astro.params;
-const data = await fetchAPI(ARTICLE_QUERY, { variables: { slug } });
+const data = await fetchWithFallback(ARTICLE_PAGE, ARTICLE_PAGE_LEGACY, { variables: { slug } });
+const article = data?.article;
+if (!article?.slug) return Astro.redirect('/404');
 
-if (!data?.article?.slug) {
-  return Astro.redirect('/404');
-}
+const issues = toIssues<ArticleLike>(data.allArticles ?? []);
+const issue = issues.find((i) => i.article.slug === article.slug)!;
+const more = issues.filter((i) => i.article.slug !== article.slug).sort((a, b) => b.no.localeCompare(a.no)).slice(0, 5);
 
-const article = data.article;
-const moreArticles = data.moreArticles ?? [];
-
-const htmlContent = sanitizeHtml(await marked(article.content ?? ''));
-
-// Reading time estimate
-const wordCount = (article.content ?? '').split(/\s+/).filter(Boolean).length;
-const readingTime = Math.max(1, Math.ceil(wordCount / 200));
-
-// Parse tags
-const tagList = article.tags
-  ? article.tags.split(/[,·]/).map((t: string) => t.trim()).filter(Boolean)
-  : [];
-
-const formattedDate = dayjs(article.date).format('DD MMM, YYYY');
+const fromBody = renderStructuredText(article.body);
+const legacyHtml = !fromBody && article.content ? sanitizeHtml(await marked(article.content)) : '';
+const body: Rendered = fromBody ?? enhanceLegacyHtml(legacyHtml);
+const minutes = readingMinutes(fromBody ? dastText(article.body) : legacyHtml);
+const thumb = article.thumbnail?.responsiveImage;
+const description = article.summary || issue?.zine.dek || `${article.title}, by Adithya NR.`;
+const ROTS = [-2, 1.5, -1, 2, -1.5];
 ---
 
-<PageLayout title={`${article.title} | Blog`}>
-  <!-- Reading progress bar -->
-  <div class="reading-progress" aria-hidden="true">
-    <div class="reading-progress-bar"></div>
+<PageLayout title={`${article.title.trim()} | Writing | Adithya NR`} description={description}>
+  <div class="progress" aria-hidden="true" data-progress>
+    <span class="progress-ink"></span>
+    <svg class="progress-bike" viewBox="0 0 28 16"><circle cx="6" cy="12" r="3.4" /><circle cx="22" cy="12" r="3.4" /><path d="M6 12l5-6h6l5 6M11 6l-2-2h-2M17 6l2-3h2" /></svg>
   </div>
 
-  <Container>
-    <article class="article-page">
-      <!-- Back link -->
-      <a href="/blog" class="back-link" data-animate>
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <line x1="19" y1="12" x2="5" y2="12" />
-          <polyline points="12 19 5 12 12 5" />
-        </svg>
-        Back to blog
-      </a>
+  <article class="post">
+    <header class="wrap post-hero">
+      <div class="post-cover">
+        {issue && <Zine issue={issue} rot={-4} as="p" />}
+      </div>
+      <div class="post-head">
+        <a class="back" href="/blog" data-sound-hover="tick">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M12.7 8H4M7.3 4l-4 4 4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" /></svg>
+          All writing
+        </a>
+        <h1 class="post-title">{article.title.trim()}</h1>
+        <p class="post-meta">
+          <time datetime={dayjs(article.date).format('YYYY-MM-DD')}>{dayjs(article.date).format('D MMM YYYY')}</time>
+          <span aria-hidden="true">·</span>
+          <span>{minutes} min read</span>
+          {issue && <span class="topic">{issue.zine.topic}</span>}
+        </p>
+      </div>
+    </header>
 
-      <!-- Hero area -->
-      <header class="article-header" data-animate>
-        <h1 class="article-title" transition:name={`card-${slug}`}>
-          {article.title}
-        </h1>
-
-        <div class="article-meta">
-          <time class="article-meta-item" datetime={article.date}>
-            {formattedDate}
-          </time>
-          <span class="article-meta-dot">&middot;</span>
-          <span class="article-meta-item">{readingTime} min read</span>
-          {tagList.length > 0 && (
-            <>
-              <span class="article-meta-dot">&middot;</span>
-              <div class="article-meta-tags">
-                {tagList.map((tag: string) => (
-                  <span class="article-meta-tag">{tag}</span>
-                ))}
-              </div>
-            </>
-          )}
-        </div>
-      </header>
-
-      <!-- Hero image -->
-      {article.thumbnail?.responsiveImage && (
-        <div class="article-hero-img" data-animate>
-          <img
-            src={article.thumbnail.responsiveImage.src}
-            srcset={article.thumbnail.responsiveImage.srcSet}
-            sizes={article.thumbnail.responsiveImage.sizes}
-            width={article.thumbnail.responsiveImage.width}
-            height={article.thumbnail.responsiveImage.height}
-            alt={article.thumbnail.responsiveImage.alt || article.title}
-            loading="eager"
-            decoding="async"
-            class="w-full h-full object-cover"
-            style={article.thumbnail.responsiveImage.base64 ? `background-image: url(${article.thumbnail.responsiveImage.base64}); background-size: cover;` : ''}
-          />
-        </div>
+    <div class="wrap post-grid">
+      {body.toc.length > 1 && (
+        <nav class="toc" aria-label="On this page">
+          <p class="toc-title">On this page</p>
+          <ol>
+            {body.toc.map((t) => <li><a href={`#${t.id}`} data-stage-link><span>{Number(t.n)}</span> <span set:html={t.title} /></a></li>)}
+          </ol>
+        </nav>
       )}
-
-      <!-- Content -->
-      <div class="article-body">
-        <div class="content" set:html={htmlContent} />
+      <div class="post-col">
+        {thumb && (
+          <figure class="torn-print post-lead">
+            <span class="torn-print-frame">
+              <img src={thumb.src} srcset={thumb.webpSrcSet || thumb.srcSet} sizes="(max-width: 767px) 92vw, 640px" alt={thumb.alt ?? ''} width={thumb.width} height={thumb.height} fetchpriority="high" decoding="async" />
+            </span>
+          </figure>
+        )}
+        <div class="log-body post-body" set:html={body.html} />
+        <footer class="post-foot">
+          <p><span class="dot" aria-hidden="true"></span> Filed in {issue?.zine.topic ?? 'Notes'} · {dayjs(article.date).format('D MMM YYYY')}</p>
+          <a class="back" href="/blog">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M12.7 8H4M7.3 4l-4 4 4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" /></svg>
+            All writing
+          </a>
+        </footer>
       </div>
-    </article>
+    </div>
+  </article>
 
-    <!-- More articles -->
-    {moreArticles.length > 0 && (
-      <div class="max-w-4xl mx-auto mt-20">
-        <div class="flex items-center gap-4 mb-8">
-          <h3 class="text-sm uppercase font-body font-semibold tracking-widest text-[var(--text-muted)]">
-            More articles
-          </h3>
-          <span class="flex-1 h-[1px] bg-[var(--border)]"></span>
-        </div>
-        <CardGrid items={moreArticles} type="article" />
+  {more.length > 0 && (
+    <section class="more" aria-labelledby="more-title">
+      <div class="wrap more-head">
+        <h2 id="more-title" class="display-l">More writing</h2>
+        <a class="arrow-link" href="/blog">All writing <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3.3 8H12M8.7 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" /></svg></a>
       </div>
-    )}
-  </Container>
+      <DualPainting
+        desktop={{ src: rack, fg: rackFg, w: 1440, h: 540 }}
+        mobile={{ src: rack, fg: rackFg, w: 1440, h: 540 }}
+        alt="A newsstand rack at dusk with more issues on the shelf."
+        tint
+      >
+        <ul class="rack">
+          {more.map((iss, i) => (
+            <li><Zine issue={iss} rot={ROTS[i]} /></li>
+          ))}
+        </ul>
+      </DualPainting>
+    </section>
+  )}
+</PageLayout>
 
-  <style>
-    /* ===== Reading progress bar ===== */
-    .reading-progress {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 3px;
-      z-index: 100;
-      background: transparent;
-    }
-
-    .reading-progress-bar {
-      height: 100%;
-      width: 0%;
-      background: var(--gradient-accent);
-      transition: width 0.1s linear;
-      border-radius: 0 2px 2px 0;
-    }
-
-    /* ===== Article layout ===== */
-    .article-page {
-      width: 100%;
-    }
-
-    /* Back link */
-    .back-link {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      font-family: 'DM Sans', sans-serif;
-      font-size: 0.875rem;
-      font-weight: 500;
-      color: var(--text-muted);
-      padding: 0.5rem 0;
-      margin-top: 1rem;
-      margin-bottom: 1.5rem;
-      transition: all 0.3s ease;
-    }
-
-    .back-link svg {
-      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-    }
-
-    .back-link:hover {
-      color: var(--accent);
-    }
-
-    .back-link:hover svg {
-      transform: translateX(-4px);
-    }
-
-    /* ===== Header ===== */
-    .article-header {
-      max-width: 42rem;
-      margin: 0 auto 2rem;
-    }
-
-    .article-title {
-      font-family: 'Bricolage Grotesque', Georgia, serif;
-      font-size: clamp(2rem, 5vw, 3.25rem);
-      font-weight: 800;
-      line-height: 1.15;
-      letter-spacing: -0.025em;
-      color: var(--text);
-      margin-bottom: 1.25rem;
-    }
-
-    /* Metadata row */
-    .article-meta {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      gap: 0.5rem;
-    }
-
-    .article-meta-item {
-      font-family: 'DM Sans', sans-serif;
-      font-size: 0.875rem;
-      color: var(--text-muted);
-      font-weight: 500;
-    }
-
-    .article-meta-dot {
-      color: var(--text-muted);
-      opacity: 0.4;
-    }
-
-    .article-meta-tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.3rem;
-    }
-
-    .article-meta-tag {
-      display: inline-block;
-      padding: 0.15rem 0.55rem;
-      font-family: 'DM Sans', sans-serif;
-      font-size: 0.6875rem;
-      font-weight: 500;
-      color: var(--accent);
-      background: var(--accent-glow);
-      border: 1px solid transparent;
-      border-radius: 100px;
-      letter-spacing: 0.02em;
-    }
-
-    /* ===== Hero image ===== */
-    .article-hero-img {
-      max-width: 48rem;
-      margin: 0 auto 2.5rem;
-      border-radius: var(--radius-xl);
-      overflow: hidden;
-      aspect-ratio: 16/9;
-      background: var(--bg-surface);
-    }
-
-    .article-hero-img img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    /* ===== Article body ===== */
-    .article-body {
-      max-width: 42rem;
-      margin: 0 auto;
-    }
-
-    /* ===== MOBILE ===== */
-    @media (max-width: 767px) {
-      .article-header {
-        margin-bottom: 1.5rem;
-      }
-
-      .article-title {
-        font-size: clamp(1.75rem, 7vw, 2.5rem);
-        margin-bottom: 1rem;
-      }
-
-      .article-meta {
-        gap: 0.375rem;
-      }
-
-      .article-hero-img {
-        margin: 0 -1.5rem 2rem;
-        border-radius: var(--radius);
-        max-width: calc(100% + 3rem);
-      }
-
-      .back-link {
-        margin-top: 0.5rem;
-        margin-bottom: 1rem;
-      }
-    }
-  </style>
-
-  <script>
-    function initReadingProgress() {
-      const bar = document.querySelector<HTMLElement>('.reading-progress-bar');
-      if (!bar) return;
-
+<script>
+  function initPost() {
+    // Reading progress: a scaleX on the ink line (compositor only), bike at the tip.
+    const bar = document.querySelector<HTMLElement>('[data-progress]');
+    const post = document.querySelector<HTMLElement>('.post');
+    if (bar && post && !bar.dataset.bound) {
+      bar.dataset.bound = '1';
+      let raf = 0;
       const update = () => {
-        const article = document.querySelector('.article-page');
-        if (!article) return;
-
-        const rect = article.getBoundingClientRect();
-        const total = rect.height - window.innerHeight;
-        const scrolled = -rect.top;
-        const progress = Math.min(100, Math.max(0, (scrolled / total) * 100));
-        bar.style.width = `${progress}%`;
+        raf = 0;
+        const r = post.getBoundingClientRect();
+        const total = r.height - window.innerHeight;
+        const p = Math.min(1, Math.max(0, -r.top / (total > 0 ? total : 1)));
+        bar.style.setProperty('--p', String(p));
       };
-
-      window.addEventListener('scroll', update, { passive: true });
+      const onScroll = () => {
+        if (!raf) raf = requestAnimationFrame(update);
+      };
+      addEventListener('scroll', onScroll, { passive: true });
+      document.addEventListener('astro:before-swap', () => removeEventListener('scroll', onScroll), { once: true });
       update();
     }
+  }
+  initPost();
+  document.addEventListener('astro:page-load', initPost);
+</script>
 
-    initReadingProgress();
-    document.addEventListener('astro:after-swap', initReadingProgress);
-  </script>
-</PageLayout>
+<style>
+  .progress {
+    --p: 0;
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    height: 20px;
+    margin-top: -20px;
+    pointer-events: none;
+  }
+  .progress-ink {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 8px;
+    height: 2.5px;
+    background: var(--orange);
+    border-radius: 2px;
+    transform-origin: 0 50%;
+    transform: scaleX(var(--p));
+  }
+  .progress-bike {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 28px;
+    height: 16px;
+    transform: translateX(calc(var(--p) * (100vw - 28px)));
+    fill: none;
+    stroke: var(--ink);
+    stroke-width: 1.4;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .post-hero {
+    display: grid;
+    grid-template-columns: 360px minmax(0, 1fr);
+    align-items: center;
+    gap: 72px;
+    padding-top: 56px;
+    padding-bottom: 64px;
+  }
+  .post-cover :global(.zine) {
+    --zs: 1.4px;
+  }
+  .back {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    min-height: 32px;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--ink-soft);
+  }
+  .back:hover {
+    color: var(--orange);
+  }
+  .post-title {
+    margin-top: 16px;
+    font-size: clamp(3rem, 2rem + 2.6vw, 4.5rem);
+    line-height: 1.06;
+    letter-spacing: -0.015em;
+  }
+  .post-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    margin-top: 22px;
+    font-size: 13px;
+    color: var(--ink-meta);
+  }
+  .topic {
+    padding: 4px 12px;
+    border-radius: 999px;
+    background: var(--paper-deep);
+    color: var(--ink-soft);
+    font-weight: 500;
+  }
+
+  .post-grid {
+    display: grid;
+    grid-template-columns: 200px minmax(0, 640px) 1fr;
+    gap: 0 60px;
+  }
+  .post-col {
+    grid-column: 2;
+  }
+  .toc {
+    grid-column: 1;
+    position: sticky;
+    top: 40px;
+    align-self: start;
+  }
+  .toc-title {
+    font-family: var(--font-display);
+    font-size: 17px;
+  }
+  .toc ol {
+    margin: 12px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  .toc a {
+    display: flex;
+    gap: 10px;
+    padding: 5px 0;
+    font-size: 13px;
+    color: var(--ink-meta);
+  }
+  .toc a[aria-current],
+  .toc a:hover {
+    color: var(--ink);
+  }
+  .toc a[aria-current] span:first-child {
+    color: var(--orange);
+  }
+  .post-lead {
+    margin-top: 0;
+  }
+  .post-body :global(.stage .stage-n) {
+    display: none;
+  }
+  .post-foot {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-top: 56px;
+    padding-top: 20px;
+    border-top: 1px solid var(--rule);
+    font-size: 13px;
+    color: var(--ink-meta);
+  }
+  .dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    margin-right: 6px;
+    background: var(--orange);
+  }
+
+  .more {
+    padding-top: 120px;
+  }
+  .more-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 28px;
+  }
+  .rack {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    gap: 2.6%;
+    margin: 0;
+    padding: 0 3% 21%;
+    list-style: none;
+  }
+  .rack :global(.zine) {
+    --zs: calc(0.84 * var(--u));
+  }
+  .rack li:has(:hover, :focus-visible) {
+    z-index: 4;
+  }
+
+  @media (max-width: 1100px) {
+    .post-grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .post-col,
+    .toc {
+      grid-column: 1;
+    }
+    .toc {
+      position: static;
+      margin-bottom: 24px;
+    }
+  }
+  @media (max-width: 767px) {
+    .post-hero {
+      grid-template-columns: 1fr;
+      gap: 32px;
+      padding-top: 28px;
+    }
+    .post-cover :global(.zine) {
+      --zs: 1px;
+    }
+    .post-title {
+      font-size: 48px;
+    }
+    .more {
+      padding-top: 72px;
+    }
+    .rack {
+      position: absolute;
+      justify-content: flex-start;
+      align-items: flex-end;
+      gap: 14px;
+      padding: 0 20px 22%;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .rack li {
+      flex: 0 0 auto;
+    }
+    .rack :global(.zine) {
+      --zs: 0.62px;
+    }
+  }
+</style>

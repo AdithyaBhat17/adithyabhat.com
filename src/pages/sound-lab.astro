@@ -1,0 +1,107 @@
+---
+// Audition page for the synthesized sound kit. Not linked anywhere, noindex,
+// and excluded from the sitemap.
+import PageLayout from '@/layouts/PageLayout.astro';
+import { ENGINE_SAMPLES } from '@/scripts/sound';
+
+const groups = [
+  {
+    title: 'Engines in use',
+    items: [
+      { id: 'bike:ktm', label: `KTM 390 (now: ${ENGINE_SAMPLES.ktm})` },
+      { id: 'bike:cb', label: `CB300R (now: ${ENGINE_SAMPLES.cb})` },
+      { id: 'theme', label: 'Theme toggle (ink bleed + engine)' },
+    ],
+  },
+  {
+    title: 'Synthesized, for comparison',
+    items: [
+      { id: 'synth:ktm:A1', label: 'KTM synth · A1' },
+      { id: 'synth:ktm:A2', label: 'KTM synth · A2' },
+      { id: 'synth:cb:A1', label: 'CB300R synth · A1' },
+      { id: 'synth:cb:A2', label: 'CB300R synth · A2' },
+    ],
+  },
+  {
+    title: 'Paper, pen and garage',
+    items: [
+      { id: 'rustle', label: 'Paper rustle (page transitions)' },
+      { id: 'scratch', label: 'Pen scratch (hand notes ink in)' },
+      { id: 'stamp', label: 'Rubber stamp thunk (build sheets)' },
+      { id: 'flick', label: 'Zine flick (newsstand)' },
+      { id: 'tick', label: 'Watch tick (nav hover)' },
+      { id: 'chalk', label: 'Chalk tap (route signs)' },
+      { id: 'pour', label: 'Espresso hiss and pour (shelf)' },
+    ],
+  },
+];
+---
+
+<PageLayout title="Sound lab | Adithya NR" cta={false}>
+  <meta slot="head" name="robots" content="noindex, nofollow" />
+  <section class="wrap lab">
+    <h1 class="display-xl">Sound lab</h1>
+    <p class="body-l">Every sound on the site. Pressing a button switches sound on. The bikes use the recordings; everything else is synthesized live.</p>
+    {groups.map((g) => (
+      <div class="group">
+        <h2 class="display-m">{g.title}</h2>
+        <div class="grid">
+          {g.items.map((it) => (
+            <button type="button" class="btn btn--ghost" data-lab={it.id}>▶ {it.label}</button>
+          ))}
+        </div>
+      </div>
+    ))}
+  </section>
+</PageLayout>
+
+<script>
+  import { engine, engineSynth, play, setSoundOn, type EngineVariant, type EngineVoice } from '@/scripts/sound';
+  import { syncSoundControls } from '@/scripts/site';
+
+  function initLab() {
+    document.querySelectorAll<HTMLButtonElement>('[data-lab]').forEach((b) => {
+      if (b.dataset.bound) return;
+      b.dataset.bound = '1';
+      b.addEventListener('click', () => {
+        if (document.documentElement.dataset.sound !== 'on') setSoundOn(true);
+        syncSoundControls();
+        const id = b.dataset.lab!;
+        // Small delay on the very first press while the AudioContext spins up.
+        window.setTimeout(() => {
+          if (id.startsWith('synth:')) {
+            const [, voice, variant] = id.split(':');
+            engineSynth(voice as EngineVoice, variant as EngineVariant);
+          } else if (id.startsWith('bike:')) {
+            engine(id.slice(5) as EngineVoice);
+          } else if (id === 'theme') {
+            (document.querySelector('[data-theme-toggle]') as HTMLButtonElement | null)?.click();
+          } else {
+            play(id);
+          }
+        }, 60);
+      });
+    });
+  }
+  initLab();
+  document.addEventListener('astro:page-load', initLab);
+</script>
+
+<style>
+  .lab {
+    padding-top: 56px;
+  }
+  .lab .body-l {
+    max-width: 620px;
+    margin-top: 16px;
+  }
+  .group {
+    margin-top: 48px;
+  }
+  .grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 16px;
+  }
+</style>

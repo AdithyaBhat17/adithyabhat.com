@@ -1,701 +1,322 @@
 ---
+import { Picture } from 'astro:assets';
 import PageLayout from '@/layouts/PageLayout.astro';
-import Container from '@/components/astro/Container.astro';
-import PortraitSlideshow from '@/components/astro/PortraitSlideshow.astro';
-import CtaCard from '@/components/astro/CtaCard.astro';
-import Eyebrow from '@/components/astro/Eyebrow.astro';
-import { companies } from '@/utils/about';
+import Painting from '@/components/journal/Painting.astro';
+import PortraitStack from '@/components/about/PortraitStack.astro';
+import hills from '@/assets/about/misty-hills.png';
+import figKtm from '@/assets/about/fig-ktm.png';
+import toolbox from '@/assets/about/toolbox.png';
+import offDuty from '@/assets/about/off-duty.png';
+import service from '@/assets/paintings/service.png';
+import serviceFg from '@/assets/paintings/service-fg.png';
+import { ROUTE } from '@/data/career';
 
-const careers = [
-  {
-    year: '2024',
-    role: 'Software Engineer (SDE-3)',
-    company: 'yellow.ai',
-    summary: 'Agentic AI — Nexus, Forge, Analyze, Search SDK',
-    current: true,
-  },
-  {
-    year: '2022',
-    role: 'Software Engineer (SDE-2)',
-    company: 'yellow.ai',
-    summary: 'Chat widget at 300k DAU · WCAG AA · i18n',
-  },
-  {
-    year: '2021',
-    role: 'UX Engineer',
-    company: 'Softway',
-    summary: 'Culture+ measurement platform',
-  },
-  {
-    year: '2019',
-    role: 'Software Engineer',
-    company: 'Betsol',
-    summary: 'Leto DevOps tooling · SlingTV dashboards',
-  },
+const SPECS: [string, string][] = [
+  ['Model', 'Adithya NR'],
+  ['Based in', 'Abu Dhabi, UAE'],
+  ['Engine', 'Design and engineering'],
+  ['Mileage', '7 years'],
+  ['Current tune', 'SDE-3 at yellow.ai, on the Agentic AI platform'],
+  ['Languages', 'English, Hindi, Kannada'],
+  ['Design kit', 'UX, UI, wireframing, prototyping, design systems'],
+  ['Code kit', 'TypeScript, React, Next.js, Node.js, GraphQL, PostgreSQL, Playwright'],
+  ['Daily tools', 'Figma, Cursor, Claude Code, Git'],
+  ['Fuel', 'Moka pot on weekdays, espresso on weekends'],
 ];
-
-const practiceColumns = [
-  {
-    title: 'Design',
-    desc: 'Untangling vague briefs into interfaces people get without a tour.',
-    skills: [
-      { label: 'User Experience', meta: '7y' },
-      { label: 'UI Design', meta: '7y' },
-      { label: 'Wireframing', meta: '7y' },
-      { label: 'Prototyping', meta: '7y' },
-      { label: 'Design Systems', meta: '5y' },
-      { label: 'Web Design', meta: '7y' },
-    ],
-  },
-  {
-    title: 'Development',
-    desc: 'Production code that ships fast, ages well, and doesn\'t page anyone at 3am.',
-    skills: [
-      { label: 'TypeScript', meta: '6y' },
-      { label: 'React, Redux', meta: '6y' },
-      { label: 'Next.js', meta: '3y' },
-      { label: 'Node.js', meta: '5y' },
-      { label: 'GraphQL', meta: '3y' },
-      { label: 'PostgreSQL', meta: '3y' },
-      { label: 'Jest, RTL, Playwright', meta: '5y' },
-    ],
-  },
-  {
-    title: 'Tools',
-    desc: 'The first things I install on a new laptop. Each one saves me an hour a day.',
-    skills: [
-      { label: 'Figma', meta: 'daily' },
-      { label: 'VS Code, Cursor', meta: 'daily' },
-      { label: 'Claude Code', meta: 'daily' },
-      { label: 'Git', meta: 'daily' },
-      { label: 'Jira, Linear, DevRev', meta: 'work' },
-    ],
-  },
-];
+const ledger = [...ROUTE].reverse();
 ---
 
-<PageLayout title="About - Adithya NR">
-  <Container>
-    <!-- ===== HERO ===== -->
-    <section class="about-hero-section mt-10 md:mt-16 mb-24 md:mb-36 lg:mb-44" data-animate>
-      <div class="about-hero-grid">
-        <div class="about-hero-text">
-          <Eyebrow>About · 2026</Eyebrow>
-          <h1 class="font-display text-[1.75rem] sm:text-4xl md:text-5xl lg:text-6xl tracking-tight leading-[1.1] mt-6">
-            I craft digital experiences that people <span class="gradient-text">actually enjoy</span>
-          </h1>
-
-          <div class="about-paragraphs">
-            <p class="font-body leading-8 text-[var(--text-secondary)] text-lg">
-              I'm Adithya, a UX Engineer in Abu Dhabi, UAE. For more than
-              7 years, design has been the central piece of my world. I've
-              moved from being a graphic designer to a full-time UX Designer
-              and UI Engineer.
-            </p>
-            <p class="font-body leading-8 text-[var(--text-secondary)] text-lg">
-              With a never-ending goal of maintaining a high standard for
-              usability & user experience, I have consistently worked with
-              startups and clients worldwide, helping them create unique and
-              engaging digital products.
-            </p>
-            <p class="font-body leading-8 text-[var(--text-secondary)] text-lg">
-              Currently working on the Conversational CX platform at{' '}
-              <a
-                href="https://yellow.ai/"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="text-[var(--accent)] hover:underline"
-              >
-                yellow.ai
-              </a>{' '}
-              as a Software Engineer (SDE-3).
-            </p>
-          </div>
-
-          <div class="about-aside-block">
-            <Eyebrow>Outside the screen</Eyebrow>
-            <p class="about-aside-text">
-              When I'm not near a keyboard, you'll usually find me on a motorcycle.
-              Long road days, weekend offroad trails, or out chasing a good coffee
-              spot. Riding is my reset button between hard problems.
-            </p>
-          </div>
-        </div>
-
-        <aside class="about-hero-aside" aria-label="Quick facts">
-          <PortraitSlideshow alt="Adithya NR" interval={5500} />
-
-          <dl class="facts-list">
-            <div class="fact-row">
-              <dt>Located</dt>
-              <dd>Abu Dhabi · UAE</dd>
-            </div>
-            <div class="fact-row">
-              <dt>Currently</dt>
-              <dd><span class="fact-dot" aria-hidden="true"></span>SDE-3 @ yellow.ai</dd>
-            </div>
-            <div class="fact-row">
-              <dt>Experience</dt>
-              <dd>7 years</dd>
-            </div>
-            <div class="fact-row">
-              <dt>Speaks</dt>
-              <dd>EN · HI · KN</dd>
-            </div>
-            <div class="fact-row">
-              <dt>CV</dt>
-              <dd>
-                <a href="/resume.pdf" target="_blank" rel="noopener" class="fact-cv-link">
-                  Download PDF
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                    <path d="M12 5v14"></path>
-                    <polyline points="19 12 12 19 5 12"></polyline>
-                  </svg>
-                </a>
-              </dd>
-            </div>
-          </dl>
-        </aside>
+<PageLayout title="About | Adithya NR" description="Adithya NR is a product engineer in Abu Dhabi who designs interfaces and then builds them.">
+  <section class="wrap about-hero">
+    <div class="intro">
+      <h1 class="display-xl">The owner’s manual</h1>
+      <p class="body-l">I’m Adithya, a product engineer in Abu Dhabi. For more than seven years, design has been the centre of my work. I started as a graphic designer, moved into UX, and these days I design the interface and then build it.</p>
+      <p class="body-l">I’ve worked with startups and teams around the world. Right now I’m shaping the Agentic AI platform at <a class="text-link" href="https://yellow.ai/" target="_blank" rel="noopener noreferrer">yellow.ai</a>.</p>
+      <div class="actions">
+        <a class="btn btn--ink" href="/resume.pdf" target="_blank" rel="noopener" data-sound-hover="tick">
+          Download my CV
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 3v9M4 8.5l4 4 4-4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" /></svg>
+        </a>
+        <a class="btn btn--ghost" href="/contact" data-sound-hover="tick">Say hello</a>
       </div>
-    </section>
+    </div>
+    <div class="portrait" data-reveal>
+      <PortraitStack />
+    </div>
+  </section>
 
-    <!-- ===== TRUSTED BY ===== -->
-    <section class="trusted-section mb-24 md:mb-36 lg:mb-44" data-animate>
-      <Eyebrow>Brands I've worked with</Eyebrow>
+  <Painting src={hills} alt="Misty green hills with pine trees and a road, a small motorcycle on it; a note reads “where I go to think”." w={1440} h={420} ink={false} focusX={900} mobileScale={0.7} tint />
 
-      <div class="trusted-marquee">
-        <div class="trusted-track">
-          {[...companies, ...companies].map((company, i) => (
-            <span
-              class:list={[
-                'trusted-mark',
-                company.stayMono && 'is-stay-mono',
-                company.hoverPath && 'has-hover-logo',
-              ]}
-              title={company.name}
-              aria-hidden={i >= companies.length ? 'true' : undefined}
-            >
-              <img
-                loading="lazy"
-                class="company-logo trusted-logo trusted-logo-default"
-                src={company.path}
-                alt={i < companies.length ? company.name : ''}
-              />
-              {company.hoverPath && (
-                <img
-                  loading="lazy"
-                  class="trusted-logo trusted-logo-hover"
-                  src={company.hoverPath}
-                  alt=""
-                  aria-hidden="true"
-                />
-              )}
-            </span>
-          ))}
-        </div>
+  <section class="section wrap specs" aria-labelledby="spec-title">
+    <div class="spec-sheet">
+      <h2 id="spec-title" class="display-l">Specifications</h2>
+      <dl>
+        {SPECS.map(([k, v]) => (
+          <div class="spec-row"><dt>{k}</dt><dd>{v}</dd></div>
+        ))}
+      </dl>
+    </div>
+    <figure class="fig" data-reveal>
+      <Picture src={figKtm} formats={['avif', 'webp']} widths={[521]} sizes="(max-width: 767px) 88vw, 521px" alt="Fig. 1, a pencil-style drawing of the KTM 390 Adventure (2025), with notes on the tall screen, the Acerbis handguards and the 399cc single." loading="lazy" />
+    </figure>
+  </section>
+
+  <section class="section service" aria-labelledby="service-title">
+    <div class="wrap section-head">
+      <h2 id="service-title" class="display-l">Service history</h2>
+    </div>
+    <Painting src={service} alt="A wooden workbench with a toolbox, spanner and oil stains under an open service book." w={1440} h={640} ink={false} focusX={720} tint>
+      <Picture src={serviceFg} formats={['avif', 'webp']} widths={[1440]} sizes="100vw" alt="" class="service-fg" loading="lazy" />
+      <div class="ledger-wrap" slot="outer">
+        <table class="ledger grain">
+          <caption class="sr-only">Service history: where I’ve worked</caption>
+          <thead>
+            <tr><th scope="col">Date</th><th scope="col">Workshop</th><th scope="col">Work done</th><th scope="col">Signed off</th></tr>
+          </thead>
+          <tbody>
+            {ledger.map((s) => (
+              <tr>
+                <td class="l-date">{s.year}</td>
+                <th scope="row" class="l-shop">{s.company}</th>
+                <td class="l-work">{s.work}</td>
+                <td class="l-sign">
+                  <svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="13" /><path d="M10 16.5l4 4 8-9" /></svg>
+                  <span class="hand">{s.current ? 'in progress' : 'passed'}</span>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
-    </section>
-
-    <!-- ===== CAREER HISTORY ===== -->
-    <section class="career-section mb-24 md:mb-36 lg:mb-44" data-animate>
-      <div class="career-grid">
-        <div class="career-head">
-          <Eyebrow>Career</Eyebrow>
-          <h2 class="career-title">
-            A short<br />
-            <span class="career-title-em">history<span class="career-dot">.</span></span>
-          </h2>
-        </div>
-
-        <ol class="career-timeline">
-          {careers.map((c, i) => (
-            <li class="career-row" data-animate style={`--stagger-index: ${i}`}>
-              <span class="career-year" data-current={c.current ? 'true' : 'false'}>
-                {c.year}
-                {c.current && (
-                  <svg class="career-year-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                    <line x1="5" y1="12" x2="19" y2="12"></line>
-                    <polyline points="12 5 19 12 12 19"></polyline>
-                  </svg>
-                )}
-              </span>
-              <div class="career-meta">
-                <h3 class="career-role">{c.role}</h3>
-                <p class="career-company">{c.company}</p>
-              </div>
-              <p class="career-summary">{c.summary}</p>
-            </li>
-          ))}
-        </ol>
-      </div>
-    </section>
-
-    <style>
-      /* ===== HERO GRID ===== */
-      .about-hero-grid {
-        display: grid;
-        gap: 3rem;
-      }
-
-      @media (min-width: 1024px) {
-        .about-hero-grid {
-          grid-template-columns: minmax(0, 1.25fr) minmax(320px, 420px);
-          gap: 4.5rem;
-          align-items: start;
-        }
-      }
-
-      .about-paragraphs {
-        margin-top: 2rem;
-        display: grid;
-        gap: 1.5rem;
-      }
-
-      .about-aside-block {
-        margin-top: 2.75rem;
-        max-width: 58ch;
-      }
-
-      .about-aside-block :global(.eyebrow) {
-        margin-bottom: 1rem;
-      }
-
-      .about-aside-text {
-        font-family: 'DM Sans', sans-serif;
-        font-size: 1.05rem;
-        line-height: 1.7;
-        color: var(--text-secondary);
-        margin: 0;
-      }
-
-      @media (min-width: 1024px) {
-        .about-paragraphs {
-          grid-template-columns: 1fr;
-        }
-      }
-
-      /* ===== FACTS LIST ===== */
-      .facts-list {
-        margin-top: 1.75rem;
-        display: flex;
-        flex-direction: column;
-      }
-
-      .fact-row {
-        display: grid;
-        grid-template-columns: 110px 1fr;
-        align-items: center;
-        gap: 1.25rem;
-        padding: 0.85rem 0;
-        border-top: 1px dashed var(--border);
-      }
-
-      .fact-row:first-child {
-        border-top: none;
-      }
-
-      .fact-row dt {
-        font-family: 'DM Sans', sans-serif;
-        font-size: 0.7rem;
-        font-weight: 500;
-        letter-spacing: 0.18em;
-        text-transform: uppercase;
-        color: var(--text-muted);
-      }
-
-      .fact-row dd {
-        font-family: 'DM Sans', sans-serif;
-        font-size: 0.95rem;
-        font-weight: 500;
-        color: var(--text);
-        margin: 0;
-        display: inline-flex;
-        align-items: center;
-        gap: 0.5rem;
-      }
-
-      .fact-dot {
-        display: inline-block;
-        width: 6px;
-        height: 6px;
-        border-radius: 50%;
-        background: var(--accent);
-        box-shadow: 0 0 0 4px var(--accent-glow);
-      }
-
-      .fact-cv-link {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.4rem;
-        color: var(--accent);
-        text-decoration: underline;
-        text-underline-offset: 4px;
-        text-decoration-color: var(--accent-glow-strong);
-        transition: text-decoration-color 0.2s ease, color 0.2s ease;
-      }
-
-      .fact-cv-link:hover {
-        color: var(--accent-hover);
-        text-decoration-color: var(--accent);
-      }
-
-      /* ===== TRUSTED BY ===== */
-      .trusted-section :global(.eyebrow) {
-        margin-bottom: 1.25rem;
-      }
-
-      /* Continuous-scroll marquee strip */
-      .trusted-marquee {
-        position: relative;
-        overflow: hidden;
-        padding: 1.75rem 0;
-        border-top: 1px dashed var(--border);
-        border-bottom: 1px dashed var(--border);
-        mask-image: linear-gradient(
-          90deg,
-          transparent 0%,
-          #000 8%,
-          #000 92%,
-          transparent 100%
-        );
-        -webkit-mask-image: linear-gradient(
-          90deg,
-          transparent 0%,
-          #000 8%,
-          #000 92%,
-          transparent 100%
-        );
-      }
-
-      .trusted-track {
-        display: flex;
-        align-items: center;
-        gap: 4.5rem;
-        width: max-content;
-        animation: trustedScroll 50s linear infinite;
-      }
-
-      .trusted-marquee:hover .trusted-track {
-        animation-play-state: paused;
-      }
-
-      @keyframes trustedScroll {
-        from { transform: translateX(0); }
-        to   { transform: translateX(-50%); }
-      }
-
-      .trusted-mark {
-        position: relative;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        flex-shrink: 0;
-        height: 56px;
-        padding: 0 0.25rem;
-        cursor: default;
-      }
-
-      .trusted-logo {
-        max-height: 32px;
-        max-width: 160px;
-        width: auto;
-        object-fit: contain;
-        transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-      }
-
-      .trusted-mark:hover .trusted-logo {
-        transform: scale(1.12);
-      }
-
-      /* Hover-swap colored variant */
-      .trusted-logo-hover {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        max-height: 32px;
-        max-width: 160px;
-        opacity: 0;
-        filter: none !important;
-        transition: opacity 0.3s ease, transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-        pointer-events: none;
-      }
-
-      .trusted-mark.has-hover-logo:hover .trusted-logo-default {
-        opacity: 0;
-      }
-
-      .trusted-mark.has-hover-logo:hover .trusted-logo-hover {
-        opacity: 1;
-        transform: translate(-50%, -50%) scale(1.12);
-      }
-
-      @media (prefers-reduced-motion: reduce) {
-        .trusted-track {
-          animation: none;
-        }
-        .trusted-logo,
-        .trusted-logo-hover {
-          transition: none;
-        }
-        .trusted-mark:hover .trusted-logo,
-        .trusted-mark.has-hover-logo:hover .trusted-logo-hover {
-          transform: translate(-50%, -50%) scale(1);
-        }
-      }
-
-      /* ===== CAREER ===== */
-      .career-grid {
-        display: grid;
-        gap: 3rem;
-      }
-
-      @media (min-width: 1024px) {
-        .career-grid {
-          grid-template-columns: minmax(220px, 320px) minmax(0, 1fr);
-          gap: 4.5rem;
-          align-items: start;
-        }
-      }
-
-      .career-title {
-        font-family: 'Bricolage Grotesque', Georgia, serif;
-        font-size: clamp(2.5rem, 6vw, 4.5rem);
-        font-weight: 800;
-        line-height: 1.05;
-        letter-spacing: -0.03em;
-        color: var(--text);
-        margin-top: 1rem;
-      }
-
-      .career-title-em {
-        color: var(--accent);
-      }
-
-      .career-dot {
-        color: var(--accent);
-      }
-
-      .career-timeline {
-        list-style: none;
-        margin: 0;
-        padding: 0;
-        display: flex;
-        flex-direction: column;
-        border-top: 1px solid var(--border);
-      }
-
-      .career-row {
-        display: grid;
-        grid-template-columns: 1fr;
-        gap: 0.5rem 1.5rem;
-        padding: 1.5rem 0;
-        border-bottom: 1px solid var(--border);
-      }
-
-      @media (min-width: 768px) {
-        .career-row {
-          grid-template-columns: 96px minmax(0, 1.2fr) minmax(0, 1fr);
-          align-items: start;
-          gap: 1.5rem;
-          padding: 1.75rem 0;
-        }
-      }
-
-      .career-year {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.4rem;
-        font-family: 'JetBrains Mono', monospace;
-        font-size: 0.875rem;
-        font-weight: 500;
-        color: var(--text-muted);
-        letter-spacing: 0.04em;
-      }
-
-      .career-year[data-current='true'] {
-        color: var(--accent);
-      }
-
-      .career-year-arrow {
-        color: var(--accent);
-      }
-
-      .career-role {
-        font-family: 'Bricolage Grotesque', Georgia, serif;
-        font-size: 1.125rem;
-        font-weight: 700;
-        letter-spacing: -0.01em;
-        color: var(--text);
-        margin: 0;
-      }
-
-      @media (min-width: 768px) {
-        .career-role {
-          font-size: 1.25rem;
-        }
-      }
-
-      .career-company {
-        font-family: 'DM Sans', sans-serif;
-        font-size: 0.875rem;
-        color: var(--text-muted);
-        margin: 0.2rem 0 0;
-      }
-
-      .career-summary {
-        font-family: 'DM Sans', sans-serif;
-        font-size: 0.9rem;
-        color: var(--text-secondary);
-        line-height: 1.6;
-        margin: 0;
-      }
-    </style>
-
-      <!-- ===== WHAT I ACTUALLY DO ===== -->
-      <section class="practice-section mb-24 md:mb-36 lg:mb-44" data-animate>
-        <Eyebrow>Craft</Eyebrow>
-        <h2 class="practice-title">
-          What I <span class="practice-title-em">actually</span> do<span class="practice-dot">.</span>
-        </h2>
-
-        <div class="practice-grid" data-animate-stagger>
-          {practiceColumns.map((col, i) => (
-            <article class="practice-col" data-animate style={`--stagger-index: ${i}`}>
-              <div class="practice-col-head">
-                <h3 class="practice-col-title">{col.title}</h3>
-              </div>
-              <p class="practice-col-desc">{col.desc}</p>
-              <ul class="practice-col-list">
-                {col.skills.map((skill) => (
-                  <li class="practice-col-row">
-                    <span class="practice-row-label">{skill.label}</span>
-                    <span class="practice-row-meta">{skill.meta}</span>
-                  </li>
-                ))}
-              </ul>
-            </article>
-          ))}
-        </div>
-      </section>
-
-      <style>
-        .practice-title {
-          font-family: 'Bricolage Grotesque', Georgia, serif;
-          font-size: clamp(2.5rem, 6vw, 4.5rem);
-          font-weight: 800;
-          line-height: 1.05;
-          letter-spacing: -0.03em;
-          color: var(--text);
-          margin: 1rem 0 3rem;
-          max-width: 900px;
-        }
-
-        @media (min-width: 768px) {
-          .practice-title {
-            margin-bottom: 4.5rem;
-          }
-        }
-
-        .practice-title-em {
-          color: var(--accent);
-          font-style: italic;
-        }
-
-        .practice-dot {
-          color: var(--accent);
-        }
-
-        .practice-grid {
-          display: grid;
-          gap: 3rem;
-        }
-
-        @media (min-width: 768px) {
-          .practice-grid {
-            grid-template-columns: repeat(3, minmax(0, 1fr));
-            gap: 3rem;
-          }
-        }
-
-        .practice-col {
-          display: flex;
-          flex-direction: column;
-        }
-
-        .practice-col-head {
-          margin-bottom: 0.6rem;
-        }
-
-        .practice-col-title {
-          font-family: 'Bricolage Grotesque', Georgia, serif;
-          font-size: 1.5rem;
-          font-weight: 700;
-          letter-spacing: -0.02em;
-          color: var(--accent);
-          margin: 0;
-        }
-
-        .practice-col-desc {
-          font-family: 'DM Sans', sans-serif;
-          font-size: 0.95rem;
-          line-height: 1.55;
-          color: var(--text-secondary);
-          margin: 0 0 1.25rem;
-          max-width: 32ch;
-        }
-
-        .practice-col-list {
-          list-style: none;
-          padding: 0;
-          margin: 0;
-          border-top: 1px dashed var(--border);
-        }
-
-        .practice-col-row {
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          gap: 1rem;
-          padding: 0.85rem 0;
-          border-bottom: 1px dashed var(--border);
-          transition: padding 0.2s ease;
-        }
-
-        .practice-col-row:hover .practice-row-label {
-          color: var(--accent);
-        }
-
-        .practice-col-row:hover .practice-row-meta {
-          color: var(--accent);
-        }
-
-        .practice-row-label {
-          font-family: 'DM Sans', sans-serif;
-          font-size: 0.95rem;
-          font-weight: 500;
-          color: var(--text);
-          transition: color 0.2s ease;
-        }
-
-        .practice-row-meta {
-          font-family: 'JetBrains Mono', monospace;
-          font-size: 0.72rem;
-          color: var(--text-muted);
-          letter-spacing: 0.04em;
-          text-transform: lowercase;
-          transition: color 0.2s ease;
-        }
-      </style>
-
-
-      <section class="about-cta my-24 md:my-36 lg:my-44">
-        <CtaCard
-          spotlight="glow"
-          lines={["Let's make", "something", "good together"]}
-          sub="Designing thoughtful interfaces, shipping production code, and obsessing over the details in between."
-        />
-      </section>
-
-  </Container>
+    </Painting>
+  </section>
+
+  <section class="section stickers" aria-labelledby="stickers-title">
+    <div class="wrap section-head">
+      <h2 id="stickers-title" class="display-l">Stickers on the toolbox</h2>
+    </div>
+    <Painting src={toolbox} alt="An orange toolbox lid covered in stickers from yellow.ai, Softway, Daikin, Dish, Betsol and Homero, plus a WCAG AA badge, “ship it”, “390 Adventure” and “dirt > traffic”." w={1440} h={560} ink={false} mobileScale={0.6} mobileSwipe />
+  </section>
+
+  <section class="section off-duty" aria-labelledby="off-title">
+    <div class="wrap">
+      <h2 id="off-title" class="display-l section-head">Off duty</h2>
+      <p class="body-l off-copy">When I’m not at a keyboard, I’m usually riding. Long road days, weekend off-road trails, or a ride out for good coffee.</p>
+    </div>
+    <Painting src={offDuty} alt="Three ride photos taped over a dusk mountain painting, captioned “blue hour on the 390”, “dirt days in the hills” and “helmet on, lift going down”." w={1440} h={660} ink={false} mobileScale={0.55} mobileSwipe tint />
+  </section>
 </PageLayout>
+
+<style>
+  .about-hero {
+    display: grid;
+    grid-template-columns: minmax(0, 724px) 473px;
+    justify-content: space-between;
+    align-items: start;
+    gap: 40px;
+    padding-top: 90px;
+    padding-bottom: 60px;
+  }
+  .intro {
+    padding-top: 30px;
+  }
+  .intro .body-l {
+    max-width: 600px;
+    margin-top: 26px;
+  }
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 26px;
+  }
+  
+  .specs {
+    display: grid;
+    grid-template-columns: minmax(0, 680px) minmax(0, 521px);
+    justify-content: space-between;
+    gap: 60px;
+    padding-top: 120px;
+  }
+  .spec-sheet dl {
+    margin: 28px 0 0;
+  }
+  .spec-row {
+    display: grid;
+    grid-template-columns: 180px 1fr;
+    gap: 24px;
+    padding: 14px 0;
+    border-top: 1px solid var(--rule);
+  }
+  .spec-row:last-child {
+    border-bottom: 1px solid var(--rule);
+  }
+  .spec-row dt {
+    padding-top: 2px;
+    font-size: 13px;
+    color: var(--ink-meta);
+  }
+  .spec-row dd {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: 19px;
+    line-height: 1.3;
+  }
+  .fig {
+    margin: 0;
+  }
+  .fig :global(img) {
+    width: 100%;
+    height: auto;
+  }
+  [data-theme='dark'] .fig :global(img) {
+    filter: invert(0.88) hue-rotate(180deg) saturate(0.7);
+  }
+
+  .service :global(.service-fg),
+  .service :global(.service-fg img) {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 3;
+    pointer-events: none;
+  }
+  .ledger-wrap {
+    --u: calc(100cqw / 1440);
+    position: absolute;
+    left: calc(200 * var(--u));
+    top: calc(144 * var(--u));
+    width: calc(1039 * var(--u));
+    rotate: -1.2deg;
+    z-index: 2;
+  }
+  .ledger {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fbf7ee;
+    color: #1c2124;
+    box-shadow: calc(4 * var(--u)) calc(14 * var(--u)) calc(24 * var(--u)) rgba(30, 18, 6, 0.4);
+    font-size: max(11px, calc(11 * var(--u)));
+  }
+  .ledger th,
+  .ledger td {
+    padding: calc(14 * var(--u)) calc(14 * var(--u));
+    text-align: left;
+    vertical-align: middle;
+    border-bottom: 1px solid rgba(28, 33, 36, 0.12);
+  }
+  .ledger thead th {
+    padding-top: calc(22 * var(--u));
+    font-size: max(10px, calc(9 * var(--u)));
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    color: #6b6659;
+  }
+  .ledger tbody tr:last-child > * {
+    border-bottom: 0;
+  }
+  .ledger th:first-child,
+  .ledger td:first-child {
+    padding-left: calc(40 * var(--u));
+    width: calc(150 * var(--u));
+  }
+  .l-shop {
+    width: calc(180 * var(--u));
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: max(14px, calc(16 * var(--u)));
+  }
+  .l-work {
+    color: #464b4d;
+  }
+  .l-sign {
+    width: calc(190 * var(--u));
+    white-space: nowrap;
+  }
+  .l-sign svg {
+    display: inline-block;
+    width: calc(30 * var(--u));
+    height: calc(30 * var(--u));
+    vertical-align: middle;
+    fill: none;
+    stroke: #e2560b;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .l-sign .hand {
+    margin-left: calc(8 * var(--u));
+    font-size: max(17px, calc(19 * var(--u)));
+    color: #e2560b;
+    vertical-align: middle;
+  }
+
+  .off-copy {
+    max-width: 640px;
+    margin-bottom: 32px;
+  }
+
+  @media (max-width: 1100px) {
+    .about-hero,
+    .specs {
+      grid-template-columns: 1fr;
+    }
+    .portrait,
+    .fig {
+      max-width: 473px;
+    }
+  }
+  @media (max-width: 767px) {
+    .about-hero {
+      padding-top: 32px;
+      gap: 32px;
+    }
+    .intro {
+      padding-top: 0;
+    }
+    .specs {
+      padding-top: 72px;
+      gap: 40px;
+    }
+    .spec-row {
+      grid-template-columns: 1fr;
+      gap: 2px;
+    }
+    .spec-row dd {
+      font-size: 17px;
+    }
+    .ledger-wrap {
+      --u: 1px;
+      position: relative;
+      left: auto;
+      top: auto;
+      width: auto;
+      margin: -560px var(--gutter) 0;
+      rotate: -1deg;
+    }
+    .ledger thead {
+      display: none;
+    }
+    .ledger tr {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 2px 12px;
+      padding: 14px 16px;
+      border-bottom: 1px solid rgba(28, 33, 36, 0.12);
+    }
+    .ledger th,
+    .ledger td {
+      display: block;
+      width: auto !important;
+      padding: 0 !important;
+      border: 0;
+    }
+    .l-work {
+      grid-column: 1 / -1;
+    }
+    .service :global(.painting) {
+      height: 640px;
+    }
+  }
+</style>

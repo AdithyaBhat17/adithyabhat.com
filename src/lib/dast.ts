@@ -1,0 +1,285 @@
+// Server-side rendering of DatoCMS Structured Text (DAST) into the Garage
+// Journal components, plus fallbacks for the legacy fields (case study HTML,
+// article markdown). Produces an HTML string and a table of contents; no
+// client JS. Text is always escaped; legacy HTML is sanitized by the caller.
+
+import type { ResponsiveImage } from '@/types/content';
+
+/* ------------------------------------------------------------- types */
+
+interface DastNode {
+  type: string;
+  children?: DastNode[];
+  value?: string;
+  level?: number;
+  style?: 'bulleted' | 'numbered';
+  marks?: string[];
+  url?: string;
+  item?: string;
+  code?: string;
+  language?: string;
+}
+
+export interface StructuredText {
+  value: { document: DastNode } | null;
+  blocks?: Block[];
+  inlineBlocks?: Block[];
+}
+
+export type Block =
+  | { __typename: 'FigureRecord'; id: string; caption?: string; size?: 'column' | 'wide'; media?: { url?: string; alt?: string | null; mimeType?: string; width?: number; height?: number; responsiveImage?: ResponsiveImage | null } }
+  | { __typename: 'MarginNoteRecord'; id: string; text?: string }
+  | { __typename: 'TapedNoteRecord'; id: string; quote?: string; attribution?: string }
+  | { __typename: 'CodeBlockRecord'; id: string; filename?: string; language?: string; code?: string }
+  | { __typename: 'OutcomeRecord'; id: string; stats?: { value?: string; label?: string }[] }
+  | { __typename: 'SideNoteRecord'; id: string; text?: string };
+
+export interface TocEntry {
+  id: string;
+  n: string;
+  title: string;
+}
+
+export interface Rendered {
+  html: string;
+  toc: TocEntry[];
+  /** id of the "Outcome" stage, if there is one (for "Skip to the outcome"). */
+  outcomeId?: string;
+}
+
+/* ------------------------------------------------------------ helpers */
+
+export const esc = (s: string = '') =>
+  s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+
+const slugify = (s: string) =>
+  s
+    .toLowerCase()
+    .replace(/<[^>]+>/g, '')
+    .replace(/&[a-z]+;/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '')
+    .slice(0, 60) || 'section';
+
+const pad = (n: number) => String(n).padStart(2, '0');
+
+const plain = (node: DastNode): string =>
+  node.type === 'span' ? node.value ?? '' : (node.children ?? []).map(plain).join('');
+
+/** A numbered stage heading ("01 Why I built this"). */
+export function stageHeading(n: number, title: string, id: string) {
+  return `<h2 class="stage" id="${id}"><span class="stage-n" aria-hidden="true">${pad(n)}</span><span class="stage-t">${title}</span></h2>`;
+}
+
+/** Code block chrome: a filename bar and Copy button around a <pre> (the only monospace). */
+const codeChrome = (label: string, pre: string) =>
+  `<figure class="code-block"><figcaption><span class="code-file">${esc(label)}</span><button type="button" class="code-copy" data-copy>Copy</button></figcaption>${pre}</figure>`;
+
+export function codeBlock(code: string, opts: { filename?: string; language?: string } = {}) {
+  const lang = opts.language ? ` data-lang="${esc(opts.language)}"` : '';
+  return codeChrome(opts.filename || opts.language || '', `<pre${lang}><code>${esc(code.replace(/\n$/, ''))}</code></pre>`);
+}
+
+/** Ids the layout already uses; a stage heading must not take them. */
+const RESERVED_IDS = new Set(['main', 'top', 'content']);
+
+/** Collects stage headings into a table of contents and spots the outcome stage. */
+function stageCollector() {
+  const toc: TocEntry[] = [];
+  const used = new Set(RESERVED_IDS);
+  let outcomeId: string | undefined;
+  return {
+    toc,
+    get outcomeId() {
+      return outcomeId;
+    },
+    /** `text` is plain text (it gets escaped here); `inner` is the heading's HTML. */
+    add(text: string, inner: string) {
+      const base = slugify(text);
+      let id = base;
+      for (let i = 2; used.has(id); i++) id = `${base}-${i}`;
+      used.add(id);
+      toc.push({ id, n: pad(toc.length + 1), title: esc(text) });
+      if (!outcomeId && /outcome|result/i.test(text)) outcomeId = id;
+      return stageHeading(toc.length, inner, id);
+    },
+  };
+}
+
+/** Only web, mail, phone, in-page and site-relative links make it into an href. */
+const safeUrl = (url = '') => (/^(https?:|mailto:|tel:|#|\/(?!\/))/i.test(url.trim()) ? url.trim() : '#');
+
+/** Plain text from already-escaped HTML (legacy headings). */
+const unescapeHtml = (s: string) =>
+  s.replace(/&(amp|lt|gt|quot|#39|#x27|nbsp);/g, (_m, e: string) => ({ amp: '&', lt: '<', gt: '>', quot: '"', '#39': "'", '#x27': "'", nbsp: ' ' })[e] ?? _m);
+
+function figure(b: Extract<Block, { __typename: 'FigureRecord' }>) {
+  const img = b.media?.responsiveImage;
+  const src = img?.src ?? b.media?.url;
+  if (!src) return '';
+  const rawAlt = img?.alt ?? b.media?.alt ?? '';
+  if (!rawAlt) console.warn(`[build-log] figure ${b.id} has no alt text${b.caption ? ' (caption is used instead)' : ''}`);
+  const cap = b.caption ? `<figcaption>${esc(b.caption)}</figcaption>` : '';
+  const wide = b.size === 'wide' ? ' torn-print--wide' : '';
+  // Screen recordings (e.g. the Homero webm clips): muted, looping, no autoplay
+  // download until visible-ish (preload none), controls for a11y.
+  if (b.media?.mimeType?.startsWith('video/') || /\.(webm|mp4|mov)(\?|$)/i.test(src)) {
+    const dims = b.media?.width && b.media?.height ? ` width="${b.media.width}" height="${b.media.height}"` : '';
+    return `<figure class="torn-print${wide}"><span class="torn-print-frame"><video src="${esc(src)}"${dims} muted loop playsinline controls preload="none" aria-label="${esc(rawAlt || b.caption || 'Screen recording')}"></video></span>${cap}</figure>`;
+  }
+  const alt = esc(rawAlt);
+  const set = img?.webpSrcSet || img?.srcSet;
+  return `<figure class="torn-print${wide}"><span class="torn-print-frame"><img src="${esc(src)}"${
+    set ? ` srcset="${esc(set)}" sizes="(max-width: 767px) 92vw, 760px"` : ''
+  }${img ? ` width="${img.width}" height="${img.height}"` : ''} alt="${alt}" loading="lazy" decoding="async" /></span>${cap}</figure>`;
+}
+
+function renderBlock(b: Block | undefined): string {
+  if (!b) return '';
+  switch (b.__typename) {
+    case 'FigureRecord':
+      return figure(b);
+    case 'MarginNoteRecord':
+      return `<aside class="margin-note hand" data-ink-in data-observe>${esc(b.text)}</aside>`;
+    case 'TapedNoteRecord':
+      return `<aside class="taped-note"><span class="tape" aria-hidden="true"></span><p>${esc(b.quote)}</p>${
+        b.attribution ? `<cite>${esc(b.attribution)}</cite>` : ''
+      }</aside>`;
+    case 'CodeBlockRecord':
+      return codeBlock(b.code ?? '', { filename: b.filename, language: b.language });
+    case 'OutcomeRecord':
+      return `<div class="outcome">${(b.stats ?? [])
+        .map((s) => `<div class="stat"><span class="stat-v" data-reveal>${esc(s.value)}</span><span class="stat-l">${esc(s.label)}</span></div>`)
+        .join('')}</div>`;
+    default:
+      return '';
+  }
+}
+
+/* ------------------------------------------------------------- DAST */
+
+export function renderStructuredText(st: StructuredText | null | undefined): Rendered | null {
+  const doc = st?.value?.document;
+  if (!doc?.children?.length) return null;
+  const blocks = new Map((st!.blocks ?? []).map((b) => [b.id, b]));
+  const inline = new Map((st!.inlineBlocks ?? []).map((b) => [b.id, b]));
+  const stages = stageCollector();
+  let notes = 0;
+  // Stage the top heading level actually used (h2 normally; older posts use h3/h4).
+  const levels: number[] = [];
+  const scan = (n: DastNode) => {
+    if (n.type === 'heading' && n.level && n.level >= 2) levels.push(n.level);
+    n.children?.forEach(scan);
+  };
+  scan(doc);
+  const stageLevel = levels.length ? Math.min(...levels) : 2;
+  // Render the top level as h2 (the page title is the h1), shifting the rest with it.
+  const shift = (level: number) => Math.max(2, level - (stageLevel - 2));
+
+  const span = (n: DastNode) => {
+    let out = esc(n.value).replace(/\n/g, '<br />');
+    for (const m of n.marks ?? []) {
+      if (m === 'strong') out = `<strong>${out}</strong>`;
+      else if (m === 'emphasis') out = `<em>${out}</em>`;
+      else if (m === 'code') out = `<code>${out}</code>`;
+      else if (m === 'underline') out = `<u>${out}</u>`;
+      else if (m === 'strikethrough') out = `<s>${out}</s>`;
+      else if (m === 'highlight') out = `<mark>${out}</mark>`;
+    }
+    return out;
+  };
+
+  const walk = (n: DastNode): string => {
+    const kids = () => (n.children ?? []).map(walk).join('');
+    switch (n.type) {
+      case 'root':
+        return kids();
+      case 'paragraph':
+        return `<p>${kids()}</p>`;
+      case 'heading': {
+        const title = kids();
+        if (n.level === stageLevel) return stages.add(plain(n), title);
+        const h = shift(n.level ?? 2);
+        return `<h${h}>${title}</h${h}>`;
+      }
+      case 'list':
+        return n.style === 'numbered' ? `<ol>${kids()}</ol>` : `<ul>${kids()}</ul>`;
+      case 'listItem':
+        return `<li>${kids()}</li>`;
+      case 'blockquote':
+        return `<blockquote>${kids()}</blockquote>`;
+      case 'code':
+        return codeBlock(n.code ?? '', { language: n.language });
+      case 'thematicBreak':
+        return '<hr />';
+      case 'span':
+        return span(n);
+      case 'link':
+        return `<a href="${esc(safeUrl(n.url))}"${/^https?:/.test(n.url ?? '') ? ' target="_blank" rel="noopener noreferrer"' : ''}>${kids()}</a>`;
+      case 'block':
+        return renderBlock(blocks.get(n.item!));
+      case 'inlineBlock': {
+        const b = inline.get(n.item!);
+        if (!b || b.__typename !== 'SideNoteRecord') return '';
+        notes += 1;
+        return `<sup class="sn-ref" id="snr-${notes}">${notes}</sup><span class="side-note" role="note"><span class="sn-k">${notes}</span> ${esc(b.text)}</span>`;
+      }
+      default:
+        return kids();
+    }
+  };
+
+  const html = walk(doc);
+  return { html, toc: stages.toc, outcomeId: stages.outcomeId };
+}
+
+/* ------------------------------------------------------- legacy paths */
+
+/**
+ * Legacy HTML (already sanitized): number every h2 as a stage, wrap <pre>
+ * in the code block chrome, and frame lone images as torn prints.
+ */
+export function enhanceLegacyHtml(html: string): Rendered {
+  const stages = stageCollector();
+  let out = html;
+  // Older articles use h3/h4 for their steps; shift headings so the top level
+  // present renders as h2 (the page title is the h1), then stage the h2s.
+  const top = [2, 3, 4].find((l) => new RegExp(`<h${l}[\\s>]`, 'i').test(out)) ?? 2;
+  if (top > 2) out = out.replace(/<(\/?)h([2-6])(?=[\s>])/gi, (_m, close: string, d: string) => `<${close}h${Math.max(2, Number(d) - (top - 2))}`);
+  out = out.replace(/<h2[^>]*>([\s\S]*?)<\/h2>/gi, (_m, inner: string) => stages.add(unescapeHtml(inner.replace(/<[^>]+>/g, '')).trim(), inner));
+  out = out.replace(/<pre[^>]*>([\s\S]*?)<\/pre>/gi, (_m, inner: string) =>
+    codeChrome(/class="[^"]*language-([\w-]+)/.exec(inner)?.[1] ?? '', `<pre>${inner}</pre>`),
+  );
+  out = out.replace(/<p>\s*(<img[^>]+>)\s*<\/p>/gi, (_m, img: string) => {
+    const lazy = /loading=/.test(img) ? img : img.replace('<img', '<img loading="lazy" decoding="async"');
+    return `<figure class="torn-print"><span class="torn-print-frame">${lazy}</span></figure>`;
+  });
+  return { html: out, toc: stages.toc, outcomeId: stages.outcomeId };
+}
+
+/** "Tech Stack: Next.js, Swift, …" line in a legacy case study → parts. */
+export function partsFromLegacy(html: string | undefined): string[] {
+  if (!html) return [];
+  const text = html.replace(/<[^>]+>/g, '\n');
+  const m = /Tech\s*Stack\s*:?\s*([^\n]+)/i.exec(text);
+  if (!m) return [];
+  return m[1]
+    .split(/[,·|]/)
+    .map((s) => s.replace(/&amp;/g, '&').trim())
+    .filter((s) => s && s.length < 40);
+}
+
+/** Strip the "Tech Stack:" paragraph so it isn't shown twice. */
+export function withoutTechStack(html: string): string {
+  return html.replace(/<p>[^<]*(?:<strong>)?\s*Tech\s*Stack\s*:?[\s\S]*?<\/p>/i, '');
+}
+
+export function readingMinutes(text: string): number {
+  const words = text.replace(/<[^>]+>/g, ' ').split(/\s+/).filter(Boolean).length;
+  return Math.max(1, Math.round(words / 220));
+}
+
+export function dastText(st: StructuredText | null | undefined): string {
+  const doc = st?.value?.document;
+  return doc ? plain(doc) : '';
+}

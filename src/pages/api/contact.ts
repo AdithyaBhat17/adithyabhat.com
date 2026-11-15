@@ -1,6 +1,7 @@
 import type { APIRoute } from 'astro';
 import dayjs from 'dayjs';
 import { checkForSpam, type SpamCheckResult } from '@/lib/spam-filter';
+import { CONTACT_TOPICS } from '@/data/contact';
 
 export const prerender = false;
 
@@ -27,7 +28,8 @@ const getText = (
   name: string,
   email: string,
   message: string,
-  spamResult: SpamCheckResult
+  spamResult: SpamCheckResult,
+  topic?: string
 ): string => {
   const spamPrefix = spamResult.isSpam ? '[SPAM] ' : '';
   const spamDetails = spamResult.isSpam
@@ -36,7 +38,7 @@ const getText = (
 
   return `${spamPrefix}Hey Adithya, ${name} just sent you this message from https://adithyabhat.com/contact on ${dayjs().format(
     'DD MMM [at] h:mm a'
-  )}\n"${message}"\nYou can reach them at ${email}${spamDetails}`;
+  )}${topic ? ` (about: ${topic})` : ''}\n"${message}"\nYou can reach them at ${email}${spamDetails}`;
 };
 
 export const POST: APIRoute = async ({ request, clientAddress }) => {
@@ -58,7 +60,8 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
     );
   }
 
-  const { name, message, email, website } = await request.json();
+  const { name, message, email, website, topic: rawTopic } = await request.json();
+  const topic = typeof rawTopic === 'string' && CONTACT_TOPICS.includes(rawTopic) ? rawTopic : undefined;
 
   if (!name?.trim() || !message?.trim() || !email?.trim()) {
     return new Response(
@@ -80,7 +83,7 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
   const slackResponse = await fetch(SLACK_URL, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ text: getText(name, email, message, spamResult) }),
+    body: JSON.stringify({ text: getText(name, email, message, spamResult, topic) }),
   });
 
   if (!slackResponse.ok) {

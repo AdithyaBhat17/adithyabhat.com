@@ -1,179 +1,289 @@
 ---
 import PageLayout from '@/layouts/PageLayout.astro';
-import Container from '@/components/astro/Container.astro';
-import CardGrid from '@/components/astro/CardGrid.astro';
-import FloatingShapes from '@/components/astro/FloatingShapes.astro';
-import { fetchAPI } from '@/lib/datocms';
-import { ALL_ARTICLES_QUERY } from '@/graphql/posts';
+import Painting from '@/components/journal/Painting.astro';
+import Zine from '@/components/writing/Zine.astro';
+import night from '@/assets/paintings/newsstand-night.png';
+import { fetchWithFallback } from '@/lib/datocms';
+import { ALL_ARTICLES_QUERY, ALL_ARTICLES_QUERY_LEGACY } from '@/graphql/posts';
+import { toIssues, type ArticleLike } from '@/lib/articles';
+import dayjs from 'dayjs';
 
-const data = await fetchAPI(ALL_ARTICLES_QUERY);
-const articles = data.allArticles ?? [];
+const data = await fetchWithFallback(ALL_ARTICLES_QUERY, ALL_ARTICLES_QUERY_LEGACY);
+const issues = toIssues<ArticleLike>(data.allArticles ?? []).sort((a, b) => b.no.localeCompare(a.no));
+const latest = issues[0];
 
-// Collect all unique tags
-const allTags = [...new Set(
-  articles.flatMap((a: any) => a.tags ? a.tags.split(/[,·]/).map((t: string) => t.trim()).filter(Boolean) : [])
-)];
+const years = [...new Set(issues.map((i) => i.year))];
+const byYear = years.map((y) => ({ year: y, items: issues.filter((i) => i.year === y) }));
+const topics = [...new Set(issues.map((i) => i.zine.topic))];
+const ORDER = ['JavaScript', 'React', 'Testing', 'Accessibility', 'Craft'];
+topics.sort((a, b) => (ORDER.indexOf(a) + 1 || 99) - (ORDER.indexOf(b) + 1 || 99));
+const ROTS = [2, -2, 1.5, -1, 2, -2, 1.5, -1.5];
 ---
 
-<PageLayout title="Blog | Adithya NR">
-  <div class="blog-page">
-    <FloatingShapes />
+<PageLayout title="Writing | Adithya NR" description="Notes on building for the web, mostly JavaScript, React, testing and accessibility.">
+  <section class="wrap page-head">
+    <h1 class="display-xl">Writing</h1>
+    <p class="body-l lede">Notes on building for the web, mostly JavaScript, React, testing and accessibility.</p>
+  </section>
 
-    <Container>
-      <!-- Header -->
-      <div class="blog-header" data-animate>
-        <div class="blog-header-inner">
-          <span class="inline-flex items-center text-sm font-body font-medium text-[var(--accent)] tracking-wide uppercase mb-5">
-            Blog
-          </span>
+  <Painting
+    src={night}
+    alt="The newsstand at night, open late, its rack lit up under a street lamp, with the KTM parked outside and a cat asleep on the counter."
+    w={1440}
+    h={620}
+    focusX={560}
+    priority
+    ink={false}
+  />
 
-          <h1 class="font-display text-4xl md:text-5xl lg:text-6xl tracking-tight leading-[1.1]">
-            Thoughts &<br />
-            <span class="gradient-text">writings</span>
-            <span class="pen-icon" aria-hidden="true">&#x270F;&#xFE0F;</span>
-          </h1>
-
-          <p class="font-body text-[var(--text-secondary)] mt-4 text-lg leading-relaxed max-w-lg">
-            Notes on design, development, and things I find interesting along the way.
-          </p>
-        </div>
-
-        <!-- Stats + tags row -->
-        <div class="blog-meta" data-animate>
-          <div class="blog-stats">
-            <span class="stat-number font-display">{articles.length}</span>
-            <span class="stat-label font-body">{articles.length === 1 ? 'article' : 'articles'}</span>
-          </div>
-
-          {allTags.length > 0 && (
-            <div class="blog-tags">
-              {allTags.slice(0, 8).map((tag) => (
-                <span class="blog-tag">{tag}</span>
-              ))}
-            </div>
-          )}
-        </div>
+  {latest && (
+    <section class="wrap latest" aria-labelledby="latest-title">
+      <div class="latest-zine">
+        <Zine issue={latest} rot={-3} as="p" />
       </div>
+      <div class="latest-copy">
+        <p class="hand latest-label" aria-hidden="true">latest</p>
+        <h2 id="latest-title" class="display-l">{latest.article.title.trim()}</h2>
+        {latest.zine.dek && <p class="body-l">{latest.zine.dek}</p>}
+        <p class="latest-meta">
+          {dayjs(latest.article.date).format('MMMM YYYY')}{latest.external && ` · on the ${new URL(latest.href).host.replace(/^(www|tech)\./, '')} blog`}
+        </p>
+        <a class="btn btn--ink" href={latest.href} target={latest.external ? '_blank' : undefined} rel={latest.external ? 'noopener noreferrer' : undefined} data-sound-hover="tick">
+          Read the article
+          {latest.external ? (
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M5 11 11 5M6 5h5v5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" /></svg>
+          ) : (
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3.3 8H12M8.7 4l4 4-4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" /></svg>
+          )}
+          {latest.external && <span class="sr-only">(opens in a new tab)</span>}
+        </a>
+      </div>
+    </section>
+  )}
 
-      <!-- Articles grid -->
-      <CardGrid items={articles} type="article" />
-    </Container>
-  </div>
+  <section class="wrap archive" aria-labelledby="all-title" data-archive>
+    <div class="archive-head">
+      <h2 id="all-title" class="display-l">Everything I’ve written</h2>
+      <div class="chips" role="group" aria-label="Filter by topic">
+        <button type="button" class="chip" aria-pressed="true" data-topic="all">All</button>
+        {topics.map((t) => <button type="button" class="chip" aria-pressed="false" data-topic={t}>{t}</button>)}
+      </div>
+    </div>
+
+    {byYear.map(({ year, items }) => (
+      <div class="year-row" data-year-row>
+        <div class="year">
+          <h3 class="year-num">{year}</h3>
+          <p class="hand year-count" data-count={items.length}>{items.length} {items.length === 1 ? 'post' : 'posts'}</p>
+        </div>
+        <ul class="year-zines">
+          {items.map((iss, i) => (
+            <li data-topic={iss.zine.topic}>
+              <Zine issue={iss} rot={ROTS[(Number(iss.no) + i) % ROTS.length]} as="h4" />
+            </li>
+          ))}
+        </ul>
+      </div>
+    ))}
+    <p class="empty body-m" hidden data-empty>Nothing filed under that topic yet.</p>
+  </section>
 </PageLayout>
 
+<script>
+  function initFilter() {
+    const root = document.querySelector<HTMLElement>('[data-archive]');
+    if (!root || root.dataset.bound) return;
+    root.dataset.bound = '1';
+    root.addEventListener('click', (e) => {
+      const chip = (e.target as HTMLElement).closest<HTMLButtonElement>('[data-topic].chip');
+      if (!chip) return;
+      const topic = chip.dataset.topic!;
+      root.querySelectorAll<HTMLButtonElement>('.chip').forEach((c) => c.setAttribute('aria-pressed', String(c === chip)));
+      let shown = 0;
+      root.querySelectorAll<HTMLElement>('[data-year-row]').forEach((row) => {
+        let n = 0;
+        row.querySelectorAll<HTMLElement>('li[data-topic]').forEach((li) => {
+          const on = topic === 'all' || li.dataset.topic === topic;
+          li.hidden = !on;
+          if (on) n++;
+        });
+        row.hidden = n === 0;
+        const count = row.querySelector<HTMLElement>('.year-count');
+        if (count) count.textContent = `${n} ${n === 1 ? 'post' : 'posts'}`;
+        shown += n;
+      });
+      root.querySelector<HTMLElement>('[data-empty]')!.hidden = shown > 0;
+    });
+  }
+  initFilter();
+  document.addEventListener('astro:page-load', initFilter);
+</script>
+
 <style>
-  .blog-page {
-    position: relative;
+  .page-head {
+    display: flex;
+    align-items: flex-end;
+    gap: 60px;
+    padding-top: 80px;
+    padding-bottom: 40px;
+  }
+  .lede {
+    max-width: 480px;
+    margin-bottom: 4px;
   }
 
-  /* ===== HEADER ===== */
-  .blog-header {
-    position: relative;
-    z-index: 1;
-    padding-top: 2rem;
-    margin-bottom: 0.5rem;
+  .latest {
+    display: grid;
+    grid-template-columns: 420px minmax(0, 620px);
+    align-items: center;
+    gap: 72px;
+    padding-top: 110px;
+    padding-bottom: 40px;
+  }
+  .latest-zine {
+    display: flex;
+    justify-content: center;
+  }
+  .latest-zine :global(.zine) {
+    --zs: 1.45px;
+  }
+  .latest-copy {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 18px;
+  }
+  .latest-label {
+    font-size: 32px;
+    color: var(--orange);
+    margin-bottom: -6px;
+  }
+  .latest-meta {
+    font-size: 14px;
+    color: var(--ink-meta);
   }
 
-  .blog-header-inner {
-    max-width: 640px;
+  .archive {
+    padding-top: 120px;
   }
-
-  /* ===== PEN ICON ===== */
-  .pen-icon {
-    display: inline-block;
-    margin-left: 0.25rem;
-    animation: scribble 3s ease-in-out infinite;
-    transform-origin: bottom left;
-  }
-
-  @keyframes scribble {
-    0%, 100% { transform: rotate(0deg); }
-    10% { transform: rotate(-12deg); }
-    20% { transform: rotate(5deg); }
-    30% { transform: rotate(-5deg); }
-    40% { transform: rotate(0deg); }
-  }
-
-  /* ===== META ROW ===== */
-  .blog-meta {
+  .archive-head {
     display: flex;
     align-items: center;
-    gap: 1.25rem;
-    margin-top: 2rem;
-    padding: 1rem 1.5rem;
-    background: var(--bg-elevated);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
-    width: fit-content;
-    max-width: 100%;
     flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 20px;
+    margin-bottom: 36px;
   }
-
-  .blog-stats {
-    display: flex;
-    align-items: baseline;
-    gap: 0.375rem;
-    flex-shrink: 0;
-  }
-
-  .stat-number {
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: var(--text);
-    letter-spacing: -0.02em;
-    line-height: 1;
-  }
-
-  .stat-label {
-    font-size: 0.8125rem;
-    color: var(--text-muted);
-    font-weight: 500;
-  }
-
-  /* ===== TAGS ===== */
-  .blog-tags {
+  .chips {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.375rem;
-    border-left: 1px solid var(--border);
-    padding-left: 1.25rem;
+    gap: 8px;
   }
-
-  .blog-tag {
-    display: inline-block;
-    padding: 0.2rem 0.65rem;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 0.6875rem;
+  .chip {
+    min-height: 38px;
+    padding: 8px 16px;
+    border-radius: 999px;
+    background: var(--paper-deep);
+    color: var(--ink-soft);
+    font-size: 13px;
     font-weight: 500;
-    color: var(--accent);
-    background: var(--accent-glow);
-    border-radius: 100px;
-    letter-spacing: 0.02em;
+    transition: background-color 0.2s ease, color 0.2s ease;
+  }
+  .chip:hover {
+    color: var(--ink);
+  }
+  .chip[aria-pressed='true'] {
+    background: var(--ink);
+    color: var(--paper);
   }
 
-  @media (max-width: 480px) {
-    .blog-meta {
-      gap: 0.75rem;
-      padding: 1rem 1.25rem;
-    }
-
-    .blog-tags {
-      border-left: none;
-      padding-left: 0;
-      border-top: 1px solid var(--border);
-      padding-top: 0.75rem;
-      width: 100%;
-    }
-
-    .stat-number {
-      font-size: 1.25rem;
-    }
+  .year-row {
+    display: flex;
+    gap: 32px;
+    padding-top: 28px;
+    padding-bottom: 36px;
+    border-top: 1px solid var(--rule);
+  }
+  .year {
+    flex: 0 0 140px;
+  }
+  .year-num {
+    font-size: 36px;
+    line-height: 1.2;
+  }
+  .year-count {
+    font-size: 24px;
+    color: var(--orange);
+  }
+  .year-zines {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 36px 30px;
+    margin: 0;
+    padding: 10px 0 0;
+    list-style: none;
+  }
+  .year-zines li :global(.zine) {
+    --zs: 0.9px;
+  }
+  .year-zines li:has(:hover, :focus-visible) {
+    position: relative;
+    z-index: 3;
+  }
+  .empty {
+    padding: 28px 0;
+    border-top: 1px solid var(--rule);
   }
 
-  /* ===== REDUCED MOTION ===== */
-  @media (prefers-reduced-motion: reduce) {
-    .pen-icon {
-      animation: none;
+  @media (max-width: 1100px) {
+    .latest {
+      grid-template-columns: 1fr;
+      justify-items: start;
+      gap: 40px;
+    }
+  }
+  @media (max-width: 767px) {
+    .page-head {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 16px;
+      padding-top: 32px;
+      padding-bottom: 24px;
+    }
+    .latest {
+      padding-top: 64px;
+    }
+    .latest-zine :global(.zine) {
+      --zs: 1.1px;
+    }
+    .archive {
+      padding-top: 72px;
+    }
+    .year-row {
+      flex-direction: column;
+      gap: 12px;
+    }
+    .year {
+      flex: none;
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+    }
+    .year-zines {
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      margin-inline: calc(var(--gutter) * -1);
+      padding: 70px var(--gutter) 10px;
+      margin-top: -50px;
+      scroll-snap-type: x mandatory;
+      scrollbar-width: none;
+    }
+    .year-zines li {
+      flex: 0 0 auto;
+      scroll-snap-align: start;
+    }
+    .year-zines li :global(.zine) {
+      --zs: 0.75px;
     }
   }
 </style>

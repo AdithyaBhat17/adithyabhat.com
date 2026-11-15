@@ -5,7 +5,7 @@ import sitemap from '@astrojs/sitemap';
 import tailwindcss from '@tailwindcss/vite';
 
 async function fetchDato(query) {
-  const token = process.env.DATOCMS_API_TOKEN;
+  const token = process.env.DATOCMS_API_TOKEN ?? process.env.DATOCMS_READONLY_TOKEN;
   if (!token) return null;
   try {
     const res = await fetch('https://graphql.datocms.com', {
@@ -13,6 +13,7 @@ async function fetchDato(query) {
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`,
+        ...(process.env.DATOCMS_ENVIRONMENT ? { 'X-Environment': process.env.DATOCMS_ENVIRONMENT } : {}),
       },
       body: JSON.stringify({ query }),
     });
@@ -39,6 +40,9 @@ for (const p of projectsData?.allProjects ?? []) {
 export default defineConfig({
   site: 'https://adithyabhat.com',
   output: 'static',
+  // The whole stylesheet is ~12 KB compressed: inlining it removes a
+  // render-blocking request from the LCP path.
+  build: { inlineStylesheets: 'always' },
   adapter: vercel({
     webAnalytics: { enabled: true },
     speedInsights: { enabled: true },
@@ -46,7 +50,7 @@ export default defineConfig({
   integrations: [
     react(),
     sitemap({
-      filter: (page) => !page.includes('/404') && !page.includes('/legal'),
+      filter: (page) => !page.includes('/404') && !page.includes('/legal') && !page.includes('/sound-lab'),
       serialize(item) {
         const path = new URL(item.url).pathname.replace(/\/$/, '');
         const lastmod = articleDates.get(path) ?? projectDates.get(path);

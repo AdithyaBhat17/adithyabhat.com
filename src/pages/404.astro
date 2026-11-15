@@ -1,27 +1,50 @@
 ---
 import PageLayout from '@/layouts/PageLayout.astro';
-import Container from '@/components/astro/Container.astro';
+import Painting from '@/components/journal/Painting.astro';
+import fork from '@/assets/paintings/desert-fork.png';
 ---
 
-<PageLayout title="404 - Page not found">
-  <Container>
-    <div class="flex flex-col items-center justify-center text-center py-32 relative" data-animate>
-      <!-- Background 404 -->
-      <div class="absolute inset-0 flex items-center justify-center pointer-events-none select-none">
-        <span class="font-display text-[12rem] md:text-[20rem] font-800 text-[var(--bg-surface)] leading-none tracking-tighter">
-          404
-        </span>
-      </div>
-
-      <div class="relative z-10">
-        <h1 class="font-display text-4xl md:text-5xl tracking-tight mb-4">
-          Page not found
-        </h1>
-        <p class="font-body text-lg text-[var(--text-muted)] mb-10 max-w-md mx-auto">
-          The page you're looking for doesn't exist or has been moved.
-        </p>
-        <a href="/" class="btn-primary">Go home</a>
-      </div>
+<PageLayout title="Page not found | Adithya NR" description="This road doesn’t go anywhere." cta={false}>
+  <meta slot="head" name="robots" content="noindex" />
+  <section class="wrap nf">
+    <h1 class="display-xl">This road doesn’t go anywhere.</h1>
+    <p class="body-l">This page has moved, or it never existed.</p>
+    <div class="actions">
+      <a class="btn btn--ink" href="/" data-sound-hover="tick">
+        Back home
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3.3 8H12M8.7 4l4 4-4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" /></svg>
+      </a>
+      <a class="btn btn--ghost" href="/work" data-sound-hover="tick">See my work</a>
     </div>
-  </Container>
+  </section>
+  <Painting src={fork} alt="A desert road at dusk forking at a signpost; one arm points home." w={1440} h={600} ink={false} focusX={720} mobileScale={0.65} priority tint />
+  <div class="spacer" aria-hidden="true"></div>
 </PageLayout>
+
+<style>
+  .nf {
+    padding-top: 80px;
+    padding-bottom: 48px;
+  }
+  .nf .body-l {
+    max-width: 560px;
+    margin-top: 22px;
+  }
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 26px;
+  }
+  .spacer {
+    height: 120px;
+  }
+  @media (max-width: 767px) {
+    .nf {
+      padding-top: 32px;
+    }
+    .spacer {
+      height: 64px;
+    }
+  }
+</style>

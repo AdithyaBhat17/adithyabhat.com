@@ -1,0 +1,244 @@
+---
+/**
+ * A project as a build sheet on a clipboard.
+ * Hover: the clipboard lifts and straightens and the stamp thunks down.
+ */
+import type { ResponsiveImage } from '@/types/content';
+import type { BuildMeta } from '@/data/builds';
+import { shortTitle, tagLine } from '@/lib/projects';
+
+interface Props {
+  slug: string;
+  title: string;
+  date?: string;
+  tags?: string;
+  link?: string;
+  image?: ResponsiveImage;
+  meta?: BuildMeta;
+  rot?: number;
+  as?: 'h2' | 'h3';
+}
+
+const { slug, title, date, tags, link, image, meta, rot = 0, as: H = 'h3' } = Astro.props;
+const name = shortTitle(title);
+const year = date ? new Date(date).getFullYear() : undefined;
+const host = link ? new URL(link).host.replace(/^www\./, '') : '';
+const stamp = (meta?.stamp ?? 'Shipped').toUpperCase().split(' ');
+const visit = meta?.visit && link;
+---
+
+<article class="sheet-board" style={`--rot:${rot}deg`} data-sound-hover="stamp">
+  <svg class="clip" viewBox="0 0 140 55" aria-hidden="true">
+    <path d="M122 17H18a8 8 0 0 0-8 8v14a8 8 0 0 0 8 8h104a8 8 0 0 0 8-8V25a8 8 0 0 0-8-8Z" fill="#8F9599" />
+    <path d="M126 17H14a4 4 0 0 0 0 8h112a4 4 0 0 0 0-8Z" fill="#B9BEC2" />
+    <path d="M46 17c16-17.3 32-17.3 48 0" stroke="#8F9599" stroke-width="8" fill="none" />
+    <circle cx="70" cy="33" r="5" fill="#5E6468" />
+  </svg>
+  <div class="sheet grain">
+    <div class="shot" transition:name={`build-${slug}`}>
+      {image && (
+        <img
+          src={image.src}
+          srcset={image.webpSrcSet || image.srcSet}
+          sizes="(max-width: 767px) 88vw, 324px"
+          alt={image.alt ?? ''}
+          width={image.width}
+          height={image.height}
+          loading="lazy"
+          decoding="async"
+        />
+      )}
+    </div>
+    <H class="title"><a href={`/work/${slug}`} class="title-link">{name}</a></H>
+    <p class="one-liner hand">{meta?.oneLiner ?? tagLine(tags)}</p>
+    <dl class="specs">
+      {year && (<div><dt>Year</dt><dd>{year}</dd></div>)}
+      <div><dt>Role</dt><dd>{meta?.role || tagLine(tags)}</dd></div>
+      {meta?.builtWith && (<div><dt>Built with</dt><dd>{meta.builtWith}</dd></div>)}
+    </dl>
+    <p class="foot">
+      {visit ? (
+        <a class="foot-link" href={link} target="_blank" rel="noopener noreferrer">
+          Visit {host} <span aria-hidden="true">↗</span><span class="sr-only"> (opens in a new tab)</span>
+        </a>
+      ) : (
+        <span class="foot-link" aria-hidden="true">Read the build log</span>
+      )}
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3.3 8H12M8.7 4l4 4-4 4" stroke="#e2560b" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" /></svg>
+    </p>
+  </div>
+  <div class="stamp" aria-hidden="true">
+    <svg viewBox="0 0 104 104"><circle cx="52" cy="52" r="46.8" /><circle class="perf" cx="52" cy="52" r="38" /></svg>
+    <span>{stamp[0]}<br />{stamp.slice(1).join(' ')}</span>
+  </div>
+</article>
+
+<style>
+  .sheet-board {
+    position: relative;
+    width: 100%;
+    max-width: 400px;
+    padding: 30px 18px 18px;
+    border-radius: 14px;
+    background: #9c7650;
+    rotate: var(--rot);
+    box-shadow: 2px 10px 18px rgba(38, 20, 5, 0.3);
+    transition: transform 0.5s var(--ease-spring), rotate 0.5s var(--ease-spring);
+    isolation: isolate;
+  }
+  .sheet-board::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: inherit;
+    box-shadow: 4px 28px 40px rgba(38, 20, 5, 0.38);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+  .sheet-board:hover,
+  .sheet-board:focus-within {
+    rotate: 0deg;
+    transform: translate3d(0, -8px, 0);
+  }
+  .sheet-board:hover::before,
+  .sheet-board:focus-within::before {
+    opacity: 1;
+  }
+  [data-theme='dark'] .sheet-board {
+    background: #7a5a3c;
+  }
+
+  .clip {
+    position: absolute;
+    top: -14px;
+    left: calc(50% - 70px);
+    width: 140px;
+    height: 55px;
+    z-index: 3;
+    filter: drop-shadow(0 4px 3px rgba(0, 0, 0, 0.25));
+  }
+
+  .sheet {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding: 18px 20px 22px;
+    background: #fbf7ee;
+    color: #1c2124;
+  }
+  .shot {
+    aspect-ratio: 324 / 216;
+    background: #2a2622;
+    box-shadow: 0 3px 6px rgba(38, 20, 5, 0.2);
+    overflow: hidden;
+  }
+  .shot img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .title {
+    font-size: 28px;
+    line-height: 1.2;
+    color: #1c2124;
+  }
+  .title-link::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    border-radius: 14px;
+  }
+  .title-link:focus-visible {
+    outline: none;
+  }
+  .title-link:focus-visible::after {
+    outline: 2px solid var(--orange);
+    outline-offset: 4px;
+  }
+  .one-liner {
+    font-size: 26px;
+    line-height: 1.1;
+    color: #e2560b;
+  }
+  .specs {
+    margin: 0;
+  }
+  .specs div {
+    display: flex;
+    gap: 12px;
+    padding: 9px 0;
+    border-top: 1px solid rgba(28, 33, 36, 0.14);
+  }
+  .specs dt {
+    flex: 0 0 82px;
+    font-size: 13px;
+    color: #6b6659;
+  }
+  .specs dd {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.4;
+  }
+  .foot {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding-top: 4px;
+    font-size: 15px;
+    font-weight: 500;
+  }
+  a.foot-link {
+    position: relative;
+    z-index: 4;
+  }
+  a.foot-link:hover {
+    color: #e2560b;
+  }
+
+  .stamp {
+    position: absolute;
+    right: 38px;
+    bottom: 18px;
+    width: 104px;
+    height: 104px;
+    display: grid;
+    place-items: center;
+    rotate: 14deg;
+    opacity: 0.85;
+    color: #e2560b;
+    pointer-events: none;
+    transition: transform 0.18s cubic-bezier(0.5, 0, 0.75, 0);
+  }
+  .stamp svg {
+    position: absolute;
+    inset: 0;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2.6;
+  }
+  .stamp .perf {
+    stroke-width: 1.4;
+    stroke-dasharray: 2.5 3;
+  }
+  .stamp span {
+    position: relative;
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1.1;
+    letter-spacing: 0.1em;
+    text-align: center;
+  }
+  /* Thunk: the stamp lifts off, then slams down. */
+  .sheet-board:hover .stamp {
+    animation: thunk 0.42s cubic-bezier(0.3, 0, 0.4, 1);
+  }
+  @keyframes thunk {
+    0% { transform: none; }
+    45% { transform: translate3d(-6px, -14px, 0) scale(1.25); opacity: 0.5; }
+    70% { transform: scale(0.94); opacity: 1; }
+    100% { transform: none; }
+  }
+</style>

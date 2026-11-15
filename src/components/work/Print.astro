@@ -1,0 +1,138 @@
+---
+/**
+ * A taped print of a project, pinned to the garage wall.
+ * Hover: lifts toward you and straightens. The photo morphs into the build
+ * sheet on the project page (shared view-transition name).
+ */
+import type { ResponsiveImage } from '@/types/content';
+import { shortTitle, tagLine } from '@/lib/projects';
+
+interface Props {
+  slug: string;
+  title: string;
+  tags?: string;
+  image?: ResponsiveImage;
+  /** Print rotation (deg) and tape style. */
+  rot?: number;
+  tape?: { rot: number; color: 'orange' | 'cream' };
+  class?: string;
+  style?: string;
+  eager?: boolean;
+}
+
+const { slug, title, tags, image, rot = 0, tape = { rot: 3, color: 'cream' }, class: className, style, eager = false } = Astro.props;
+const name = shortTitle(title);
+---
+
+<a
+  href={`/work/${slug}`}
+  class:list={['print', className]}
+  style={`--rot:${rot}deg;--tape-rot:${tape.rot}deg;${style ?? ''}`}
+  data-sound-hover="flick"
+>
+  <span class:list={['print-tape', `print-tape--${tape.color}`]} aria-hidden="true"></span>
+  <span class="print-photo" transition:name={`build-${slug}`}>
+    {image && (
+      <img
+        src={image.src}
+        srcset={image.webpSrcSet || image.srcSet}
+        sizes="(max-width: 767px) 196px, 14vw"
+        alt={image.alt ?? ''}
+        width="392"
+        height="280"
+        loading={eager ? 'eager' : 'lazy'}
+        decoding="async"
+      />
+    )}
+  </span>
+  <span class="print-title">{name}</span>
+  {tags && <span class="print-meta">{tagLine(tags)}</span>}
+</a>
+
+<style>
+  .print {
+    --s: var(--u, 1px);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: calc(8 * var(--s));
+    width: calc(212 * var(--s));
+    padding: calc(8 * var(--s)) calc(8 * var(--s)) calc(13 * var(--s));
+    background: #f6efe0;
+    color: #1c2124;
+    rotate: var(--rot);
+    transform-origin: 50% 0;
+    transition: transform 0.5s var(--ease-spring), rotate 0.5s var(--ease-spring);
+    box-shadow: calc(3 * var(--s)) calc(8 * var(--s)) calc(12 * var(--s)) rgba(30, 20, 8, 0.3);
+    isolation: isolate;
+  }
+  /* The lifted shadow is pre-rendered and only faded in (opacity is cheap). */
+  .print::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    box-shadow: calc(3 * var(--s)) calc(22 * var(--s)) calc(32 * var(--s)) rgba(30, 20, 8, 0.45);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+  .print::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: url('../../assets/art/grain.png') 0 0 / 160px;
+    mix-blend-mode: multiply;
+    opacity: 0.35;
+    pointer-events: none;
+  }
+  .print:hover,
+  .print:focus-visible {
+    rotate: 0deg;
+    transform: translate3d(0, calc(-6 * var(--s)), 0) scale(1.08);
+    z-index: 5;
+  }
+  .print:hover::before,
+  .print:focus-visible::before {
+    opacity: 1;
+  }
+
+  .print-tape {
+    position: absolute;
+    top: calc(-10 * var(--s));
+    left: calc(50% - 35 * var(--s));
+    width: calc(70 * var(--s));
+    height: calc(22 * var(--s));
+    rotate: var(--tape-rot);
+    z-index: 2;
+  }
+  .print-tape--cream {
+    background: rgba(237, 217, 173, 0.8);
+  }
+  .print-tape--orange {
+    background: rgba(227, 87, 10, 0.75);
+  }
+
+  .print-photo {
+    display: block;
+    aspect-ratio: 196 / 140;
+    background: #2a2622;
+    overflow: hidden;
+  }
+  .print-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .print-title {
+    font-family: var(--font-display);
+    font-size: calc(17 * var(--s));
+    line-height: 1.2;
+  }
+  .print-meta {
+    margin-top: calc(-4 * var(--s));
+    font-size: calc(11 * var(--s));
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    color: #6b6659;
+  }
+</style>

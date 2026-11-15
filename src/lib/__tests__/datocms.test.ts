@@ -35,6 +35,7 @@ describe('fetchAPI', () => {
       headers: {
         'Content-Type': 'application/json',
         Authorization: expect.stringContaining('Bearer'),
+        // No X-Environment unless DATOCMS_ENVIRONMENT is set: the primary environment.
       },
       body: JSON.stringify({ query: '{ query }', variables: { id: '1' } }),
     });

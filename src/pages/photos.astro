@@ -1,172 +1,158 @@
 ---
 import PageLayout from '@/layouts/PageLayout.astro';
-import Container from '@/components/astro/Container.astro';
+import Painting from '@/components/journal/Painting.astro';
 import PhotoGallery from '@/components/react/PhotoGallery';
-import FloatingShapes from '@/components/astro/FloatingShapes.astro';
+import darkroom from '@/assets/paintings/darkroom.png';
 import { fetchGalleryAPI } from '@/lib/datocms';
 import { GALLERY_PHOTOS } from '@/graphql/photos';
 
 const data = await fetchGalleryAPI(GALLERY_PHOTOS);
 const places = data.allPlaces ?? [];
 const totalPhotos = places.reduce((sum: number, p: any) => sum + (p.photos?.length ?? 0), 0);
-
-// Get unique states/regions for display
-const uniqueStates = [...new Set(places.map((p: any) => p.state).filter(Boolean))];
-// Get cameras used
-const cameras = [...new Set(places.map((p: any) => p.camera).filter(Boolean))];
+const states = new Set(places.map((p: any) => p.state).filter(Boolean)).size;
+const cameras = new Set(places.map((p: any) => p.camera).filter(Boolean)).size;
+const stats = [
+  [totalPhotos, 'photos'],
+  [places.length, 'places'],
+  [states, 'states'],
+  [cameras, cameras === 1 ? 'camera' : 'cameras'],
+] as const;
 ---
 
-<PageLayout title="Photos | Adithya NR">
-  <Container class="relative pb-16 md:pb-24">
-    <FloatingShapes />
-
-    <!-- Hero header -->
-    <div class="photos-header" data-animate>
-      <div class="photos-header-inner">
-        <span class="inline-flex items-center text-sm font-body font-medium text-[var(--accent)] tracking-wide uppercase mb-5">
-          Gallery
-        </span>
-
-        <h1 class="font-display text-4xl md:text-5xl lg:text-6xl tracking-tight leading-[1.1]">
-          Through my<br />
-          <span class="gradient-text">lens</span>
-          <span class="camera-icon" aria-hidden="true">&#x1F4F7;</span>
-        </h1>
-
-        <p class="font-body text-[var(--text-secondary)] mt-4 text-lg leading-relaxed max-w-lg">
-          Snapshots from my travels and everyday life. Landscapes,
-          cityscapes, and everything in between.
-        </p>
-      </div>
-
-      <!-- Stats row -->
-      <div class="stats-row" data-animate>
-        <div class="stat-item">
-          <span class="stat-number font-display">{totalPhotos}</span>
-          <span class="stat-label font-body">photos</span>
-        </div>
-        <div class="stat-divider" aria-hidden="true"></div>
-        <div class="stat-item">
-          <span class="stat-number font-display">{places.length}</span>
-          <span class="stat-label font-body">places</span>
-        </div>
-        <div class="stat-divider" aria-hidden="true"></div>
-        <div class="stat-item">
-          <span class="stat-number font-display">{uniqueStates.length}</span>
-          <span class="stat-label font-body">states</span>
-        </div>
-        {cameras.length > 0 && (
-          <>
-            <div class="stat-divider" aria-hidden="true"></div>
-            <div class="stat-item">
-              <span class="stat-number font-display">{cameras.length}</span>
-              <span class="stat-label font-body">{cameras.length === 1 ? 'camera' : 'cameras'}</span>
-            </div>
-          </>
-        )}
-      </div>
+<PageLayout title="Photos | Adithya NR" description="Photos from trips and everyday life.">
+  <section class="wrap page-head">
+    <div>
+      <h1 class="display-xl">Photos</h1>
+      <p class="body-l lede">Photos from trips and everyday life.</p>
     </div>
+    <dl class="stats">
+      {stats.map(([n, l]) => <div><dt class="sr-only">{l}</dt><dd><span class="n">{n}</span> <span class="l">{l}</span></dd></div>)}
+    </dl>
+  </section>
 
-    <!-- Gallery -->
-    <div class="photos-gallery">
-      <PhotoGallery places={places} client:load />
+  <Painting src={darkroom} alt="A darkroom under a red safelight, prints pegged on a line to dry; a note reads “still drying”." w={1440} h={620} ink={false} focusX={720} mobileScale={0.6} priority />
+
+  <section class="wrap prints" aria-labelledby="prints-title">
+    <div class="prints-head">
+      <h2 id="prints-title" class="display-l">Every print</h2>
+      <p class="hand" aria-hidden="true">newest first, click one for the full view</p>
     </div>
-  </Container>
+    <PhotoGallery places={places} client:visible />
+  </section>
 </PageLayout>
 
 <style>
-  /* ===== HEADER ===== */
-  .photos-header {
-    position: relative;
-    z-index: 1;
-    padding: 2rem 0 2.5rem;
-  }
-
-  .photos-header-inner {
-    max-width: 640px;
-  }
-
-  /* ===== CAMERA ICON ===== */
-  .camera-icon {
-    display: inline-flex;
-    margin-left: 0.375rem;
-    color: var(--accent);
-    vertical-align: middle;
-    animation: shutter 3s ease-in-out infinite;
-  }
-
-  @keyframes shutter {
-    0%, 100% { transform: rotate(0deg); }
-    8% { transform: rotate(-8deg) scale(1.1); }
-    16% { transform: rotate(0deg) scale(1); }
-  }
-
-  /* ===== STATS ROW ===== */
-  .stats-row {
+  .page-head {
     display: flex;
-    align-items: center;
-    gap: 1.25rem;
-    margin-top: 2rem;
-    padding: 1.25rem 1.5rem;
-    background: var(--bg-elevated);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
-    width: fit-content;
+    align-items: flex-end;
+    justify-content: space-between;
     flex-wrap: wrap;
+    gap: 32px 60px;
+    padding-top: 80px;
+    padding-bottom: 40px;
   }
-
-  .stat-item {
+  .lede {
+    max-width: 520px;
+    margin-top: 18px;
+  }
+  .stats {
+    display: flex;
+    gap: 32px;
+    margin: 0;
+  }
+  .stats dd {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+  }
+  .stats .n {
+    font-family: var(--font-display);
+    font-size: 36px;
+    line-height: 1.1;
+    color: var(--ink);
+  }
+  .stats .l {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--ink-meta);
+  }
+  .prints {
+    padding-top: 100px;
+  }
+  .prints-head {
     display: flex;
     align-items: baseline;
-    gap: 0.375rem;
+    flex-wrap: wrap;
+    gap: 8px 20px;
+    margin-bottom: 36px;
   }
-
-  .stat-number {
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: var(--text);
-    letter-spacing: -0.02em;
-    line-height: 1;
+  .prints-head .hand {
+    font-size: 26px;
+    color: var(--orange);
   }
-
-  .stat-label {
-    font-size: 0.8125rem;
-    color: var(--text-muted);
+  .prints :global(.photo-prints) {
+    columns: 3;
+    column-gap: 36px;
+  }
+  .prints :global(.photo-print-wrap) {
+    break-inside: avoid;
+    margin-bottom: 40px;
+  }
+  .prints :global(.photo-print) {
+    display: block;
+    width: 100%;
+    padding: 12px 12px 14px;
+    background: #fbf7ee;
+    color: #1c2124;
+    text-align: left;
+    rotate: var(--r);
+    box-shadow: 3px 10px 22px rgba(var(--shadow-ink), 0.26);
+    cursor: zoom-in;
+    transition: transform 0.45s var(--ease-spring), rotate 0.45s var(--ease-spring);
+  }
+  .prints :global(.photo-print:hover),
+  .prints :global(.photo-print:focus-visible) {
+    rotate: 0deg;
+    transform: translate3d(0, -6px, 0) scale(1.02);
+  }
+  .prints :global(.photo-print img) {
+    width: 100%;
+    height: auto;
+  }
+  .prints :global(.photo-print-caption) {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    margin-top: 12px;
+  }
+  .prints :global(.photo-print-no) {
+    font-size: 12px;
     font-weight: 500;
+    color: #b3430a; /* KTM orange, darkened for 4.5:1 on the print paper */
   }
-
-  .stat-divider {
-    width: 1px;
-    height: 24px;
-    background: var(--border);
+  .prints :global(.photo-print-city) {
+    font-family: var(--font-display);
+    font-size: 18px;
   }
-
-  /* ===== GALLERY ===== */
-  .photos-gallery {
-    position: relative;
-    z-index: 1;
-    margin-top: 1rem;
+  .prints :global(.photo-print-date) {
+    margin-left: auto;
+    font-size: 12px;
+    color: #6b6659;
   }
-
-  /* ===== REDUCED MOTION ===== */
-  @media (prefers-reduced-motion: reduce) {
-    .camera-icon {
-      animation: none;
+  @media (max-width: 1100px) {
+    .prints :global(.photo-prints) {
+      columns: 2;
     }
   }
-
-  @media (max-width: 480px) {
-    .stats-row {
-      gap: 0.75rem;
-      padding: 1rem 1.25rem;
+  @media (max-width: 767px) {
+    .page-head {
+      padding-top: 32px;
     }
-
-    .stat-number {
-      font-size: 1.25rem;
+    .prints {
+      padding-top: 64px;
     }
-
-    .stat-divider {
-      height: 20px;
+    .prints :global(.photo-prints) {
+      columns: 1;
     }
   }
 </style>

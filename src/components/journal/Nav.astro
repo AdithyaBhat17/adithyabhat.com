@@ -1,0 +1,249 @@
+---
+import Fennec from './Fennec.astro';
+
+const routes = [
+  { name: 'About', href: '/about' },
+  { name: 'Work', href: '/work' },
+  { name: 'Writing', href: '/blog' },
+  { name: 'Photos', href: '/photos' },
+  { name: 'Contact', href: '/contact' },
+];
+
+const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+const isActive = (href: string) => path === href || path.startsWith(href + '/');
+// Slightly different scribble per link so they don't look stamped.
+const scribbles = [
+  'M1 4C6 1.6 12 5.4 18 3S29 1.6 34 3.6',
+  'M1 3.6C6 1.2 11 5.4 16 3s9-1.4 11 .6',
+  'M1 4c8-2.4 16 1.8 24-.6S41 1.2 48 3.6',
+  'M1 3.4c7-2 13 2 20-.4s14-1.6 20 .8',
+  'M1 4.2c8-2.6 16 1.6 24-.8S41 1 48 3.4',
+];
+---
+
+<header class="nav" data-site-nav transition:name="site-nav">
+  <div class="nav-inner">
+    <a href="/" class="nav-brand" aria-label="Adithya NR, home" data-sound-hover="tick">
+      <Fennec size={34} />
+    </a>
+
+    <nav class="nav-links" aria-label="Primary">
+      {routes.map((r, i) => (
+        <a
+          href={r.href}
+          class:list={['nav-link', isActive(r.href) && 'is-active']}
+          aria-current={isActive(r.href) ? 'page' : undefined}
+          data-sound-hover="tick"
+        >
+          <span>{r.name}</span>
+          <svg class="nav-scribble" viewBox="0 0 49 6" preserveAspectRatio="none" aria-hidden="true">
+            <path d={scribbles[i]} pathLength="1" />
+          </svg>
+        </a>
+      ))}
+    </nav>
+
+    <div class="nav-tools">
+      <button type="button" class="nav-tool nav-sound" data-sound-toggle aria-pressed="false" aria-label="Turn sound on">
+        <svg viewBox="0 0 18 18" width="18" height="18" aria-hidden="true">
+          <path class="spk" d="M3 7.1h2.6L9 4.5v9l-3.4-2.6H3V7.1Z" />
+          <path class="wave" d="M11.6 7.1c.8 1 .8 2.7 0 3.8M13.5 5.6c1.5 2 1.5 4.8 0 6.8" />
+          <path class="mute" d="M11.8 7.2l3.6 3.6M15.4 7.2l-3.6 3.6" />
+        </svg>
+      </button>
+      <button type="button" class="nav-tool nav-theme" data-theme-toggle aria-pressed="false" aria-label="Switch to dark mode">
+        <svg class="moon" viewBox="0 0 18 18" width="18" height="18" aria-hidden="true">
+          <path d="M15 10.9A6.2 6.2 0 1 1 7.1 3a4.9 4.9 0 0 0 7.9 7.9Z" />
+        </svg>
+        <svg class="sun" viewBox="0 0 18 18" width="18" height="18" aria-hidden="true">
+          <circle cx="9" cy="9" r="3.2" />
+          <path d="M9 1.8v1.6M9 14.6v1.6M1.8 9h1.6M14.6 9h1.6M3.9 3.9 5 5M13 13l1.1 1.1M3.9 14.1 5 13M13 5l1.1-1.1" />
+        </svg>
+      </button>
+      <button type="button" class="nav-search" data-cmd-open aria-keyshortcuts="Meta+K Control+K">
+        <span class="sr-only">Menu and search</span><span aria-hidden="true">⌘K</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<style>
+  .nav {
+    position: relative;
+    z-index: 30;
+    height: var(--nav-h);
+  }
+
+  .nav-inner {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    height: 100%;
+    max-width: calc(var(--content) + var(--gutter) * 2);
+    margin-inline: auto;
+    padding-inline: var(--gutter);
+  }
+
+  .nav-brand {
+    display: inline-flex;
+    margin-right: auto;
+    border-radius: 6px;
+    transition: transform 0.4s var(--ease-spring);
+  }
+  .nav-brand:hover {
+    transform: rotate(-6deg) scale(1.06);
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 4px;
+  }
+
+  .nav-link {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1px;
+    padding: 6px 11px 2px;
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--ink-soft);
+    transition: color 0.2s ease;
+  }
+  .nav-link:hover,
+  .nav-link.is-active {
+    color: var(--ink);
+  }
+
+  .nav-scribble {
+    width: calc(100% - 4px);
+    height: 6px;
+    overflow: visible;
+  }
+  .nav-scribble path {
+    fill: none;
+    stroke: var(--orange);
+    stroke-width: 2.4;
+    stroke-linecap: round;
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    transition: stroke-dashoffset 0.45s var(--ease-in-out);
+  }
+  .nav-link:hover .nav-scribble path,
+  .nav-link:focus-visible .nav-scribble path,
+  .nav-link.is-active .nav-scribble path {
+    stroke-dashoffset: 0;
+  }
+
+  .nav-tools {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .nav-tool {
+    display: grid;
+    place-items: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 999px;
+    color: var(--ink-soft);
+    transition: background-color 0.2s ease, color 0.2s ease, transform 0.3s var(--ease-spring);
+  }
+  .nav-tool:hover {
+    background: var(--paper-deep);
+    color: var(--ink);
+  }
+  .nav-tool:active {
+    transform: scale(0.92);
+  }
+  .nav-tool svg {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  /* Sound: muted speaker by default; orange with waves when on. */
+  .nav-sound .wave {
+    display: none;
+  }
+  .nav-sound[aria-pressed='true'] {
+    color: var(--orange);
+  }
+  .nav-sound[aria-pressed='true'] .spk {
+    fill: var(--orange-wash);
+  }
+  .nav-sound[aria-pressed='true'] .wave {
+    display: inline;
+  }
+  .nav-sound[aria-pressed='true'] .mute {
+    display: none;
+  }
+
+  .nav-theme .sun {
+    display: none;
+  }
+  :global([data-theme='dark']) .nav-theme .sun {
+    display: block;
+  }
+  :global([data-theme='dark']) .nav-theme .moon {
+    display: none;
+  }
+  .nav-theme svg {
+    transition: transform 0.6s var(--ease-spring);
+  }
+  .nav-theme:hover svg {
+    transform: rotate(-20deg);
+  }
+
+  .nav-search {
+    padding: 6px 10px;
+    border-radius: 999px;
+    border: 1px solid var(--rule);
+    background: var(--paper-deep);
+    color: var(--ink-soft);
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 1.4;
+    letter-spacing: 0.02em;
+    transition: border-color 0.2s ease, color 0.2s ease;
+  }
+  .nav-search:hover {
+    border-color: var(--rule-strong);
+    color: var(--ink);
+  }
+
+  /* Mobile: logo + tools; the links move into the ⌘K drawer and the footer. */
+  @media (max-width: 767px) {
+    .nav-inner {
+      gap: 12px;
+    }
+    .nav-links {
+      display: none;
+    }
+    .nav-tool {
+      width: 44px;
+      height: 44px;
+    }
+    .nav-tools {
+      gap: 4px;
+    }
+    .nav-search {
+      min-height: 44px;
+      padding: 10px 18px;
+      background: transparent;
+      border-color: var(--rule-strong);
+      color: var(--ink);
+    }
+    .nav-search span {
+      font-size: 0;
+    }
+    .nav-search span::before {
+      content: 'Menu';
+      font-size: 15px;
+      line-height: 1.6;
+    }
+  }
+</style>

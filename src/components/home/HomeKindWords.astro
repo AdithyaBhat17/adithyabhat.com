@@ -1,0 +1,247 @@
+---
+/**
+ * Kind words: every testimonial in src/data/testimonials.ts, written on
+ * napkins and receipts across a café table. The table is a top cap, a
+ * repeating middle band and a bottom cap cut from the painting, so it grows
+ * to fit however many notes there are. Desktop: staggered rows of four, then
+ * three, and so on. Mobile: one column.
+ */
+import { getImage } from 'astro:assets';
+import top from '@/assets/paintings/cafe-top.png';
+import mid from '@/assets/paintings/cafe-mid.png';
+import bottom from '@/assets/paintings/cafe-bottom.png';
+import { TESTIMONIALS } from '@/data/testimonials';
+
+async function bg(src: ImageMetadata) {
+  const [avif, webp] = await Promise.all([
+    getImage({ src, width: 1440, format: 'avif', quality: 55 }),
+    getImage({ src, width: 1440, format: 'webp', quality: 70 }),
+  ]);
+  return `image-set(url('${avif.src}') type('image/avif'), url('${webp.src}') type('image/webp'))`;
+}
+const [bgTop, bgMid, bgBottom] = await Promise.all([bg(top), bg(mid), bg(bottom)]);
+const ROT = [-4, 3, -2, 5, 2, -3, 4, -1.5];
+---
+
+<section class="section kind" id="kind-words" aria-labelledby="kind-title">
+  <div class="wrap section-head">
+    <h2 id="kind-title" class="display-l">Kind words</h2>
+  </div>
+
+  <div class="table" style={`--bg-top:${bgTop};--bg-mid:${bgMid};--bg-bottom:${bgBottom}`} data-observe>
+    <span class="cap cap--top" aria-hidden="true"></span>
+    <span class="band" aria-hidden="true"></span>
+    <span class="cap cap--bottom" aria-hidden="true"></span>
+    <ul class="notes">
+      {TESTIMONIALS.map((t, i) => {
+        const receipt = t.paper === 'receipt';
+        return (
+          <li class:list={['paper', receipt ? 'receipt' : 'napkin']} style={`--r:${ROT[i % ROT.length]}deg;--reveal-delay:${0.1 + (i % 4) * 0.08}s`} data-sound-hover="scratch">
+            <figure>
+              {receipt && (
+                <p class="receipt-head" aria-hidden="true">
+                  Café · Table {String(4 + i).padStart(2, '0')}<br />Flat white × 1&nbsp;&nbsp;&nbsp;Espresso × 2
+                  <span class="receipt-dots">· · · · · · · · · · · · · · · · · ·</span>
+                </p>
+              )}
+              <blockquote>“{t.quote}”</blockquote>
+              <figcaption>
+                <span class="sig hand">{t.name}</span>
+                <span class="who">{t.role}, {t.company}</span>
+              </figcaption>
+            </figure>
+          </li>
+        );
+      })}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .table {
+    --cap: calc(min(100vw, 2400px) * 200 / 1440);
+    position: relative;
+    isolation: isolate;
+    padding: calc(var(--cap) * 0.55) var(--gutter) calc(var(--cap) * 0.6);
+  }
+  .cap,
+  .band {
+    position: absolute;
+    left: 0;
+    right: 0;
+    z-index: -1;
+    background-repeat: no-repeat;
+    background-size: 100% auto;
+  }
+  :global([data-theme='dark']) .cap,
+  :global([data-theme='dark']) .band {
+    filter: var(--painting-tint);
+  }
+  .cap--top {
+    top: 0;
+    height: var(--cap);
+    background-image: var(--bg-top);
+    background-position: top center;
+  }
+  .cap--bottom {
+    bottom: 0;
+    height: var(--cap);
+    background-image: var(--bg-bottom);
+    background-position: bottom center;
+  }
+  .band {
+    top: calc(var(--cap) - 2px);
+    bottom: calc(var(--cap) - 2px);
+    background-image: var(--bg-mid);
+    background-repeat: repeat-y;
+    background-position: top center;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    :global(.js) .table > .cap,
+    :global(.js) .table > .band {
+      opacity: 0;
+      transition: opacity 0.9s ease;
+    }
+    :global(.js) .table.is-in > .cap,
+    :global(.js) .table.is-in > .band {
+      opacity: 1;
+    }
+  }
+
+  .notes {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 40px 34px;
+    max-width: 1360px;
+    margin: 0 auto;
+    padding: 0;
+    list-style: none;
+  }
+  /* Stagger: every other note sits a little lower. */
+  .paper:nth-child(even) {
+    margin-top: 36px;
+  }
+  .paper {
+    position: relative;
+    flex: 0 0 auto;
+    width: 290px;
+    color: #1c2124;
+    rotate: var(--r);
+    transition: transform 0.5s var(--ease-spring), rotate 0.5s var(--ease-spring);
+    isolation: isolate;
+  }
+  .paper figure {
+    margin: 0;
+  }
+  .paper::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    box-shadow: 0 24px 34px rgba(25, 15, 5, 0.4);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+  .paper:hover,
+  .paper:focus-within {
+    rotate: 0deg;
+    transform: translate3d(0, -10px, 0) scale(1.05);
+    z-index: 5;
+  }
+  .paper:hover::before,
+  .paper:focus-within::before {
+    opacity: 1;
+  }
+  .napkin {
+    padding: 32px 30px;
+    background: #fbf8f1;
+    border: 1.5px dashed #d8cdb8;
+    border-radius: 3px;
+    box-shadow: 2px 8px 14px rgba(25, 15, 5, 0.28);
+  }
+  .receipt {
+    width: 250px;
+    padding: 26px 24px 40px;
+    background: #f7f5ef;
+    box-shadow: 2px 8px 14px rgba(25, 15, 5, 0.28);
+  }
+  .receipt::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -11px;
+    height: 12px;
+    background: #f7f5ef;
+    clip-path: polygon(0 0, 100% 0, 100% 33%, 98% 100%, 96% 33%, 94% 100%, 92% 33%, 90% 100%, 88% 33%, 86% 100%, 84% 33%, 82% 100%, 80% 33%, 78% 100%, 76% 33%, 74% 100%, 72% 33%, 70% 100%, 68% 33%, 66% 100%, 64% 33%, 62% 100%, 60% 33%, 58% 100%, 56% 33%, 54% 100%, 52% 33%, 50% 100%, 48% 33%, 46% 100%, 44% 33%, 42% 100%, 40% 33%, 38% 100%, 36% 33%, 34% 100%, 32% 33%, 30% 100%, 28% 33%, 26% 100%, 24% 33%, 22% 100%, 20% 33%, 18% 100%, 16% 33%, 14% 100%, 12% 33%, 10% 100%, 8% 33%, 6% 100%, 4% 33%, 2% 100%, 0 33%);
+  }
+  .receipt-head {
+    margin-bottom: 12px;
+    font-size: 11px;
+    font-weight: 500;
+    line-height: 1.6;
+    letter-spacing: 0.02em;
+    color: #6b6659;
+    white-space: nowrap;
+  }
+  .receipt-dots {
+    display: block;
+    margin-top: 12px;
+    color: #b9b1a1;
+  }
+  blockquote {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: 16.5px;
+    line-height: 1.5;
+  }
+  figcaption {
+    display: flex;
+    flex-direction: column;
+    margin-top: 14px;
+  }
+  .sig {
+    font-size: 32px;
+    color: #e2560b;
+  }
+  .paper:hover .sig {
+    animation: reink 0.9s var(--ease-in-out);
+  }
+  @keyframes reink {
+    0% { clip-path: inset(0 100% 0 0); }
+    100% { clip-path: inset(0 0 0 0); }
+  }
+  .who {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    color: #6b6659;
+  }
+
+  @media (max-width: 767px) {
+    .table {
+      --cap: calc(100vw * 200 / 1440 * 1.6);
+      padding-top: calc(var(--cap) * 0.7);
+    }
+    .cap,
+    .band {
+      background-size: 160% auto;
+    }
+    .notes {
+      flex-direction: column;
+      align-items: center;
+      gap: 32px;
+    }
+    .paper:nth-child(even) {
+      margin-top: 0;
+    }
+    .paper {
+      width: min(320px, 100%);
+    }
+    .receipt {
+      width: min(270px, 92%);
+    }
+  }
+</style>

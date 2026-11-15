@@ -18,18 +18,19 @@ const SOCIAL_KEYWORDS: Record<string, string> = {
 
 const items: Item[] = [
   { label: 'Back to top', href: '#top', group: 'Sections', keywords: 'scroll up top start beginning' },
-  { label: 'Selected work', href: '#work', group: 'Sections', keywords: 'projects portfolio case studies' },
-  { label: 'Writing', href: '#writing', group: 'Sections', keywords: 'articles blog posts' },
-  { label: 'Testimonials', href: '#testimonials', group: 'Sections', keywords: 'reviews kind words' },
-  { label: 'Get in touch', href: '#contact', group: 'Sections', keywords: 'contact email message reach out' },
+  { label: 'Built in the garage', href: '/#projects', group: 'Sections', keywords: 'projects portfolio work prints' },
+  { label: 'The route so far', href: '/#work-history', group: 'Sections', keywords: 'career experience jobs' },
+  { label: 'Writing', href: '/#writing', group: 'Sections', keywords: 'articles blog posts zines' },
+  { label: 'Lately', href: '/#lately', group: 'Sections', keywords: 'shelf still life watches perfume coffee' },
+  { label: 'Kind words', href: '/#kind-words', group: 'Sections', keywords: 'testimonials reviews' },
 
-  { label: 'All projects', href: '/work', group: 'Pages', keywords: 'work portfolio case studies' },
-  { label: 'Blog', href: '/blog', group: 'Pages', keywords: 'articles writing posts' },
+  { label: 'Builds', href: '/work', group: 'Pages', keywords: 'work projects portfolio case studies' },
+  { label: 'Writing', href: '/blog', group: 'Pages', keywords: 'articles blog posts newsstand' },
   { label: 'Photos', href: '/photos', group: 'Pages', keywords: 'pictures photography gallery' },
   { label: 'About', href: '/about', group: 'Pages', keywords: 'bio me story' },
   { label: 'Uses', href: '/uses', group: 'Pages', keywords: 'gear setup tools desk' },
-  { label: 'Contact', href: '/contact', group: 'Pages', keywords: 'email message reach out form' },
-  { label: 'Legal', href: '/legal', group: 'Pages', keywords: 'privacy terms' },
+  { label: 'Contact', href: '/contact', group: 'Pages', keywords: 'message note reach out form hello' },
+  { label: 'Privacy', href: '/legal', group: 'Pages', keywords: 'privacy legal cookies terms' },
 
   ...socialLinks.map(({ name, href }): Item => ({
     label: name,
@@ -148,7 +149,7 @@ const itemsJson = JSON.stringify(items);
     background: transparent;
     border: none;
     outline: none;
-    font-family: 'DM Sans', sans-serif;
+    font-family: var(--font-body);
     font-size: 1rem;
     color: var(--text);
     padding: 0;
@@ -160,7 +161,7 @@ const itemsJson = JSON.stringify(items);
   }
 
   .cmdk-esc {
-    font-family: 'JetBrains Mono', monospace;
+    font-family: var(--font-body);
     font-size: 0.65rem;
     letter-spacing: 0.08em;
     color: var(--text-muted);
@@ -182,7 +183,7 @@ const itemsJson = JSON.stringify(items);
   }
 
   .cmdk-group-label {
-    font-family: 'DM Sans', sans-serif;
+    font-family: var(--font-body);
     font-size: 0.65rem;
     font-weight: 600;
     letter-spacing: 0.18em;
@@ -206,7 +207,7 @@ const itemsJson = JSON.stringify(items);
     border-radius: var(--radius);
     cursor: pointer;
     color: var(--text-secondary);
-    font-family: 'DM Sans', sans-serif;
+    font-family: var(--font-body);
     font-size: 0.9375rem;
     background: transparent;
     border: 1px solid transparent;
@@ -235,7 +236,7 @@ const itemsJson = JSON.stringify(items);
   }
 
   .cmdk-item-meta {
-    font-family: 'JetBrains Mono', monospace;
+    font-family: var(--font-body);
     font-size: 0.7rem;
     letter-spacing: 0.04em;
     text-transform: uppercase;
@@ -258,7 +259,7 @@ const itemsJson = JSON.stringify(items);
     padding: 2rem 1rem;
     text-align: center;
     color: var(--text-muted);
-    font-family: 'DM Sans', sans-serif;
+    font-family: var(--font-body);
     font-size: 0.9rem;
   }
 
@@ -269,14 +270,14 @@ const itemsJson = JSON.stringify(items);
     padding: 0.6rem 1rem;
     border-top: 1px solid var(--border);
     background: var(--bg-surface);
-    font-family: 'DM Sans', sans-serif;
+    font-family: var(--font-body);
     font-size: 0.75rem;
     color: var(--text-muted);
   }
 
   .cmdk-foot kbd {
     display: inline-block;
-    font-family: 'JetBrains Mono', monospace;
+    font-family: var(--font-body);
     font-size: 0.65rem;
     color: var(--text-secondary);
     border: 1px solid var(--border);
@@ -303,7 +304,7 @@ const itemsJson = JSON.stringify(items);
 </style>
 
 <script>
-  import { playClickFeedback } from '../../scripts/click-feedback';
+  import { play } from '../../scripts/sound';
 
   type Item = {
     label: string;
@@ -420,7 +421,7 @@ const itemsJson = JSON.stringify(items);
       if (filtered.length === 0) return;
       activeIndex = (activeIndex + delta + filtered.length) % filtered.length;
       updateActive();
-      playClickFeedback();
+      play('tick');
     }
 
     function activate(item: Item) {
@@ -452,7 +453,7 @@ const itemsJson = JSON.stringify(items);
       render();
       requestAnimationFrame(() => input!.focus());
       document.body.style.overflow = 'hidden';
-      playClickFeedback();
+      play('tick');
     }
 
     function close() {
@@ -460,7 +461,7 @@ const itemsJson = JSON.stringify(items);
       root!.setAttribute('hidden', '');
       root!.setAttribute('aria-hidden', 'true');
       document.body.style.overflow = '';
-      playClickFeedback();
+      play('tick');
     }
 
     input.addEventListener('input', () => {
@@ -499,6 +500,11 @@ const itemsJson = JSON.stringify(items);
 
     const onDocKey = (e: KeyboardEvent) => {
       if (e.key === 'k' || e.key === 'K') {
+        if ((e.metaKey || e.ctrlKey) && root!.hasAttribute('hidden')) {
+          e.preventDefault();
+          open();
+          return;
+        }
         if (e.metaKey || e.ctrlKey || e.altKey) return;
         const ae = document.activeElement as HTMLElement | null;
         if (

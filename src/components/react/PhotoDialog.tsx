@@ -57,7 +57,7 @@ export default function PhotoDialog({ item, onClose, onPrev, onNext, counter }: 
       {/* Top bar */}
       <div className="absolute top-0 left-0 right-0 z-20 flex items-center justify-between px-5 py-4">
         {/* Left: counter */}
-        <span className="font-mono text-xs text-white/60">
+        <span className="text-xs tabular-nums text-white/60">
           {counter}
         </span>
 
