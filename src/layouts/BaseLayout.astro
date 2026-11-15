@@ -40,7 +40,15 @@ const ogImage = new URL(image, Astro.site).toString();
         }
         d.setAttribute('data-theme', t);
         var s = 'off';
-        try { s = localStorage.getItem('journal-sound') === 'on' ? 'on' : 'off'; } catch (e) {}
+        try {
+          // One-time migration: the old key's 'off' was just the default, so only an 'on' carries over.
+          var old = localStorage.getItem('journal-sound');
+          if (old !== null) {
+            if (old === 'on' && !localStorage.getItem('journal-sound-choice')) localStorage.setItem('journal-sound-choice', 'on');
+            localStorage.removeItem('journal-sound');
+          }
+          s = localStorage.getItem('journal-sound-choice') === 'on' ? 'on' : 'off';
+        } catch (e) {}
         d.setAttribute('data-sound', s);
         d.classList.add('js');
       })();
