@@ -3,8 +3,9 @@ import { Picture } from 'astro:assets';
 import PageLayout from '@/layouts/PageLayout.astro';
 import Painting from '@/components/journal/Painting.astro';
 import PortraitStack from '@/components/about/PortraitStack.astro';
-import hills from '@/assets/about/misty-hills.png';
+import HillsGame from '@/components/about/HillsGame.astro';
 import figKtm from '@/assets/about/fig-ktm.png';
+import figCb from '@/assets/about/fig-cb300r.png';
 import toolbox from '@/assets/about/toolbox.png';
 import offDuty from '@/assets/about/off-duty.png';
 import service from '@/assets/paintings/service.png';
@@ -26,7 +27,7 @@ const SPECS: [string, string][] = [
 const ledger = [...ROUTE].reverse();
 ---
 
-<PageLayout title="About | Adithya NR" description="Adithya NR is a product engineer in Abu Dhabi who designs interfaces and then builds them.">
+<PageLayout image="/brand/og/about.png" imageAlt="The misty hill road with a KTM, under the title “The owner’s manual”." title="About | Adithya NR" description="Adithya NR is a product engineer in Abu Dhabi who designs interfaces and then builds them.">
   <section class="wrap about-hero">
     <div class="intro">
       <h1 class="display-xl">The owner’s manual</h1>
@@ -45,7 +46,7 @@ const ledger = [...ROUTE].reverse();
     </div>
   </section>
 
-  <Painting src={hills} alt="Misty green hills with pine trees and a road, a small motorcycle on it; a note reads “where I go to think”." w={1440} h={420} ink={false} focusX={900} mobileScale={0.7} tint />
+  <HillsGame />
 
   <section class="section wrap specs" aria-labelledby="spec-title">
     <div class="spec-sheet">
@@ -56,9 +57,14 @@ const ledger = [...ROUTE].reverse();
         ))}
       </dl>
     </div>
-    <figure class="fig" data-reveal>
-      <Picture src={figKtm} formats={['avif', 'webp']} widths={[521]} sizes="(max-width: 767px) 88vw, 521px" alt="Fig. 1, a pencil-style drawing of the KTM 390 Adventure (2025), with notes on the tall screen, the Acerbis handguards and the 399cc single." loading="lazy" />
-    </figure>
+    <div class="figs">
+      <figure class="fig" data-reveal>
+        <Picture src={figKtm} formats={['avif', 'webp']} widths={[520]} sizes="(max-width: 767px) 88vw, 520px" alt="Fig. 1, a pencil-style drawing of the KTM 390 Adventure (2025), with notes on the tall screen, the Acerbis handguards and the 399cc single." loading="lazy" />
+      </figure>
+      <figure class="fig" data-reveal>
+        <Picture src={figCb} formats={['avif', 'webp']} widths={[520]} sizes="(max-width: 767px) 88vw, 520px" alt="Fig. 2, a pencil-style drawing of the Honda CB300R, with notes on the round LED headlight, the gold upside-down forks and the 286cc single." loading="lazy" />
+      </figure>
+    </div>
   </section>
 
   <section class="section service" aria-labelledby="service-title">
@@ -131,11 +137,10 @@ const ledger = [...ROUTE].reverse();
     margin-top: 26px;
   }
   
+  /* The spec sheet runs full width; the two figures sit side by side below it. */
   .specs {
     display: grid;
-    grid-template-columns: minmax(0, 680px) minmax(0, 521px);
-    justify-content: space-between;
-    gap: 60px;
+    gap: 48px;
     padding-top: 120px;
   }
   .spec-sheet dl {
@@ -161,6 +166,12 @@ const ledger = [...ROUTE].reverse();
     font-family: var(--font-display);
     font-size: 19px;
     line-height: 1.3;
+  }
+  .figs {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 520px));
+    justify-content: space-between;
+    gap: 40px;
   }
   .fig {
     margin: 0;
@@ -258,12 +269,13 @@ const ledger = [...ROUTE].reverse();
   }
 
   @media (max-width: 1100px) {
-    .about-hero,
-    .specs {
+    .about-hero {
       grid-template-columns: 1fr;
     }
-    .portrait,
-    .fig {
+    .figs {
+      justify-content: start;
+    }
+    .portrait {
       max-width: 473px;
     }
   }
@@ -277,7 +289,11 @@ const ledger = [...ROUTE].reverse();
     }
     .specs {
       padding-top: 72px;
-      gap: 40px;
+      gap: 32px;
+    }
+    .figs {
+      grid-template-columns: minmax(0, 473px);
+      gap: 16px;
     }
     .spec-row {
       grid-template-columns: 1fr;

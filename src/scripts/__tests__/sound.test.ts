@@ -8,9 +8,9 @@ describe('sound kit', () => {
     document.documentElement.removeAttribute('data-sound');
   });
 
-  it('is off by default', async () => {
-    const { isSoundOn } = await import('../sound');
-    expect(isSoundOn()).toBe(false);
+  it('has no choice by default', async () => {
+    const { soundChoice } = await import('../sound');
+    expect(soundChoice()).toBe(null);
   });
 
   it('never creates an AudioContext while sound is off', async () => {
@@ -25,13 +25,24 @@ describe('sound kit', () => {
 
   it('persists the choice and reflects it on <html>', async () => {
     (window as unknown as { AudioContext: unknown }).AudioContext = undefined;
-    const { setSoundOn, isSoundOn } = await import('../sound');
+    const { setSoundOn, soundChoice } = await import('../sound');
     setSoundOn(true);
-    expect(isSoundOn()).toBe(true);
+    expect(soundChoice()).toBe('on');
     expect(document.documentElement.dataset.sound).toBe('on');
     setSoundOn(false);
-    expect(isSoundOn()).toBe(false);
+    expect(soundChoice()).toBe('off');
     expect(document.documentElement.dataset.sound).toBe('off');
+  });
+
+  it('turns on for this visit without overwriting the button choice', async () => {
+    (window as unknown as { AudioContext: unknown }).AudioContext = undefined;
+    const { setSoundOn, soundChoice } = await import('../sound');
+    expect(soundChoice()).toBe(null);
+    setSoundOn(true, { remember: false });
+    expect(document.documentElement.dataset.sound).toBe('on');
+    expect(soundChoice()).toBe(null);
+    setSoundOn(false);
+    expect(soundChoice()).toBe('off');
   });
 
   it('ignores unknown sound names', async () => {

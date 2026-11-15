@@ -7,14 +7,16 @@ interface Props {
   title: string;
   description?: string;
   image?: string;
+  imageAlt?: string;
+  type?: 'website' | 'article';
   /** Show the closing "Got something in mind?" CTA above the footer. */
   cta?: boolean;
 }
 
-const { title, description, image, cta = true } = Astro.props;
+const { title, description, image, imageAlt, type, cta = true } = Astro.props;
 ---
 
-<BaseLayout title={title} description={description} image={image}>
+<BaseLayout title={title} description={description} image={image} imageAlt={imageAlt} type={type}>
   <Nav />
   <main id="main" tabindex="-1">
     <slot />

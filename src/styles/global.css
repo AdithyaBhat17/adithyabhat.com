@@ -246,6 +246,37 @@ p {
   padding-inline: var(--gutter);
 }
 
+/* Left edge of the content column, for things placed absolutely inside a
+   full-bleed panel (lines up with .wrap's content at any width). */
+.at-column {
+  left: max(var(--gutter), calc((100% - var(--content)) / 2));
+}
+
+/* A small dark pill laid over a painting (the hero clock, the hills HUD).
+   Solid, not blurred: the scenery under it is often moving. */
+.scene-pill {
+  margin: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 32px;
+  padding: 6px 13px;
+  border-radius: 999px;
+  border: 1px solid rgba(243, 234, 216, 0.18);
+  background: rgba(13, 14, 16, 0.72);
+  color: #f3ead8;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.4;
+  font-variant-numeric: tabular-nums;
+}
+button.scene-pill {
+  cursor: pointer;
+}
+button.scene-pill:hover {
+  background: rgba(13, 14, 16, 0.85);
+}
+
 .section {
   padding-top: 140px;
   padding-bottom: 40px;

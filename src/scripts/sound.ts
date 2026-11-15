@@ -1,8 +1,8 @@
 // Garage Journal sound kit: tiny, synthesized, no audio files.
 //
-// Off by default. The visitor opts in from the nav, the choice persists, and
-// the AudioContext is only ever created inside that click, so nothing can play
-// before a user gesture. Everything runs through one bus: a gentle low-pass,
+// Comes on with the visitor's first click or tap, unless they turned it off
+// with the nav button before (that choice persists). The AudioContext is only
+// ever created inside a click, so nothing can play before a user gesture. Everything runs through one bus: a gentle low-pass,
 // a master gain, then a compressor acting as a limiter so stacked sounds never
 // clip. Each sound is throttled on its own clock so hover storms stay quiet.
 //
@@ -17,7 +17,9 @@
 
 export type SoundName = 'engine' | 'rustle' | 'scratch' | 'chalk' | 'stamp' | 'flick' | 'tick' | 'pour';
 
-const STORAGE_KEY = 'journal-sound';
+// The choice made with the sound button. (BaseLayout's head script migrates the
+// old 'journal-sound' key into this one before anything reads it.)
+const STORAGE_KEY = 'journal-sound-choice';
 const THROTTLE: Record<SoundName, number> = {
   engine: 0.6,
   rustle: 0.35,
@@ -34,20 +36,28 @@ let bus: GainNode | null = null;
 let noise: AudioBuffer | null = null;
 const last: Partial<Record<SoundName, number>> = {};
 
-export function isSoundOn(): boolean {
+/** What the visitor picked with the sound button, or null if they never touched it. */
+export function soundChoice(): 'on' | 'off' | null {
   try {
-    return localStorage.getItem(STORAGE_KEY) === 'on';
+    const v = localStorage.getItem(STORAGE_KEY);
+    return v === 'on' || v === 'off' ? v : null;
   } catch {
-    return false;
+    return null;
   }
 }
 
-/** Must be called from a user gesture when turning sound on. */
-export function setSoundOn(on: boolean): void {
-  try {
-    localStorage.setItem(STORAGE_KEY, on ? 'on' : 'off');
-  } catch {
-    /* storage blocked: the choice just won't persist */
+/**
+ * Must be called from a user gesture when turning sound on. `remember: false`
+ * turns it on for this visit only (the first-click default), so it never
+ * overrides a choice the visitor made with the button.
+ */
+export function setSoundOn(on: boolean, { remember = true } = {}): void {
+  if (remember) {
+    try {
+      localStorage.setItem(STORAGE_KEY, on ? 'on' : 'off');
+    } catch {
+      /* storage blocked: the choice just won't persist */
+    }
   }
   document.documentElement.dataset.sound = on ? 'on' : 'off';
   if (on) {
@@ -103,10 +113,19 @@ function getNoise(ac: AudioContext): AudioBuffer {
   return noise;
 }
 
+/** The context can still be starting inside the click that unlocked it; sounds
+ *  scheduled meanwhile play as soon as it runs. */
+function live(): boolean {
+  // Never wake a context that was suspended because sound is off.
+  if (document.documentElement.dataset.sound !== 'on') return false;
+  if (!ctx || !bus || ctx.state === 'closed') return false;
+  if (ctx.state === 'suspended') ctx.resume().catch(() => {});
+  return true;
+}
+
 /** Returns the context only if sound is on, unlocked, and the throttle allows it. */
 function ready(name: SoundName): AudioContext | null {
-  if (!ctx || !bus || ctx.state !== 'running') return null;
-  if (document.documentElement.dataset.sound !== 'on') return null;
+  if (!live() || !ctx) return null;
   const now = ctx.currentTime;
   if (now - (last[name] ?? -10) < THROTTLE[name]) return null;
   last[name] = now;
@@ -186,8 +205,7 @@ function prefetchEngines() {
 
 /** Plays a recorded engine. `force` skips the throttle (sound lab). */
 export function engineSample(name: string, { level = 0.9, force = false } = {}): void {
-  if (!ctx || !bus || ctx.state !== 'running') return;
-  if (document.documentElement.dataset.sound !== 'on') return;
+  if (!live() || !ctx || !bus) return;
   if (!force && !ready('engine')) return;
   const ac = ctx;
   const out = bus;

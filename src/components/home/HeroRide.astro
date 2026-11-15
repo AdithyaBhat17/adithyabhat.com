@@ -1,0 +1,334 @@
+---
+/**
+ * The home hero as an endless ride. The painting is split into layers (see
+ * scripts/art/make-hero-ride.mjs): the sky and sun stay put, and everything
+ * else scrolls past at its own speed. The far band runs through the Abu Dhabi
+ * skyline, open desert, the mountains and desert again, so the scenery changes
+ * as you watch. Each strip is exactly one loop long and is drawn twice, side
+ * by side, sliding left by one strip width.
+ *
+ * Positions are in the painting's Figma px via --u, like <Painting>.
+ * Reduced motion: the layers sit still and show the original composition.
+ *
+ * Short viewports: --crop trims painting px off the top so the road and bike
+ * show without scrolling. The top ~105px is empty paper above the torn edge;
+ * past that the torn edge (mask and ink) moves down by --shift, cutting into
+ * the sky instead of being sliced off.
+ */
+import type { ImageMetadata } from 'astro';
+import edgesData from '@/assets/paintings/edges.json';
+import { layerSources } from '@/lib/art';
+
+interface Props {
+  alt: string;
+  nightAlt: string;
+  class?: string;
+}
+const { alt, nightAlt, class: className } = Astro.props;
+
+const W = 1440;
+const H = 640;
+const MOBILE_SCALE = 0.7;
+const FOCUS_X = 928;
+
+const files = import.meta.glob<{ default: ImageMetadata }>('/src/assets/ride/*-*.png', { eager: true });
+const art = (name: string) => {
+  const f = files[`/src/assets/ride/${name}.png`];
+  if (!f) throw new Error(`missing ride layer ${name}`);
+  return f.default;
+};
+
+/** Bottom → top. `top` is the strip's y in the painting; `speed` is Figma px per second. */
+const LAYERS = [
+  { key: 'back', top: 0, speed: 0 },
+  { key: 'cloudsBack', top: 118, speed: 8 },
+  { key: 'far', top: 160, speed: 16 },
+  { key: 'cloudsFront', top: 241, speed: 14 },
+  { key: 'duneFar', top: 321, speed: 30 },
+  { key: 'duneMidPalms', top: 272, speed: 55 },
+  { key: 'verge', top: 518, speed: 210 },
+  { key: 'lamp', top: 316, speed: 210 },
+  { key: 'lampLight', top: 197, speed: 210, screen: true },
+] as const;
+
+const layerSet = (theme: 'dawn' | 'night') =>
+  Promise.all(
+    LAYERS.map(async (l) => ({
+      ...l,
+      ...(await layerSources(art(`${theme}-${l.key}`), { frameW: W, mobileScale: MOBILE_SCALE, quality: theme === 'dawn' ? 50 : 55 })),
+    })),
+  );
+const [dawn, night] = await Promise.all([layerSet('dawn'), layerSet('night')]);
+const themes = [
+  { key: 'day', layers: dawn },
+  { key: 'night', layers: night },
+];
+
+const edge = (edgesData as Record<string, { top?: string }>)['hero-dawn'];
+---
+
+<div
+  class:list={['ride', className]}
+  style={`--pw:${W};--ph:${H};--ms:${MOBILE_SCALE};--fx:${FOCUS_X};--crop:0;--shift:0`}
+  data-observe
+  data-ride
+>
+  <div class="ride-inner">
+    {themes.map((t) => (
+      <div class:list={['ride-scene', `is-${t.key}`]} role="img" aria-label={t.key === 'night' ? nightAlt : alt}>
+        {t.layers.map((l, i) => {
+          const eager = t.key === 'day' && i === 0;
+          const pic = (
+            <picture>
+              <source type="image/avif" srcset={l.avif} sizes={l.sizes} />
+              <source type="image/webp" srcset={l.webp} sizes={l.sizes} />
+              <img
+                src={l.src}
+                alt=""
+                width={l.w}
+                height={l.h}
+                loading={eager ? 'eager' : 'lazy'}
+                decoding={eager ? 'sync' : 'async'}
+                fetchpriority={eager ? 'high' : 'auto'}
+                draggable="false"
+                data-art={t.key}
+                data-back={i === 0 ? '' : undefined}
+              />
+            </picture>
+          );
+          return l.speed === 0 ? (
+            <div class="layer" style={`--top:${l.top};--w:${l.w};--h:${l.h}`}>{pic}</div>
+          ) : (
+            <div
+              class:list={['layer', 'layer--move', 'screen' in l && l.screen && 'layer--screen']}
+              style={`--top:${l.top};--w:${l.w};--h:${l.h};--dur:${(l.w / l.speed).toFixed(2)}s`}
+            >
+              <div class="track">
+                {pic}
+                {pic}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    ))}
+    {edge?.top && (
+      <svg class="ride-ink ink-stroke" data-draw viewBox={`0 0 ${W} ${H}`} preserveAspectRatio="none" aria-hidden="true" style="--draw-dur:1.6s">
+        <path d={edge.top} pathLength="1" />
+      </svg>
+    )}
+    <slot />
+  </div>
+  <slot name="outer" />
+</div>
+<script is:inline>
+  // Dark visitors see the night scene first: give its backdrop the high-priority
+  // fetch instead of the hidden day one, as Painting does for its night art.
+  (function () {
+    if (document.documentElement.dataset.theme !== 'dark') return;
+    var s = document.currentScript, r = s && s.previousElementSibling;
+    var day = r && r.querySelector('img[data-art=day][data-back]');
+    var night = r && r.querySelector('img[data-art=night][data-back]');
+    if (night) { night.loading = 'eager'; night.setAttribute('fetchpriority', 'high'); }
+    if (day) { day.loading = 'lazy'; day.setAttribute('fetchpriority', 'low'); }
+  })();
+  // Fit before first paint (re-run on resize and once fonts settle, below).
+  (function () {
+    // Looks the scene up on each call, so it never holds a page that's gone.
+    window.__fitRide = function () {
+      var r = document.querySelector('[data-ride]');
+      if (!r) return;
+      var ROAD = 625, MAX = 220, EDGE = 105.49;
+      r.style.setProperty('--crop', '0');
+      var b = r.getBoundingClientRect(), inner = r.firstElementChild.getBoundingClientRect();
+      var u = inner.width / 1440;
+      var top = b.top + window.scrollY;
+      var crop = Math.max(0, Math.min(MAX, ROAD - (window.innerHeight - top) / u));
+      r.style.setProperty('--crop', crop.toFixed(1));
+      r.style.setProperty('--shift', Math.max(0, crop - EDGE).toFixed(1));
+    };
+    window.__fitRide();
+  })();
+</script>
+
+<style>
+  .ride {
+    position: relative;
+    width: 100%;
+    container-type: inline-size;
+    aspect-ratio: var(--pw) / calc(var(--ph) - var(--crop));
+    overflow: hidden;
+  }
+  .ride-inner {
+    --u: calc(100cqw / var(--pw));
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: calc(-1 * var(--crop) * var(--u));
+    height: calc(var(--ph) * var(--u));
+  }
+
+  /* The torn top edge, same mask the static painting was cut with. */
+  .ride-scene {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    -webkit-mask: url('/art/hero-mask.svg') no-repeat calc(-18 * var(--u)) calc((105.49 + var(--shift)) * var(--u)) / calc(1476 * var(--u)) calc(570.51 * var(--u));
+    mask: url('/art/hero-mask.svg') no-repeat calc(-18 * var(--u)) calc((105.49 + var(--shift)) * var(--u)) / calc(1476 * var(--u)) calc(570.51 * var(--u));
+  }
+
+  .layer {
+    position: absolute;
+    left: 0;
+    top: calc(var(--top) * var(--u));
+    width: calc(var(--w) * var(--u));
+    height: calc(var(--h) * var(--u));
+  }
+  .layer img {
+    display: block;
+    width: calc(var(--w) * var(--u));
+    height: calc(var(--h) * var(--u));
+    user-select: none;
+    -webkit-user-drag: none;
+  }
+  .layer--move,
+  .track {
+    width: calc(2 * var(--w) * var(--u));
+  }
+  .track {
+    display: flex;
+    will-change: transform;
+  }
+  .layer--screen {
+    mix-blend-mode: screen;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .track {
+      animation: ride var(--dur) linear infinite;
+    }
+    .ride:not(.is-riding) .track {
+      animation-play-state: paused;
+    }
+  }
+  @keyframes ride {
+    to {
+      transform: translate3d(calc(-1 * var(--w) * var(--u)), 0, 0);
+    }
+  }
+
+  /* Day/night: only the active scene is displayed (so the other never loads
+     up front); both show while the theme is switching, to crossfade. */
+  .ride-scene.is-night {
+    display: none;
+  }
+  :global([data-theme='dark']) .ride-scene.is-night {
+    display: block;
+  }
+  :global([data-theme='dark']) .ride-scene.is-day {
+    display: none;
+  }
+  :global(.theme-switching) .ride-scene.is-day,
+  :global(.theme-switching) .ride-scene.is-night {
+    display: block;
+    transition: opacity 0.9s ease;
+  }
+  :global(.theme-switching[data-theme='dark']) .ride-scene.is-day,
+  :global(.theme-switching[data-theme='light']) .ride-scene.is-night {
+    opacity: 0;
+  }
+
+  .ride-ink {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+    pointer-events: none;
+    translate: 0 calc(var(--shift) * var(--u));
+  }
+  .ride-ink path {
+    stroke-width: 2.4;
+  }
+
+  @media (max-width: 767px) {
+    .ride {
+      aspect-ratio: auto;
+      height: calc((var(--ph) - var(--crop)) * var(--ms) * 1px);
+      container-type: normal;
+    }
+    .ride-inner {
+      --u: calc(var(--ms) * 1px);
+      left: calc(50% - var(--fx) * var(--u));
+      right: auto;
+      width: calc(var(--pw) * var(--u));
+    }
+  }
+</style>
+
+<script>
+  // Ride only while the scene is on screen, the tab is visible, and the
+  // visitor hasn't pressed pause.
+  const PAUSE_KEY = 'ride-paused';
+  let io: IntersectionObserver | null = null;
+  let sync = () => {};
+  let paused = (() => {
+    try {
+      return localStorage.getItem(PAUSE_KEY) === '1';
+    } catch {
+      return false;
+    }
+  })();
+
+  function setup() {
+    io?.disconnect();
+    const ride = document.querySelector<HTMLElement>('[data-ride]');
+    if (!ride) {
+      sync = () => {};
+      return;
+    }
+    let visible = false;
+    const btn = document.querySelector<HTMLButtonElement>('[data-ride-toggle]');
+    sync = () => {
+      ride.classList.toggle('is-riding', visible && !paused && !document.hidden);
+      if (btn) {
+        btn.setAttribute('aria-pressed', String(paused));
+        btn.setAttribute('aria-label', paused ? 'Keep riding' : 'Pause the ride');
+      }
+    };
+    io = new IntersectionObserver(([e]) => {
+      visible = e.isIntersecting;
+      sync();
+    });
+    io.observe(ride);
+    btn?.addEventListener('click', () => {
+      paused = !paused;
+      try {
+        localStorage.setItem(PAUSE_KEY, paused ? '1' : '0');
+      } catch {
+        /* storage blocked: the choice lasts for this visit */
+      }
+      sync();
+    });
+    sync();
+  }
+
+  document.addEventListener('visibilitychange', () => sync());
+  setup();
+
+  // Keep the road above the fold as the viewport changes.
+  type FitWindow = Window & { __fitRide?: () => void };
+  const fit = () => (window as FitWindow).__fitRide?.();
+  // Width changes only: phones resize the viewport's height as the address bar
+  // shows and hides while scrolling, and re-fitting then would shift the page.
+  let fitWidth = window.innerWidth;
+  let resizeTimer = 0;
+  window.addEventListener('resize', () => {
+    if (window.innerWidth === fitWidth) return;
+    fitWidth = window.innerWidth;
+    clearTimeout(resizeTimer);
+    resizeTimer = window.setTimeout(fit, 120);
+  });
+  document.fonts?.ready.then(fit);
+  document.addEventListener('astro:after-swap', setup);
+</script>

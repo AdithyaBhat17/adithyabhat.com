@@ -38,9 +38,14 @@ const idx = all.findIndex((p) => p.slug === project.slug);
 const next = all.length > 1 ? all[(idx + 1) % all.length] : null;
 const nextMeta = next ? buildMeta(next) : undefined;
 const screen = project.thumbnail?.responsiveImage;
+// Link previews: the build's thumbnail at 1200 x 630. Builds for me and at work
+// share the dark thumbnail template, so they're padded in its colour; older
+// client thumbnails have their own backgrounds and are cropped instead.
+const ogFit = meta?.group === 'clients' ? 'fit=crop&crop=center' : 'fit=fill&fill=solid&fill-color=09090b';
+const ogImage = project.thumbnail?.url ? `${project.thumbnail.url}?w=1200&h=630&${ogFit}&fm=jpg&q=80` : undefined;
 ---
 
-<PageLayout title={`${name} | Builds | Adithya NR`} description={lede || meta?.oneLiner}>
+<PageLayout title={`${name} | Builds | Adithya NR`} description={lede || meta?.oneLiner} image={ogImage} imageAlt={project.thumbnail?.alt || `${name}, a build by Adithya NR`} type="article">
   <section class="wrap cs-hero">
     <div class="cs-copy">
       <a class="back" href="/work" data-sound-hover="tick">

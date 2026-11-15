@@ -43,25 +43,13 @@ const PAINTINGS = [
     frame: [1440, 640],
     mask: { file: 'hero.svg', x: -18, y: 105.49 },
     ink: { top: true, bottom: false },
-    crops: { 'hero-dawn': [357, 1083] },
+    // Only the OG image uses this now; the live hero is built from layers
+    // (scripts/art/make-hero-ride.mjs).
     outputs: {
       'hero-dawn': [
         '01-3_4', '02-3_7', '03-3_80', '04-3_83', '05-3_117', '06-3_123', '07-3_126',
         '08-3_148', '09-3_151', '10-3_154', '11-3_162', '12-3_165',
         ['13-3_182', 'screen'], '14-3_185', ['15-3_189', 'screen'],
-      ],
-    },
-  },
-  {
-    id: 'hero-night',
-    frame: [1440, 640],
-    mask: { file: 'hero.svg', x: -18, y: 105.49 },
-    crops: { 'hero-night': [357, 1083] },
-    outputs: {
-      'hero-night': [
-        '01-36_592', '02-36_595', '03-36_668', '04-36_671', '05-36_706', '06-36_712', '07-36_715',
-        '08-36_738', '09-36_741', '10-36_744', '11-36_752', '12-36_755',
-        ['13-36_772', 'screen'], '14-36_775', ['15-36_779', 'screen'],
       ],
     },
   },

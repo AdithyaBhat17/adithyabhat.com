@@ -2,12 +2,12 @@
 // Global listeners are bound once (event delegation); per-page work runs once
 // on start and again after every client-side navigation (`astro:after-swap`).
 
-import { isSoundOn, play, setSoundOn, unlock } from './sound';
+import { play, setSoundOn, soundChoice, unlock } from './sound';
 
 type Theme = 'light' | 'dark';
 
 const html = document.documentElement;
-const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+export const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
 /* ------------------------------------------------------------------ theme */
 
@@ -242,15 +242,32 @@ export function initSite() {
   onPageLoad();
   document.addEventListener('astro:after-swap', onPageLoad);
 
-  // A returning visitor with sound on: unlock audio on their first gesture.
-  if (isSoundOn()) {
-    const once = () => {
-      unlock();
-      window.removeEventListener('pointerdown', once, true);
-      window.removeEventListener('keydown', once, true);
+  // Sound comes on with the first click or tap anywhere, unless the visitor
+  // turned it off with the button before. Audio can only start inside a user
+  // gesture, so this waits for one. Keys only unlock it for someone who chose
+  // "on" last time. Runs in the capture phase, ahead of the click handler
+  // below, so a first click on the theme toggle already plays the engine.
+  if (soundChoice() !== 'off') {
+    const stop = () => {
+      window.removeEventListener('click', first, true);
+      window.removeEventListener('keydown', first, true);
     };
-    window.addEventListener('pointerdown', once, true);
-    window.addEventListener('keydown', once, true);
+    const first = (e: Event) => {
+      const choice = soundChoice();
+      if (choice === 'off') return stop();
+      if (choice === 'on') {
+        unlock();
+        return stop();
+      }
+      if (e.type !== 'click') return;
+      // The sound button makes its own (remembered) choice.
+      if ((e.target as HTMLElement).closest?.('[data-sound-toggle]')) return;
+      setSoundOn(true, { remember: false });
+      syncSoundControls();
+      stop();
+    };
+    window.addEventListener('click', first, true);
+    window.addEventListener('keydown', first, true);
   }
 
   document.addEventListener('click', (e) => {
