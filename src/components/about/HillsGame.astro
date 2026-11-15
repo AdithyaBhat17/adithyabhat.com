@@ -1,0 +1,657 @@
+---
+/**
+ * The misty hills on the About page, as a small game. Click, tap or press
+ * Space and the KTM rides off along the hill road; tap again to hop over
+ * rocks, potholes and the odd goat. Distance is in km, and your best is kept
+ * on this device.
+ *
+ * The painting is split into layers (scripts/art/make-hills-game.mjs). Each
+ * hills layer is a seamless 2880 strip that scrolls at its own depth, and the
+ * bike follows the road's measured centre line (src/data/hills-road.json).
+ * Positions are in the painting's Figma px, like <Painting>.
+ */
+import type { ImageMetadata } from 'astro';
+import { getImage } from 'astro:assets';
+import BikeArt from '@/components/journal/BikeArt.astro';
+import { layerSources } from '@/lib/art';
+
+const W = 1440;
+// 60px taller than the original painting, so the torn bottom edge clears the road.
+const H = 480;
+const MOBILE_SCALE = 0.7;
+// Phones show ~560px of the painting around this x; it keeps the bike (640–736) in from the edge.
+const FOCUS_X = 860;
+
+const files = import.meta.glob<{ default: ImageMetadata }>('/src/assets/hills/*.png', { eager: true });
+const art = (name: string) => files[`/src/assets/hills/${name}.png`].default;
+
+/** Bottom → top, with how fast each layer moves relative to the road. */
+const LAYERS = [
+  { key: 'far', depth: 0.12 },
+  { key: 'fog', depth: 0.2 },
+  { key: 'mid', depth: 0.35 },
+  { key: 'trees', depth: 0.6 },
+  { key: 'near', depth: 0.85 },
+  { key: 'grass', depth: 1 },
+  { key: 'road', depth: 1 },
+];
+
+const sources = (name: string) => layerSources(art(name), { frameW: W, mobileScale: MOBILE_SCALE });
+const [back, layers, ink, note, mask] = await Promise.all([
+  sources('back'),
+  Promise.all(LAYERS.map(async (l) => ({ ...l, ...(await sources(l.key)) }))),
+  sources('overlay-ink'),
+  getImage({ src: art('overlay-note'), format: 'webp', quality: 80 }),
+  getImage({ src: art('mask'), format: 'png' }),
+]);
+---
+
+<section
+  class="hills"
+  style={`--pw:${W};--ph:${H};--ms:${MOBILE_SCALE};--fx:${FOCUS_X};--mask:url('${mask.src}')`}
+  data-w={W}
+  data-h={H}
+  aria-label="Misty hills, a small riding game"
+  data-hills
+  data-state="idle"
+>
+  <div class="hills-inner">
+    <div class="scene" data-hills-stage>
+      <picture class="layer">
+        <source type="image/avif" srcset={back.avif} sizes={back.sizes} />
+        <source type="image/webp" srcset={back.webp} sizes={back.sizes} />
+        <img src={back.src} alt="" width={back.w} height={back.h} loading="lazy" decoding="async" draggable="false" style={`--w:${back.w};--h:${back.h}`} />
+      </picture>
+      {layers.map((l) => (
+        <div class="layer layer--move" style={`--w:${l.w}`} data-depth={l.depth} data-period={l.w}>
+          <div class="track">
+            {[0, 1].map(() => (
+              <picture>
+                <source type="image/avif" srcset={l.avif} sizes={l.sizes} />
+                <source type="image/webp" srcset={l.webp} sizes={l.sizes} />
+                <img src={l.src} alt="" width={l.w} height={l.h} loading="lazy" decoding="async" draggable="false" style={`--w:${l.w};--h:${l.h}`} />
+              </picture>
+            ))}
+          </div>
+        </div>
+      ))}
+      <canvas class="obstacles" data-hills-canvas aria-hidden="true"></canvas>
+      <div class="bike" data-hills-bike>
+        <BikeArt bike="ktm" width={200} sizes="(max-width: 767px) 68px, 7vw" />
+      </div>
+    </div>
+    <picture class="ink">
+      <source type="image/avif" srcset={ink.avif} sizes={ink.sizes} />
+      <source type="image/webp" srcset={ink.webp} sizes={ink.sizes} />
+      <img src={ink.src} alt="" width={ink.w} height={ink.h} loading="lazy" decoding="async" draggable="false" />
+    </picture>
+    <img class="note" src={note.src} alt="A note by the bike reads “where I go to think”." width="300" height="112" loading="lazy" decoding="async" draggable="false" />
+  </div>
+
+  <div class="hud at-column">
+    <button type="button" class="scene-pill pill--btn" data-hills-start>
+      <svg viewBox="0 0 14 14" width="14" height="14" aria-hidden="true"><path d="M5 3.2v7.6L10.8 7Z" /></svg>
+      <span data-hills-label>Ride</span>
+    </button>
+    <p class="scene-pill" data-hills-score hidden></p>
+    <p class="scene-pill pill--quiet" data-hills-msg hidden></p>
+  </div>
+  <p class="sr-only" aria-live="polite" data-hills-live></p>
+</section>
+
+<style>
+  .hills {
+    position: relative;
+    width: 100%;
+    container-type: inline-size;
+    aspect-ratio: var(--pw) / var(--ph);
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .hills-inner {
+    --u: calc(100cqw / var(--pw));
+    position: absolute;
+    inset: 0;
+  }
+  .scene {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    cursor: pointer;
+    touch-action: manipulation;
+    -webkit-mask: var(--mask) no-repeat 0 0 / 100% 100%;
+    mask: var(--mask) no-repeat 0 0 / 100% 100%;
+    filter: var(--painting-tint);
+    transition: filter 0.6s ease;
+  }
+  .scene:focus-visible {
+    outline: none;
+  }
+  .layer {
+    position: absolute;
+    left: 0;
+    top: 0;
+  }
+  .layer img {
+    display: block;
+    width: calc(var(--w) * var(--u));
+    height: calc(var(--h) * var(--u));
+    -webkit-user-drag: none;
+  }
+  .track {
+    display: flex;
+    width: max-content;
+    will-change: transform;
+  }
+  .track > picture {
+    flex: none;
+  }
+  .obstacles {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+  }
+  /* The tiny KTM: the 400x256 bike art at 0.24. JS moves it along the road. */
+  .bike {
+    position: absolute;
+    left: calc(640 * var(--u));
+    top: 0;
+    width: calc(96 * var(--u));
+    transform-origin: 50% 92%;
+    pointer-events: none;
+  }
+  .ink,
+  .ink img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+  }
+  .ink {
+    filter: var(--painting-tint);
+  }
+  .note {
+    position: absolute;
+    left: calc(800 * var(--u));
+    top: calc(196 * var(--u));
+    width: calc(300 * var(--u));
+    height: auto;
+    pointer-events: none;
+    filter: var(--painting-tint);
+    transition: opacity 0.4s ease, translate 0.4s ease;
+  }
+  .hills:not([data-state='idle']) .note {
+    opacity: 0;
+    translate: 0 calc(-8 * var(--u));
+  }
+
+  .hud {
+    position: absolute;
+    /* Above the torn bottom edge, which scales with the painting. */
+    bottom: calc(100cqw * 64 / 1440);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    pointer-events: none;
+  }
+  .scene-pill[hidden] {
+    display: none;
+  }
+  .pill--btn {
+    pointer-events: auto;
+  }
+  .pill--btn svg {
+    fill: currentColor;
+  }
+  .pill--quiet {
+    background: rgba(13, 14, 16, 0.5);
+  }
+  .hills[data-state='playing'] .pill--btn {
+    display: none;
+  }
+
+  @media (max-width: 767px) {
+    .hills {
+      aspect-ratio: auto;
+      height: calc(var(--ph) * var(--ms) * 1px);
+      overflow: hidden;
+      container-type: normal;
+    }
+    .hills-inner {
+      --u: calc(var(--ms) * 1px);
+      inset: 0 auto 0 calc(50% - var(--fx) * var(--u));
+      width: calc(var(--pw) * var(--u));
+    }
+    /* Over the fog, clear of the road and the bike. */
+    .hud {
+      top: 40px;
+      bottom: auto;
+    }
+  }
+</style>
+
+<script>
+  import road from '@/data/hills-road.json';
+  import { play } from '@/scripts/sound';
+
+  type State = 'idle' | 'playing' | 'paused' | 'over';
+  type Kind = 'rock' | 'pothole' | 'goat';
+  interface Obstacle {
+    kind: Kind;
+    x: number; // left edge, painting px on screen
+    seed: number; // keeps its hand-drawn wobble the same every frame
+  }
+
+  // All in painting px (one Figma px), seconds.
+  const BIKE_X = 640;
+  const BIKE_W = 96;
+  const REAR_X = BIKE_X + 20;
+  const FRONT_X = BIKE_X + 78;
+  const BIKE_LIFT = 59; // bike art top above the road's centre line
+  const WHEEL_R = 12.6;
+  const START_SPEED = 300;
+  const MAX_SPEED = 700;
+  const ACCEL = 9;
+  const JUMP_V = 340;
+  const GRAVITY = 1150;
+  const PX_PER_KM = 6000;
+  const BEST_KEY = 'hills-best';
+  // w/h are the hit box (h: how high you must be to clear it); the drawings
+  // are made at 22-28px and scaled by SCALE.
+  const SCALE = 1.4;
+  const KINDS: Record<Kind, { w: number; h: number; label: string }> = {
+    rock: { w: 22 * SCALE, h: 14 * SCALE, label: 'a rock' },
+    pothole: { w: 28 * SCALE, h: 3, label: 'a pothole' },
+    goat: { w: 26 * SCALE, h: 22 * SCALE, label: 'a goat' },
+  };
+  const INK = '#2b2622';
+
+  function roadCentre(stripX: number): number {
+    const n = road.top.length;
+    const f = (((stripX % road.period) + road.period) % road.period) / road.step;
+    const i = Math.floor(f) % n;
+    const j = (i + 1) % n;
+    const t = f - Math.floor(f);
+    const c = (k: number) => (road.top[k] + road.bottom[k]) / 2;
+    return c(i) * (1 - t) + c(j) * t;
+  }
+
+  function readBest(): number {
+    try {
+      return Number(localStorage.getItem(BEST_KEY)) || 0;
+    } catch {
+      return 0;
+    }
+  }
+
+  const km = (px: number) => `${(px / PX_PER_KM).toFixed(1)} km`;
+
+  function rng(seed: number) {
+    let s = seed;
+    return () => {
+      s = (s * 16807) % 2147483647;
+      return s / 2147483647;
+    };
+  }
+
+  function drawRock(ctx: CanvasRenderingContext2D, o: Obstacle) {
+    const r = rng(o.seed);
+    const stones = [
+      [3, 13, 9],
+      [11, 15, 11],
+      [18, 9, 6],
+    ];
+    for (const [sx, w, h] of stones) {
+      ctx.beginPath();
+      const steps = 9;
+      for (let k = 0; k <= steps; k++) {
+        const a = Math.PI + (Math.PI * k) / steps;
+        const jitter = 0.85 + r() * 0.3;
+        ctx.lineTo(sx + (w / 2) * Math.cos(a) * jitter + w / 2 - 2, 1 + h * Math.sin(a) * jitter);
+      }
+      ctx.closePath();
+      ctx.fillStyle = '#77716a';
+      ctx.fill();
+      ctx.strokeStyle = INK;
+      ctx.lineWidth = 1.1;
+      ctx.stroke();
+      ctx.fillStyle = 'rgba(255,255,255,0.14)';
+      ctx.fillRect(sx, -h * 0.8, w * 0.35, h * 0.25);
+    }
+    ctx.fillStyle = 'rgba(20,20,20,0.3)';
+    ctx.fillRect(0, 0, 22, 1.6);
+  }
+
+  function drawPothole(ctx: CanvasRenderingContext2D, o: Obstacle) {
+    const r = rng(o.seed);
+    ctx.beginPath();
+    for (let k = 0; k < 18; k++) {
+      const a = (Math.PI * 2 * k) / 18;
+      const j = 0.82 + r() * 0.3;
+      ctx.lineTo(14 + 14 * Math.cos(a) * j, 3.4 * Math.sin(a) * j);
+    }
+    ctx.closePath();
+    ctx.fillStyle = '#1d1e22';
+    ctx.fill();
+    ctx.strokeStyle = 'rgba(190,190,195,0.7)';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+  }
+
+  function drawGoat(ctx: CanvasRenderingContext2D, t: number) {
+    ctx.strokeStyle = INK;
+    ctx.lineWidth = 1.6;
+    ctx.lineCap = 'round';
+    const step = Math.sin(t * 9) * 1.2;
+    // legs
+    for (const [lx, d] of [
+      [6, step],
+      [9, -step],
+      [17, -step],
+      [20, step],
+    ]) {
+      ctx.beginPath();
+      ctx.moveTo(lx, -8);
+      ctx.lineTo(lx + d, 0);
+      ctx.stroke();
+    }
+    // body
+    ctx.fillStyle = '#ece3d2';
+    ctx.beginPath();
+    ctx.ellipse(14, -11, 10, 5.5, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.lineWidth = 0.9;
+    ctx.stroke();
+    // head (facing the bike, to the left) and horns
+    ctx.beginPath();
+    ctx.ellipse(2.5, -16, 3.6, 2.8, -0.4, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.stroke();
+    ctx.lineWidth = 1.3;
+    ctx.beginPath();
+    ctx.moveTo(4, -18.5);
+    ctx.quadraticCurveTo(7, -22.5, 9, -20);
+    ctx.stroke();
+    // tail
+    ctx.beginPath();
+    ctx.moveTo(23.5, -13);
+    ctx.lineTo(26, -15.5);
+    ctx.stroke();
+  }
+
+  // One game per page visit. Everything bound outside the game's own DOM is
+  // tied to this controller and released when Astro swaps the page out.
+  let teardown: AbortController | null = null;
+
+  function setup() {
+    const root = document.querySelector<HTMLElement>('[data-hills]');
+    if (!root || root.dataset.ready) return;
+    root.dataset.ready = '1';
+    teardown?.abort();
+    teardown = new AbortController();
+    const { signal } = teardown;
+    const PW = Number(root.dataset.w);
+    const PH = Number(root.dataset.h);
+    const stage = root.querySelector<HTMLElement>('[data-hills-stage]')!;
+    const inner = root.querySelector<HTMLElement>('.hills-inner')!;
+    const canvas = root.querySelector<HTMLCanvasElement>('[data-hills-canvas]')!;
+    const ctx = canvas.getContext('2d')!;
+    const bikeEl = root.querySelector<HTMLElement>('[data-hills-bike]')!;
+    const wheels = [...bikeEl.querySelectorAll<HTMLElement>('.part--wheelRear, .part--wheelFront')];
+    const startBtn = root.querySelector<HTMLButtonElement>('[data-hills-start]')!;
+    const label = root.querySelector<HTMLElement>('[data-hills-label]')!;
+    const scoreEl = root.querySelector<HTMLElement>('[data-hills-score]')!;
+    const msgEl = root.querySelector<HTMLElement>('[data-hills-msg]')!;
+    const live = root.querySelector<HTMLElement>('[data-hills-live]')!;
+    const tracks = [...root.querySelectorAll<HTMLElement>('.layer--move')].map((el) => ({
+      el: el.querySelector<HTMLElement>('.track')!,
+      depth: Number(el.dataset.depth),
+      period: Number(el.dataset.period),
+    }));
+
+    let state: State = 'idle';
+    let dist = 0;
+    let speed = START_SPEED;
+    let lift = 0; // height above the road
+    let vy = 0;
+    let wheelTurn = 0;
+    let obstacles: Obstacle[] = [];
+    let nextGap = 500;
+    let last = 0;
+    let raf = 0;
+    let clock = 0;
+    let best = readBest();
+    let visible = false;
+    let u = 1;
+    let measuredW = 0;
+    let shownKm = '';
+    const rand = rng(Date.now() % 2147483646 + 1);
+
+    function measure() {
+      const r = inner.getBoundingClientRect();
+      if (r.width === measuredW) return;
+      measuredW = r.width;
+      u = r.width / PW;
+      const dpr = Math.min(2, window.devicePixelRatio || 1);
+      canvas.width = Math.round(r.width * dpr);
+      canvas.height = Math.round(r.height * dpr);
+      ctx.setTransform(u * dpr, 0, 0, u * dpr, 0, 0);
+    }
+
+    /** Right edge of what the visitor can see, in painting px (phones crop the scene). */
+    function viewRight(): number {
+      const ir = inner.getBoundingClientRect();
+      const rr = root!.getBoundingClientRect();
+      return Math.min(PW, (rr.right - ir.left) / u);
+    }
+
+    function setMsg(el: HTMLElement, text: string | null) {
+      el.hidden = !text;
+      if (text) el.textContent = text;
+    }
+
+    function render() {
+      for (const t of tracks) {
+        const off = (dist * t.depth) % t.period;
+        t.el.style.transform = `translate3d(${(-off * u).toFixed(2)}px,0,0)`;
+      }
+      const rearY = roadCentre(REAR_X + dist);
+      const frontY = roadCentre(FRONT_X + dist);
+      const base = (rearY + frontY) / 2;
+      const tilt = Math.atan2(frontY - rearY, FRONT_X - REAR_X);
+      const crashTilt = state === 'over' ? -0.35 : 0;
+      bikeEl.style.transform = `translate3d(0,${((base - BIKE_LIFT - lift) * u).toFixed(2)}px,0) rotate(${(lift > 0 ? tilt * 0.4 - Math.min(0.18, vy / 2000) : tilt) + crashTilt}rad)`;
+      for (const w of wheels) w.style.transform = `rotate(${wheelTurn}rad)`;
+
+      ctx.clearRect(0, 0, PW, PH);
+      for (const o of obstacles) {
+        const y = roadCentre(o.x + KINDS[o.kind].w / 2 + dist) + 2;
+        ctx.save();
+        ctx.translate(o.x, y);
+        ctx.scale(SCALE, SCALE);
+        if (o.kind === 'rock') drawRock(ctx, o);
+        else if (o.kind === 'pothole') drawPothole(ctx, o);
+        else drawGoat(ctx, clock);
+        ctx.restore();
+      }
+    }
+
+    function spawn() {
+      const r = rand();
+      const kind: Kind = r < 0.45 ? 'rock' : r < 0.75 ? 'pothole' : 'goat';
+      obstacles.push({ kind, x: viewRight() + 30, seed: Math.floor(rand() * 2147483646) + 1 });
+      // Leave room to land and take off again; gaps tighten as you speed up.
+      const min = Math.max(240, speed * 0.75);
+      nextGap = min + rand() * speed * 1.1;
+    }
+
+    function crash(o: Obstacle) {
+      state = 'over';
+      root!.dataset.state = 'over';
+      play('stamp');
+      const isBest = dist > best;
+      if (isBest) {
+        best = dist;
+        try {
+          localStorage.setItem(BEST_KEY, String(Math.round(best)));
+        } catch {
+          /* storage blocked: the best lasts for this visit */
+        }
+      }
+      const text = `Hit ${KINDS[o.kind].label} at ${km(dist)}`;
+      setMsg(scoreEl, text);
+      setMsg(msgEl, isBest ? 'New best' : `Best ${km(best)}`);
+      label.textContent = 'Ride again';
+      live.textContent = `${text}. ${isBest ? 'That’s a new best.' : `Your best is ${km(best)}.`}`;
+      render();
+    }
+
+    function tick(now: number) {
+      const dt = Math.min(0.05, (now - last) / 1000);
+      last = now;
+      clock += dt;
+      if (state !== 'playing') return;
+      speed = Math.min(MAX_SPEED, speed + ACCEL * dt);
+      const step = speed * dt;
+      dist += step;
+      wheelTurn += step / WHEEL_R;
+      if (lift > 0 || vy > 0) {
+        vy -= GRAVITY * dt;
+        lift = Math.max(0, lift + vy * dt);
+        if (lift === 0) vy = 0;
+      }
+      for (const o of obstacles) o.x -= step;
+      obstacles = obstacles.filter((o) => o.x + KINDS[o.kind].w > -40);
+      nextGap -= step;
+      if (nextGap <= 0) spawn();
+
+      for (const o of obstacles) {
+        const { w, h } = KINDS[o.kind];
+        const overlap = o.x < BIKE_X + BIKE_W - 10 && o.x + w > BIKE_X + 10;
+        if (overlap && lift < h - 1) return crash(o);
+      }
+      // The label only changes every 0.1 km, so don't touch the DOM every frame.
+      const kmNow = km(dist);
+      if (kmNow !== shownKm) setMsg(scoreEl, (shownKm = kmNow));
+      if (clock > 3.5 && !msgEl.hidden && msgEl.dataset.hint) {
+        setMsg(msgEl, best ? `Best ${km(best)}` : null);
+        delete msgEl.dataset.hint;
+      }
+      render();
+      raf = requestAnimationFrame(tick);
+    }
+
+    function run() {
+      cancelAnimationFrame(raf);
+      last = performance.now();
+      raf = requestAnimationFrame(tick);
+    }
+
+    function start() {
+      if (state === 'paused') {
+        state = 'playing';
+        root!.dataset.state = 'playing';
+        setMsg(msgEl, best ? `Best ${km(best)}` : null);
+        run();
+        return;
+      }
+      measure();
+      state = 'playing';
+      root!.dataset.state = 'playing';
+      dist = 0;
+      speed = START_SPEED;
+      lift = 0;
+      vy = 0;
+      clock = 0;
+      obstacles = [];
+      nextGap = 420;
+      setMsg(scoreEl, (shownKm = km(0)));
+      setMsg(msgEl, 'Tap, click or press Space to jump');
+      msgEl.dataset.hint = '1';
+      live.textContent = 'Riding. Press Space to jump.';
+      play('engine-ktm');
+      stage.focus({ preventScroll: true });
+      run();
+    }
+
+    function jump() {
+      if (state !== 'playing' || lift > 0) return;
+      vy = JUMP_V;
+      lift = 0.01;
+      play('flick');
+    }
+
+    function pause() {
+      if (state !== 'playing') return;
+      state = 'paused';
+      root!.dataset.state = 'paused';
+      cancelAnimationFrame(raf);
+      label.textContent = 'Keep riding';
+      setMsg(msgEl, 'Paused');
+    }
+
+    stage.tabIndex = -1;
+    stage.addEventListener('pointerdown', (e) => {
+      if (state === 'playing') {
+        e.preventDefault();
+        jump();
+      }
+    });
+    stage.addEventListener('click', () => {
+      if (state !== 'playing') start();
+    });
+    startBtn.addEventListener('click', start);
+    window.addEventListener(
+      'keydown',
+      (e) => {
+      if (!visible || e.repeat) return;
+      if (e.key !== ' ' && e.key !== 'ArrowUp') return;
+      const inGame = root!.contains(document.activeElement);
+      if (state === 'playing') {
+        e.preventDefault();
+        jump();
+      } else if (inGame && document.activeElement !== startBtn) {
+        e.preventDefault();
+        start();
+      }
+      },
+      { signal },
+    );
+    const io = new IntersectionObserver(([e]) => {
+      visible = e.isIntersecting;
+      if (!visible) pause();
+    });
+    io.observe(root);
+    document.addEventListener(
+      'visibilitychange',
+      () => {
+        if (document.hidden) pause();
+      },
+      { signal },
+    );
+    const ro = new ResizeObserver(() => {
+      measure();
+      render();
+    });
+    ro.observe(inner);
+    signal.addEventListener('abort', () => {
+      cancelAnimationFrame(raf);
+      io.disconnect();
+      ro.disconnect();
+    });
+
+    if (best) setMsg(msgEl, `Best ${km(best)}`);
+    measure();
+    render();
+  }
+
+  // Now (on a hard load astro:page-load waits for every image), and after each
+  // client-side navigation. data-ready keeps the two from running it twice.
+  setup();
+  document.addEventListener('astro:page-load', setup);
+  document.addEventListener('astro:before-swap', () => teardown?.abort());
+</script>
