@@ -48,7 +48,7 @@ export const BUILD_LOG = `
     project(filter: { slug: { eq: $slug } }) {
       id title caseStudy slug date link tags oneLiner role builtWith stamp builtFor parts
       metadata { description }
-      thumbnail { alt responsiveImage(imgixParams: { fit: crop, w: 648, h: 432, auto: format }) { srcSet webpSrcSet sizes src width height aspectRatio alt title base64 } }
+      thumbnail { url alt responsiveImage(imgixParams: { fit: crop, w: 648, h: 432, auto: format }) { srcSet webpSrcSet sizes src width height aspectRatio alt title base64 } }
       buildLog { value ${ST_BLOCKS} }
       seo: _seoMetaTags { attributes tag content }
     }
@@ -64,7 +64,7 @@ export const BUILD_LOG_LEGACY = `
     project(filter: { slug: { eq: $slug } }) {
       id title caseStudy slug date link tags
       metadata { description }
-      thumbnail { alt responsiveImage(imgixParams: { fit: crop, w: 648, h: 432, auto: format }) { srcSet webpSrcSet sizes src width height aspectRatio alt title base64 } }
+      thumbnail { url alt responsiveImage(imgixParams: { fit: crop, w: 648, h: 432, auto: format }) { srcSet webpSrcSet sizes src width height aspectRatio alt title base64 } }
       seo: _seoMetaTags { attributes tag content }
     }
     allProjects(orderBy: date_DESC) {
