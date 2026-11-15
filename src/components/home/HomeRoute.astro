@@ -38,7 +38,7 @@ import { ROUTE } from '@/data/career';
         </li>
       ))}
     </ol>
-    <div class="at route-bike" style="--x:1060;--y:400;--mx:83;--my:1071" aria-hidden="true">
+    <div class="at route-bike" style="--x:1060;--y:400;--mx:83;--my:1071" aria-hidden="true" data-route-bike>
       <Image src={ktm} alt="" widths={[402]} sizes="220px" loading="lazy" />
     </div>
   </DualPainting>
@@ -118,15 +118,14 @@ import { ROUTE } from '@/data/career';
   .route-bike :global(img) {
     width: 100%;
   }
+  /* The ride in is scripted along the road (see the script below); until it
+     starts, the bike waits out of sight. */
+  .route-bike {
+    transform-origin: 50% 96%;
+  }
   @media (prefers-reduced-motion: no-preference) {
-    :global(.js) .route-bike {
-      transform: translate3d(calc(-460 * var(--u)), calc(30 * var(--u)), 0);
+    :global(.js) .route-bike:not([data-rode]) {
       opacity: 0;
-      transition: transform 2.2s cubic-bezier(0.25, 0.6, 0.2, 1) 0.6s, opacity 0.4s ease 0.6s;
-    }
-    :global(.js .is-in) .route-bike {
-      transform: none;
-      opacity: 1;
     }
   }
 
@@ -139,10 +138,100 @@ import { ROUTE } from '@/data/career';
       max-width: calc(var(--mw) * var(--u));
       font-size: calc(24 * var(--u));
     }
-    @media (prefers-reduced-motion: no-preference) {
-      :global(.js) .route-bike {
-        transform: translate3d(calc(-260 * var(--u)), 0, 0);
-      }
-    }
   }
 </style>
+
+<script>
+  import { reducedMotion } from '@/scripts/site';
+
+  // The KTM rides the last stretch of the road into its parking spot. The road
+  // is one stroked path in the painting (Figma "Road"), so the bike follows its
+  // centre line, tilting with it. Coordinates are the painting's Figma px.
+  const ROADS = {
+    desktop: {
+      d: 'M 0 170 C 190 170 270 90 430 90 C 610 90 650 170 830 162 C 1010 154 1050 50 1210 40 C 1320 33 1400 10 1500 0',
+      offset: [-30, 470],
+      startX: 640, // where on the road the ride begins
+    },
+    mobile: {
+      d: 'M 475 1.39 C 335 -10.61 195 59.39 75 55.39 C -25 61.39 -25 261.39 75 267.39 C 195 261.39 285 317.39 385 311.39 C 485 317.39 485 515.39 385 521.39 C 285 515.39 185 567.39 75 561.39 C -25 567.39 -25 795.39 75 801.39 C 195 797.39 325 835.39 475 827.39',
+      offset: [-35, 390.5],
+      startX: 0,
+    },
+  };
+  const BIKE_W = 220;
+  const CONTACT: [number, number] = [110, 135]; // wheels' contact point in the 220px bike
+  const DURATION = 2600;
+
+  /** Last length along the path, at or before `from`, whose x is <= `x`: a
+   *  coarse walk back, then a 1px refine. */
+  function backTo(at: (l: number) => { x: number }, from: number, x: number): number {
+    let l = from;
+    while (l > 0 && at(l).x > x) l -= 16;
+    l = Math.max(0, l);
+    while (l + 1 <= from && at(l + 1).x <= x) l += 1;
+    return l;
+  }
+
+  function rideIn(bike: HTMLElement) {
+    const mobile = window.matchMedia('(max-width: 767px)').matches;
+    const road = mobile ? ROADS.mobile : ROADS.desktop;
+    // Where the bike parks: the same --x/--y (or --mx/--my) its inline style sets.
+    const css = getComputedStyle(bike);
+    const park = [Number(css.getPropertyValue(mobile ? '--mx' : '--x')), Number(css.getPropertyValue(mobile ? '--my' : '--y'))];
+    const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    path.setAttribute('d', road.d);
+    const total = path.getTotalLength();
+    const at = (l: number) => {
+      const p = path.getPointAtLength(Math.max(0, Math.min(total, l)));
+      return { x: p.x + road.offset[0], y: p.y + road.offset[1] };
+    };
+    const rest = { x: park[0] + CONTACT[0], y: park[1] + CONTACT[1] };
+    // The parking spot: the last point on the road level with the parked bike.
+    const end = backTo(at, total, rest.x);
+    const start = backTo(at, end, road.startX);
+    const drop = rest.y - at(end).y; // the bike sits a little below the centre line
+    const angle = (l: number) => {
+      const a = at(l - 2);
+      const b = at(l + 2);
+      return (Math.atan2(b.y - a.y, b.x - a.x) * 180) / Math.PI;
+    };
+    const finalAngle = angle(end);
+    const u = bike.offsetWidth / BIKE_W;
+    const t0 = performance.now();
+    bike.dataset.rode = '';
+    const frame = (now: number) => {
+      const t = Math.min(1, Math.max(0, (now - t0) / DURATION));
+      const e = 1 - Math.pow(1 - t, 3);
+      const l = start + (end - start) * e;
+      const p = at(l);
+      const dx = (p.x - rest.x) * u;
+      const dy = (p.y + drop - rest.y) * u;
+      // Lean with the road. The parked art is drawn level, so lean relative to
+      // the slope at the parking spot and it settles to exactly 0.
+      const lean = angle(l) - finalAngle;
+      bike.style.transform = t < 1 ? `translate3d(${dx.toFixed(2)}px,${dy.toFixed(2)}px,0) rotate(${lean.toFixed(2)}deg)` : '';
+      bike.style.opacity = String(Math.min(1, t * 6));
+      if (t < 1) requestAnimationFrame(frame);
+    };
+    requestAnimationFrame(frame);
+  }
+
+  function setup() {
+    const bike = document.querySelector<HTMLElement>('[data-route-bike]');
+    if (!bike || bike.dataset.armed !== undefined || reducedMotion.matches) return;
+    bike.dataset.armed = '';
+    const io = new IntersectionObserver(
+      ([e]) => {
+        if (!e.isIntersecting) return;
+        io.disconnect();
+        setTimeout(() => rideIn(bike), 400);
+      },
+      { threshold: 0.5 },
+    );
+    io.observe(bike);
+  }
+
+  setup();
+  document.addEventListener('astro:page-load', setup);
+</script>

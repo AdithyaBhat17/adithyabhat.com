@@ -1,12 +1,6 @@
 ---
-import { Image } from 'astro:assets';
-import Painting from '@/components/journal/Painting.astro';
-import dawn from '@/assets/paintings/hero-dawn.png';
-import dawnM from '@/assets/paintings/hero-dawn-m.png';
-import night from '@/assets/paintings/hero-night.png';
-import nightM from '@/assets/paintings/hero-night-m.png';
-import ktm from '@/assets/bikes/ktm-390-adventure.png';
-import cb300r from '@/assets/bikes/honda-cb300r.png';
+import HeroRide from '@/components/home/HeroRide.astro';
+import BikeArt from '@/components/journal/BikeArt.astro';
 ---
 
 <section class="hero" aria-labelledby="hero-title">
@@ -28,36 +22,33 @@ import cb300r from '@/assets/bikes/honda-cb300r.png';
     </div>
   </div>
 
-  <Painting
+  <HeroRide
     class="hero-scene"
-    src={dawn}
-    mobileSrc={dawnM}
-    nightSrc={night}
-    nightMobileSrc={nightM}
-    mobileCrop={[357, 1083]}
-    alt="A watercolor of Abu Dhabi at dawn, with pink clouds, the skyline, palms, dunes and a KTM 390 Adventure parked by the road."
-    nightAlt="The same road at night under a crescent moon, with a Honda CB300R under the street lamp."
-    w={1440}
-    h={640}
-    edges="hero-dawn"
-    priority
-    mobileScale={0.7}
-    focusX={928}
+    alt="A watercolor of Abu Dhabi at dawn, with a KTM 390 Adventure riding along the road past the skyline, palms and dunes, on into the desert and the mountains."
+    nightAlt="The same road at night under a crescent moon, with a Honda CB300R riding past the lit skyline."
   >
     <div class="hero-bikes">
-      <button type="button" class="bike bike--ktm" data-bike data-sound-click="engine-ktm" aria-label="Rev the KTM 390 Adventure">
-        <Image src={ktm} alt="" widths={[402]} sizes="(max-width: 767px) 282px, 28vw" loading="eager" fetchpriority="low" />
-      </button>
-      <button type="button" class="bike bike--cb" data-bike data-sound-click="engine-cb" aria-label="Rev the Honda CB300R">
-        <Image src={cb300r} alt="" widths={[402]} sizes="(max-width: 767px) 282px, 28vw" loading="lazy" />
+      {[
+        { key: 'ktm' as const, label: 'Rev the KTM 390 Adventure', sound: 'engine-ktm', eager: true },
+        { key: 'cb' as const, label: 'Rev the Honda CB300R', sound: 'engine-cb', eager: false },
+      ].map((b) => (
+        <button type="button" class={`bike bike--${b.key}`} data-bike data-sound-click={b.sound} aria-label={b.label}>
+          <BikeArt bike={b.key} sizes="(max-width: 767px) 280px, 28vw" eager={b.eager} />
+        </button>
+      ))}
+    </div>
+    <div class="hero-meta at-column" slot="outer">
+      <p class="hero-caption scene-pill">
+        <svg class="cap-sun" viewBox="0 0 14 14" width="14" height="14" aria-hidden="true"><circle cx="7" cy="7" r="2.6" /><path d="M7 1v1.4M7 11.6V13M1 7h1.4M11.6 7H13M2.8 2.8l1 1M10.2 10.2l1 1M2.8 11.2l1-1M10.2 3.8l1-1" /></svg>
+        <svg class="cap-moon" viewBox="0 0 14 14" width="14" height="14" aria-hidden="true"><path d="M11.6 8.5A4.8 4.8 0 1 1 5.5 2.4a3.8 3.8 0 0 0 6.1 6.1Z" /></svg>
+        <span><time data-ad-clock></time> in Abu Dhabi</span>
+      </p>
+      <button type="button" class="ride-toggle scene-pill" data-ride-toggle aria-pressed="false" aria-label="Pause the ride">
+        <svg class="i-pause" viewBox="0 0 14 14" width="14" height="14" aria-hidden="true"><path d="M5 3.5v7M9 3.5v7" /></svg>
+        <svg class="i-play" viewBox="0 0 14 14" width="14" height="14" aria-hidden="true"><path d="M5 3.2v7.6L10.8 7Z" /></svg>
       </button>
     </div>
-    <p class="hero-caption" slot="outer">
-      <svg class="cap-sun" viewBox="0 0 14 14" width="14" height="14" aria-hidden="true"><circle cx="7" cy="7" r="2.6" /><path d="M7 1v1.4M7 11.6V13M1 7h1.4M11.6 7H13M2.8 2.8l1 1M10.2 10.2l1 1M2.8 11.2l1-1M10.2 3.8l1-1" /></svg>
-      <svg class="cap-moon" viewBox="0 0 14 14" width="14" height="14" aria-hidden="true"><path d="M11.6 8.5A4.8 4.8 0 1 1 5.5 2.4a3.8 3.8 0 0 0 6.1 6.1Z" /></svg>
-      <span><time data-ad-clock></time> in Abu Dhabi</span>
-    </p>
-  </Painting>
+  </HeroRide>
 </section>
 
 <style>
@@ -104,7 +95,7 @@ import cb300r from '@/assets/bikes/honda-cb300r.png';
 
   /* The scene tucks up under the copy, as in the painting's frame. */
   .hero :global(.hero-scene) {
-    margin-top: calc(-76 * min(100vw, 2400px) / 1440);
+    margin-top: calc(-76 * 100vw / 1440);
     z-index: 1;
   }
 
@@ -118,22 +109,45 @@ import cb300r from '@/assets/bikes/honda-cb300r.png';
   .bike {
     position: absolute;
     top: calc(313 * var(--u));
-    width: calc(402 * var(--u));
+    width: calc(400 * var(--u));
     padding: 0;
     border-radius: 12px;
     pointer-events: auto;
     transform-origin: 60% 90%;
     transition: transform 1.3s cubic-bezier(0.55, 0, 0.7, 0.2), opacity 0.5s ease 0.8s;
   }
-  .bike :global(img) {
-    width: 100%;
-    height: auto;
-  }
   .bike--ktm {
-    left: calc(700 * var(--u));
+    left: calc(701 * var(--u));
+    --rear-turn: 1.57s;
+    --front-turn: 1.7s;
   }
   .bike--cb {
-    left: calc(720 * var(--u));
+    left: calc(721 * var(--u));
+    --rear-turn: 1.51s;
+    --front-turn: 1.45s;
+  }
+  /* Riding: wheels turn at road speed (210 px/s over each tyre's circumference),
+     and the bike bobs a little on its suspension. Paused with the scene. */
+  @media (prefers-reduced-motion: no-preference) {
+    :global(.ride.is-riding .bike-art) :global(.part--wheelRear) {
+      animation: turn var(--rear-turn) linear infinite;
+    }
+    :global(.ride.is-riding .bike-art) :global(.part--wheelFront) {
+      animation: turn var(--front-turn) linear infinite;
+    }
+    :global(.ride.is-riding .bike-art) :global(.part--body) {
+      animation: bob 0.42s ease-in-out infinite alternate;
+    }
+  }
+  @keyframes turn {
+    to {
+      transform: rotate(1turn);
+    }
+  }
+  @keyframes bob {
+    to {
+      transform: translate3d(0, calc(-0.8 * var(--u)), 0);
+    }
   }
   /* The bike that isn't in this theme's painting has ridden out of frame. */
   .bike--cb,
@@ -164,7 +178,7 @@ import cb300r from '@/assets/bikes/honda-cb300r.png';
     outline-offset: -6px;
   }
   /* Click a bike: a little rev and rock. */
-  .bike:global(.is-revving) :global(img) {
+  .bike:global(.is-revving) :global(.bike-art) {
     animation: rev 0.7s var(--ease-out);
   }
   @keyframes rev {
@@ -176,25 +190,45 @@ import cb300r from '@/assets/bikes/honda-cb300r.png';
     100% { transform: none; }
   }
 
-  .hero-caption {
+  .hero-meta {
     position: absolute;
-    left: var(--gutter);
     bottom: clamp(12px, 1.32vw, 32px);
-    display: inline-flex;
+    display: flex;
     align-items: center;
     gap: 8px;
-    padding: 7px 13px;
-    border-radius: 999px;
-    border: 1px solid rgba(243, 234, 216, 0.18);
-    background: rgba(13, 14, 16, 0.55);
-    color: #f3ead8;
+  }
+  .ride-toggle {
+    justify-content: center;
+    width: 32px;
+    padding: 0;
+  }
+  .ride-toggle svg {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.6;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .ride-toggle .i-play {
+    display: none;
+    fill: currentColor;
+  }
+  .ride-toggle[aria-pressed='true'] .i-play {
+    display: block;
+  }
+  .ride-toggle[aria-pressed='true'] .i-pause {
+    display: none;
+  }
+  /* Nothing moves with reduced motion, so there's nothing to pause. */
+  @media (prefers-reduced-motion: reduce) {
+    .ride-toggle {
+      display: none;
+    }
+  }
+  .hero-caption {
     font-size: 12px;
-    font-weight: 500;
-    line-height: 1.4;
     letter-spacing: 0.02em;
     text-transform: uppercase;
-    -webkit-backdrop-filter: blur(4px);
-    backdrop-filter: blur(4px);
   }
   .hero-caption svg {
     fill: none;
@@ -238,7 +272,7 @@ import cb300r from '@/assets/bikes/honda-cb300r.png';
     .hero :global(.hero-scene) {
       margin-top: -5px;
     }
-    .hero-caption {
+    .hero-meta {
       bottom: 16px;
     }
   }

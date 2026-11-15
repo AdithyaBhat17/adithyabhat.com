@@ -8,7 +8,15 @@ import type { ResponsiveImage } from '@/types/content';
 interface Props {
   projects: { slug: string; title: string; tags?: string; thumbnail?: { responsiveImage: ResponsiveImage } }[];
 }
-const { projects } = Astro.props;
+const { projects: all } = Astro.props;
+
+// The order the prints hang in, left to right. Anything not listed follows, newest first.
+const ORDER = ['olympus', 'nexus-routines', 'daily-planner', 'nexus-copilot', 'cortex'];
+const rank = (slug: string) => {
+  const i = ORDER.indexOf(slug);
+  return i === -1 ? ORDER.length : i;
+};
+const projects = [...all].sort((a, b) => rank(a.slug) - rank(b.slug)); // stable, so unlisted keep CMS order
 
 // Where each print hangs on the wall (Figma px), and how it's taped.
 const SPOTS = [
