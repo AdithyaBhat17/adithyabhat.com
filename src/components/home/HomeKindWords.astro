@@ -28,7 +28,7 @@ const ROT = [-4, 3, -2, 5, 2, -3, 4, -1.5];
     <h2 id="kind-title" class="display-l">Kind words</h2>
   </div>
 
-  <div class="table" style={`--bg-top:${bgTop};--bg-mid:${bgMid};--bg-bottom:${bgBottom}`} data-observe>
+  <div class="cafe" style={`--bg-top:${bgTop};--bg-mid:${bgMid};--bg-bottom:${bgBottom}`} data-observe>
     <span class="cap cap--top" aria-hidden="true"></span>
     <span class="band" aria-hidden="true"></span>
     <span class="cap cap--bottom" aria-hidden="true"></span>
@@ -58,8 +58,14 @@ const ROT = [-4, 3, -2, 5, 2, -3, 4, -1.5];
 </section>
 
 <style>
-  .table {
-    --cap: calc(min(100vw, 2400px) * 200 / 1440);
+  /* Not `.table`: Tailwind ships a `table` utility (display: table), which
+     shrank this box to its content on wide screens. */
+  /* The caps scale with the painting's width (the section's), at 200/1440. */
+  .kind {
+    container-type: inline-size;
+  }
+  .cafe {
+    --cap: calc(100cqw * 200 / 1440);
     position: relative;
     isolation: isolate;
     padding: calc(var(--cap) * 0.55) var(--gutter) calc(var(--cap) * 0.6);
@@ -97,13 +103,13 @@ const ROT = [-4, 3, -2, 5, 2, -3, 4, -1.5];
     background-position: top center;
   }
   @media (prefers-reduced-motion: no-preference) {
-    :global(.js) .table > .cap,
-    :global(.js) .table > .band {
+    :global(.js) .cafe > .cap,
+    :global(.js) .cafe > .band {
       opacity: 0;
       transition: opacity 0.9s ease;
     }
-    :global(.js) .table.is-in > .cap,
-    :global(.js) .table.is-in > .band {
+    :global(.js) .cafe.is-in > .cap,
+    :global(.js) .cafe.is-in > .band {
       opacity: 1;
     }
   }
@@ -221,7 +227,7 @@ const ROT = [-4, 3, -2, 5, 2, -3, 4, -1.5];
   }
 
   @media (max-width: 767px) {
-    .table {
+    .cafe {
       --cap: calc(100vw * 200 / 1440 * 1.6);
       padding-top: calc(var(--cap) * 0.7);
     }
