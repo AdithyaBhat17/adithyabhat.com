@@ -114,15 +114,13 @@ import { ROUTE } from '@/data/career';
 
   .route-bike {
     width: calc(220 * var(--u));
+    transform-origin: 50% 96%;
   }
   .route-bike :global(img) {
     width: 100%;
   }
   /* The ride in is scripted along the road (see the script below); until it
      starts, the bike waits out of sight. */
-  .route-bike {
-    transform-origin: 50% 96%;
-  }
   @media (prefers-reduced-motion: no-preference) {
     :global(.js) .route-bike:not([data-rode]) {
       opacity: 0;

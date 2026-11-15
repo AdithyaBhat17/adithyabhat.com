@@ -91,6 +91,8 @@ const edge = (edgesData as Record<string, { top?: string }>)['hero-dawn'];
                 decoding={eager ? 'sync' : 'async'}
                 fetchpriority={eager ? 'high' : 'auto'}
                 draggable="false"
+                data-art={t.key}
+                data-back={i === 0 ? '' : undefined}
               />
             </picture>
           );
@@ -120,6 +122,16 @@ const edge = (edgesData as Record<string, { top?: string }>)['hero-dawn'];
   <slot name="outer" />
 </div>
 <script is:inline>
+  // Dark visitors see the night scene first: give its backdrop the high-priority
+  // fetch instead of the hidden day one, as Painting does for its night art.
+  (function () {
+    if (document.documentElement.dataset.theme !== 'dark') return;
+    var s = document.currentScript, r = s && s.previousElementSibling;
+    var day = r && r.querySelector('img[data-art=day][data-back]');
+    var night = r && r.querySelector('img[data-art=night][data-back]');
+    if (night) { night.loading = 'eager'; night.setAttribute('fetchpriority', 'high'); }
+    if (day) { day.loading = 'lazy'; day.setAttribute('fetchpriority', 'low'); }
+  })();
   // Fit before first paint (re-run on resize and once fonts settle, below).
   (function () {
     // Looks the scene up on each call, so it never holds a page that's gone.
@@ -307,8 +319,13 @@ const edge = (edgesData as Record<string, { top?: string }>)['hero-dawn'];
   // Keep the road above the fold as the viewport changes.
   type FitWindow = Window & { __fitRide?: () => void };
   const fit = () => (window as FitWindow).__fitRide?.();
+  // Width changes only: phones resize the viewport's height as the address bar
+  // shows and hides while scrolling, and re-fitting then would shift the page.
+  let fitWidth = window.innerWidth;
   let resizeTimer = 0;
   window.addEventListener('resize', () => {
+    if (window.innerWidth === fitWidth) return;
+    fitWidth = window.innerWidth;
     clearTimeout(resizeTimer);
     resizeTimer = window.setTimeout(fit, 120);
   });

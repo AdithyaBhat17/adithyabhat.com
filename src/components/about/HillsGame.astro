@@ -427,26 +427,25 @@ const [back, layers, ink, note, mask] = await Promise.all([
     let best = readBest();
     let visible = false;
     let u = 1;
-    let measuredW = 0;
+    let measured = '';
+    let viewR = PW;
+    let crashedAt = 0;
     let shownKm = '';
     const rand = rng(Date.now() % 2147483646 + 1);
 
     function measure() {
       const r = inner.getBoundingClientRect();
-      if (r.width === measuredW) return;
-      measuredW = r.width;
-      u = r.width / PW;
       const dpr = Math.min(2, window.devicePixelRatio || 1);
+      const key = `${r.width}x${dpr}`;
+      if (key === measured) return;
+      measured = key;
+      u = r.width / PW;
+      // Right edge of what the visitor can see (phones crop the scene); new
+      // obstacles enter from just past it.
+      viewR = Math.min(PW, (root!.getBoundingClientRect().right - r.left) / u);
       canvas.width = Math.round(r.width * dpr);
       canvas.height = Math.round(r.height * dpr);
       ctx.setTransform(u * dpr, 0, 0, u * dpr, 0, 0);
-    }
-
-    /** Right edge of what the visitor can see, in painting px (phones crop the scene). */
-    function viewRight(): number {
-      const ir = inner.getBoundingClientRect();
-      const rr = root!.getBoundingClientRect();
-      return Math.min(PW, (rr.right - ir.left) / u);
     }
 
     function setMsg(el: HTMLElement, text: string | null) {
@@ -483,13 +482,14 @@ const [back, layers, ink, note, mask] = await Promise.all([
     function spawn() {
       const r = rand();
       const kind: Kind = r < 0.45 ? 'rock' : r < 0.75 ? 'pothole' : 'goat';
-      obstacles.push({ kind, x: viewRight() + 30, seed: Math.floor(rand() * 2147483646) + 1 });
+      obstacles.push({ kind, x: viewR + 30, seed: Math.floor(rand() * 2147483646) + 1 });
       // Leave room to land and take off again; gaps tighten as you speed up.
       const min = Math.max(240, speed * 0.75);
       nextGap = min + rand() * speed * 1.1;
     }
 
     function crash(o: Obstacle) {
+      crashedAt = performance.now();
       state = 'over';
       root!.dataset.state = 'over';
       play('stamp');
@@ -511,7 +511,8 @@ const [back, layers, ink, note, mask] = await Promise.all([
     }
 
     function tick(now: number) {
-      const dt = Math.min(0.05, (now - last) / 1000);
+      // The first frame's timestamp can be a touch earlier than `last`.
+      const dt = Math.min(0.05, Math.max(0, (now - last) / 1000));
       last = now;
       clock += dt;
       if (state !== 'playing') return;
@@ -602,7 +603,10 @@ const [back, layers, ink, note, mask] = await Promise.all([
       }
     });
     stage.addEventListener('click', () => {
-      if (state !== 'playing') start();
+      if (state === 'playing') return;
+      // A jump tap that lands just after a crash shouldn't wipe the result.
+      if (state === 'over' && performance.now() - crashedAt < 900) return;
+      start();
     });
     startBtn.addEventListener('click', start);
     window.addEventListener(
@@ -610,7 +614,11 @@ const [back, layers, ink, note, mask] = await Promise.all([
       (e) => {
       if (!visible || e.repeat) return;
       if (e.key !== ' ' && e.key !== 'ArrowUp') return;
-      const inGame = root!.contains(document.activeElement);
+      // Leave Space alone for text fields, open dialogs and controls elsewhere.
+      const active = document.activeElement as HTMLElement | null;
+      const inGame = root!.contains(active);
+      if (active?.isContentEditable || active?.closest('input, textarea, select, dialog, [role="dialog"]')) return;
+      if (!inGame && active && active !== document.body && active.matches('a, button, [tabindex]')) return;
       if (state === 'playing') {
         e.preventDefault();
         jump();

@@ -41,7 +41,10 @@ const ogImage = new URL(image, Astro.site).toString();
         d.setAttribute('data-theme', t);
         var s = 'off';
         try {
-          // One-time migration: the old key's 'off' was just the default, so only an 'on' carries over.
+          // One-time migration. Sound used to start off and now comes on with the
+          // first click, so earlier choices reset once (deliberately, the owner's
+          // call): an old 'on' carries over, an old 'off' is dropped. Choices made
+          // from now on live in 'journal-sound-choice' and are always honoured.
           var old = localStorage.getItem('journal-sound');
           if (old !== null) {
             if (old === 'on' && !localStorage.getItem('journal-sound-choice')) localStorage.setItem('journal-sound-choice', 'on');

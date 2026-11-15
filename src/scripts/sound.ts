@@ -116,15 +116,16 @@ function getNoise(ac: AudioContext): AudioBuffer {
 /** The context can still be starting inside the click that unlocked it; sounds
  *  scheduled meanwhile play as soon as it runs. */
 function live(): boolean {
+  // Never wake a context that was suspended because sound is off.
+  if (document.documentElement.dataset.sound !== 'on') return false;
   if (!ctx || !bus || ctx.state === 'closed') return false;
-  if (ctx.state === 'suspended') void ctx.resume();
+  if (ctx.state === 'suspended') ctx.resume().catch(() => {});
   return true;
 }
 
 /** Returns the context only if sound is on, unlocked, and the throttle allows it. */
 function ready(name: SoundName): AudioContext | null {
   if (!live() || !ctx) return null;
-  if (document.documentElement.dataset.sound !== 'on') return null;
   const now = ctx.currentTime;
   if (now - (last[name] ?? -10) < THROTTLE[name]) return null;
   last[name] = now;
@@ -205,7 +206,6 @@ function prefetchEngines() {
 /** Plays a recorded engine. `force` skips the throttle (sound lab). */
 export function engineSample(name: string, { level = 0.9, force = false } = {}): void {
   if (!live() || !ctx || !bus) return;
-  if (document.documentElement.dataset.sound !== 'on') return;
   if (!force && !ready('engine')) return;
   const ac = ctx;
   const out = bus;
